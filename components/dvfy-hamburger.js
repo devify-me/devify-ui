@@ -591,7 +591,16 @@ class DvfyHamburger extends HTMLElement {
 
     // Menu classes
     if (state === 'closed') {
-      this.#menu.classList.remove('dvfy-hb__menu--open', 'dvfy-hb__menu--icons');
+      // Only remove --open to trigger slide-out; keep --icons so it doesn't jerk wider
+      this.#menu.classList.remove('dvfy-hb__menu--open');
+      // Clean up --icons after transition completes
+      const cleanup = () => {
+        this.#menu.classList.remove('dvfy-hb__menu--icons');
+        this.#menu.removeEventListener('transitionend', cleanup);
+      };
+      this.#menu.addEventListener('transitionend', cleanup);
+      // Fallback if transitionend doesn't fire
+      setTimeout(cleanup, 350);
     } else if (state === 'expanded') {
       this.#menu.classList.add('dvfy-hb__menu--open');
       this.#menu.classList.remove('dvfy-hb__menu--icons');
