@@ -100,21 +100,20 @@ dvfy-hamburger {
   background: rgba(255,255,255,0.15);
 }
 
-/* ── Trigger button (hamburger/arrow/X) ── */
+/* ── Trigger button (animated 3-line icon) ── */
 .dvfy-hb__trigger {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 5px;
   width: 2.5rem;
   height: 2.5rem;
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--dvfy-primary-text);
-  font-size: var(--dvfy-text-2xl);
   border-radius: var(--dvfy-radius-md);
   transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
-  line-height: 1;
   padding: 0;
   flex-shrink: 0;
 }
@@ -122,6 +121,42 @@ dvfy-hamburger {
 .dvfy-hb__trigger:focus-visible {
   outline: var(--dvfy-ring-width, 2px) solid var(--dvfy-ring-color, currentColor);
   outline-offset: var(--dvfy-ring-offset, 2px);
+}
+
+/* Three lines */
+.dvfy-hb__line {
+  display: block;
+  width: 1.25rem;
+  height: 2px;
+  background: var(--dvfy-primary-text);
+  border-radius: 1px;
+  transition: transform var(--dvfy-duration-normal) var(--dvfy-ease-out),
+              opacity var(--dvfy-duration-normal) var(--dvfy-ease-out);
+  transform-origin: center center;
+}
+
+/* ☰ → ▶ (expanded): top fades, mid+bot form > */
+[data-state="expanded"] .dvfy-hb__line--top {
+  opacity: 0;
+  transform: translateX(4px);
+}
+[data-state="expanded"] .dvfy-hb__line--mid {
+  transform: rotate(-40deg) translateX(2px);
+}
+[data-state="expanded"] .dvfy-hb__line--bot {
+  transform: rotate(40deg) translateX(2px);
+}
+
+/* ▶ → ✕ (icons): lines continue rotation to form X */
+[data-state="icons"] .dvfy-hb__line--top {
+  opacity: 0;
+  transform: translateX(4px);
+}
+[data-state="icons"] .dvfy-hb__line--mid {
+  transform: rotate(-45deg) translate(0, 3.5px);
+}
+[data-state="icons"] .dvfy-hb__line--bot {
+  transform: rotate(45deg) translate(0, -3.5px);
 }
 
 /* ── Overlay ── */
@@ -441,14 +476,27 @@ class DvfyHamburger extends HTMLElement {
       this.#bar.appendChild(utilityZone);
     }
 
-    // Trigger button
+    // Trigger button (3 animated lines)
     this.#trigger = document.createElement('button');
     this.#trigger.className = 'dvfy-hb__trigger';
     this.#trigger.setAttribute('aria-label', 'Open menu');
     this.#trigger.setAttribute('aria-expanded', 'false');
-    this.#trigger.textContent = '\u2630'; // hamburger ☰
+
+    const lineTop = document.createElement('span');
+    lineTop.className = 'dvfy-hb__line dvfy-hb__line--top';
+    const lineMid = document.createElement('span');
+    lineMid.className = 'dvfy-hb__line dvfy-hb__line--mid';
+    const lineBot = document.createElement('span');
+    lineBot.className = 'dvfy-hb__line dvfy-hb__line--bot';
+    this.#trigger.appendChild(lineTop);
+    this.#trigger.appendChild(lineMid);
+    this.#trigger.appendChild(lineBot);
+
     this.#trigger.addEventListener('click', () => this.#cycle());
     this.#bar.appendChild(this.#trigger);
+
+    // Set initial state
+    this.setAttribute('data-state', 'closed');
 
     this.appendChild(this.#bar);
 
@@ -527,20 +575,13 @@ class DvfyHamburger extends HTMLElement {
   #setState(state) {
     this.#state = state;
 
-    // Trigger icon and aria
-    if (state === 'closed') {
-      this.#trigger.textContent = '\u2630'; // ☰
-      this.#trigger.setAttribute('aria-label', 'Open menu');
-      this.#trigger.setAttribute('aria-expanded', 'false');
-    } else if (state === 'expanded') {
-      this.#trigger.textContent = '\u25B6'; // ▶
-      this.#trigger.setAttribute('aria-label', 'Collapse menu');
-      this.#trigger.setAttribute('aria-expanded', 'true');
-    } else {
-      this.#trigger.textContent = '\u2715'; // ✕
-      this.#trigger.setAttribute('aria-label', 'Close menu');
-      this.#trigger.setAttribute('aria-expanded', 'true');
-    }
+    // Animate trigger lines via data-state on component
+    this.setAttribute('data-state', state);
+
+    // Aria
+    const labels = { closed: 'Open menu', expanded: 'Collapse menu', icons: 'Close menu' };
+    this.#trigger.setAttribute('aria-label', labels[state]);
+    this.#trigger.setAttribute('aria-expanded', String(state !== 'closed'));
 
     // Overlay
     if (state === 'closed') {
