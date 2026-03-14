@@ -135,28 +135,28 @@ dvfy-hamburger {
   transform-origin: center center;
 }
 
-/* ☰ → ▶ (expanded): top fades, mid+bot form > */
+/* ☰ → > (expanded): top fades, mid rotates to \, bot rotates to / forming > pointing RIGHT */
 [data-state="expanded"] .dvfy-hb__line--top {
   opacity: 0;
-  transform: translateX(4px);
+  transform: translateX(-4px);
 }
 [data-state="expanded"] .dvfy-hb__line--mid {
-  transform: rotate(-40deg) translateX(2px);
+  transform: rotate(40deg) translateX(-2px);
 }
 [data-state="expanded"] .dvfy-hb__line--bot {
-  transform: rotate(40deg) translateX(2px);
+  transform: rotate(-40deg) translateX(-2px);
 }
 
-/* ▶ → ✕ (icons): lines continue rotation to form X */
+/* > → ✕ (icons): lines continue rotation to form X */
 [data-state="icons"] .dvfy-hb__line--top {
   opacity: 0;
-  transform: translateX(4px);
+  transform: translateX(-4px);
 }
 [data-state="icons"] .dvfy-hb__line--mid {
-  transform: rotate(-45deg) translate(0, 3.5px);
+  transform: rotate(45deg) translate(0, 3.5px);
 }
 [data-state="icons"] .dvfy-hb__line--bot {
-  transform: rotate(45deg) translate(0, -3.5px);
+  transform: rotate(-45deg) translate(0, -3.5px);
 }
 
 /* ── Overlay ── */
@@ -193,18 +193,16 @@ dvfy-hamburger {
   overflow-y: auto;
   overflow-x: hidden;
 
-  /* Animation */
-  opacity: 0;
-  transform: translateY(-0.5rem);
+  /* Animation: slide in from right */
+  transform: translateX(100%);
   pointer-events: none;
-  transition: opacity var(--dvfy-duration-normal) var(--dvfy-ease-out),
-              transform var(--dvfy-duration-normal) var(--dvfy-ease-out),
-              width var(--dvfy-duration-normal) var(--dvfy-ease-out),
-              min-width var(--dvfy-duration-normal) var(--dvfy-ease-out);
+  transition: transform var(--dvfy-duration-normal) var(--dvfy-ease-out),
+              max-width var(--dvfy-duration-normal) var(--dvfy-ease-out),
+              min-width var(--dvfy-duration-normal) var(--dvfy-ease-out),
+              padding var(--dvfy-duration-normal) var(--dvfy-ease-out);
 }
 .dvfy-hb__menu--open {
-  opacity: 1;
-  transform: translateY(0);
+  transform: translateX(0);
   pointer-events: auto;
 }
 
@@ -240,9 +238,10 @@ dvfy-hamburger {
 /* ── Icons-only state ── */
 .dvfy-hb__menu--icons {
   min-width: 4rem;
-  width: auto;
+  max-width: 4.5rem;
   padding: var(--dvfy-space-2);
   gap: var(--dvfy-space-1);
+  transform: translateX(0);
 }
 .dvfy-hb__menu--icons .dvfy-hb__item {
   justify-content: center;
