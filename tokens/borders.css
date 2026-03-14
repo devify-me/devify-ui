@@ -1,0 +1,31 @@
+/*
+ * @devify/ui — Border Tokens
+ *
+ * Border radius scale from sharp (xs) to pill (full).
+ * Border widths for subtle to strong emphasis.
+ */
+
+:root {
+  /* ─── Border Radius ─── */
+  --dvfy-radius-none:  0;
+  --dvfy-radius-xs:    0.125rem;   /* 2px */
+  --dvfy-radius-sm:    0.25rem;    /* 4px */
+  --dvfy-radius-md:    0.375rem;   /* 6px */
+  --dvfy-radius-lg:    0.5rem;     /* 8px */
+  --dvfy-radius-xl:    0.75rem;    /* 12px */
+  --dvfy-radius-2xl:   1rem;       /* 16px */
+  --dvfy-radius-3xl:   1.5rem;     /* 24px */
+  --dvfy-radius-full:  9999px;     /* pill */
+  --dvfy-radius-round: 50%;        /* circle */
+
+  /* ─── Border Width ─── */
+  --dvfy-border-0: 0;
+  --dvfy-border-1: 1px;
+  --dvfy-border-2: 2px;
+  --dvfy-border-4: 4px;
+  --dvfy-border-8: 8px;
+
+  /* ─── Focus Ring ─── */
+  --dvfy-ring-width:  3px;
+  --dvfy-ring-offset: 2px;
+}

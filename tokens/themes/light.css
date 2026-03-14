@@ -1,0 +1,87 @@
+/*
+ * @devify/ui — Light Theme (Semantic Tokens)
+ *
+ * Tier 2: Maps primitives to roles.
+ * These tokens describe PURPOSE, not appearance.
+ *
+ * Override this file (or add a project theme) to rebrand.
+ */
+
+:root,
+[data-theme="light"] {
+
+  /* ─── Surface (backgrounds) ─── */
+  --dvfy-surface-page:      var(--dvfy-neutral-0);
+  --dvfy-surface-raised:    var(--dvfy-neutral-0);
+  --dvfy-surface-overlay:   var(--dvfy-neutral-0);
+  --dvfy-surface-sunken:    var(--dvfy-neutral-50);
+  --dvfy-surface-muted:     var(--dvfy-neutral-100);
+
+  /* ─── Text ─── */
+  --dvfy-text-primary:      var(--dvfy-neutral-900);
+  --dvfy-text-secondary:    var(--dvfy-neutral-600);
+  --dvfy-text-muted:        var(--dvfy-neutral-400);
+  --dvfy-text-disabled:     var(--dvfy-neutral-300);
+  --dvfy-text-inverse:      var(--dvfy-neutral-0);
+  --dvfy-text-link:         var(--dvfy-blue-600);
+  --dvfy-text-link-hover:   var(--dvfy-blue-700);
+
+  /* ─── Border ─── */
+  --dvfy-border-default:    var(--dvfy-neutral-200);
+  --dvfy-border-strong:     var(--dvfy-neutral-300);
+  --dvfy-border-muted:      var(--dvfy-neutral-100);
+  --dvfy-border-focus:      var(--dvfy-blue-500);
+
+  /* ─── Primary (brand accent) ─── */
+  --dvfy-primary-bg:        var(--dvfy-blue-600);
+  --dvfy-primary-bg-hover:  var(--dvfy-blue-700);
+  --dvfy-primary-bg-active: var(--dvfy-blue-800);
+  --dvfy-primary-bg-subtle: var(--dvfy-blue-50);
+  --dvfy-primary-text:      var(--dvfy-neutral-0);
+  --dvfy-primary-border:    var(--dvfy-blue-600);
+
+  /* ─── Success ─── */
+  --dvfy-success-bg:        var(--dvfy-green-600);
+  --dvfy-success-bg-subtle: var(--dvfy-green-50);
+  --dvfy-success-text:      var(--dvfy-green-700);
+  --dvfy-success-border:    var(--dvfy-green-300);
+
+  /* ─── Warning ─── */
+  --dvfy-warning-bg:        var(--dvfy-amber-500);
+  --dvfy-warning-bg-subtle: var(--dvfy-amber-50);
+  --dvfy-warning-text:      var(--dvfy-amber-700);
+  --dvfy-warning-border:    var(--dvfy-amber-300);
+
+  /* ─── Danger ─── */
+  --dvfy-danger-bg:         var(--dvfy-red-600);
+  --dvfy-danger-bg-subtle:  var(--dvfy-red-50);
+  --dvfy-danger-text:       var(--dvfy-red-700);
+  --dvfy-danger-border:     var(--dvfy-red-300);
+
+  /* ─── Info ─── */
+  --dvfy-info-bg:           var(--dvfy-teal-600);
+  --dvfy-info-bg-subtle:    var(--dvfy-teal-50);
+  --dvfy-info-text:         var(--dvfy-teal-700);
+  --dvfy-info-border:       var(--dvfy-teal-300);
+
+  /* ─── Interactive States ─── */
+  --dvfy-hover-bg:          var(--dvfy-neutral-50);
+  --dvfy-active-bg:         var(--dvfy-neutral-100);
+  --dvfy-selected-bg:       var(--dvfy-blue-50);
+  --dvfy-disabled-bg:       var(--dvfy-neutral-100);
+  --dvfy-disabled-text:     var(--dvfy-neutral-400);
+
+  /* ─── Focus Ring ─── */
+  --dvfy-ring-color:        var(--dvfy-blue-500);
+
+  /* ─── Input ─── */
+  --dvfy-input-bg:          var(--dvfy-neutral-0);
+  --dvfy-input-border:      var(--dvfy-neutral-300);
+  --dvfy-input-border-hover: var(--dvfy-neutral-400);
+  --dvfy-input-border-focus: var(--dvfy-blue-500);
+  --dvfy-input-placeholder: var(--dvfy-neutral-400);
+  --dvfy-input-error:       var(--dvfy-red-500);
+
+  /* ─── Elevation (shadow color for light mode) ─── */
+  --dvfy-shadow-color:      220 3% 15%;
+}

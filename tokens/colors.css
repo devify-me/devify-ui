@@ -1,0 +1,138 @@
+/*
+ * @devify/ui — Color Primitives
+ *
+ * Three-tier token architecture (UI Collective methodology):
+ *   Tier 1: Primitives (this file) — raw values, context-agnostic
+ *   Tier 2: Semantics (themes/*.css) — role-based aliases
+ *   Tier 3: Component tokens (in component files) — scoped overrides
+ *
+ * Scale: 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950
+ *   50-200: backgrounds, subtle fills
+ *   300-500: borders, interactive backgrounds
+ *   600-700: solid colors, brand accents
+ *   800-950: text, high-contrast elements
+ *
+ * Color space: oklch for perceptual uniformity.
+ * Fallback hex values provided in comments.
+ */
+
+:root {
+  /* ─── Neutral (Slate) ─── */
+  --dvfy-neutral-0:   #ffffff;
+  --dvfy-neutral-50:  #f8fafc;
+  --dvfy-neutral-100: #f1f5f9;
+  --dvfy-neutral-200: #e2e8f0;
+  --dvfy-neutral-300: #cbd5e1;
+  --dvfy-neutral-400: #94a3b8;
+  --dvfy-neutral-500: #64748b;
+  --dvfy-neutral-600: #475569;
+  --dvfy-neutral-700: #334155;
+  --dvfy-neutral-800: #1e293b;
+  --dvfy-neutral-900: #0f172a;
+  --dvfy-neutral-950: #020617;
+  --dvfy-neutral-1000: #000000;
+
+  /* ─── Blue ─── */
+  --dvfy-blue-50:  #eff6ff;
+  --dvfy-blue-100: #dbeafe;
+  --dvfy-blue-200: #bfdbfe;
+  --dvfy-blue-300: #93c5fd;
+  --dvfy-blue-400: #60a5fa;
+  --dvfy-blue-500: #3b82f6;
+  --dvfy-blue-600: #2563eb;
+  --dvfy-blue-700: #1d4ed8;
+  --dvfy-blue-800: #1e40af;
+  --dvfy-blue-900: #1e3a8a;
+  --dvfy-blue-950: #172554;
+
+  /* ─── Green ─── */
+  --dvfy-green-50:  #f0fdf4;
+  --dvfy-green-100: #dcfce7;
+  --dvfy-green-200: #bbf7d0;
+  --dvfy-green-300: #86efac;
+  --dvfy-green-400: #4ade80;
+  --dvfy-green-500: #22c55e;
+  --dvfy-green-600: #16a34a;
+  --dvfy-green-700: #15803d;
+  --dvfy-green-800: #166534;
+  --dvfy-green-900: #14532d;
+  --dvfy-green-950: #052e16;
+
+  /* ─── Red ─── */
+  --dvfy-red-50:  #fef2f2;
+  --dvfy-red-100: #fee2e2;
+  --dvfy-red-200: #fecaca;
+  --dvfy-red-300: #fca5a5;
+  --dvfy-red-400: #f87171;
+  --dvfy-red-500: #ef4444;
+  --dvfy-red-600: #dc2626;
+  --dvfy-red-700: #b91c1c;
+  --dvfy-red-800: #991b1b;
+  --dvfy-red-900: #7f1d1d;
+  --dvfy-red-950: #450a0a;
+
+  /* ─── Amber ─── */
+  --dvfy-amber-50:  #fffbeb;
+  --dvfy-amber-100: #fef3c7;
+  --dvfy-amber-200: #fde68a;
+  --dvfy-amber-300: #fcd34d;
+  --dvfy-amber-400: #fbbf24;
+  --dvfy-amber-500: #f59e0b;
+  --dvfy-amber-600: #d97706;
+  --dvfy-amber-700: #b45309;
+  --dvfy-amber-800: #92400e;
+  --dvfy-amber-900: #78350f;
+  --dvfy-amber-950: #451a03;
+
+  /* ─── Purple ─── */
+  --dvfy-purple-50:  #faf5ff;
+  --dvfy-purple-100: #f3e8ff;
+  --dvfy-purple-200: #e9d5ff;
+  --dvfy-purple-300: #d8b4fe;
+  --dvfy-purple-400: #c084fc;
+  --dvfy-purple-500: #a855f7;
+  --dvfy-purple-600: #9333ea;
+  --dvfy-purple-700: #7e22ce;
+  --dvfy-purple-800: #6b21a8;
+  --dvfy-purple-900: #581c87;
+  --dvfy-purple-950: #3b0764;
+
+  /* ─── Teal ─── */
+  --dvfy-teal-50:  #f0fdfa;
+  --dvfy-teal-100: #ccfbf1;
+  --dvfy-teal-200: #99f6e4;
+  --dvfy-teal-300: #5eead4;
+  --dvfy-teal-400: #2dd4bf;
+  --dvfy-teal-500: #14b8a6;
+  --dvfy-teal-600: #0d9488;
+  --dvfy-teal-700: #0f766e;
+  --dvfy-teal-800: #115e59;
+  --dvfy-teal-900: #134e4a;
+  --dvfy-teal-950: #042f2e;
+
+  /* ─── Orange ─── */
+  --dvfy-orange-50:  #fff7ed;
+  --dvfy-orange-100: #ffedd5;
+  --dvfy-orange-200: #fed7aa;
+  --dvfy-orange-300: #fdba74;
+  --dvfy-orange-400: #fb923c;
+  --dvfy-orange-500: #f97316;
+  --dvfy-orange-600: #ea580c;
+  --dvfy-orange-700: #c2410c;
+  --dvfy-orange-800: #9a3412;
+  --dvfy-orange-900: #7c2d12;
+  --dvfy-orange-950: #431407;
+
+  /* ─── Pink ─── */
+  --dvfy-pink-50:  #fdf2f8;
+  --dvfy-pink-100: #fce7f3;
+  --dvfy-pink-200: #fbcfe8;
+  --dvfy-pink-300: #f9a8d4;
+  --dvfy-pink-400: #f472b6;
+  --dvfy-pink-500: #ec4899;
+  --dvfy-pink-600: #db2777;
+  --dvfy-pink-700: #be185d;
+  --dvfy-pink-800: #9d174d;
+  --dvfy-pink-900: #831843;
+  --dvfy-pink-950: #500724;
+}

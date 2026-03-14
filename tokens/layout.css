@@ -1,0 +1,50 @@
+/*
+ * @devify/ui — Layout Tokens
+ *
+ * Breakpoints, z-index scale, and container widths.
+ */
+
+:root {
+  /* ─── Breakpoints (reference values — use in @media queries) ─── */
+  --dvfy-screen-xs:  22.5rem;   /* 360px — mobile */
+  --dvfy-screen-sm:  30rem;     /* 480px — large phone */
+  --dvfy-screen-md:  48rem;     /* 768px — tablet */
+  --dvfy-screen-lg:  64rem;     /* 1024px — desktop */
+  --dvfy-screen-xl:  90rem;     /* 1440px — wide */
+  --dvfy-screen-2xl: 120rem;    /* 1920px — ultrawide */
+
+  /* ─── Container Max Widths ─── */
+  --dvfy-container-xs:  20rem;    /* 320px */
+  --dvfy-container-sm:  24rem;    /* 384px */
+  --dvfy-container-md:  28rem;    /* 448px */
+  --dvfy-container-lg:  32rem;    /* 512px */
+  --dvfy-container-xl:  36rem;    /* 576px */
+  --dvfy-container-2xl: 42rem;    /* 672px */
+  --dvfy-container-3xl: 48rem;    /* 768px */
+  --dvfy-container-4xl: 56rem;    /* 896px */
+  --dvfy-container-5xl: 64rem;    /* 1024px */
+  --dvfy-container-6xl: 72rem;    /* 1152px */
+  --dvfy-container-7xl: 80rem;    /* 1280px */
+
+  /* ─── Z-Index Scale ─── */
+  --dvfy-z-hide:     -1;
+  --dvfy-z-base:      0;
+  --dvfy-z-raised:    1;
+  --dvfy-z-dropdown:  10;
+  --dvfy-z-sticky:    20;
+  --dvfy-z-overlay:   30;
+  --dvfy-z-modal:     40;
+  --dvfy-z-popover:   50;
+  --dvfy-z-toast:     60;
+  --dvfy-z-tooltip:   70;
+
+  /* ─── Overlay ─── */
+  --dvfy-overlay-bg: hsl(220 3% 15% / 0.4);
+
+  /* ─── Aspect Ratios ─── */
+  --dvfy-ratio-square:     1;
+  --dvfy-ratio-landscape:  4 / 3;
+  --dvfy-ratio-portrait:   3 / 4;
+  --dvfy-ratio-widescreen: 16 / 9;
+  --dvfy-ratio-golden:     1.618 / 1;
+}

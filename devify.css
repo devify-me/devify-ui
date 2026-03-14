@@ -1,0 +1,25 @@
+/*
+ * @devify/ui — Design Token Bundle
+ *
+ * Import this single file to get all tokens.
+ * Load order matters: primitives first, then themes.
+ *
+ * Usage in HTML:
+ *   <link rel="stylesheet" href="/static/css/devify.css">
+ *
+ * Usage in CSS:
+ *   @import url('./devify.css');
+ */
+
+/* Tier 1: Primitives (raw values) */
+@import url('./tokens/colors.css');
+@import url('./tokens/typography.css');
+@import url('./tokens/spacing.css');
+@import url('./tokens/borders.css');
+@import url('./tokens/elevation.css');
+@import url('./tokens/animation.css');
+@import url('./tokens/layout.css');
+
+/* Tier 2: Semantic themes (role-based aliases) */
+@import url('./tokens/themes/light.css');
+@import url('./tokens/themes/dark.css');
