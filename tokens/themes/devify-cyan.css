@@ -1,0 +1,112 @@
+/*
+ * @devify/ui — Devify Cyan Theme
+ *
+ * Cyan-forward brand theme. Activate with data-theme="devify-cyan" (light)
+ * or data-theme="devify-cyan-dark" (dark).
+ */
+
+/* ─── Cyan Light ─── */
+[data-theme="devify-cyan"] {
+  --dvfy-surface-page:      var(--dvfy-neutral-0);
+  --dvfy-surface-raised:    var(--dvfy-neutral-0);
+  --dvfy-surface-overlay:   var(--dvfy-neutral-0);
+  --dvfy-surface-sunken:    var(--dvfy-cyan-50);
+  --dvfy-surface-muted:     var(--dvfy-neutral-100);
+
+  --dvfy-text-primary:      var(--dvfy-neutral-900);
+  --dvfy-text-secondary:    var(--dvfy-neutral-600);
+  --dvfy-text-muted:        var(--dvfy-neutral-400);
+  --dvfy-text-disabled:     var(--dvfy-neutral-400);
+  --dvfy-text-inverse:      var(--dvfy-neutral-0);
+  --dvfy-text-link:         var(--dvfy-cyan-700);
+  --dvfy-text-link-hover:   var(--dvfy-cyan-800);
+
+  --dvfy-border-default:    var(--dvfy-neutral-200);
+  --dvfy-border-strong:     var(--dvfy-neutral-300);
+  --dvfy-border-muted:      var(--dvfy-cyan-100);
+  --dvfy-border-focus:      var(--dvfy-cyan-500);
+
+  --dvfy-primary-bg:        var(--dvfy-cyan-600);
+  --dvfy-primary-bg-hover:  var(--dvfy-cyan-700);
+  --dvfy-primary-bg-active: var(--dvfy-cyan-800);
+  --dvfy-primary-bg-subtle: var(--dvfy-cyan-50);
+  --dvfy-primary-text:      var(--dvfy-neutral-0);
+  --dvfy-primary-border:    var(--dvfy-cyan-600);
+
+  --dvfy-accent-bg:         var(--dvfy-brand-500);
+  --dvfy-accent-bg-hover:   var(--dvfy-brand-600);
+  --dvfy-accent-bg-subtle:  var(--dvfy-brand-50);
+  --dvfy-accent-text:       var(--dvfy-brand-700);
+  --dvfy-accent-border:     var(--dvfy-brand-200);
+
+  --dvfy-selected-bg:       var(--dvfy-cyan-50);
+  --dvfy-ring-color:        var(--dvfy-cyan-500);
+  --dvfy-input-border-focus: var(--dvfy-cyan-500);
+  --dvfy-shadow-color:      185 3% 15%;
+}
+
+/* ─── Cyan Dark ─── */
+[data-theme="devify-cyan-dark"] {
+  --dvfy-surface-page:      var(--dvfy-neutral-950);
+  --dvfy-surface-raised:    var(--dvfy-neutral-900);
+  --dvfy-surface-overlay:   var(--dvfy-neutral-800);
+  --dvfy-surface-sunken:    var(--dvfy-neutral-1000);
+  --dvfy-surface-muted:     var(--dvfy-neutral-800);
+
+  --dvfy-text-primary:      var(--dvfy-neutral-50);
+  --dvfy-text-secondary:    var(--dvfy-neutral-300);
+  --dvfy-text-muted:        var(--dvfy-neutral-500);
+  --dvfy-text-disabled:     var(--dvfy-neutral-600);
+  --dvfy-text-inverse:      var(--dvfy-neutral-900);
+  --dvfy-text-link:         var(--dvfy-cyan-400);
+  --dvfy-text-link-hover:   var(--dvfy-cyan-300);
+
+  --dvfy-border-default:    var(--dvfy-neutral-700);
+  --dvfy-border-strong:     var(--dvfy-neutral-600);
+  --dvfy-border-muted:      var(--dvfy-neutral-800);
+  --dvfy-border-focus:      var(--dvfy-cyan-400);
+
+  --dvfy-primary-bg:        var(--dvfy-cyan-500);
+  --dvfy-primary-bg-hover:  var(--dvfy-cyan-400);
+  --dvfy-primary-bg-active: var(--dvfy-cyan-300);
+  --dvfy-primary-bg-subtle: var(--dvfy-cyan-950);
+  --dvfy-primary-text:      var(--dvfy-neutral-950);
+  --dvfy-primary-border:    var(--dvfy-cyan-500);
+
+  --dvfy-accent-bg:         var(--dvfy-brand-500);
+  --dvfy-accent-bg-hover:   var(--dvfy-brand-400);
+  --dvfy-accent-bg-subtle:  var(--dvfy-brand-950);
+  --dvfy-accent-text:       var(--dvfy-brand-300);
+  --dvfy-accent-border:     var(--dvfy-brand-700);
+
+  --dvfy-hover-bg:          var(--dvfy-neutral-800);
+  --dvfy-active-bg:         var(--dvfy-neutral-700);
+  --dvfy-selected-bg:       var(--dvfy-cyan-950);
+  --dvfy-disabled-bg:       var(--dvfy-neutral-800);
+  --dvfy-disabled-text:     var(--dvfy-neutral-600);
+  --dvfy-ring-color:        var(--dvfy-cyan-400);
+  --dvfy-input-bg:          var(--dvfy-neutral-900);
+  --dvfy-input-border:      var(--dvfy-neutral-600);
+  --dvfy-input-border-hover: var(--dvfy-neutral-500);
+  --dvfy-input-border-focus: var(--dvfy-cyan-400);
+  --dvfy-input-placeholder: var(--dvfy-neutral-500);
+  --dvfy-input-error:       var(--dvfy-red-400);
+  --dvfy-shadow-color:      185 10% 4%;
+
+  --dvfy-success-bg:        var(--dvfy-green-600);
+  --dvfy-success-bg-subtle: var(--dvfy-green-950);
+  --dvfy-success-text:      var(--dvfy-green-300);
+  --dvfy-success-border:    var(--dvfy-green-700);
+  --dvfy-warning-bg:        var(--dvfy-amber-600);
+  --dvfy-warning-bg-subtle: var(--dvfy-amber-950);
+  --dvfy-warning-text:      var(--dvfy-amber-300);
+  --dvfy-warning-border:    var(--dvfy-amber-700);
+  --dvfy-danger-bg:         var(--dvfy-red-600);
+  --dvfy-danger-bg-subtle:  var(--dvfy-red-950);
+  --dvfy-danger-text:       var(--dvfy-red-300);
+  --dvfy-danger-border:     var(--dvfy-red-700);
+  --dvfy-info-bg:           var(--dvfy-cyan-600);
+  --dvfy-info-bg-subtle:    var(--dvfy-cyan-950);
+  --dvfy-info-text:         var(--dvfy-cyan-300);
+  --dvfy-info-border:       var(--dvfy-cyan-700);
+}

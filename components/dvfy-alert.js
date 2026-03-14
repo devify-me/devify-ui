@@ -58,30 +58,30 @@ dvfy-alert .dvfy-alert__close:focus-visible {
   outline-offset: var(--dvfy-ring-offset);
 }
 
-/* Info (default) */
+/* Info (default) — subtle bg with readable dark text */
 dvfy-alert:not([status]), dvfy-alert[status="info"] {
-  background: var(--dvfy-info-bg);
+  background: var(--dvfy-info-bg-subtle);
   color: var(--dvfy-info-text);
   border-color: var(--dvfy-info-border);
 }
 
 /* Success */
 dvfy-alert[status="success"] {
-  background: var(--dvfy-success-bg);
+  background: var(--dvfy-success-bg-subtle);
   color: var(--dvfy-success-text);
   border-color: var(--dvfy-success-border);
 }
 
 /* Warning */
 dvfy-alert[status="warning"] {
-  background: var(--dvfy-warning-bg);
+  background: var(--dvfy-warning-bg-subtle);
   color: var(--dvfy-warning-text);
   border-color: var(--dvfy-warning-border);
 }
 
 /* Danger */
 dvfy-alert[status="danger"] {
-  background: var(--dvfy-danger-bg);
+  background: var(--dvfy-danger-bg-subtle);
   color: var(--dvfy-danger-text);
   border-color: var(--dvfy-danger-border);
 }

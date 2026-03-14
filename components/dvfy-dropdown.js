@@ -53,14 +53,24 @@ dvfy-dropdown .dvfy-dropdown__item {
   outline: none;
 }
 dvfy-dropdown .dvfy-dropdown__item:hover,
-dvfy-dropdown .dvfy-dropdown__item:focus-visible,
 dvfy-dropdown .dvfy-dropdown__item[data-active] {
-  background: var(--dvfy-hover-bg);
+  background: color-mix(in srgb, var(--dvfy-text-primary) 8%, transparent);
   color: var(--dvfy-text-primary);
+}
+dvfy-dropdown .dvfy-dropdown__item:active {
+  background: color-mix(in srgb, var(--dvfy-text-primary) 14%, transparent);
+}
+dvfy-dropdown .dvfy-dropdown__item[aria-selected="true"] {
+  background: var(--dvfy-selected-bg);
+  color: var(--dvfy-primary-bg);
+  font-weight: var(--dvfy-weight-medium);
 }
 dvfy-dropdown .dvfy-dropdown__item:focus-visible {
   outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);
   outline-offset: calc(-1 * var(--dvfy-ring-width));
+}
+dvfy-dropdown .dvfy-dropdown__item + .dvfy-dropdown__item {
+  border-top: var(--dvfy-border-0) solid transparent;
 }
 `;
 
@@ -124,7 +134,15 @@ class DvfyDropdown extends HTMLElement {
 
   #toggle = (e) => {
     e.stopPropagation();
-    this.hasAttribute('open') ? this.removeAttribute('open') : this.setAttribute('open', '');
+    if (this.hasAttribute('open')) {
+      this.removeAttribute('open');
+    } else {
+      // Close all other open dropdowns first
+      document.querySelectorAll('dvfy-dropdown[open]').forEach(d => {
+        if (d !== this) d.removeAttribute('open');
+      });
+      this.setAttribute('open', '');
+    }
   };
 
   #close() {

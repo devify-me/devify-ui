@@ -89,8 +89,8 @@ dvfy-button:focus-visible {
 }
 dvfy-button[disabled] {
   background: var(--dvfy-disabled-bg);
-  color: var(--dvfy-disabled-text);
-  border-color: var(--dvfy-disabled-bg);
+  color: var(--dvfy-text-muted);
+  border-color: var(--dvfy-border-default);
   cursor: not-allowed;
   pointer-events: none;
 }

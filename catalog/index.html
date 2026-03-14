@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@devify/ui — Component Catalog</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../devify.css">
+  <script type="module" src="../devify.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--dvfy-font-sans);
+      background: var(--dvfy-surface-page);
+      color: var(--dvfy-text-primary);
+      line-height: var(--dvfy-leading-normal);
+    }
+    .catalog-header {
+      background: var(--dvfy-surface-raised);
+      border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-default);
+      padding: var(--dvfy-space-4) var(--dvfy-space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: var(--dvfy-z-sticky);
+    }
+    .catalog-header h1 {
+      font-size: var(--dvfy-text-xl);
+      font-weight: var(--dvfy-weight-bold);
+    }
+    .catalog-header .theme-toggle {
+      display: flex;
+      gap: var(--dvfy-space-2);
+    }
+    .catalog-body {
+      max-width: 72rem;
+      margin: 0 auto;
+      padding: var(--dvfy-space-6);
+    }
+    .section {
+      margin-bottom: var(--dvfy-space-10);
+    }
+    .section-title {
+      font-size: var(--dvfy-text-lg);
+      font-weight: var(--dvfy-weight-semibold);
+      color: var(--dvfy-text-primary);
+      margin-bottom: var(--dvfy-space-2);
+      padding-bottom: var(--dvfy-space-2);
+      border-bottom: var(--dvfy-border-2) solid var(--dvfy-primary-bg);
+    }
+    .section-subtitle {
+      font-size: var(--dvfy-text-sm);
+      color: var(--dvfy-text-muted);
+      margin-bottom: var(--dvfy-space-4);
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--dvfy-space-3);
+      align-items: center;
+      margin-bottom: var(--dvfy-space-4);
+    }
+    .row-label {
+      font-size: var(--dvfy-text-xs);
+      color: var(--dvfy-text-muted);
+      font-weight: var(--dvfy-weight-medium);
+      text-transform: uppercase;
+      letter-spacing: var(--dvfy-tracking-wider);
+      width: 100%;
+      margin-bottom: var(--dvfy-space-1);
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--dvfy-space-4);
+      margin-bottom: var(--dvfy-space-4);
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--dvfy-space-4);
+      margin-bottom: var(--dvfy-space-4);
+    }
+    .demo-box {
+      padding: var(--dvfy-space-4);
+      background: var(--dvfy-surface-sunken);
+      border-radius: var(--dvfy-radius-xl);
+      border: var(--dvfy-border-1) solid var(--dvfy-border-muted);
+    }
+  </style>
+</head>
+<body>
+  <header class="catalog-header">
+    <h1 style="font-family:var(--dvfy-font-brand)">@devify/ui</h1>
+    <dvfy-theme-switcher default-theme="devify-cyan">
+      <option value="devify-cyan">Cyan</option>
+      <option value="devify-pink">Pink</option>
+    </dvfy-theme-switcher>
+  </header>
+
+  <main class="catalog-body">
+
+    <!-- ═══ BUTTONS ═══ -->
+    <div class="section">
+      <h2 class="section-title">Button</h2>
+      <p class="section-subtitle">dvfy-button — variant, size, disabled, loading</p>
+
+      <div class="row-label">Variants</div>
+      <div class="row">
+        <dvfy-button>Default</dvfy-button>
+        <dvfy-button variant="subtle">Subtle</dvfy-button>
+        <dvfy-button variant="outline">Outline</dvfy-button>
+        <dvfy-button variant="ghost">Ghost</dvfy-button>
+        <dvfy-button variant="danger">Danger</dvfy-button>
+      </div>
+
+      <div class="row-label">Sizes</div>
+      <div class="row">
+        <dvfy-button size="sm">Small</dvfy-button>
+        <dvfy-button size="md">Medium</dvfy-button>
+        <dvfy-button size="lg">Large</dvfy-button>
+      </div>
+
+      <div class="row-label">States</div>
+      <div class="row">
+        <dvfy-button disabled>Disabled</dvfy-button>
+        <dvfy-button loading>Loading</dvfy-button>
+      </div>
+    </div>
+
+    <!-- ═══ INPUT ═══ -->
+    <div class="section">
+      <h2 class="section-title">Input</h2>
+      <p class="section-subtitle">dvfy-input — label, type, error, help, required, disabled</p>
+      <div class="grid-2">
+        <dvfy-input label="Email" type="email" name="email" placeholder="you@example.com" help="We won't share your email."></dvfy-input>
+        <dvfy-input label="Password" type="password" name="pass" placeholder="Enter password" error="Must be at least 8 characters"></dvfy-input>
+        <dvfy-input label="Required Field" name="req" required placeholder="This is required"></dvfy-input>
+        <dvfy-input label="Disabled" name="dis" disabled value="Can't edit this"></dvfy-input>
+      </div>
+    </div>
+
+    <!-- ═══ TEXTAREA ═══ -->
+    <div class="section">
+      <h2 class="section-title">Textarea</h2>
+      <p class="section-subtitle">dvfy-textarea — auto-resize, character count, error</p>
+      <div class="grid-2">
+        <dvfy-textarea label="Bio" name="bio" placeholder="Tell us about yourself..." maxlength="200" help="Keep it brief."></dvfy-textarea>
+        <dvfy-textarea label="Notes" name="notes" placeholder="Type here..." rows="2" error="Required field"></dvfy-textarea>
+      </div>
+    </div>
+
+    <!-- ═══ SELECT ═══ -->
+    <div class="section">
+      <h2 class="section-title">Select</h2>
+      <p class="section-subtitle">dvfy-select — searchable, label, error</p>
+      <div class="grid-2">
+        <dvfy-select label="Country" name="country" placeholder="Choose..." searchable>
+          <option value="us">United States</option>
+          <option value="ca">Canada</option>
+          <option value="uk">United Kingdom</option>
+          <option value="de">Germany</option>
+          <option value="fr">France</option>
+          <option value="jp">Japan</option>
+          <option value="au">Australia</option>
+        </dvfy-select>
+        <dvfy-select label="Role" name="role" error="Selection required" required>
+          <option value="admin">Admin</option>
+          <option value="editor">Editor</option>
+          <option value="viewer">Viewer</option>
+        </dvfy-select>
+      </div>
+    </div>
+
+    <!-- ═══ CHECKBOX, RADIO, SWITCH ═══ -->
+    <div class="section">
+      <h2 class="section-title">Checkbox, Radio, Switch</h2>
+      <p class="section-subtitle">Form controls with labels</p>
+      <div class="grid-3">
+        <div class="demo-box">
+          <div class="row-label">Checkbox</div>
+          <dvfy-checkbox label="Accept terms" name="terms" checked></dvfy-checkbox>
+          <dvfy-checkbox label="Subscribe to newsletter" name="news"></dvfy-checkbox>
+          <dvfy-checkbox label="Disabled option" name="dis" disabled></dvfy-checkbox>
+        </div>
+        <div class="demo-box">
+          <div class="row-label">Radio</div>
+          <dvfy-radio label="Option A" name="choice" value="a" checked></dvfy-radio>
+          <dvfy-radio label="Option B" name="choice" value="b"></dvfy-radio>
+          <dvfy-radio label="Option C" name="choice" value="c" disabled></dvfy-radio>
+        </div>
+        <div class="demo-box">
+          <div class="row-label">Switch</div>
+          <dvfy-switch label="Notifications" description="Receive email alerts" checked></dvfy-switch>
+          <dvfy-switch label="Dark mode" name="darkmode"></dvfy-switch>
+          <dvfy-switch label="Disabled" disabled></dvfy-switch>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ BADGE & TAG ═══ -->
+    <div class="section">
+      <h2 class="section-title">Badge &amp; Tag</h2>
+      <p class="section-subtitle">Status indicators and interactive tags</p>
+
+      <div class="row-label">Badges</div>
+      <div class="row">
+        <dvfy-badge>Default</dvfy-badge>
+        <dvfy-badge status="success">Success</dvfy-badge>
+        <dvfy-badge status="warning">Warning</dvfy-badge>
+        <dvfy-badge status="danger">Danger</dvfy-badge>
+        <dvfy-badge status="info">Info</dvfy-badge>
+        <dvfy-badge variant="outline" status="success">Outline</dvfy-badge>
+        <dvfy-badge status="danger" dot>With Dot</dvfy-badge>
+      </div>
+
+      <div class="row-label">Tags</div>
+      <div class="row">
+        <dvfy-tag>Default</dvfy-tag>
+        <dvfy-tag status="success">Published</dvfy-tag>
+        <dvfy-tag status="warning" removable>Draft</dvfy-tag>
+        <dvfy-tag status="danger" removable>Rejected</dvfy-tag>
+        <dvfy-tag variant="outline">Outline</dvfy-tag>
+        <dvfy-tag size="sm" status="info">Small</dvfy-tag>
+      </div>
+    </div>
+
+    <!-- ═══ AVATAR ═══ -->
+    <div class="section">
+      <h2 class="section-title">Avatar</h2>
+      <p class="section-subtitle">dvfy-avatar — image, initials fallback, status indicator</p>
+      <div class="row">
+        <dvfy-avatar name="Jorge Sader" size="sm"></dvfy-avatar>
+        <dvfy-avatar name="Jorge Sader" size="md" status="online"></dvfy-avatar>
+        <dvfy-avatar name="Kirk McNeill" size="lg" status="busy"></dvfy-avatar>
+        <dvfy-avatar name="AI" size="md" status="offline"></dvfy-avatar>
+        <dvfy-avatar src="https://i.pravatar.cc/80?u=1" size="lg" status="online"></dvfy-avatar>
+      </div>
+    </div>
+
+    <!-- ═══ ALERT ═══ -->
+    <div class="section">
+      <h2 class="section-title">Alert</h2>
+      <p class="section-subtitle">dvfy-alert — status, dismissible, title</p>
+      <div style="display:flex;flex-direction:column;gap:var(--dvfy-space-3)">
+        <dvfy-alert status="info" title="Information">This is an informational message.</dvfy-alert>
+        <dvfy-alert status="success" title="Success" dismissible>Operation completed successfully!</dvfy-alert>
+        <dvfy-alert status="warning">Heads up — your trial expires in 3 days.</dvfy-alert>
+        <dvfy-alert status="danger" title="Error" dismissible>Something went wrong. Please try again.</dvfy-alert>
+      </div>
+    </div>
+
+    <!-- ═══ LOADER ═══ -->
+    <div class="section">
+      <h2 class="section-title">Loader</h2>
+      <p class="section-subtitle">dvfy-loader — spinner and dots variants</p>
+      <div class="row-label">Spinner</div>
+      <div class="row">
+        <dvfy-loader size="sm"></dvfy-loader>
+        <dvfy-loader size="md"></dvfy-loader>
+        <dvfy-loader size="lg"></dvfy-loader>
+      </div>
+      <div class="row-label">With Brand Icon</div>
+      <div class="row">
+        <dvfy-loader size="sm" icon="favicon.svg"></dvfy-loader>
+        <dvfy-loader size="md" icon="favicon.svg"></dvfy-loader>
+        <dvfy-loader size="lg" icon="favicon.svg"></dvfy-loader>
+      </div>
+      <div class="row-label">Dots</div>
+      <div class="row">
+        <dvfy-loader variant="dots" size="sm"></dvfy-loader>
+        <dvfy-loader variant="dots" size="md"></dvfy-loader>
+        <dvfy-loader variant="dots" size="lg"></dvfy-loader>
+      </div>
+    </div>
+
+    <!-- ═══ CARD ═══ -->
+    <div class="section">
+      <h2 class="section-title">Card</h2>
+      <p class="section-subtitle">dvfy-card — elevated, interactive</p>
+      <div class="grid-3">
+        <dvfy-card>
+          <h3 style="margin-bottom:var(--dvfy-space-2)">Basic Card</h3>
+          <p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Default card with padding.</p>
+        </dvfy-card>
+        <dvfy-card elevated>
+          <h3 style="margin-bottom:var(--dvfy-space-2)">Elevated</h3>
+          <p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Card with shadow elevation.</p>
+        </dvfy-card>
+        <dvfy-card elevated interactive>
+          <h3 style="margin-bottom:var(--dvfy-space-2)">Interactive</h3>
+          <p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Hover me for effect.</p>
+        </dvfy-card>
+      </div>
+    </div>
+
+    <!-- ═══ PROGRESS ═══ -->
+    <div class="section">
+      <h2 class="section-title">Progress</h2>
+      <p class="section-subtitle">dvfy-progress — bar and circle variants</p>
+      <div class="row" style="gap:var(--dvfy-space-6)">
+        <div style="flex:1">
+          <dvfy-progress value="25" label></dvfy-progress>
+          <div style="height:var(--dvfy-space-2)"></div>
+          <dvfy-progress value="65" status="success" label></dvfy-progress>
+          <div style="height:var(--dvfy-space-2)"></div>
+          <dvfy-progress value="90" status="danger" label></dvfy-progress>
+        </div>
+        <dvfy-progress variant="circle" value="72" size="lg" status="success" label></dvfy-progress>
+        <dvfy-progress variant="circle" value="45" size="md" label></dvfy-progress>
+        <dvfy-progress variant="circle" value="15" size="sm" status="danger"></dvfy-progress>
+      </div>
+    </div>
+
+    <!-- ═══ TABS ═══ -->
+    <div class="section">
+      <h2 class="section-title">Tabs</h2>
+      <p class="section-subtitle">dvfy-tabs — keyboard navigable tab panels</p>
+      <dvfy-tabs>
+        <dvfy-tab label="Overview">
+          <p style="padding:var(--dvfy-space-4)">This is the overview content. It shows general information about the selected item.</p>
+        </dvfy-tab>
+        <dvfy-tab label="Details">
+          <p style="padding:var(--dvfy-space-4)">Detailed information goes here. Technical specs, metadata, and more.</p>
+        </dvfy-tab>
+        <dvfy-tab label="Settings">
+          <p style="padding:var(--dvfy-space-4)">Configuration options and preferences for this item.</p>
+        </dvfy-tab>
+      </dvfy-tabs>
+    </div>
+
+    <!-- ═══ DROPDOWN ═══ -->
+    <div class="section">
+      <h2 class="section-title">Dropdown</h2>
+      <p class="section-subtitle">dvfy-dropdown — trigger + menu items</p>
+      <div class="row">
+        <dvfy-dropdown>
+          <dvfy-button variant="outline">Actions</dvfy-button>
+          <div class="dvfy-dropdown__item">Edit</div>
+          <div class="dvfy-dropdown__item">Duplicate</div>
+          <div class="dvfy-dropdown__item">Archive</div>
+          <div class="dvfy-dropdown__item" style="color:var(--dvfy-danger-text)">Delete</div>
+        </dvfy-dropdown>
+
+        <dvfy-dropdown align="right">
+          <dvfy-button variant="ghost" size="sm">More</dvfy-button>
+          <div class="dvfy-dropdown__item">Profile</div>
+          <div class="dvfy-dropdown__item">Settings</div>
+          <div class="dvfy-dropdown__item">Log out</div>
+        </dvfy-dropdown>
+      </div>
+    </div>
+
+    <!-- ═══ TOOLTIP ═══ -->
+    <div class="section">
+      <h2 class="section-title">Tooltip</h2>
+      <p class="section-subtitle">dvfy-tooltip — hover/focus tooltip with positioning</p>
+      <div class="row">
+        <dvfy-tooltip text="This is a top tooltip">
+          <dvfy-button variant="outline" size="sm">Top</dvfy-button>
+        </dvfy-tooltip>
+        <dvfy-tooltip text="Right tooltip here" position="right">
+          <dvfy-button variant="outline" size="sm">Right</dvfy-button>
+        </dvfy-tooltip>
+        <dvfy-tooltip text="Bottom tooltip" position="bottom">
+          <dvfy-button variant="outline" size="sm">Bottom</dvfy-button>
+        </dvfy-tooltip>
+        <dvfy-tooltip text="Left tooltip" position="left">
+          <dvfy-button variant="outline" size="sm">Left</dvfy-button>
+        </dvfy-tooltip>
+      </div>
+    </div>
+
+    <!-- ═══ MODAL ═══ -->
+    <div class="section">
+      <h2 class="section-title">Modal</h2>
+      <p class="section-subtitle">dvfy-modal — dialog with backdrop, focus trap, escape close</p>
+      <div class="row">
+        <dvfy-button variant="outline" onclick="document.getElementById('demo-modal').setAttribute('open','')">Open Modal (md)</dvfy-button>
+        <dvfy-button variant="outline" onclick="document.getElementById('demo-modal-sm').setAttribute('open','')">Open Modal (sm)</dvfy-button>
+      </div>
+      <dvfy-modal id="demo-modal" title="Confirm Action" size="md">
+        <p style="margin-bottom:var(--dvfy-space-4)">Are you sure you want to proceed? This action cannot be undone.</p>
+        <div style="display:flex;gap:var(--dvfy-space-2);justify-content:flex-end">
+          <dvfy-button variant="ghost" onclick="document.getElementById('demo-modal').removeAttribute('open')">Cancel</dvfy-button>
+          <dvfy-button variant="danger" onclick="document.getElementById('demo-modal').removeAttribute('open')">Delete</dvfy-button>
+        </div>
+      </dvfy-modal>
+      <dvfy-modal id="demo-modal-sm" title="Quick Note" size="sm">
+        <p>This is a small modal for simple messages.</p>
+      </dvfy-modal>
+    </div>
+
+    <!-- ═══ BREADCRUMB ═══ -->
+    <div class="section">
+      <h2 class="section-title">Breadcrumb</h2>
+      <p class="section-subtitle">dvfy-breadcrumb — auto separator, aria-current on last item</p>
+      <dvfy-breadcrumb>
+        <a href="#">Home</a>
+        <a href="#">Products</a>
+        <a href="#">Category</a>
+        <span>Current Page</span>
+      </dvfy-breadcrumb>
+    </div>
+
+    <!-- ═══ PAGINATION ═══ -->
+    <div class="section">
+      <h2 class="section-title">Pagination</h2>
+      <p class="section-subtitle">dvfy-pagination — page navigation with ellipsis</p>
+      <dvfy-pagination total="20" current="7" max-visible="5"></dvfy-pagination>
+    </div>
+
+    <!-- ═══ TABLE ═══ -->
+    <div class="section">
+      <h2 class="section-title">Table</h2>
+      <p class="section-subtitle">dvfy-table — striped, hoverable, sortable headers</p>
+      <dvfy-table striped hoverable responsive>
+        <table>
+          <thead>
+            <tr>
+              <th data-sort>Name</th>
+              <th data-sort>Role</th>
+              <th data-sort>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Jorge Sader</td><td>Board</td><td><dvfy-badge status="success" size="sm">Active</dvfy-badge></td><td><dvfy-button variant="ghost" size="sm">Edit</dvfy-button></td></tr>
+            <tr><td>Grob</td><td>VCEO</td><td><dvfy-badge status="info" size="sm">Online</dvfy-badge></td><td><dvfy-button variant="ghost" size="sm">Edit</dvfy-button></td></tr>
+            <tr><td>Kirk McNeill</td><td>Design</td><td><dvfy-badge status="warning" size="sm">Away</dvfy-badge></td><td><dvfy-button variant="ghost" size="sm">Edit</dvfy-button></td></tr>
+            <tr><td>Claude</td><td>Engineer</td><td><dvfy-badge status="success" size="sm">Active</dvfy-badge></td><td><dvfy-button variant="ghost" size="sm">Edit</dvfy-button></td></tr>
+          </tbody>
+        </table>
+      </dvfy-table>
+    </div>
+
+    <!-- ═══ TOAST ═══ -->
+    <div class="section">
+      <h2 class="section-title">Toast</h2>
+      <p class="section-subtitle">dvfy-toast — imperative via DvfyToast.show()</p>
+      <div class="row">
+        <dvfy-button variant="outline" size="sm" onclick="DvfyToast.show({message:'File saved successfully!',status:'success'})">Success Toast</dvfy-button>
+        <dvfy-button variant="outline" size="sm" onclick="DvfyToast.show({message:'Something went wrong.',status:'danger',duration:6000})">Error Toast</dvfy-button>
+        <dvfy-button variant="outline" size="sm" onclick="DvfyToast.show({message:'New version available.',status:'info'})">Info Toast</dvfy-button>
+        <dvfy-button variant="outline" size="sm" onclick="DvfyToast.show({message:'Storage almost full.',status:'warning'})">Warning Toast</dvfy-button>
+      </div>
+    </div>
+
+    <!-- ═══ EMPTY STATE ═══ -->
+    <div class="section">
+      <h2 class="section-title">Empty State</h2>
+      <p class="section-subtitle">dvfy-empty — placeholder for empty views</p>
+      <div class="demo-box">
+        <dvfy-empty icon="📭" title="No messages yet" description="When you receive messages, they'll show up here.">
+          <dvfy-button variant="outline" size="sm">Compose</dvfy-button>
+        </dvfy-empty>
+      </div>
+    </div>
+
+  </main>
+</body>
+</html>

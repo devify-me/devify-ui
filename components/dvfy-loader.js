@@ -4,10 +4,12 @@
  * Attributes:
  *   size:    sm | md | lg (default: "md")
  *   variant: spinner | dots (default: "spinner")
+ *   icon:    URL to brand icon (shown at center of spinner)
  *
  * Usage:
  *   <dvfy-loader></dvfy-loader>
- *   <dvfy-loader size="lg" variant="dots"></dvfy-loader>
+ *   <dvfy-loader size="lg" icon="/static/brand-icon.svg"></dvfy-loader>
+ *   <dvfy-loader variant="dots"></dvfy-loader>
  */
 
 const STYLES = `
@@ -17,7 +19,14 @@ dvfy-loader {
   justify-content: center;
 }
 
-/* Spinner */
+/* Spinner container for icon overlay */
+dvfy-loader .dvfy-loader__spinner-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 dvfy-loader .dvfy-loader__spinner {
   border-radius: var(--dvfy-radius-round);
   border: 2px solid var(--dvfy-border-default);
@@ -25,10 +34,21 @@ dvfy-loader .dvfy-loader__spinner {
   animation: dvfy-spin 0.7s linear infinite;
 }
 
+dvfy-loader .dvfy-loader__icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 dvfy-loader[size="sm"] .dvfy-loader__spinner { width: 1rem; height: 1rem; border-width: 2px; }
+dvfy-loader[size="sm"] .dvfy-loader__icon { width: 0.5rem; height: 0.5rem; }
 dvfy-loader:not([size]) .dvfy-loader__spinner,
 dvfy-loader[size="md"] .dvfy-loader__spinner { width: 1.5rem; height: 1.5rem; border-width: 2px; }
+dvfy-loader:not([size]) .dvfy-loader__icon,
+dvfy-loader[size="md"] .dvfy-loader__icon { width: 0.75rem; height: 0.75rem; }
 dvfy-loader[size="lg"] .dvfy-loader__spinner { width: 2.5rem; height: 2.5rem; border-width: 3px; }
+dvfy-loader[size="lg"] .dvfy-loader__icon { width: 1.25rem; height: 1.25rem; }
 
 @keyframes dvfy-spin { to { transform: rotate(360deg); } }
 
@@ -72,7 +92,7 @@ class DvfyLoader extends HTMLElement {
     this.#build();
   }
 
-  static get observedAttributes() { return ['variant', 'size']; }
+  static get observedAttributes() { return ['variant', 'size', 'icon']; }
 
   attributeChangedCallback() {
     if (this.isConnected) this.#build();
@@ -81,6 +101,7 @@ class DvfyLoader extends HTMLElement {
   #build() {
     this.textContent = '';
     const variant = this.getAttribute('variant') || 'spinner';
+    const iconSrc = this.getAttribute('icon');
 
     if (variant === 'dots') {
       const wrap = document.createElement('span');
@@ -92,9 +113,23 @@ class DvfyLoader extends HTMLElement {
       }
       this.appendChild(wrap);
     } else {
+      const wrap = document.createElement('span');
+      wrap.className = 'dvfy-loader__spinner-wrap';
+
       const spinner = document.createElement('span');
       spinner.className = 'dvfy-loader__spinner';
-      this.appendChild(spinner);
+      wrap.appendChild(spinner);
+
+      if (iconSrc) {
+        const img = document.createElement('img');
+        img.className = 'dvfy-loader__icon';
+        img.src = iconSrc;
+        img.alt = '';
+        img.setAttribute('aria-hidden', 'true');
+        wrap.appendChild(img);
+      }
+
+      this.appendChild(wrap);
     }
 
     // Screen reader text

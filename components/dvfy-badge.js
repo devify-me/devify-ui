@@ -47,7 +47,7 @@ dvfy-badge .dvfy-badge__dot {
 
 /* Neutral — default */
 dvfy-badge:not([status]), dvfy-badge[status="neutral"] {
-  background: var(--dvfy-surface-secondary);
+  background: var(--dvfy-surface-muted);
   color: var(--dvfy-text-secondary);
   border-color: var(--dvfy-border-default);
 }
@@ -55,37 +55,37 @@ dvfy-badge:not([status]) .dvfy-badge__dot, dvfy-badge[status="neutral"] .dvfy-ba
   background: var(--dvfy-text-muted);
 }
 
-/* Success */
+/* Success — subtle bg, dark text for readability */
 dvfy-badge[status="success"] {
-  background: var(--dvfy-success-bg);
+  background: var(--dvfy-success-bg-subtle);
   color: var(--dvfy-success-text);
   border-color: var(--dvfy-success-border);
 }
-dvfy-badge[status="success"] .dvfy-badge__dot { background: var(--dvfy-success-text); }
+dvfy-badge[status="success"] .dvfy-badge__dot { background: var(--dvfy-success-bg); }
 
 /* Warning */
 dvfy-badge[status="warning"] {
-  background: var(--dvfy-warning-bg);
+  background: var(--dvfy-warning-bg-subtle);
   color: var(--dvfy-warning-text);
   border-color: var(--dvfy-warning-border);
 }
-dvfy-badge[status="warning"] .dvfy-badge__dot { background: var(--dvfy-warning-text); }
+dvfy-badge[status="warning"] .dvfy-badge__dot { background: var(--dvfy-warning-bg); }
 
 /* Danger */
 dvfy-badge[status="danger"] {
-  background: var(--dvfy-danger-bg);
+  background: var(--dvfy-danger-bg-subtle);
   color: var(--dvfy-danger-text);
   border-color: var(--dvfy-danger-border);
 }
-dvfy-badge[status="danger"] .dvfy-badge__dot { background: var(--dvfy-danger-text); }
+dvfy-badge[status="danger"] .dvfy-badge__dot { background: var(--dvfy-danger-bg); }
 
 /* Info */
 dvfy-badge[status="info"] {
-  background: var(--dvfy-info-bg);
+  background: var(--dvfy-info-bg-subtle);
   color: var(--dvfy-info-text);
   border-color: var(--dvfy-info-border);
 }
-dvfy-badge[status="info"] .dvfy-badge__dot { background: var(--dvfy-info-text); }
+dvfy-badge[status="info"] .dvfy-badge__dot { background: var(--dvfy-info-bg); }
 
 /* Outline variant — transparent bg, keep border */
 dvfy-badge[variant="outline"] { background: transparent; }

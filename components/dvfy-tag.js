@@ -39,35 +39,35 @@ dvfy-tag[size="sm"] {
 
 /* Neutral */
 dvfy-tag:not([status]), dvfy-tag[status="neutral"] {
-  background: var(--dvfy-surface-secondary);
+  background: var(--dvfy-surface-muted);
   color: var(--dvfy-text-secondary);
   border-color: var(--dvfy-border-default);
 }
 
 /* Success */
 dvfy-tag[status="success"] {
-  background: var(--dvfy-success-bg);
+  background: var(--dvfy-success-bg-subtle);
   color: var(--dvfy-success-text);
   border-color: var(--dvfy-success-border);
 }
 
 /* Warning */
 dvfy-tag[status="warning"] {
-  background: var(--dvfy-warning-bg);
+  background: var(--dvfy-warning-bg-subtle);
   color: var(--dvfy-warning-text);
   border-color: var(--dvfy-warning-border);
 }
 
 /* Danger */
 dvfy-tag[status="danger"] {
-  background: var(--dvfy-danger-bg);
+  background: var(--dvfy-danger-bg-subtle);
   color: var(--dvfy-danger-text);
   border-color: var(--dvfy-danger-border);
 }
 
 /* Info */
 dvfy-tag[status="info"] {
-  background: var(--dvfy-info-bg);
+  background: var(--dvfy-info-bg-subtle);
   color: var(--dvfy-info-text);
   border-color: var(--dvfy-info-border);
 }

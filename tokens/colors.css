@@ -32,6 +32,45 @@
   --dvfy-neutral-950: #020617;
   --dvfy-neutral-1000: #000000;
 
+  /* ─── Hot Pink (Devify brand primary — #FF3CAC) ─── */
+  --dvfy-brand-50:  #fff0f7;
+  --dvfy-brand-100: #ffe0ef;
+  --dvfy-brand-200: #ffc2e0;
+  --dvfy-brand-300: #ff94c8;
+  --dvfy-brand-400: #ff5cb0;
+  --dvfy-brand-500: #ff3cac;
+  --dvfy-brand-600: #e8248e;
+  --dvfy-brand-700: #c91873;
+  --dvfy-brand-800: #a6155f;
+  --dvfy-brand-900: #8a1751;
+  --dvfy-brand-950: #54062d;
+
+  /* ─── Cyan (Devify brand accent — #00E5E5) ─── */
+  --dvfy-cyan-50:  #ecfeff;
+  --dvfy-cyan-100: #cffafe;
+  --dvfy-cyan-200: #a5f3fc;
+  --dvfy-cyan-300: #67e8f9;
+  --dvfy-cyan-400: #22d3ee;
+  --dvfy-cyan-500: #00e5e5;
+  --dvfy-cyan-600: #0891b2;
+  --dvfy-cyan-700: #0e7490;
+  --dvfy-cyan-800: #155e75;
+  --dvfy-cyan-900: #164e63;
+  --dvfy-cyan-950: #083344;
+
+  /* ─── Indigo (Devify dark accent — #1A1040) ─── */
+  --dvfy-indigo-50:  #eef2ff;
+  --dvfy-indigo-100: #e0e7ff;
+  --dvfy-indigo-200: #c7d2fe;
+  --dvfy-indigo-300: #a5b4fc;
+  --dvfy-indigo-400: #818cf8;
+  --dvfy-indigo-500: #6366f1;
+  --dvfy-indigo-600: #4f46e5;
+  --dvfy-indigo-700: #3b2d8e;
+  --dvfy-indigo-800: #2d2070;
+  --dvfy-indigo-900: #1f1558;
+  --dvfy-indigo-950: #1a1040;
+
   /* ─── Blue ─── */
   --dvfy-blue-50:  #eff6ff;
   --dvfy-blue-100: #dbeafe;

@@ -23,7 +23,7 @@ dvfy-modal[open] {
 dvfy-modal .dvfy-modal__backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.75);
   z-index: var(--dvfy-z-modal);
   display: flex;
   align-items: center;
@@ -31,7 +31,7 @@ dvfy-modal .dvfy-modal__backdrop {
   padding: var(--dvfy-space-4);
 }
 dvfy-modal .dvfy-modal__dialog {
-  background: var(--dvfy-surface-primary);
+  background: var(--dvfy-surface-raised);
   border-radius: var(--dvfy-radius-xl);
   box-shadow: var(--dvfy-shadow-xl);
   display: flex;
