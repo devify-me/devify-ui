@@ -174,14 +174,17 @@ dvfy-hamburger {
   pointer-events: auto;
 }
 
-/* ── Menu panel (absolutely positioned relative to header) ── */
+/* ── Menu panel ── */
+/* Fixed width, always fully laid out. Position controlled ONLY by translateX.
+   closed:   translateX(100%)                    — fully off-screen
+   expanded: translateX(0)                       — fully visible (icons + labels)
+   icons:    translateX(calc(100% - 4rem))       — only icon column peeks out
+*/
 .dvfy-hb__menu {
   position: absolute;
   top: 100%;
   right: 0;
-  width: auto;
-  min-width: 14rem;
-  max-width: min(80vw, 20rem);
+  width: min(80vw, 18rem);
   max-height: calc(100vh - 4rem);
   background: var(--dvfy-surface-raised);
   border-bottom-left-radius: var(--dvfy-radius-2xl);
@@ -191,19 +194,27 @@ dvfy-hamburger {
   flex-direction: column;
   padding: var(--dvfy-space-2) 0;
   overflow-y: auto;
-  overflow-x: hidden;
 
-  /* Animation: ONLY slide transform — no width/padding transitions to avoid jerk */
   transform: translateX(100%);
   pointer-events: none;
   transition: transform var(--dvfy-duration-normal) var(--dvfy-ease-out);
 }
-.dvfy-hb__menu--open {
+
+/* Expanded: fully visible */
+.dvfy-hb__menu[data-state="expanded"] {
   transform: translateX(0);
   pointer-events: auto;
 }
 
-/* ── Menu items: expanded (icon + label) ── */
+/* Icons: slid right so only ~4rem of icon column shows */
+.dvfy-hb__menu[data-state="icons"] {
+  transform: translateX(calc(100% - 4rem));
+  pointer-events: auto;
+}
+
+/* Closed: fully off-screen (default transform already handles this) */
+
+/* ── Menu items ── */
 .dvfy-hb__item {
   display: flex;
   align-items: center;
@@ -226,38 +237,6 @@ dvfy-hamburger {
 }
 .dvfy-hb__label {
   overflow: hidden;
-  max-width: 15rem;
-  opacity: 1;
-}
-/* Only animate labels when menu is open (prevents transition noise during close) */
-.dvfy-hb__menu--open .dvfy-hb__label {
-  transition: opacity var(--dvfy-duration-normal) var(--dvfy-ease-out),
-              max-width var(--dvfy-duration-normal) var(--dvfy-ease-out);
-}
-
-/* ── Icons-only state ── */
-.dvfy-hb__menu[data-state="icons"] {
-  min-width: 4rem;
-  max-width: 4.5rem;
-  padding: var(--dvfy-space-2);
-  gap: var(--dvfy-space-1);
-  transform: translateX(0);
-}
-.dvfy-hb__menu[data-state="icons"] .dvfy-hb__item {
-  justify-content: center;
-  padding: var(--dvfy-space-2);
-  border-radius: var(--dvfy-radius-lg);
-}
-.dvfy-hb__menu--icons .dvfy-hb__item:hover {
-  background: var(--dvfy-hover-bg);
-}
-.dvfy-hb__menu[data-state="icons"] .dvfy-hb__icon {
-  width: auto;
-}
-.dvfy-hb__menu[data-state="icons"] .dvfy-hb__label {
-  max-width: 0;
-  opacity: 0;
-  overflow: hidden;
 }
 
 /* ── Separator between items ── */
@@ -266,18 +245,17 @@ dvfy-hamburger {
   background: var(--dvfy-border-muted);
   margin: var(--dvfy-space-1) var(--dvfy-space-3);
 }
-.dvfy-hb__menu[data-state="icons"] .dvfy-hb__separator {
-  display: none;
-}
 
 /* ── Desktop: horizontal nav bar ── */
 @media (min-width: ${bp + 1}px) {
   .dvfy-hb__trigger { display: none; }
   .dvfy-hb__overlay { display: none !important; }
-  .dvfy-hb__menu {
+  .dvfy-hb__menu,
+  .dvfy-hb__menu[data-state="expanded"],
+  .dvfy-hb__menu[data-state="icons"] {
     position: static;
     opacity: 1;
-    transform: none;
+    transform: none !important;
     pointer-events: auto;
     flex-direction: row;
     align-items: center;
@@ -351,8 +329,6 @@ class DvfyHamburger extends HTMLElement {
   #menuItems = [];
   /** @type {Function} */
   #boundKeydown = null;
-  /** @type {number|null} */
-  #closeTimer = null;
 
   static get observedAttributes() { return ['brand', 'tagline', 'logo', 'breakpoint']; }
 
@@ -590,17 +566,8 @@ class DvfyHamburger extends HTMLElement {
       this.#overlay.classList.add('dvfy-hb__overlay--active');
     }
 
-    // Menu state transitions
-    if (state === 'closed') {
-      // Remove --open first (starts slide-out via transform).
-      // Labels have no transition when --open is removed, so resetting
-      // data-state is safe immediately — no visual jerk.
-      this.#menu.classList.remove('dvfy-hb__menu--open');
-      this.#menu.setAttribute('data-state', 'closed');
-    } else {
-      this.#menu.setAttribute('data-state', state);
-      this.#menu.classList.add('dvfy-hb__menu--open');
-    }
+    // Menu: just set data-state. CSS handles all positioning via translateX.
+    this.#menu.setAttribute('data-state', state);
   }
 }
 
