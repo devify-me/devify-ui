@@ -351,6 +351,8 @@ class DvfyHamburger extends HTMLElement {
   #menuItems = [];
   /** @type {Function} */
   #boundKeydown = null;
+  /** @type {number|null} */
+  #closeTimer = null;
 
   static get observedAttributes() { return ['brand', 'tagline', 'logo', 'breakpoint']; }
 
@@ -590,15 +592,17 @@ class DvfyHamburger extends HTMLElement {
 
     // Menu state transitions
     if (state === 'closed') {
-      // Slide out first, THEN reset menu data-state (so labels don't reappear mid-slide)
+      // Remove --open to trigger slide-out. Keep menu data-state as-is
+      // (icons or expanded) so labels don't reappear during the slide.
+      // Reset data-state ONLY after slide completes (250ms matches --dvfy-duration-normal).
       this.#menu.classList.remove('dvfy-hb__menu--open');
-      const reset = () => {
+      if (this.#closeTimer) clearTimeout(this.#closeTimer);
+      this.#closeTimer = setTimeout(() => {
         this.#menu.setAttribute('data-state', 'closed');
-        this.#menu.removeEventListener('transitionend', reset);
-      };
-      this.#menu.addEventListener('transitionend', reset);
-      setTimeout(reset, 350); // fallback
+        this.#closeTimer = null;
+      }, 300);
     } else {
+      if (this.#closeTimer) { clearTimeout(this.#closeTimer); this.#closeTimer = null; }
       this.#menu.setAttribute('data-state', state);
       this.#menu.classList.add('dvfy-hb__menu--open');
     }
