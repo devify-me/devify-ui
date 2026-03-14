@@ -1,0 +1,172 @@
+/**
+ * <dvfy-toast> — Toast notification
+ *
+ * Attributes:
+ *   status:   info | success | warning | danger (default: "info")
+ *   duration: ms (default: 4000, 0 = persistent)
+ *   position: top-right | top-left | bottom-right | bottom-left (default: "top-right")
+ *
+ * Static method:
+ *   DvfyToast.show({ message, status, duration, position })
+ *
+ * Usage:
+ *   DvfyToast.show({ message: 'Saved!', status: 'success' })
+ */
+
+const STYLES = `
+.dvfy-toast-container {
+  position: fixed;
+  z-index: var(--dvfy-z-toast, 9999);
+  display: flex;
+  flex-direction: column;
+  gap: var(--dvfy-space-2);
+  pointer-events: none;
+  max-width: 24rem;
+  width: 100%;
+}
+.dvfy-toast-container[data-position="top-right"] { top: var(--dvfy-space-4); right: var(--dvfy-space-4); }
+.dvfy-toast-container[data-position="top-left"] { top: var(--dvfy-space-4); left: var(--dvfy-space-4); }
+.dvfy-toast-container[data-position="bottom-right"] { bottom: var(--dvfy-space-4); right: var(--dvfy-space-4); }
+.dvfy-toast-container[data-position="bottom-left"] { bottom: var(--dvfy-space-4); left: var(--dvfy-space-4); }
+
+dvfy-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--dvfy-space-3);
+  padding: var(--dvfy-space-3) var(--dvfy-space-4);
+  border-radius: var(--dvfy-radius-lg);
+  font-family: var(--dvfy-font-sans);
+  font-size: var(--dvfy-text-sm);
+  line-height: var(--dvfy-leading-normal);
+  border: var(--dvfy-border-1) solid transparent;
+  box-shadow: var(--dvfy-shadow-lg);
+  pointer-events: auto;
+  cursor: pointer;
+  opacity: 0;
+  transform: translateX(1rem);
+  transition: opacity var(--dvfy-duration-normal) var(--dvfy-ease-out),
+              transform var(--dvfy-duration-normal) var(--dvfy-ease-out);
+}
+dvfy-toast.dvfy-toast--visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+dvfy-toast.dvfy-toast--hiding {
+  opacity: 0;
+  transform: translateX(1rem);
+}
+
+/* Status colors */
+dvfy-toast:not([status]), dvfy-toast[status="info"] {
+  background: var(--dvfy-info-bg);
+  color: var(--dvfy-info-text);
+  border-color: var(--dvfy-info-border);
+}
+dvfy-toast[status="success"] {
+  background: var(--dvfy-success-bg);
+  color: var(--dvfy-success-text);
+  border-color: var(--dvfy-success-border);
+}
+dvfy-toast[status="warning"] {
+  background: var(--dvfy-warning-bg);
+  color: var(--dvfy-warning-text);
+  border-color: var(--dvfy-warning-border);
+}
+dvfy-toast[status="danger"] {
+  background: var(--dvfy-danger-bg);
+  color: var(--dvfy-danger-text);
+  border-color: var(--dvfy-danger-border);
+}
+
+dvfy-toast .dvfy-toast__icon { flex-shrink: 0; font-size: var(--dvfy-text-base); }
+dvfy-toast .dvfy-toast__msg { flex: 1; }
+`;
+
+const STATUS_ICONS = { info: '\u2139\uFE0F', success: '\u2705', warning: '\u26A0\uFE0F', danger: '\u274C' };
+const CONTAINERS = new Map();
+
+function getContainer(position) {
+  if (CONTAINERS.has(position)) return CONTAINERS.get(position);
+  const el = document.createElement('div');
+  el.className = 'dvfy-toast-container';
+  el.setAttribute('data-position', position);
+  el.setAttribute('aria-live', 'polite');
+  document.body.appendChild(el);
+  CONTAINERS.set(position, el);
+  return el;
+}
+
+class DvfyToast extends HTMLElement {
+  static #styled = false;
+  #timer = null;
+
+  static show({ message, status = 'info', duration = 4000, position = 'top-right' } = {}) {
+    const toast = document.createElement('dvfy-toast');
+    toast.setAttribute('status', status);
+    toast.setAttribute('duration', String(duration));
+    toast.setAttribute('position', position);
+    toast.textContent = message;
+
+    const container = getContainer(position);
+    container.appendChild(toast);
+    return toast;
+  }
+
+  connectedCallback() {
+    if (!DvfyToast.#styled) {
+      const s = document.createElement('style');
+      s.textContent = STYLES;
+      document.head.appendChild(s);
+      DvfyToast.#styled = true;
+    }
+
+    const message = this.textContent.trim();
+    const status = this.getAttribute('status') || 'info';
+    const duration = parseInt(this.getAttribute('duration') || '4000', 10);
+
+    // Clear and rebuild
+    this.textContent = '';
+
+    const icon = document.createElement('span');
+    icon.className = 'dvfy-toast__icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = STATUS_ICONS[status] || STATUS_ICONS.info;
+    this.appendChild(icon);
+
+    const msg = document.createElement('span');
+    msg.className = 'dvfy-toast__msg';
+    msg.textContent = message;
+    this.appendChild(msg);
+
+    this.setAttribute('role', 'alert');
+    this.addEventListener('click', () => this.dismiss());
+
+    // Animate in
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => this.classList.add('dvfy-toast--visible'));
+    });
+
+    // Auto-dismiss
+    if (duration > 0) {
+      this.#timer = setTimeout(() => this.dismiss(), duration);
+    }
+  }
+
+  disconnectedCallback() {
+    if (this.#timer) clearTimeout(this.#timer);
+  }
+
+  dismiss() {
+    if (this.#timer) clearTimeout(this.#timer);
+    this.classList.remove('dvfy-toast--visible');
+    this.classList.add('dvfy-toast--hiding');
+    this.addEventListener('transitionend', () => this.remove(), { once: true });
+    // Fallback if transition doesn't fire
+    setTimeout(() => { if (this.parentNode) this.remove(); }, 400);
+  }
+}
+
+customElements.define('dvfy-toast', DvfyToast);
+
+// Export for static usage
+if (typeof window !== 'undefined') window.DvfyToast = DvfyToast;
