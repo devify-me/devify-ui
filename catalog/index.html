@@ -418,13 +418,13 @@
     <!-- ═══ TABLE ═══ -->
     <div class="section">
       <h2 class="section-title">Table</h2>
-      <p class="section-subtitle">dvfy-table — striped, hoverable, sortable headers</p>
-      <dvfy-table striped hoverable responsive>
+      <p class="section-subtitle">dvfy-table — sortable, selectable, filterable, searchable</p>
+      <dvfy-table striped hoverable responsive selectable searchable filterable>
         <table>
           <thead>
             <tr>
-              <th data-sort>Name</th>
-              <th data-sort>Role</th>
+              <th data-sort data-filter>Name</th>
+              <th data-sort data-filter>Role</th>
               <th data-sort>Status</th>
               <th>Actions</th>
             </tr>
@@ -459,6 +459,48 @@
         <dvfy-empty icon="📭" title="No messages yet" description="When you receive messages, they'll show up here.">
           <dvfy-button variant="outline" size="sm">Compose</dvfy-button>
         </dvfy-empty>
+      </div>
+    </div>
+
+    <!-- ═══ AUTH ═══ -->
+    <div class="section">
+      <h2 class="section-title">Auth</h2>
+      <p class="section-subtitle">dvfy-auth — sign-in, sign-up, sign-out forms</p>
+      <div class="grid-3">
+        <div>
+          <div class="row-label">Sign In</div>
+          <dvfy-auth mode="signin" action="/auth/login" brand="Devify.me" forgot-url="/auth/forgot" signup-url="/auth/register" oauth-google="/auth/google" oauth-github="/auth/github"></dvfy-auth>
+        </div>
+        <div>
+          <div class="row-label">Sign Up</div>
+          <dvfy-auth mode="signup" action="/auth/register" brand="Devify.me" signin-url="/auth/login"></dvfy-auth>
+        </div>
+        <div>
+          <div class="row-label">Sign Out</div>
+          <dvfy-auth mode="signout" action="/auth/logout" brand="Devify.me" email="jorge@devify.me"></dvfy-auth>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ HAMBURGER ═══ -->
+    <div class="section">
+      <h2 class="section-title">Hamburger Menu</h2>
+      <p class="section-subtitle">dvfy-hamburger — 3-stage responsive menu (always active in demo)</p>
+      <div class="demo-box" style="max-width:360px;min-height:480px;overflow:hidden;position:relative;border-radius:var(--dvfy-radius-xl)">
+        <dvfy-hamburger brand="Devify.me" tagline="making it real" breakpoint="9999">
+          <a href="#" data-utility data-icon="🛒"></a>
+          <a href="#" data-utility data-icon="🔔"></a>
+          <a href="#" data-icon="🏠">Home</a>
+          <a href="#" data-icon="🚀">Products</a>
+          <a href="#" data-icon="💡">Features</a>
+          <a href="#" data-icon="💰">Pricing</a>
+          <a href="#" data-icon="📖">Docs</a>
+          <a href="#" data-icon="💬">Support</a>
+        </dvfy-hamburger>
+        <div style="padding:var(--dvfy-space-4);color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">
+          <p>Page content goes here. Click the hamburger icon (☰) to cycle through the 3 states:</p>
+          <p style="margin-top:var(--dvfy-space-2)">☰ → expanded (icon + label)<br>▶ → icons only<br>✕ → closed</p>
+        </div>
       </div>
     </div>
 
