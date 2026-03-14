@@ -193,13 +193,10 @@ dvfy-hamburger {
   overflow-y: auto;
   overflow-x: hidden;
 
-  /* Animation: slide in from right */
+  /* Animation: ONLY slide transform — no width/padding transitions to avoid jerk */
   transform: translateX(100%);
   pointer-events: none;
-  transition: transform var(--dvfy-duration-normal) var(--dvfy-ease-out),
-              max-width var(--dvfy-duration-normal) var(--dvfy-ease-out),
-              min-width var(--dvfy-duration-normal) var(--dvfy-ease-out),
-              padding var(--dvfy-duration-normal) var(--dvfy-ease-out);
+  transition: transform var(--dvfy-duration-normal) var(--dvfy-ease-out);
 }
 .dvfy-hb__menu--open {
   transform: translateX(0);
@@ -229,10 +226,13 @@ dvfy-hamburger {
 }
 .dvfy-hb__label {
   overflow: hidden;
-  transition: opacity var(--dvfy-duration-normal) var(--dvfy-ease-out),
-              max-width var(--dvfy-duration-normal) var(--dvfy-ease-out);
   max-width: 15rem;
   opacity: 1;
+}
+/* Only animate labels when menu is open (prevents transition noise during close) */
+.dvfy-hb__menu--open .dvfy-hb__label {
+  transition: opacity var(--dvfy-duration-normal) var(--dvfy-ease-out),
+              max-width var(--dvfy-duration-normal) var(--dvfy-ease-out);
 }
 
 /* ── Icons-only state ── */
@@ -592,17 +592,12 @@ class DvfyHamburger extends HTMLElement {
 
     // Menu state transitions
     if (state === 'closed') {
-      // Remove --open to trigger slide-out. Keep menu data-state as-is
-      // (icons or expanded) so labels don't reappear during the slide.
-      // Reset data-state ONLY after slide completes (250ms matches --dvfy-duration-normal).
+      // Remove --open first (starts slide-out via transform).
+      // Labels have no transition when --open is removed, so resetting
+      // data-state is safe immediately — no visual jerk.
       this.#menu.classList.remove('dvfy-hb__menu--open');
-      if (this.#closeTimer) clearTimeout(this.#closeTimer);
-      this.#closeTimer = setTimeout(() => {
-        this.#menu.setAttribute('data-state', 'closed');
-        this.#closeTimer = null;
-      }, 300);
+      this.#menu.setAttribute('data-state', 'closed');
     } else {
-      if (this.#closeTimer) { clearTimeout(this.#closeTimer); this.#closeTimer = null; }
       this.#menu.setAttribute('data-state', state);
       this.#menu.classList.add('dvfy-hb__menu--open');
     }
