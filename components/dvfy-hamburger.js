@@ -37,7 +37,7 @@ dvfy-hamburger {
   position: relative;
 }
 
-/* ── Header bar (always visible) ── */
+/* ── Header bar (always visible, ABOVE overlay so trigger stays clickable) ── */
 .dvfy-hb__bar {
   display: flex;
   align-items: center;
@@ -45,7 +45,7 @@ dvfy-hamburger {
   background: var(--dvfy-primary-bg);
   color: var(--dvfy-primary-text);
   position: relative;
-  z-index: var(--dvfy-z-sticky, 100);
+  z-index: calc(var(--dvfy-z-sticky, 100) + 3);
   gap: var(--dvfy-space-3);
 }
 
