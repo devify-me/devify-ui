@@ -588,11 +588,18 @@ class DvfyHamburger extends HTMLElement {
       this.#overlay.classList.add('dvfy-hb__overlay--active');
     }
 
-    // Menu classes — use data attribute instead of multiple classes to avoid transition conflicts
-    this.#menu.setAttribute('data-state', state);
+    // Menu state transitions
     if (state === 'closed') {
+      // Slide out first, THEN reset menu data-state (so labels don't reappear mid-slide)
       this.#menu.classList.remove('dvfy-hb__menu--open');
+      const reset = () => {
+        this.#menu.setAttribute('data-state', 'closed');
+        this.#menu.removeEventListener('transitionend', reset);
+      };
+      this.#menu.addEventListener('transitionend', reset);
+      setTimeout(reset, 350); // fallback
     } else {
+      this.#menu.setAttribute('data-state', state);
       this.#menu.classList.add('dvfy-hb__menu--open');
     }
   }
