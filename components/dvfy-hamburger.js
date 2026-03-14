@@ -236,26 +236,25 @@ dvfy-hamburger {
 }
 
 /* ── Icons-only state ── */
-.dvfy-hb__menu--icons {
+.dvfy-hb__menu[data-state="icons"] {
   min-width: 4rem;
   max-width: 4.5rem;
   padding: var(--dvfy-space-2);
   gap: var(--dvfy-space-1);
   transform: translateX(0);
 }
-.dvfy-hb__menu--icons .dvfy-hb__item {
+.dvfy-hb__menu[data-state="icons"] .dvfy-hb__item {
   justify-content: center;
   padding: var(--dvfy-space-2);
   border-radius: var(--dvfy-radius-lg);
-  background: var(--dvfy-surface-sunken);
 }
 .dvfy-hb__menu--icons .dvfy-hb__item:hover {
   background: var(--dvfy-hover-bg);
 }
-.dvfy-hb__menu--icons .dvfy-hb__icon {
+.dvfy-hb__menu[data-state="icons"] .dvfy-hb__icon {
   width: auto;
 }
-.dvfy-hb__menu--icons .dvfy-hb__label {
+.dvfy-hb__menu[data-state="icons"] .dvfy-hb__label {
   max-width: 0;
   opacity: 0;
   overflow: hidden;
@@ -267,7 +266,7 @@ dvfy-hamburger {
   background: var(--dvfy-border-muted);
   margin: var(--dvfy-space-1) var(--dvfy-space-3);
 }
-.dvfy-hb__menu--icons .dvfy-hb__separator {
+.dvfy-hb__menu[data-state="icons"] .dvfy-hb__separator {
   display: none;
 }
 
@@ -589,23 +588,12 @@ class DvfyHamburger extends HTMLElement {
       this.#overlay.classList.add('dvfy-hb__overlay--active');
     }
 
-    // Menu classes
+    // Menu classes — use data attribute instead of multiple classes to avoid transition conflicts
+    this.#menu.setAttribute('data-state', state);
     if (state === 'closed') {
-      // Only remove --open to trigger slide-out; keep --icons so it doesn't jerk wider
       this.#menu.classList.remove('dvfy-hb__menu--open');
-      // Clean up --icons after transition completes
-      const cleanup = () => {
-        this.#menu.classList.remove('dvfy-hb__menu--icons');
-        this.#menu.removeEventListener('transitionend', cleanup);
-      };
-      this.#menu.addEventListener('transitionend', cleanup);
-      // Fallback if transitionend doesn't fire
-      setTimeout(cleanup, 350);
-    } else if (state === 'expanded') {
-      this.#menu.classList.add('dvfy-hb__menu--open');
-      this.#menu.classList.remove('dvfy-hb__menu--icons');
     } else {
-      this.#menu.classList.add('dvfy-hb__menu--open', 'dvfy-hb__menu--icons');
+      this.#menu.classList.add('dvfy-hb__menu--open');
     }
   }
 }
