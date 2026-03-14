@@ -18,25 +18,7 @@
       color: var(--dvfy-text-primary);
       line-height: var(--dvfy-leading-normal);
     }
-    .catalog-header {
-      background: var(--dvfy-surface-raised);
-      border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-default);
-      padding: var(--dvfy-space-4) var(--dvfy-space-6);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: var(--dvfy-z-sticky);
-    }
-    .catalog-header h1 {
-      font-size: var(--dvfy-text-xl);
-      font-weight: var(--dvfy-weight-bold);
-    }
-    .catalog-header .theme-toggle {
-      display: flex;
-      gap: var(--dvfy-space-2);
-    }
+    /* catalog-header styles removed — replaced by dvfy-header */
     .catalog-body {
       max-width: 72rem;
       margin: 0 auto;
@@ -95,18 +77,23 @@
   </style>
 </head>
 <body>
-  <header class="catalog-header">
-    <h1 style="font-family:var(--dvfy-font-brand)">@devify/ui</h1>
-    <dvfy-theme-switcher default-theme="devify-cyan">
+  <dvfy-header brand="@devify/ui" logo="favicon.svg" sticky scroll-shrink>
+    <a href="#buttons" data-icon="🔘">Buttons</a>
+    <a href="#inputs" data-icon="📝">Inputs</a>
+    <a href="#data" data-icon="📊">Data</a>
+    <a href="#navigation" data-icon="🧭">Navigation</a>
+    <a href="#feedback" data-icon="💬">Feedback</a>
+    <a href="#layout" data-icon="📐">Layout</a>
+    <dvfy-theme-switcher data-action default-theme="devify-cyan">
       <option value="devify-cyan">Cyan</option>
       <option value="devify-pink">Pink</option>
     </dvfy-theme-switcher>
-  </header>
+  </dvfy-header>
 
-  <main class="catalog-body">
+  <main id="main-content" class="catalog-body">
 
     <!-- ═══ BUTTONS ═══ -->
-    <div class="section">
+    <div id="buttons" class="section">
       <h2 class="section-title">Button</h2>
       <p class="section-subtitle">dvfy-button — variant, size, disabled, loading</p>
 
@@ -134,7 +121,7 @@
     </div>
 
     <!-- ═══ INPUT ═══ -->
-    <div class="section">
+    <div id="inputs" class="section">
       <h2 class="section-title">Input</h2>
       <p class="section-subtitle">dvfy-input — label, type, error, help, required, disabled</p>
       <div class="grid-2">
@@ -204,7 +191,7 @@
     </div>
 
     <!-- ═══ BADGE & TAG ═══ -->
-    <div class="section">
+    <div id="data" class="section">
       <h2 class="section-title">Badge &amp; Tag</h2>
       <p class="section-subtitle">Status indicators and interactive tags</p>
 
@@ -244,7 +231,7 @@
     </div>
 
     <!-- ═══ ALERT ═══ -->
-    <div class="section">
+    <div id="feedback" class="section">
       <h2 class="section-title">Alert</h2>
       <p class="section-subtitle">dvfy-alert — status, dismissible, title</p>
       <div style="display:flex;flex-direction:column;gap:var(--dvfy-space-3)">
@@ -335,7 +322,7 @@
     </div>
 
     <!-- ═══ DROPDOWN ═══ -->
-    <div class="section">
+    <div id="navigation" class="section">
       <h2 class="section-title">Dropdown</h2>
       <p class="section-subtitle">dvfy-dropdown — trigger + menu items</p>
       <div class="row">
@@ -463,7 +450,7 @@
     </div>
 
     <!-- ═══ AUTH ═══ -->
-    <div class="section">
+    <div id="layout" class="section">
       <h2 class="section-title">Auth</h2>
       <p class="section-subtitle">dvfy-auth — sign-in, sign-up, sign-out forms</p>
       <div class="grid-3">
@@ -482,24 +469,31 @@
       </div>
     </div>
 
-    <!-- ═══ HAMBURGER ═══ -->
+    <!-- ═══ HEADER & HAMBURGER ═══ -->
     <div class="section">
-      <h2 class="section-title">Hamburger Menu</h2>
-      <p class="section-subtitle">dvfy-hamburger — 3-stage responsive menu (always active in demo)</p>
-      <div class="demo-box" style="max-width:360px;min-height:480px;overflow:hidden;position:relative;border-radius:var(--dvfy-radius-xl)">
-        <dvfy-hamburger brand="Devify.me" tagline="making it real" breakpoint="9999">
-          <a href="#" data-utility data-icon="🛒"></a>
-          <a href="#" data-utility data-icon="🔔"></a>
+      <h2 class="section-title">Header</h2>
+      <p class="section-subtitle">dvfy-header — responsive header with 3-stage hamburger, scroll-shrink, theme picker. Resize browser to see mobile view.</p>
+
+      <div class="row-label">Mobile Preview (forced breakpoint: 9999px)</div>
+      <div style="max-width:375px;min-height:500px;overflow:hidden;position:relative;border-radius:var(--dvfy-radius-xl);border:var(--dvfy-border-1) solid var(--dvfy-border-default);background:var(--dvfy-surface-page)">
+        <dvfy-header brand="Devify.me" logo="favicon.svg" sticky breakpoint="9999">
           <a href="#" data-icon="🏠">Home</a>
           <a href="#" data-icon="🚀">Products</a>
           <a href="#" data-icon="💡">Features</a>
           <a href="#" data-icon="💰">Pricing</a>
           <a href="#" data-icon="📖">Docs</a>
           <a href="#" data-icon="💬">Support</a>
-        </dvfy-hamburger>
+          <a href="#" data-action data-icon="🛒" data-badge="3"></a>
+          <a href="#" data-action data-icon="🔔" data-badge="5"></a>
+          <dvfy-theme-switcher data-action default-theme="devify-cyan">
+            <option value="devify-cyan">Cyan</option>
+            <option value="devify-pink">Pink</option>
+          </dvfy-theme-switcher>
+        </dvfy-header>
         <div style="padding:var(--dvfy-space-4);color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">
-          <p>Page content goes here. Click the hamburger icon (☰) to cycle through the 3 states:</p>
-          <p style="margin-top:var(--dvfy-space-2)">☰ → expanded (icon + label)<br>▶ → icons only<br>✕ → closed</p>
+          <p>Click ☰ to open menu → `>` to collapse to icons → ✕ to close</p>
+          <p style="margin-top:var(--dvfy-space-2)">Cart badge: 3, Notification badge: 5</p>
+          <p style="margin-top:var(--dvfy-space-2)">Theme switcher integrated in both header actions and mobile menu.</p>
         </div>
       </div>
     </div>
