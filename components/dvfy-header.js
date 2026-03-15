@@ -30,7 +30,10 @@
  *   </dvfy-header>
  */
 
-const HDR_STYLES_FN = (bp) => `
+let _hdrIdCounter = 0;
+
+// Base styles (injected once, no breakpoint dependency)
+const HDR_BASE_STYLES = `
 /* ── Skip to content (accessibility) ── */
 .dvfy-hdr__skip {
   position: absolute;
@@ -329,33 +332,34 @@ dvfy-header[data-menu="icons"] .dvfy-hdr__line--bot {
   pointer-events: auto;
 }
 
-/* ── Mobile layout ── */
+/* Default: trigger hidden, menu hidden (desktop behavior) */
+.dvfy-hdr__trigger { display: none; }
+`;
+
+// Per-instance responsive styles (scoped by data-hdr-id)
+const HDR_RESPONSIVE_FN = (id, bp) => `
 @media (max-width: ${bp}px) {
-  .dvfy-hdr__nav { display: none; }
-  .dvfy-hdr__trigger { display: flex; }
-  .dvfy-hdr__bar {
+  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__nav { display: none; }
+  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__trigger { display: flex; }
+  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__bar {
     justify-content: space-between;
     align-items: center;
     padding: var(--dvfy-space-2) var(--dvfy-space-4);
     min-height: auto;
   }
-  .dvfy-hdr__brand { padding: 0; }
-  .dvfy-hdr__actions { gap: var(--dvfy-space-1); }
-  /* Hide theme switcher on mobile — it's in the hamburger menu */
-  .dvfy-hdr__actions dvfy-theme-switcher { display: none; }
+  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__brand { padding: 0; }
+  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__actions { gap: var(--dvfy-space-1); }
+  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__actions dvfy-theme-switcher { display: none; }
 }
-
-/* ── Desktop layout ── */
 @media (min-width: ${bp + 1}px) {
-  .dvfy-hdr__trigger { display: none; }
-  .dvfy-hdr__menu { display: none !important; }
-  .dvfy-hdr__overlay { display: none !important; }
+  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__menu { display: none !important; }
+  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__overlay { display: none !important; }
 }
 `;
 
 class DvfyHeader extends HTMLElement {
-  static #styled = false;
-  static #styleBp = 0;
+  static #baseStyled = false;
+  #hdrId = null;
   #bar = null;
   #trigger = null;
   #menu = null;
@@ -366,17 +370,24 @@ class DvfyHeader extends HTMLElement {
   static get observedAttributes() { return ['brand', 'logo', 'preset', 'sticky', 'scroll-shrink']; }
 
   connectedCallback() {
-    const bp = parseInt(this.getAttribute('breakpoint') || '768', 10);
-    if (!DvfyHeader.#styled || DvfyHeader.#styleBp !== bp) {
-      const old = document.getElementById('dvfy-hdr-style');
-      if (old) old.remove();
+    // Inject base styles once
+    if (!DvfyHeader.#baseStyled) {
       const s = document.createElement('style');
-      s.id = 'dvfy-hdr-style';
-      s.textContent = HDR_STYLES_FN(bp);
+      s.id = 'dvfy-hdr-base-style';
+      s.textContent = HDR_BASE_STYLES;
       document.head.appendChild(s);
-      DvfyHeader.#styled = true;
-      DvfyHeader.#styleBp = bp;
+      DvfyHeader.#baseStyled = true;
     }
+
+    // Assign unique ID and inject per-instance responsive styles
+    this.#hdrId = String(++_hdrIdCounter);
+    this.setAttribute('data-hdr-id', this.#hdrId);
+    const bp = parseInt(this.getAttribute('breakpoint') || '768', 10);
+    const rs = document.createElement('style');
+    rs.id = `dvfy-hdr-responsive-${this.#hdrId}`;
+    rs.textContent = HDR_RESPONSIVE_FN(this.#hdrId, bp);
+    document.head.appendChild(rs);
+
     this.#build();
   }
 
@@ -384,6 +395,9 @@ class DvfyHeader extends HTMLElement {
     if (this.#overlay && this.#overlay.parentNode) this.#overlay.remove();
     if (this.#scrollHandler) window.removeEventListener('scroll', this.#scrollHandler);
     document.removeEventListener('keydown', this.#onKey);
+    // Clean up per-instance responsive style
+    const rs = document.getElementById(`dvfy-hdr-responsive-${this.#hdrId}`);
+    if (rs) rs.remove();
   }
 
   #build() {
