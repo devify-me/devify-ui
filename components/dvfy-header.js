@@ -429,8 +429,9 @@ class DvfyHeader extends HTMLElement {
       img.alt = this.getAttribute('brand') || 'Logo';
       brand.appendChild(img);
     }
+    // Only show brand text if no logo (horizontal logos usually include the name)
     const brandName = this.getAttribute('brand');
-    if (brandName) {
+    if (brandName && !logoUrl) {
       const txt = document.createElement('span');
       txt.className = 'dvfy-hdr__brand-text';
       txt.textContent = brandName;
