@@ -474,20 +474,36 @@
     <div id="layout" class="section">
       <h2 class="section-title">Auth</h2>
       <p class="section-subtitle">dvfy-auth — sign-in, sign-up, sign-out forms</p>
-      <div class="grid-3">
+      <div class="grid-2">
         <div>
-          <div class="row-label">Sign In</div>
-          <dvfy-auth mode="signin" action="/auth/login" brand="Devify.me" logo="favicon.svg" forgot-url="/auth/forgot" signup-url="/auth/register" oauth-google="/auth/google" oauth-github="/auth/github"></dvfy-auth>
+          <div class="row-label">Sign In (with logo)</div>
+          <dvfy-auth mode="signin" action="/auth/login" logo="favicon.svg" forgot-url="/auth/forgot" signup-url="/auth/register" oauth-google="/auth/google" oauth-github="/auth/github"></dvfy-auth>
         </div>
         <div>
-          <div class="row-label">Sign Up</div>
-          <dvfy-auth mode="signup" action="/auth/register" brand="Devify.me" logo="favicon.svg" signin-url="/auth/login"></dvfy-auth>
-        </div>
-        <div>
-          <div class="row-label">Sign Out</div>
-          <dvfy-auth mode="signout" action="/auth/logout" brand="Devify.me" logo="favicon.svg" email="jorge@devify.me"></dvfy-auth>
+          <div class="row-label">Sign Up (with brand text)</div>
+          <dvfy-auth mode="signup" action="/auth/register" brand="Devify.me" signin-url="/auth/login"></dvfy-auth>
         </div>
       </div>
+
+      <div class="row-label">Modal variant (click to open)</div>
+      <div class="row">
+        <dvfy-button onclick="document.getElementById('auth-modal-signin').open()">Open Sign In Modal</dvfy-button>
+        <dvfy-button variant="outline" onclick="document.getElementById('auth-modal-signup').open()">Open Sign Up Modal</dvfy-button>
+      </div>
+      <dvfy-auth id="auth-modal-signin" mode="signin" modal action="/auth/login" logo="favicon.svg" forgot-url="/auth/forgot" oauth-google="/auth/google" oauth-github="/auth/github"></dvfy-auth>
+      <dvfy-auth id="auth-modal-signup" mode="signup" modal action="/auth/register" logo="favicon.svg"></dvfy-auth>
+
+      <div class="row-label" style="margin-top:var(--dvfy-space-4)">Non-dismissible modal (required)</div>
+      <div class="row">
+        <dvfy-button variant="danger" onclick="document.getElementById('required-modal').setAttribute('open','')">Open Required Modal</dvfy-button>
+      </div>
+      <dvfy-modal id="required-modal" title="Unsaved Changes" required>
+        <p style="margin-bottom:var(--dvfy-space-4)">You have unsaved changes. Are you sure you want to leave?</p>
+        <div style="display:flex;gap:var(--dvfy-space-2);justify-content:flex-end">
+          <dvfy-button variant="ghost" onclick="document.getElementById('required-modal').removeAttribute('open')">Stay</dvfy-button>
+          <dvfy-button variant="danger" onclick="document.getElementById('required-modal').removeAttribute('open')">Discard</dvfy-button>
+        </div>
+      </dvfy-modal>
     </div>
 
     <!-- ═══ HEADER & HAMBURGER ═══ -->

@@ -1,12 +1,13 @@
 /**
- * <dvfy-auth> — Authentication forms (sign-in, sign-up, sign-out)
+ * <dvfy-auth> — Authentication forms (sign-in, sign-up)
  *
  * Attributes:
- *   mode:         signin | signup | signout (default: "signin")
+ *   mode:         signin | signup (default: "signin")
  *   action:       form action URL
  *   method:       form method (default: "post")
- *   brand:        brand name text
- *   logo:         logo image URL
+ *   brand:        brand name text (hidden when logo is present)
+ *   logo:         logo image URL (shown instead of brand text)
+ *   modal:        boolean — wraps form in a modal (use with trigger button)
  *   forgot-url:   "Forgot password?" link URL
  *   signup-url:   "Create account" link URL (sign-in mode)
  *   signin-url:   "Already have an account?" link URL (sign-up mode)
@@ -15,6 +16,11 @@
  *
  * Events:
  *   auth-submit — { email, password, ... } form data as object
+ *
+ * Modal usage:
+ *   <dvfy-auth mode="signin" modal action="/auth/login" logo="/logo.svg">
+ *   </dvfy-auth>
+ *   <!-- Opens via: document.querySelector('dvfy-auth').open() -->
  *
  * Usage:
  *   <dvfy-auth mode="signin" action="/auth/login" brand="Devify"
@@ -50,9 +56,12 @@ const STYLES = `
 }
 
 .dvfy-auth__logo {
-  max-height: 3rem;
+  max-width: 60%;
+  max-height: 5rem;
   object-fit: contain;
-  margin-bottom: var(--dvfy-space-2);
+}
+.dvfy-auth__logo--hz {
+  max-width: 80%;
 }
 
 .dvfy-auth__brand {
@@ -198,11 +207,15 @@ const STYLES = `
   color: var(--dvfy-text-secondary);
 }
 
-.dvfy-auth__message {
-  text-align: center;
-  font-size: var(--dvfy-text-sm);
-  color: var(--dvfy-text-secondary);
-  padding: var(--dvfy-space-4) 0;
+/* Modal variant — no min-height or centering, card has no shadow (modal provides it) */
+.dvfy-auth--modal {
+  min-height: auto;
+  padding: 0;
+}
+.dvfy-auth--modal .dvfy-auth__card {
+  box-shadow: none;
+  border: none;
+  padding: var(--dvfy-space-4) var(--dvfy-space-2);
 }
 `;
 
@@ -210,7 +223,7 @@ class DvfyAuth extends HTMLElement {
   static #styled = false;
 
   static get observedAttributes() {
-    return ['mode', 'action', 'method', 'brand', 'logo', 'forgot-url',
+    return ['mode', 'action', 'method', 'brand', 'logo', 'modal', 'forgot-url',
             'signup-url', 'signin-url', 'oauth-google', 'oauth-github'];
   }
 
@@ -240,56 +253,48 @@ class DvfyAuth extends HTMLElement {
     const card = document.createElement('div');
     card.className = 'dvfy-auth__card';
 
-    // Logo
+    // Logo OR brand text (not both — logo takes precedence)
     const logoUrl = this.#attr('logo');
+    const brand = this.#attr('brand');
     if (logoUrl) {
       const img = document.createElement('img');
       img.className = 'dvfy-auth__logo';
       img.src = logoUrl;
-      img.alt = this.#attr('brand') || 'Logo';
+      img.alt = brand || 'Logo';
       card.appendChild(img);
-    }
-
-    // Brand
-    const brand = this.#attr('brand');
-    if (brand) {
+    } else if (brand) {
       const h = document.createElement('h1');
       h.className = 'dvfy-auth__brand';
       h.textContent = brand;
       card.appendChild(h);
     }
 
-    if (mode === 'signout') {
-      this.#buildSignOut(card);
-    } else {
-      this.#buildForm(card, mode);
-    }
+    this.#buildForm(card, mode);
 
     root.appendChild(card);
-    this.appendChild(root);
+
+    // Modal wrapping
+    if (this.hasAttribute('modal')) {
+      const modal = document.createElement('dvfy-modal');
+      modal.setAttribute('title', mode === 'signup' ? 'Create Account' : 'Sign In');
+      modal.setAttribute('size', 'sm');
+      // Remove min-height and centering from root — modal handles positioning
+      root.classList.remove('dvfy-auth');
+      root.classList.add('dvfy-auth--modal');
+      modal.appendChild(root);
+      this.appendChild(modal);
+      // Expose open/close methods
+      this._modal = modal;
+    } else {
+      this.appendChild(root);
+    }
   }
 
-  #buildSignOut(card) {
-    const msg = document.createElement('p');
-    msg.className = 'dvfy-auth__message';
-    msg.textContent = 'You are currently signed in.';
-    card.appendChild(msg);
+  /** Open the auth modal (only works when modal attribute is set) */
+  open() { if (this._modal) this._modal.setAttribute('open', ''); }
 
-    const form = document.createElement('form');
-    form.className = 'dvfy-auth__form';
-    form.action = this.#attr('action');
-    form.method = this.#attr('method') || 'post';
-    this.#copyHxAttrs(form);
-    form.addEventListener('submit', (e) => this.#handleSubmit(e, form));
-
-    const btn = document.createElement('button');
-    btn.type = 'submit';
-    btn.className = 'dvfy-auth__btn';
-    btn.textContent = 'Sign out';
-    form.appendChild(btn);
-
-    card.appendChild(form);
-  }
+  /** Close the auth modal */
+  close() { if (this._modal) this._modal.removeAttribute('open'); }
 
   #buildForm(card, mode) {
     const isSignUp = mode === 'signup';

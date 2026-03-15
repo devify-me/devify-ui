@@ -97,7 +97,7 @@ class DvfyModal extends HTMLElement {
     if (this.hasAttribute('open')) this.#build();
   }
 
-  static get observedAttributes() { return ['open', 'title']; }
+  static get observedAttributes() { return ['open', 'title', 'required']; }
 
   attributeChangedCallback(name) {
     if (name === 'open') {
@@ -118,7 +118,9 @@ class DvfyModal extends HTMLElement {
     this.#backdrop = document.createElement('div');
     this.#backdrop.className = 'dvfy-modal__backdrop';
     this.#backdrop.addEventListener('click', (e) => {
-      if (e.target === this.#backdrop) this.removeAttribute('open');
+      if (e.target === this.#backdrop && !this.hasAttribute('required')) {
+        this.removeAttribute('open');
+      }
     });
 
     this.#dialog = document.createElement('div');
@@ -138,7 +140,10 @@ class DvfyModal extends HTMLElement {
     closeBtn.textContent = '\u00d7';
     closeBtn.addEventListener('click', () => this.removeAttribute('open'));
     header.appendChild(title);
-    header.appendChild(closeBtn);
+    // Hide close button when required (non-dismissible)
+    if (!this.hasAttribute('required')) {
+      header.appendChild(closeBtn);
+    }
 
     // Body
     const body = document.createElement('div');
@@ -167,7 +172,7 @@ class DvfyModal extends HTMLElement {
   }
 
   #onKey = (e) => {
-    if (e.key === 'Escape') {
+    if (e.key === 'Escape' && !this.hasAttribute('required')) {
       e.preventDefault();
       this.removeAttribute('open');
       return;
