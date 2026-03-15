@@ -34,6 +34,13 @@ let _hdrIdCounter = 0;
 
 // Base styles (injected once, no breakpoint dependency)
 const HDR_BASE_STYLES = `
+/* ── Container query context ── */
+dvfy-header {
+  container-type: inline-size;
+  container-name: dvfy-header;
+  display: block;
+}
+
 /* ── Skip to content (accessibility) ── */
 .dvfy-hdr__skip {
   position: absolute;
@@ -336,24 +343,27 @@ dvfy-header[data-menu="icons"] .dvfy-hdr__line--bot {
 .dvfy-hdr__trigger { display: none; }
 `;
 
-// Per-instance responsive styles (scoped by data-hdr-id)
+// Per-instance responsive styles using CSS Container Queries
+// Each dvfy-header is its own container context — queries respond to
+// the header's width, not the viewport. This means a 375px-wide
+// container shows hamburger even on a wide desktop screen.
 const HDR_RESPONSIVE_FN = (id, bp) => `
-@media (max-width: ${bp}px) {
-  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__nav { display: none; }
-  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__trigger { display: flex; }
-  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__bar {
+@container dvfy-header (max-width: ${bp}px) {
+  [data-hdr-id="${id}"] .dvfy-hdr__nav { display: none; }
+  [data-hdr-id="${id}"] .dvfy-hdr__trigger { display: flex; }
+  [data-hdr-id="${id}"] .dvfy-hdr__bar {
     justify-content: space-between;
     align-items: center;
     padding: var(--dvfy-space-2) var(--dvfy-space-4);
     min-height: auto;
   }
-  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__brand { padding: 0; }
-  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__actions { gap: var(--dvfy-space-1); }
-  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__actions dvfy-theme-switcher { display: none; }
+  [data-hdr-id="${id}"] .dvfy-hdr__brand { padding: 0; }
+  [data-hdr-id="${id}"] .dvfy-hdr__actions { gap: var(--dvfy-space-1); }
+  [data-hdr-id="${id}"] .dvfy-hdr__actions dvfy-theme-switcher { display: none; }
 }
-@media (min-width: ${bp + 1}px) {
-  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__menu { display: none !important; }
-  dvfy-header[data-hdr-id="${id}"] .dvfy-hdr__overlay { display: none !important; }
+@container dvfy-header (min-width: ${bp + 1}px) {
+  [data-hdr-id="${id}"] .dvfy-hdr__menu { display: none !important; }
+  [data-hdr-id="${id}"] .dvfy-hdr__overlay { display: none !important; }
 }
 `;
 
