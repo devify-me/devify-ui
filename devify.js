@@ -40,6 +40,7 @@ import './components/dvfy-select.js';
 import './components/dvfy-theme-switcher.js';
 import './components/dvfy-auth.js';
 import './components/dvfy-hamburger.js';
+import './components/dvfy-section.js';
 import './components/dvfy-header.js';
 
 // HTMX Integration Patterns
