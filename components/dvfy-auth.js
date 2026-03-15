@@ -391,6 +391,9 @@ class DvfyAuth extends HTMLElement {
     lbl.textContent = label;
     wrapper.appendChild(lbl);
 
+    const inputWrap = document.createElement('div');
+    inputWrap.style.cssText = 'position:relative;display:flex;align-items:center';
+
     const input = document.createElement('input');
     input.className = 'dvfy-auth__input';
     input.id = `dvfy-auth-${name}`;
@@ -399,8 +402,57 @@ class DvfyAuth extends HTMLElement {
     input.placeholder = placeholder || '';
     input.required = true;
     input.autocomplete = type === 'password' ? (name === 'password_confirmation' ? 'new-password' : 'current-password') : name;
-    wrapper.appendChild(input);
 
+    if (type === 'password') {
+      input.style.paddingRight = '2.5rem';
+      inputWrap.appendChild(input);
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.style.cssText = 'position:absolute;right:0.5rem;top:50%;transform:translateY(-50%);background:none;border:none;padding:0.25rem;cursor:pointer;color:var(--dvfy-text-muted);line-height:1';
+      toggle.setAttribute('aria-label', 'Show password');
+      toggle.setAttribute('tabindex', '-1');
+      let visible = false;
+      const eyeOpen = 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z';
+      const eyeSlash1 = 'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94';
+      const eyeSlash2 = 'M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19';
+      const eyeSlash3 = 'M14.12 14.12a3 3 0 1 1-4.24-4.24';
+      const setEye = () => {
+        toggle.textContent = '';
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', '16'); svg.setAttribute('height', '16');
+        svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', '2');
+        svg.setAttribute('stroke-linecap', 'round'); svg.setAttribute('stroke-linejoin', 'round');
+        if (visible) {
+          const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          p.setAttribute('d', eyeOpen); svg.appendChild(p);
+          const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          c.setAttribute('cx','12'); c.setAttribute('cy','12'); c.setAttribute('r','3'); svg.appendChild(c);
+        } else {
+          for (const d of [eyeSlash1, eyeSlash2, eyeSlash3]) {
+            const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            p.setAttribute('d', d); svg.appendChild(p);
+          }
+          const l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          l.setAttribute('x1','1'); l.setAttribute('y1','1'); l.setAttribute('x2','23'); l.setAttribute('y2','23');
+          svg.appendChild(l);
+        }
+        toggle.appendChild(svg);
+      };
+      setEye();
+      toggle.addEventListener('click', () => {
+        visible = !visible;
+        input.type = visible ? 'text' : 'password';
+        toggle.setAttribute('aria-label', visible ? 'Hide password' : 'Show password');
+        setEye();
+        input.focus();
+      });
+      inputWrap.appendChild(toggle);
+    } else {
+      inputWrap.appendChild(input);
+    }
+
+    wrapper.appendChild(inputWrap);
     return wrapper;
   }
 

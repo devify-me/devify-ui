@@ -126,7 +126,7 @@
       <p class="section-subtitle">dvfy-input — label, type, error, help, required, disabled</p>
       <div class="grid-2">
         <dvfy-input label="Email" type="email" name="email" placeholder="you@example.com" help="We won't share your email."></dvfy-input>
-        <dvfy-input label="Password" type="password" name="pass" placeholder="Enter password" error="Must be at least 8 characters"></dvfy-input>
+        <dvfy-input label="Password" type="password" name="pass" placeholder="Enter password" error="Must be at least 8 characters" preview></dvfy-input>
         <dvfy-input label="Required Field" name="req" required placeholder="This is required"></dvfy-input>
         <dvfy-input label="Disabled" name="dis" disabled value="Can't edit this"></dvfy-input>
       </div>
@@ -502,8 +502,8 @@
         <dvfy-button onclick="document.getElementById('auth-modal-signin').open()">Open Sign In Modal</dvfy-button>
         <dvfy-button variant="outline" onclick="document.getElementById('auth-modal-signup').open()">Open Sign Up Modal</dvfy-button>
       </div>
-      <dvfy-auth id="auth-modal-signin" mode="signin" modal action="/auth/login" logo="favicon.svg" forgot-url="/auth/forgot" oauth-google="/auth/google" oauth-github="/auth/github"></dvfy-auth>
-      <dvfy-auth id="auth-modal-signup" mode="signup" modal action="/auth/register" logo="favicon.svg"></dvfy-auth>
+      <dvfy-auth id="auth-modal-signin" mode="signin" modal action="/auth/login" logo="favicon.svg" forgot-url="/auth/forgot" signup-url="/auth/register" oauth-google="/auth/google" oauth-github="/auth/github"></dvfy-auth>
+      <dvfy-auth id="auth-modal-signup" mode="signup" modal action="/auth/register" logo="favicon.svg" signin-url="/auth/login"></dvfy-auth>
     </div>
 
     <!-- ═══ HEADER & HAMBURGER ═══ -->
