@@ -74,9 +74,11 @@ dvfy-header[sticky] .dvfy-hdr__bar {
   padding: 0 var(--dvfy-space-5);
   background: var(--dvfy-surface-raised);
   border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-muted);
+  box-shadow: var(--dvfy-shadow-md);
   z-index: calc(var(--dvfy-z-sticky) + 3);
   gap: var(--dvfy-space-3);
   min-height: 3.25rem;
+  position: relative;
   transition: padding var(--dvfy-duration-fast) var(--dvfy-ease-out),
               box-shadow var(--dvfy-duration-fast) var(--dvfy-ease-out),
               background var(--dvfy-duration-fast) var(--dvfy-ease-out);
