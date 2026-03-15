@@ -220,13 +220,34 @@
     <!-- ═══ AVATAR ═══ -->
     <div class="section">
       <h2 class="section-title">Avatar</h2>
-      <p class="section-subtitle">dvfy-avatar — image, initials fallback, status indicator</p>
+      <p class="section-subtitle">dvfy-avatar — image, initials, status, interactive, groups</p>
+
+      <div class="row-label">Basic + Status</div>
       <div class="row">
         <dvfy-avatar name="Jorge Sader" size="sm"></dvfy-avatar>
         <dvfy-avatar name="Jorge Sader" size="md" status="online"></dvfy-avatar>
         <dvfy-avatar name="Kirk McNeill" size="lg" status="busy"></dvfy-avatar>
         <dvfy-avatar name="AI" size="md" status="offline"></dvfy-avatar>
         <dvfy-avatar src="https://i.pravatar.cc/80?u=1" size="lg" status="online"></dvfy-avatar>
+      </div>
+
+      <div class="row-label">Interactive (hover + click)</div>
+      <div class="row">
+        <dvfy-avatar name="Jorge Sader" size="md" interactive></dvfy-avatar>
+        <dvfy-avatar name="Kirk McNeill" size="md" interactive status="online"></dvfy-avatar>
+        <dvfy-avatar src="https://i.pravatar.cc/80?u=2" size="md" interactive status="busy"></dvfy-avatar>
+      </div>
+
+      <div class="row-label">Avatar Group (stacked, max=4)</div>
+      <div class="row">
+        <dvfy-avatar-group max="4">
+          <dvfy-avatar name="Jorge Sader" size="md"></dvfy-avatar>
+          <dvfy-avatar name="Kirk McNeill" size="md"></dvfy-avatar>
+          <dvfy-avatar name="Claude" size="md"></dvfy-avatar>
+          <dvfy-avatar name="Grob" size="md"></dvfy-avatar>
+          <dvfy-avatar name="Alice" size="md"></dvfy-avatar>
+          <dvfy-avatar name="Bob" size="md"></dvfy-avatar>
+        </dvfy-avatar-group>
       </div>
     </div>
 
@@ -456,15 +477,15 @@
       <div class="grid-3">
         <div>
           <div class="row-label">Sign In</div>
-          <dvfy-auth mode="signin" action="/auth/login" brand="Devify.me" forgot-url="/auth/forgot" signup-url="/auth/register" oauth-google="/auth/google" oauth-github="/auth/github"></dvfy-auth>
+          <dvfy-auth mode="signin" action="/auth/login" brand="Devify.me" logo="favicon.svg" forgot-url="/auth/forgot" signup-url="/auth/register" oauth-google="/auth/google" oauth-github="/auth/github"></dvfy-auth>
         </div>
         <div>
           <div class="row-label">Sign Up</div>
-          <dvfy-auth mode="signup" action="/auth/register" brand="Devify.me" signin-url="/auth/login"></dvfy-auth>
+          <dvfy-auth mode="signup" action="/auth/register" brand="Devify.me" logo="favicon.svg" signin-url="/auth/login"></dvfy-auth>
         </div>
         <div>
           <div class="row-label">Sign Out</div>
-          <dvfy-auth mode="signout" action="/auth/logout" brand="Devify.me" email="jorge@devify.me"></dvfy-auth>
+          <dvfy-auth mode="signout" action="/auth/logout" brand="Devify.me" logo="favicon.svg" email="jorge@devify.me"></dvfy-auth>
         </div>
       </div>
     </div>

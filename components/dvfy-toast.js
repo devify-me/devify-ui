@@ -56,34 +56,30 @@ dvfy-toast.dvfy-toast--hiding {
   transform: translateX(1rem);
 }
 
-/* Status colors — subtle bg with high-contrast text */
+/* Status colors — subtle tinted backgrounds like alerts */
 dvfy-toast:not([status]), dvfy-toast[status="info"] {
-  background: var(--dvfy-surface-raised);
-  color: var(--dvfy-text-primary);
+  background: var(--dvfy-info-bg-subtle);
+  color: var(--dvfy-info-text);
   border-color: var(--dvfy-info-border);
 }
-dvfy-toast:not([status]) .dvfy-toast__icon, dvfy-toast[status="info"] .dvfy-toast__icon { color: var(--dvfy-info-bg); }
 
 dvfy-toast[status="success"] {
-  background: var(--dvfy-surface-raised);
-  color: var(--dvfy-text-primary);
+  background: var(--dvfy-success-bg-subtle);
+  color: var(--dvfy-success-text);
   border-color: var(--dvfy-success-border);
 }
-dvfy-toast[status="success"] .dvfy-toast__icon { color: var(--dvfy-success-bg); }
 
 dvfy-toast[status="warning"] {
-  background: var(--dvfy-surface-raised);
-  color: var(--dvfy-text-primary);
+  background: var(--dvfy-warning-bg-subtle);
+  color: var(--dvfy-warning-text);
   border-color: var(--dvfy-warning-border);
 }
-dvfy-toast[status="warning"] .dvfy-toast__icon { color: var(--dvfy-warning-bg); }
 
 dvfy-toast[status="danger"] {
-  background: var(--dvfy-surface-raised);
-  color: var(--dvfy-text-primary);
+  background: var(--dvfy-danger-bg-subtle);
+  color: var(--dvfy-danger-text);
   border-color: var(--dvfy-danger-border);
 }
-dvfy-toast[status="danger"] .dvfy-toast__icon { color: var(--dvfy-danger-bg); }
 
 dvfy-toast .dvfy-toast__icon { flex-shrink: 0; font-size: var(--dvfy-text-lg); font-weight: var(--dvfy-weight-bold); }
 dvfy-toast .dvfy-toast__msg { flex: 1; }

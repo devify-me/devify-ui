@@ -2,14 +2,29 @@
  * <dvfy-avatar> — User avatar with image + fallback initials
  *
  * Attributes:
- *   src:    image URL
- *   name:   user name (for initials fallback)
- *   size:   sm | md | lg (default: "md")
- *   status: online | offline | busy
+ *   src:         image URL
+ *   name:        user name (for initials fallback)
+ *   size:        sm | md | lg (default: "md")
+ *   status:      online | offline | busy
+ *   interactive: boolean — adds hover effect and cursor pointer
+ *
+ * Events:
+ *   avatar-click — dispatched when interactive avatar is clicked
+ *
+ * <dvfy-avatar-group> — Overlapping avatar stack
+ *
+ * Attributes:
+ *   max: number — max avatars to show before "+N" overflow
  *
  * Usage:
  *   <dvfy-avatar src="/photos/user.jpg" name="Jorge Garcia" status="online"></dvfy-avatar>
- *   <dvfy-avatar name="Jane Doe" size="lg"></dvfy-avatar>
+ *   <dvfy-avatar name="Jane Doe" size="lg" interactive></dvfy-avatar>
+ *   <dvfy-avatar-group max="3">
+ *     <dvfy-avatar name="A B"></dvfy-avatar>
+ *     <dvfy-avatar name="C D"></dvfy-avatar>
+ *     <dvfy-avatar name="E F"></dvfy-avatar>
+ *     <dvfy-avatar name="G H"></dvfy-avatar>
+ *   </dvfy-avatar-group>
  */
 
 const STYLES = `
@@ -17,6 +32,17 @@ dvfy-avatar {
   display: inline-flex;
   position: relative;
   flex-shrink: 0;
+}
+
+dvfy-avatar[interactive] {
+  cursor: pointer;
+  transition: transform var(--dvfy-duration-fast) var(--dvfy-ease-out),
+              box-shadow var(--dvfy-duration-fast) var(--dvfy-ease-out);
+  border-radius: var(--dvfy-radius-round);
+}
+dvfy-avatar[interactive]:hover {
+  transform: scale(1.08);
+  box-shadow: var(--dvfy-shadow-md);
 }
 
 dvfy-avatar .dvfy-avatar__img,
@@ -57,6 +83,38 @@ dvfy-avatar[size="lg"] .dvfy-avatar__status { width: 0.75rem; height: 0.75rem; }
 dvfy-avatar .dvfy-avatar__status[data-status="online"] { background: var(--dvfy-success-text); }
 dvfy-avatar .dvfy-avatar__status[data-status="offline"] { background: var(--dvfy-neutral-400); }
 dvfy-avatar .dvfy-avatar__status[data-status="busy"] { background: var(--dvfy-danger-text); }
+
+/* Avatar group */
+dvfy-avatar-group {
+  display: inline-flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  align-items: center;
+}
+dvfy-avatar-group dvfy-avatar {
+  margin-left: -0.5rem;
+  border: 2px solid var(--dvfy-surface-page);
+  border-radius: var(--dvfy-radius-round);
+}
+dvfy-avatar-group dvfy-avatar:last-of-type {
+  margin-left: 0;
+}
+dvfy-avatar-group .dvfy-avatar-group__overflow {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--dvfy-radius-round);
+  background: var(--dvfy-neutral-400);
+  color: var(--dvfy-neutral-0);
+  font-family: var(--dvfy-font-sans);
+  font-size: var(--dvfy-text-xs);
+  font-weight: var(--dvfy-weight-semibold);
+  margin-left: -0.5rem;
+  border: 2px solid var(--dvfy-surface-page);
+  flex-shrink: 0;
+}
 `;
 
 class DvfyAvatar extends HTMLElement {
@@ -72,7 +130,7 @@ class DvfyAvatar extends HTMLElement {
     this.#build();
   }
 
-  static get observedAttributes() { return ['src', 'name', 'size', 'status']; }
+  static get observedAttributes() { return ['src', 'name', 'size', 'status', 'interactive']; }
 
   attributeChangedCallback() {
     if (this.isConnected) this.#build();
@@ -84,6 +142,7 @@ class DvfyAvatar extends HTMLElement {
     const src = this.getAttribute('src');
     const name = this.getAttribute('name') || '';
     const status = this.getAttribute('status');
+    const interactive = this.hasAttribute('interactive');
 
     if (src) {
       const img = document.createElement('img');
@@ -105,7 +164,19 @@ class DvfyAvatar extends HTMLElement {
       dot.dataset.status = status;
       this.appendChild(dot);
     }
+
+    // Interactive click handling
+    if (interactive) {
+      this.addEventListener('click', this.#handleClick);
+    }
   }
+
+  #handleClick = () => {
+    this.dispatchEvent(new CustomEvent('avatar-click', {
+      bubbles: true,
+      detail: { name: this.getAttribute('name') || '', src: this.getAttribute('src') || '' }
+    }));
+  };
 
   #showInitials(name) {
     // Don't add if already present
@@ -130,4 +201,48 @@ class DvfyAvatar extends HTMLElement {
   }
 }
 
+class DvfyAvatarGroup extends HTMLElement {
+  static get observedAttributes() { return ['max']; }
+
+  connectedCallback() {
+    // Defer to let child avatars render first
+    requestAnimationFrame(() => this.#arrange());
+  }
+
+  attributeChangedCallback() {
+    if (this.isConnected) {
+      requestAnimationFrame(() => this.#arrange());
+    }
+  }
+
+  #arrange() {
+    const max = parseInt(this.getAttribute('max') || '0', 10);
+    if (!max || max <= 0) return;
+
+    // Remove any existing overflow indicator
+    const existing = this.querySelector('.dvfy-avatar-group__overflow');
+    if (existing) existing.remove();
+
+    const avatars = Array.from(this.querySelectorAll('dvfy-avatar'));
+    if (avatars.length <= max) {
+      // Show all
+      for (const av of avatars) av.style.display = '';
+      return;
+    }
+
+    // Hide excess avatars
+    const overflow = avatars.length - max;
+    for (let i = 0; i < avatars.length; i++) {
+      avatars[i].style.display = i < max ? '' : 'none';
+    }
+
+    // Add overflow indicator — inserted as first child since flex-direction is row-reverse
+    const badge = document.createElement('span');
+    badge.className = 'dvfy-avatar-group__overflow';
+    badge.textContent = `+${overflow}`;
+    this.insertBefore(badge, this.firstChild);
+  }
+}
+
 customElements.define('dvfy-avatar', DvfyAvatar);
+customElements.define('dvfy-avatar-group', DvfyAvatarGroup);

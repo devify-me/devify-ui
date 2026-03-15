@@ -50,9 +50,9 @@ const STYLES = `
 }
 
 .dvfy-auth__logo {
-  width: 3rem;
-  height: 3rem;
+  max-height: 3rem;
   object-fit: contain;
+  margin-bottom: var(--dvfy-space-2);
 }
 
 .dvfy-auth__brand {
@@ -120,8 +120,8 @@ const STYLES = `
   color: var(--dvfy-primary-text);
   box-sizing: border-box;
 }
-.dvfy-auth__btn:hover { background: var(--dvfy-primary-hover); }
-.dvfy-auth__btn:active { background: var(--dvfy-primary-active); }
+.dvfy-auth__btn:hover { background: var(--dvfy-primary-bg-hover, var(--dvfy-primary-hover)); }
+.dvfy-auth__btn:active { background: var(--dvfy-primary-bg-active, var(--dvfy-primary-active)); }
 .dvfy-auth__btn:focus-visible {
   outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);
   outline-offset: var(--dvfy-ring-offset);

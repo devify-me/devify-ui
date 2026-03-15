@@ -119,7 +119,7 @@ dvfy-table th[data-sort] .dvfy-table__sort {
   min-width: 0;
 }
 
-/* Filter icon in header */
+/* Filter icon in header — CSS funnel (three horizontal lines of decreasing width) */
 .dvfy-table__filter-icon {
   display: inline-flex;
   align-items: center;
@@ -128,24 +128,41 @@ dvfy-table th[data-sort] .dvfy-table__sort {
   height: 1.25rem;
   flex-shrink: 0;
   cursor: pointer;
-  color: var(--dvfy-text-muted);
-  font-size: 0.6rem;
   border-radius: var(--dvfy-radius-sm);
   transition: color var(--dvfy-duration-fast) var(--dvfy-ease-out),
               background var(--dvfy-duration-fast) var(--dvfy-ease-out);
   margin-left: auto;
+  position: relative;
+  flex-direction: column;
+  gap: 2px;
 }
+.dvfy-table__filter-icon .dvfy-table__filter-line {
+  display: block;
+  height: 1.5px;
+  background: var(--dvfy-text-muted);
+  border-radius: 1px;
+  transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
+}
+.dvfy-table__filter-icon .dvfy-table__filter-line:nth-child(1) { width: 10px; }
+.dvfy-table__filter-icon .dvfy-table__filter-line:nth-child(2) { width: 7px; }
+.dvfy-table__filter-icon .dvfy-table__filter-line:nth-child(3) { width: 4px; }
 .dvfy-table__filter-icon:hover {
-  color: var(--dvfy-text-primary);
   background: var(--dvfy-hover-bg);
 }
+.dvfy-table__filter-icon:hover .dvfy-table__filter-line {
+  background: var(--dvfy-text-primary);
+}
 .dvfy-table__filter-icon--active {
-  color: var(--dvfy-primary-text, #fff);
   background: var(--dvfy-primary-bg);
+}
+.dvfy-table__filter-icon--active .dvfy-table__filter-line {
+  background: var(--dvfy-primary-text, #fff);
 }
 .dvfy-table__filter-icon--active:hover {
   background: var(--dvfy-primary-hover);
-  color: var(--dvfy-primary-text, #fff);
+}
+.dvfy-table__filter-icon--active:hover .dvfy-table__filter-line {
+  background: var(--dvfy-primary-text, #fff);
 }
 
 /* Filter dropdown panel */
@@ -244,28 +261,6 @@ dvfy-table th[data-sort] .dvfy-table__sort {
   white-space: nowrap;
 }
 
-/* Filter apply button */
-.dvfy-table__filter-actions {
-  padding-top: var(--dvfy-space-1);
-  border-top: 1px solid var(--dvfy-border-muted);
-}
-.dvfy-table__filter-actions button {
-  width: 100%;
-  font-family: inherit;
-  font-size: var(--dvfy-text-xs);
-  font-weight: var(--dvfy-weight-semibold);
-  padding: var(--dvfy-space-1-5) var(--dvfy-space-3);
-  color: var(--dvfy-primary-text, #fff);
-  background: var(--dvfy-primary-bg);
-  border: none;
-  border-radius: var(--dvfy-radius-md);
-  cursor: pointer;
-  transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
-}
-.dvfy-table__filter-actions button:hover {
-  background: var(--dvfy-primary-hover);
-}
-
 /* Striped */
 dvfy-table[striped] tbody tr:nth-child(even) {
   background: var(--dvfy-surface-sunken);
@@ -311,7 +306,7 @@ class DvfyTable extends HTMLElement {
   /** @type {Map<HTMLTableRowElement, number>} row element -> original index */
   #rowIndexMap = new Map();
 
-  /** @type {Map<number, { icon: HTMLElement, panel: HTMLElement|null, checkedValues: Set<string>|null, allValues: string[] }>} col index -> filter state */
+  /** @type {Map<number, { icon: HTMLElement, panel: HTMLElement|null, checkedValues: Set<string>|null, allValues: string[], checkboxes: Array|null }>} col index -> filter state */
   #columnFilters = new Map();
   /** @type {HTMLElement|null} currently open filter panel */
   #openPanel = null;
@@ -504,13 +499,23 @@ class DvfyTable extends HTMLElement {
       }
       contentWrap.appendChild(textWrap);
 
-      // Create filter icon
+      // Create filter icon — CSS funnel with three lines
       const icon = document.createElement('span');
       icon.className = 'dvfy-table__filter-icon';
       icon.setAttribute('aria-label', 'Filter column');
       icon.setAttribute('role', 'button');
       icon.setAttribute('tabindex', '0');
-      icon.textContent = '\u25BC'; // down triangle
+
+      const line1 = document.createElement('span');
+      line1.className = 'dvfy-table__filter-line';
+      const line2 = document.createElement('span');
+      line2.className = 'dvfy-table__filter-line';
+      const line3 = document.createElement('span');
+      line3.className = 'dvfy-table__filter-line';
+      icon.appendChild(line1);
+      icon.appendChild(line2);
+      icon.appendChild(line3);
+
       icon.addEventListener('click', (e) => {
         e.stopPropagation(); // prevent sort from triggering
         this.#toggleFilterPanel(dataColIndex, th);
@@ -530,7 +535,8 @@ class DvfyTable extends HTMLElement {
         icon,
         panel: null,
         checkedValues: null, // null = all selected (no active filter)
-        allValues
+        allValues,
+        checkboxes: null
       });
     }
   }
@@ -610,6 +616,11 @@ class DvfyTable extends HTMLElement {
       cb.checked = currentChecked.has(value);
       cb.dataset.value = value;
 
+      // Apply filter immediately on toggle
+      cb.addEventListener('change', () => {
+        this.#applyColumnFilterFromPanel(colIndex, checkboxes);
+      });
+
       const label = document.createElement('span');
       label.textContent = value;
       label.title = value;
@@ -622,6 +633,9 @@ class DvfyTable extends HTMLElement {
 
     panel.appendChild(list);
 
+    // Store checkboxes reference for immediate apply
+    filterState.checkboxes = checkboxes;
+
     // Search filtering within the dropdown
     searchInput.addEventListener('input', () => {
       const term = searchInput.value.toLowerCase();
@@ -630,32 +644,19 @@ class DvfyTable extends HTMLElement {
       }
     });
 
-    // Select All / Clear All
+    // Select All / Clear All — apply immediately
     selectAllBtn.addEventListener('click', () => {
       for (const { cb, item } of checkboxes) {
         if (item.style.display !== 'none') cb.checked = true;
       }
+      this.#applyColumnFilterFromPanel(colIndex, checkboxes);
     });
     clearAllBtn.addEventListener('click', () => {
       for (const { cb, item } of checkboxes) {
         if (item.style.display !== 'none') cb.checked = false;
       }
+      this.#applyColumnFilterFromPanel(colIndex, checkboxes);
     });
-
-    // Apply button
-    const actionsBottom = document.createElement('div');
-    actionsBottom.className = 'dvfy-table__filter-actions';
-
-    const applyBtn = document.createElement('button');
-    applyBtn.type = 'button';
-    applyBtn.textContent = 'Apply';
-    applyBtn.addEventListener('click', () => {
-      this.#applyColumnFilter(colIndex, checkboxes);
-      this.#closeFilterPanel();
-    });
-
-    actionsBottom.appendChild(applyBtn);
-    panel.appendChild(actionsBottom);
 
     // Prevent clicks inside panel from closing it
     panel.addEventListener('mousedown', (e) => e.stopPropagation());
@@ -669,7 +670,7 @@ class DvfyTable extends HTMLElement {
     requestAnimationFrame(() => searchInput.focus());
   }
 
-  #applyColumnFilter(colIndex, checkboxes) {
+  #applyColumnFilterFromPanel(colIndex, checkboxes) {
     const filterState = this.#columnFilters.get(colIndex);
     if (!filterState) return;
 
@@ -701,7 +702,10 @@ class DvfyTable extends HTMLElement {
     }
     if (this.#openCol !== null) {
       const fs = this.#columnFilters.get(this.#openCol);
-      if (fs) fs.panel = null;
+      if (fs) {
+        fs.panel = null;
+        fs.checkboxes = null;
+      }
     }
     this.#openPanel = null;
     this.#openCol = null;
