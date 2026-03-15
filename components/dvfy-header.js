@@ -64,7 +64,7 @@ dvfy-header[sticky] .dvfy-hdr__bar {
   padding: var(--dvfy-space-3) var(--dvfy-space-5);
   background: var(--dvfy-surface-raised);
   border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-muted);
-  z-index: var(--dvfy-z-sticky);
+  z-index: calc(var(--dvfy-z-sticky) + 3);
   gap: var(--dvfy-space-3);
   transition: padding var(--dvfy-duration-fast) var(--dvfy-ease-out),
               box-shadow var(--dvfy-duration-fast) var(--dvfy-ease-out),
@@ -541,14 +541,22 @@ class DvfyHeader extends HTMLElement {
       this.#menu.appendChild(item);
     }
 
-    // Move theme switcher clone into menu extras on mobile
+    // Move theme switcher clone into menu as a menu item with icon
     const themeSwitcher = actions.querySelector('dvfy-theme-switcher');
     if (themeSwitcher) {
-      const extras = document.createElement('div');
-      extras.className = 'dvfy-hdr__menu-extras';
+      const sep = document.createElement('div');
+      sep.className = 'dvfy-hdr__menu-sep';
+      this.#menu.appendChild(sep);
+
+      const themeItem = document.createElement('div');
+      themeItem.className = 'dvfy-hdr__menu-item';
+      const themeIcon = document.createElement('span');
+      themeIcon.className = 'dvfy-hdr__menu-icon';
+      themeIcon.textContent = '\uD83C\uDFA8'; // 🎨
+      themeItem.appendChild(themeIcon);
       const clone = themeSwitcher.cloneNode(true);
-      extras.appendChild(clone);
-      this.#menu.appendChild(extras);
+      themeItem.appendChild(clone);
+      this.#menu.appendChild(themeItem);
     }
 
     this.appendChild(this.#menu);
