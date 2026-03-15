@@ -35,6 +35,8 @@ dvfy-hamburger {
   display: block;
   font-family: var(--dvfy-font-sans);
   position: relative;
+  container-type: inline-size;
+  container-name: dvfy-hamburger;
 }
 
 /* ── Header bar (always visible, ABOVE overlay so trigger stays clickable) ── */
@@ -246,8 +248,8 @@ dvfy-hamburger {
   margin: var(--dvfy-space-1) var(--dvfy-space-3);
 }
 
-/* ── Desktop: horizontal nav bar ── */
-@media (min-width: ${bp + 1}px) {
+/* ── Desktop: horizontal nav bar (container query) ── */
+@container dvfy-hamburger (min-width: ${bp + 1}px) {
   .dvfy-hb__trigger { display: none; }
   .dvfy-hb__overlay { display: none !important; }
   .dvfy-hb__menu,
@@ -299,8 +301,8 @@ dvfy-hamburger {
   }
 }
 
-/* ── Mobile: hide menu when closed, position relative to component ── */
-@media (max-width: ${bp}px) {
+/* ── Mobile: position relative to component (container query) ── */
+@container dvfy-hamburger (max-width: ${bp}px) {
   .dvfy-hb__bar {
     justify-content: space-between;
   }
