@@ -60,12 +60,13 @@ dvfy-header[sticky] .dvfy-hdr__bar {
 
 .dvfy-hdr__bar {
   display: flex;
-  align-items: center;
-  padding: var(--dvfy-space-3) var(--dvfy-space-5);
+  align-items: stretch;
+  padding: 0 var(--dvfy-space-5);
   background: var(--dvfy-surface-raised);
   border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-muted);
   z-index: calc(var(--dvfy-z-sticky) + 3);
   gap: var(--dvfy-space-3);
+  min-height: 3.25rem;
   transition: padding var(--dvfy-duration-fast) var(--dvfy-ease-out),
               box-shadow var(--dvfy-duration-fast) var(--dvfy-ease-out),
               background var(--dvfy-duration-fast) var(--dvfy-ease-out);
@@ -73,8 +74,7 @@ dvfy-header[sticky] .dvfy-hdr__bar {
 
 /* Scroll-shrink state */
 .dvfy-hdr__bar--scrolled {
-  padding-top: var(--dvfy-space-2);
-  padding-bottom: var(--dvfy-space-2);
+  min-height: 2.75rem;
   box-shadow: var(--dvfy-shadow-md);
 }
 
@@ -96,6 +96,7 @@ dvfy-header[preset="landing"] .dvfy-hdr__bar--scrolled {
   text-decoration: none;
   color: var(--dvfy-text-primary);
   flex-shrink: 0;
+  padding: var(--dvfy-space-2) 0;
 }
 .dvfy-hdr__logo {
   height: 1.75rem;
@@ -108,20 +109,20 @@ dvfy-header[preset="landing"] .dvfy-hdr__bar--scrolled {
   line-height: 1.2;
 }
 
-/* ── Desktop nav (tab-style) ── */
+/* ── Desktop nav (tab bar) ── */
 .dvfy-hdr__nav {
   display: flex;
   align-items: stretch;
   gap: 0;
   flex: 1;
   justify-content: center;
-  align-self: stretch;
+  margin-bottom: -1px; /* overlap the bar's bottom border */
 }
 .dvfy-hdr__nav-item {
   display: flex;
   align-items: center;
   gap: var(--dvfy-space-1-5);
-  padding: var(--dvfy-space-1) var(--dvfy-space-3);
+  padding: 0 var(--dvfy-space-3);
   color: var(--dvfy-text-secondary);
   text-decoration: none;
   font-size: var(--dvfy-text-sm);
@@ -131,7 +132,6 @@ dvfy-header[preset="landing"] .dvfy-hdr__bar--scrolled {
               border-color var(--dvfy-duration-fast) var(--dvfy-ease-out),
               background var(--dvfy-duration-fast) var(--dvfy-ease-out);
   white-space: nowrap;
-  position: relative;
 }
 .dvfy-hdr__nav-item:hover {
   color: var(--dvfy-text-primary);
@@ -141,20 +141,7 @@ dvfy-header[preset="landing"] .dvfy-hdr__bar--scrolled {
 .dvfy-hdr__nav-item--active {
   color: var(--dvfy-primary-bg);
   border-bottom-color: var(--dvfy-primary-bg);
-}
-.dvfy-hdr__nav-item--active::after {
-  display: none; /* underline is now the border-bottom */
-}
-/* Legacy ::after kept for compat but hidden via display:none above */
-.dvfy-hdr__nav-item--active::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: var(--dvfy-space-3);
-  right: var(--dvfy-space-3);
-  height: 2px;
-  background: var(--dvfy-primary-bg);
-  border-radius: 1px;
+  font-weight: var(--dvfy-weight-semibold);
 }
 .dvfy-hdr__nav-icon {
   font-size: var(--dvfy-text-base);
@@ -346,7 +333,13 @@ dvfy-header[data-menu="icons"] .dvfy-hdr__line--bot {
 @media (max-width: ${bp}px) {
   .dvfy-hdr__nav { display: none; }
   .dvfy-hdr__trigger { display: flex; }
-  .dvfy-hdr__bar { justify-content: space-between; }
+  .dvfy-hdr__bar {
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--dvfy-space-2) var(--dvfy-space-4);
+    min-height: auto;
+  }
+  .dvfy-hdr__brand { padding: 0; }
   .dvfy-hdr__actions { gap: var(--dvfy-space-1); }
   /* Hide theme switcher on mobile — it's in the hamburger menu */
   .dvfy-hdr__actions dvfy-theme-switcher { display: none; }
