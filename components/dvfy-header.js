@@ -548,15 +548,50 @@ class DvfyHeader extends HTMLElement {
       sep.className = 'dvfy-hdr__menu-sep';
       this.#menu.appendChild(sep);
 
+      const themeOptions = themeSwitcher.querySelectorAll('option');
+      const isSingleTheme = themeOptions.length <= 1;
+
       const themeItem = document.createElement('div');
-      themeItem.className = 'dvfy-hdr__menu-item';
+      themeItem.className = 'dvfy-hdr__menu-item dvfy-hdr__menu-theme';
+
       const themeIcon = document.createElement('span');
-      themeIcon.className = 'dvfy-hdr__menu-icon';
-      themeIcon.textContent = '\uD83C\uDFA8'; // 🎨
+      themeIcon.className = 'dvfy-hdr__menu-icon dvfy-hdr__theme-icon';
+      // Show sun/moon based on current mode
+      const updateIcon = () => {
+        const isDark = (document.documentElement.getAttribute('data-theme') || '').endsWith('-dark');
+        themeIcon.textContent = isDark ? '\u{1F319}' : '\u{2600}\uFE0F';
+      };
+      updateIcon();
+
       themeItem.appendChild(themeIcon);
       const clone = themeSwitcher.cloneNode(true);
+
+      if (isSingleTheme) {
+        // Single theme: icon click toggles dark/light directly
+        themeIcon.style.cursor = 'pointer';
+        themeIcon.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const toggle = clone.querySelector('.dvfy-ts__toggle');
+          if (toggle) toggle.click();
+          setTimeout(updateIcon, 50);
+        });
+      } else {
+        // Multiple themes: icon click opens menu back to expanded for interaction
+        themeIcon.style.cursor = 'pointer';
+        themeIcon.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (this.#menuState === 'icons') {
+            this.#setMenuState('expanded');
+          }
+        });
+      }
+      clone.className = (clone.className || '') + ' dvfy-hdr__theme-switcher-clone';
       themeItem.appendChild(clone);
       this.#menu.appendChild(themeItem);
+
+      // Observe theme changes to update icon
+      const observer = new MutationObserver(updateIcon);
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     }
 
     this.appendChild(this.#menu);
