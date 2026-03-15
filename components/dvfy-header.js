@@ -108,36 +108,44 @@ dvfy-header[preset="landing"] .dvfy-hdr__bar--scrolled {
   line-height: 1.2;
 }
 
-/* ── Desktop nav (center) ── */
+/* ── Desktop nav (tab-style) ── */
 .dvfy-hdr__nav {
   display: flex;
-  align-items: center;
-  gap: var(--dvfy-space-1);
+  align-items: stretch;
+  gap: 0;
   flex: 1;
   justify-content: center;
+  align-self: stretch;
 }
 .dvfy-hdr__nav-item {
   display: flex;
   align-items: center;
   gap: var(--dvfy-space-1-5);
-  padding: var(--dvfy-space-1-5) var(--dvfy-space-3);
+  padding: var(--dvfy-space-1) var(--dvfy-space-3);
   color: var(--dvfy-text-secondary);
   text-decoration: none;
   font-size: var(--dvfy-text-sm);
   font-weight: var(--dvfy-weight-medium);
-  border-radius: var(--dvfy-radius-md);
+  border-bottom: 2px solid transparent;
   transition: color var(--dvfy-duration-fast) var(--dvfy-ease-out),
+              border-color var(--dvfy-duration-fast) var(--dvfy-ease-out),
               background var(--dvfy-duration-fast) var(--dvfy-ease-out);
   white-space: nowrap;
   position: relative;
 }
 .dvfy-hdr__nav-item:hover {
   color: var(--dvfy-text-primary);
-  background: var(--dvfy-hover-bg);
+  background: color-mix(in srgb, var(--dvfy-text-primary) 4%, transparent);
+  border-bottom-color: var(--dvfy-border-strong);
 }
 .dvfy-hdr__nav-item--active {
   color: var(--dvfy-primary-bg);
+  border-bottom-color: var(--dvfy-primary-bg);
 }
+.dvfy-hdr__nav-item--active::after {
+  display: none; /* underline is now the border-bottom */
+}
+/* Legacy ::after kept for compat but hidden via display:none above */
 .dvfy-hdr__nav-item--active::after {
   content: '';
   position: absolute;
