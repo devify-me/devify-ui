@@ -402,6 +402,18 @@
       <dvfy-modal id="demo-modal-sm" title="Quick Note" size="sm">
         <p>This is a small modal for simple messages.</p>
       </dvfy-modal>
+
+      <div class="row-label">Non-dismissible (required)</div>
+      <div class="row">
+        <dvfy-button variant="danger" onclick="document.getElementById('required-modal').setAttribute('open','')">Open Required Modal</dvfy-button>
+      </div>
+      <dvfy-modal id="required-modal" title="Unsaved Changes" required>
+        <p style="margin-bottom:var(--dvfy-space-4)">You have unsaved changes. Are you sure you want to leave?</p>
+        <div style="display:flex;gap:var(--dvfy-space-2);justify-content:flex-end">
+          <dvfy-button variant="ghost" onclick="document.getElementById('required-modal').removeAttribute('open')">Stay</dvfy-button>
+          <dvfy-button variant="danger" onclick="document.getElementById('required-modal').removeAttribute('open')">Discard</dvfy-button>
+        </div>
+      </dvfy-modal>
     </div>
 
     <!-- ═══ BREADCRUMB ═══ -->
@@ -492,18 +504,6 @@
       </div>
       <dvfy-auth id="auth-modal-signin" mode="signin" modal action="/auth/login" logo="favicon.svg" forgot-url="/auth/forgot" oauth-google="/auth/google" oauth-github="/auth/github"></dvfy-auth>
       <dvfy-auth id="auth-modal-signup" mode="signup" modal action="/auth/register" logo="favicon.svg"></dvfy-auth>
-
-      <div class="row-label" style="margin-top:var(--dvfy-space-4)">Non-dismissible modal (required)</div>
-      <div class="row">
-        <dvfy-button variant="danger" onclick="document.getElementById('required-modal').setAttribute('open','')">Open Required Modal</dvfy-button>
-      </div>
-      <dvfy-modal id="required-modal" title="Unsaved Changes" required>
-        <p style="margin-bottom:var(--dvfy-space-4)">You have unsaved changes. Are you sure you want to leave?</p>
-        <div style="display:flex;gap:var(--dvfy-space-2);justify-content:flex-end">
-          <dvfy-button variant="ghost" onclick="document.getElementById('required-modal').removeAttribute('open')">Stay</dvfy-button>
-          <dvfy-button variant="danger" onclick="document.getElementById('required-modal').removeAttribute('open')">Discard</dvfy-button>
-        </div>
-      </dvfy-modal>
     </div>
 
     <!-- ═══ HEADER & HAMBURGER ═══ -->
