@@ -66,15 +66,15 @@ dvfy-input .dvfy-input__error-msg { font-size: var(--dvfy-text-xs); color: var(-
 
 dvfy-input .dvfy-input__toggle {
   position: absolute;
-  right: var(--dvfy-space-1);
+  right: var(--dvfy-space-2);
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
-  padding: var(--dvfy-space-1) var(--dvfy-space-2);
-  font-family: inherit;
-  font-size: var(--dvfy-text-xs);
-  color: var(--dvfy-text-link);
+  padding: var(--dvfy-space-1);
+  font-size: var(--dvfy-text-lg);
+  line-height: 1;
+  color: var(--dvfy-text-muted);
   cursor: pointer;
   user-select: none;
   border-radius: var(--dvfy-radius-sm);
@@ -162,18 +162,58 @@ class DvfyInput extends HTMLElement {
     if (disabled) input.disabled = true;
     wrapper.appendChild(input);
 
-    // Password toggle
+    // Password toggle with eye SVG icon
     if (isPassword) {
       const toggle = document.createElement('button');
       toggle.type = 'button';
       toggle.className = 'dvfy-input__toggle';
-      toggle.textContent = this.#passwordVisible ? 'Hide' : 'Show';
       toggle.setAttribute('aria-label', this.#passwordVisible ? 'Hide password' : 'Show password');
       toggle.setAttribute('tabindex', '-1');
+
+      const setIcon = (visible) => {
+        toggle.textContent = '';
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', '18');
+        svg.setAttribute('height', '18');
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.setAttribute('stroke-width', '2');
+        svg.setAttribute('stroke-linecap', 'round');
+        svg.setAttribute('stroke-linejoin', 'round');
+        const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        if (visible) {
+          // Eye open
+          path1.setAttribute('d', 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z');
+          svg.appendChild(path1);
+          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+          circle.setAttribute('cx', '12');
+          circle.setAttribute('cy', '12');
+          circle.setAttribute('r', '3');
+          svg.appendChild(circle);
+        } else {
+          // Eye closed (with slash)
+          path1.setAttribute('d', 'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94');
+          svg.appendChild(path1);
+          const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path2.setAttribute('d', 'M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19');
+          svg.appendChild(path2);
+          const path3 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+          path3.setAttribute('d', 'M14.12 14.12a3 3 0 1 1-4.24-4.24');
+          svg.appendChild(path3);
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', '1'); line.setAttribute('y1', '1');
+          line.setAttribute('x2', '23'); line.setAttribute('y2', '23');
+          svg.appendChild(line);
+        }
+        toggle.appendChild(svg);
+      };
+
+      setIcon(this.#passwordVisible);
       toggle.addEventListener('click', () => {
         this.#passwordVisible = !this.#passwordVisible;
         input.type = this.#passwordVisible ? 'text' : 'password';
-        toggle.textContent = this.#passwordVisible ? 'Hide' : 'Show';
+        setIcon(this.#passwordVisible);
         toggle.setAttribute('aria-label', this.#passwordVisible ? 'Hide password' : 'Show password');
         input.focus();
       });

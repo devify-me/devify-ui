@@ -340,6 +340,8 @@ dvfy-header[data-menu="icons"] .dvfy-hdr__line--bot {
   .dvfy-hdr__trigger { display: flex; }
   .dvfy-hdr__bar { justify-content: space-between; }
   .dvfy-hdr__actions { gap: var(--dvfy-space-1); }
+  /* Hide theme switcher on mobile — it's in the hamburger menu */
+  .dvfy-hdr__actions dvfy-theme-switcher { display: none; }
 }
 
 /* ── Desktop layout ── */
