@@ -3,7 +3,8 @@
  *
  * Attributes:
  *   label:    Section title text
- *   open:     boolean — expanded state
+ *   open:     boolean — expanded state (default: true)
+ *   collapsed: boolean — start collapsed
  *   icon:     Optional icon/emoji before label
  *
  * Usage:
@@ -87,7 +88,7 @@ class DvfySection extends HTMLElement {
     this.#build();
   }
 
-  static get observedAttributes() { return ['label', 'icon', 'open']; }
+  static get observedAttributes() { return ['label', 'icon', 'open', 'collapsed']; }
 
   attributeChangedCallback(name) {
     if (!this.isConnected) return;
@@ -102,6 +103,11 @@ class DvfySection extends HTMLElement {
 
   #build() {
     const children = Array.from(this.childNodes);
+
+    // Open by default unless collapsed attribute is set
+    if (!this.hasAttribute('collapsed') && !this.hasAttribute('open')) {
+      this.setAttribute('open', '');
+    }
 
     // Clear
     while (this.firstChild) this.removeChild(this.firstChild);

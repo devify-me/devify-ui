@@ -83,7 +83,7 @@
   <main id="main-content" class="catalog-body">
 
     <!-- ═══ BUTTONS ═══ -->
-    <dvfy-section id="buttons" label="Button">
+    <dvfy-section collapsed id="buttons" label="Button">
       <p class="section-subtitle">dvfy-button — variant, size, disabled, loading</p>
 
       <div class="row-label">Variants</div>
@@ -110,7 +110,7 @@
     </dvfy-section>
 
     <!-- ═══ INPUT ═══ -->
-    <dvfy-section id="inputs" label="Input">
+    <dvfy-section collapsed id="inputs" label="Input">
       <p class="section-subtitle">dvfy-input — label, type, error, help, required, disabled</p>
       <div class="grid-2">
         <dvfy-input label="Email" type="email" name="email" placeholder="you@example.com" help="We won't share your email."></dvfy-input>
@@ -121,7 +121,7 @@
     </dvfy-section>
 
     <!-- ═══ TEXTAREA ═══ -->
-    <dvfy-section label="Textarea">
+    <dvfy-section collapsed label="Textarea">
       <p class="section-subtitle">dvfy-textarea — auto-resize, character count, error</p>
       <div class="grid-2">
         <dvfy-textarea label="Bio" name="bio" placeholder="Tell us about yourself..." maxlength="200" help="Keep it brief."></dvfy-textarea>
@@ -130,7 +130,7 @@
     </dvfy-section>
 
     <!-- ═══ SELECT ═══ -->
-    <dvfy-section label="Select">
+    <dvfy-section collapsed label="Select">
       <p class="section-subtitle">dvfy-select — searchable, label, error</p>
       <div class="grid-2">
         <dvfy-select label="Country" name="country" placeholder="Choose..." searchable>
@@ -151,7 +151,7 @@
     </dvfy-section>
 
     <!-- ═══ CHECKBOX, RADIO, SWITCH ═══ -->
-    <dvfy-section label="Checkbox, Radio, Switch">
+    <dvfy-section collapsed label="Checkbox, Radio, Switch">
       <p class="section-subtitle">Form controls with labels</p>
       <div class="grid-3">
         <div class="demo-box">
@@ -176,7 +176,7 @@
     </dvfy-section>
 
     <!-- ═══ BADGE & TAG ═══ -->
-    <dvfy-section id="data" label="Badge &amp; Tag">
+    <dvfy-section collapsed id="data" label="Badge &amp; Tag">
       <p class="section-subtitle">Status indicators and interactive tags</p>
 
       <div class="row-label">Badges</div>
@@ -202,7 +202,7 @@
     </dvfy-section>
 
     <!-- ═══ AVATAR ═══ -->
-    <dvfy-section label="Avatar">
+    <dvfy-section collapsed label="Avatar">
       <p class="section-subtitle">dvfy-avatar — image, initials, status, interactive, groups</p>
 
       <div class="row-label">Basic + Status</div>
@@ -235,7 +235,7 @@
     </dvfy-section>
 
     <!-- ═══ ALERT ═══ -->
-    <dvfy-section id="feedback" label="Alert">
+    <dvfy-section collapsed id="feedback" label="Alert">
       <p class="section-subtitle">dvfy-alert — status, dismissible, title</p>
       <div style="display:flex;flex-direction:column;gap:var(--dvfy-space-3)">
         <dvfy-alert status="info" title="Information">This is an informational message.</dvfy-alert>
@@ -246,7 +246,7 @@
     </dvfy-section>
 
     <!-- ═══ LOADER ═══ -->
-    <dvfy-section label="Loader">
+    <dvfy-section collapsed label="Loader">
       <p class="section-subtitle">dvfy-loader — spinner and dots variants</p>
       <div class="row-label">Spinner</div>
       <div class="row">
@@ -269,7 +269,7 @@
     </dvfy-section>
 
     <!-- ═══ CARD ═══ -->
-    <dvfy-section label="Card">
+    <dvfy-section collapsed label="Card">
       <p class="section-subtitle">dvfy-card — elevated, interactive</p>
       <div class="grid-3">
         <dvfy-card>
@@ -288,7 +288,7 @@
     </dvfy-section>
 
     <!-- ═══ PROGRESS ═══ -->
-    <dvfy-section label="Progress">
+    <dvfy-section collapsed label="Progress">
       <p class="section-subtitle">dvfy-progress — bar and circle variants</p>
       <div class="row" style="gap:var(--dvfy-space-6)">
         <div style="flex:1">
@@ -305,7 +305,7 @@
     </dvfy-section>
 
     <!-- ═══ TABS ═══ -->
-    <dvfy-section label="Tabs">
+    <dvfy-section collapsed label="Tabs">
       <p class="section-subtitle">dvfy-tabs — keyboard navigable tab panels</p>
       <dvfy-tabs>
         <dvfy-tab label="Overview">
@@ -321,7 +321,7 @@
     </dvfy-section>
 
     <!-- ═══ DROPDOWN ═══ -->
-    <dvfy-section id="navigation" label="Dropdown">
+    <dvfy-section collapsed id="navigation" label="Dropdown">
       <p class="section-subtitle">dvfy-dropdown — trigger + menu items</p>
       <div class="row">
         <dvfy-dropdown>
@@ -342,7 +342,7 @@
     </dvfy-section>
 
     <!-- ═══ TOOLTIP ═══ -->
-    <dvfy-section label="Tooltip">
+    <dvfy-section collapsed label="Tooltip">
       <p class="section-subtitle">dvfy-tooltip — hover/focus tooltip with positioning</p>
       <div class="row">
         <dvfy-tooltip text="This is a top tooltip">
@@ -361,7 +361,7 @@
     </dvfy-section>
 
     <!-- ═══ MODAL ═══ -->
-    <dvfy-section label="Modal">
+    <dvfy-section collapsed label="Modal">
       <p class="section-subtitle">dvfy-modal — dialog with backdrop, focus trap, escape close</p>
       <div class="row">
         <dvfy-button variant="outline" onclick="document.getElementById('demo-modal').setAttribute('open','')">Open Modal (md)</dvfy-button>
@@ -392,7 +392,7 @@
     </dvfy-section>
 
     <!-- ═══ BREADCRUMB ═══ -->
-    <dvfy-section label="Breadcrumb">
+    <dvfy-section collapsed label="Breadcrumb">
       <p class="section-subtitle">dvfy-breadcrumb — auto separator, aria-current on last item</p>
       <dvfy-breadcrumb>
         <a href="#">Home</a>
@@ -403,13 +403,13 @@
     </dvfy-section>
 
     <!-- ═══ PAGINATION ═══ -->
-    <dvfy-section label="Pagination">
+    <dvfy-section collapsed label="Pagination">
       <p class="section-subtitle">dvfy-pagination — page navigation with ellipsis</p>
       <dvfy-pagination total="20" current="7" max-visible="5"></dvfy-pagination>
     </dvfy-section>
 
     <!-- ═══ TABLE ═══ -->
-    <dvfy-section label="Table">
+    <dvfy-section collapsed label="Table">
       <p class="section-subtitle">dvfy-table — sortable, selectable, filterable, searchable</p>
       <dvfy-table striped hoverable responsive selectable searchable filterable>
         <table>
@@ -432,7 +432,7 @@
     </dvfy-section>
 
     <!-- ═══ TOAST ═══ -->
-    <dvfy-section label="Toast">
+    <dvfy-section collapsed label="Toast">
       <p class="section-subtitle">dvfy-toast — imperative via DvfyToast.show()</p>
       <div class="row">
         <dvfy-button variant="outline" size="sm" onclick="DvfyToast.show({message:'File saved successfully!',status:'success'})">Success Toast</dvfy-button>
@@ -443,7 +443,7 @@
     </dvfy-section>
 
     <!-- ═══ EMPTY STATE ═══ -->
-    <dvfy-section label="Empty State">
+    <dvfy-section collapsed label="Empty State">
       <p class="section-subtitle">dvfy-empty — placeholder for empty views</p>
       <div class="demo-box">
         <dvfy-empty icon="📭" title="No messages yet" description="When you receive messages, they'll show up here.">
@@ -453,7 +453,7 @@
     </dvfy-section>
 
     <!-- ═══ AUTH ═══ -->
-    <dvfy-section id="layout" label="Auth">
+    <dvfy-section collapsed id="layout" label="Auth">
       <p class="section-subtitle">dvfy-auth — sign-in, sign-up, sign-out forms</p>
       <div class="grid-2">
         <div>
@@ -476,7 +476,7 @@
     </dvfy-section>
 
     <!-- ═══ HEADER & HAMBURGER ═══ -->
-    <dvfy-section label="Header">
+    <dvfy-section collapsed label="Header">
       <p class="section-subtitle">dvfy-header — responsive header with 3-stage hamburger, scroll-shrink, theme picker. Resize browser to see mobile view.</p>
 
       <div class="row-label">Mobile Preview (forced breakpoint: 9999px)</div>
@@ -504,7 +504,7 @@
     </dvfy-section>
 
     <!-- ═══ HTMX PATTERNS ═══ -->
-    <dvfy-section id="htmx-patterns" label="HTMX Patterns">
+    <dvfy-section collapsed id="htmx-patterns" label="HTMX Patterns">
       <p class="section-subtitle">Pre-wired HTMX interaction patterns. These require HTMX + a server to function fully — shown here as structural demos.</p>
 
       <div class="row-label">dvfy-htmx-form — submit with loading, validation, toast feedback</div>
