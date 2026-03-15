@@ -41,3 +41,10 @@ import './components/dvfy-theme-switcher.js';
 import './components/dvfy-auth.js';
 import './components/dvfy-hamburger.js';
 import './components/dvfy-header.js';
+
+// HTMX Integration Patterns
+import './patterns/dvfy-htmx-form.js';
+import './patterns/dvfy-infinite-scroll.js';
+import './patterns/dvfy-live-search.js';
+import './patterns/dvfy-htmx-table.js';
+import './patterns/dvfy-confirm.js';

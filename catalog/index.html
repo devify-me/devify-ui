@@ -84,6 +84,7 @@
     <a href="#navigation" data-icon="🧭">Navigation</a>
     <a href="#feedback" data-icon="💬">Feedback</a>
     <a href="#layout" data-icon="📐">Layout</a>
+    <a href="#htmx-patterns" data-icon="⚡">HTMX</a>
     <dvfy-theme-switcher data-action default-theme="devify-cyan">
       <option value="devify-cyan">Cyan</option>
       <option value="devify-pink">Pink</option>
@@ -532,6 +533,64 @@
           <p style="margin-top:var(--dvfy-space-2)">Cart badge: 3, Notification badge: 5</p>
           <p style="margin-top:var(--dvfy-space-2)">Theme switcher integrated in both header actions and mobile menu.</p>
         </div>
+      </div>
+    </div>
+
+    <!-- ═══ HTMX PATTERNS ═══ -->
+    <div id="htmx-patterns" class="section">
+      <h2 class="section-title">HTMX Patterns</h2>
+      <p class="section-subtitle">Pre-wired HTMX interaction patterns. These require HTMX + a server to function fully — shown here as structural demos.</p>
+
+      <div class="row-label">dvfy-htmx-form — submit with loading, validation, toast feedback</div>
+      <div class="demo-box" style="max-width:400px">
+        <dvfy-htmx-form action="/api/contact" method="post" success-message="Message sent!" reset-on-success>
+          <dvfy-input label="Name" name="name" required></dvfy-input>
+          <dvfy-input label="Email" type="email" name="email" required></dvfy-input>
+          <dvfy-textarea label="Message" name="message" required placeholder="Your message..."></dvfy-textarea>
+          <dvfy-button type="submit">Send Message</dvfy-button>
+        </dvfy-htmx-form>
+      </div>
+
+      <div class="row-label" style="margin-top:var(--dvfy-space-6)">dvfy-live-search — debounced search with loading indicator</div>
+      <div class="demo-box" style="max-width:400px">
+        <dvfy-live-search src="/api/search" param="q" placeholder="Search products..." min-chars="2"></dvfy-live-search>
+      </div>
+
+      <div class="row-label" style="margin-top:var(--dvfy-space-6)">dvfy-confirm — confirmation before destructive action</div>
+      <div class="row">
+        <dvfy-confirm title="Delete item?" message="This will permanently delete the item. This action cannot be undone." confirm-text="Delete" variant="danger">
+          <dvfy-button variant="danger">Delete Item</dvfy-button>
+        </dvfy-confirm>
+        <dvfy-confirm title="Publish?" message="This will make the article visible to everyone." confirm-text="Publish">
+          <dvfy-button variant="outline">Publish Article</dvfy-button>
+        </dvfy-confirm>
+      </div>
+
+      <div class="row-label" style="margin-top:var(--dvfy-space-6)">dvfy-htmx-table — server-side sort, search, paginate</div>
+      <div class="demo-box">
+        <p style="color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm);margin-bottom:var(--dvfy-space-2)">Requires a server endpoint. Usage:</p>
+        <pre style="background:var(--dvfy-surface-sunken);padding:var(--dvfy-space-3);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-mono);font-size:var(--dvfy-text-xs);color:var(--dvfy-text-secondary);overflow-x:auto">&lt;dvfy-htmx-table src="/api/users" searchable&gt;
+  &lt;table&gt;
+    &lt;thead&gt;
+      &lt;tr&gt;
+        &lt;th data-sort="name"&gt;Name&lt;/th&gt;
+        &lt;th data-sort="email"&gt;Email&lt;/th&gt;
+        &lt;th&gt;Actions&lt;/th&gt;
+      &lt;/tr&gt;
+    &lt;/thead&gt;
+    &lt;tbody&gt;&lt;!-- server-rendered rows --&gt;&lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/dvfy-htmx-table&gt;</pre>
+      </div>
+
+      <div class="row-label" style="margin-top:var(--dvfy-space-6)">dvfy-infinite-scroll — auto-load on scroll</div>
+      <div class="demo-box">
+        <p style="color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm);margin-bottom:var(--dvfy-space-2)">Requires a paginated server endpoint. Usage:</p>
+        <pre style="background:var(--dvfy-surface-sunken);padding:var(--dvfy-space-3);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-mono);font-size:var(--dvfy-text-xs);color:var(--dvfy-text-secondary);overflow-x:auto">&lt;dvfy-infinite-scroll src="/api/feed" page-param="page"&gt;
+  &lt;!-- initial content (page 1) --&gt;
+  &lt;dvfy-card&gt;First item&lt;/dvfy-card&gt;
+  &lt;dvfy-card&gt;Second item&lt;/dvfy-card&gt;
+&lt;/dvfy-infinite-scroll&gt;</pre>
       </div>
     </div>
 
