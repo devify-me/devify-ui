@@ -105,7 +105,7 @@ class DvfyInput extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'preview'];
+    return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'no-preview'];
   }
 
   attributeChangedCallback() {
@@ -150,7 +150,7 @@ class DvfyInput extends HTMLElement {
     // Input
     const input = document.createElement('input');
     input.className = 'dvfy-input__field';
-    const hasPreview = isPassword && this.hasAttribute('preview');
+    const hasPreview = isPassword && !this.hasAttribute('no-preview');
     if (hasPreview) {
       input.classList.add('dvfy-input__field--has-toggle');
     }
