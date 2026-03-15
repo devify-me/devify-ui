@@ -324,20 +324,7 @@ dvfy-header[data-menu="icons"] .dvfy-hdr__line--bot {
   margin-top: var(--dvfy-space-2);
 }
 
-/* ── Overlay ── */
-.dvfy-hdr__overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.3);
-  z-index: calc(var(--dvfy-z-sticky) + 1);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--dvfy-duration-normal) var(--dvfy-ease-out);
-}
-.dvfy-hdr__overlay--active {
-  opacity: 1;
-  pointer-events: auto;
-}
+/* No overlay — click-outside listener handles menu closing */
 
 /* Default: trigger hidden, menu hidden (desktop behavior) */
 .dvfy-hdr__trigger { display: none; }
@@ -363,7 +350,6 @@ const HDR_RESPONSIVE_FN = (id, bp) => `
 }
 @container dvfy-header (min-width: ${bp + 1}px) {
   [data-hdr-id="${id}"] .dvfy-hdr__menu { display: none !important; }
-  [data-hdr-id="${id}"] .dvfy-hdr__overlay { display: none !important; }
 }
 `;
 
@@ -376,6 +362,7 @@ class DvfyHeader extends HTMLElement {
   #overlay = null;
   #menuState = 'closed'; // closed | expanded | icons
   #scrollHandler = null;
+  #onClickOutside = null;
 
   static get observedAttributes() { return ['brand', 'logo', 'preset', 'sticky', 'scroll-shrink']; }
 
@@ -402,7 +389,7 @@ class DvfyHeader extends HTMLElement {
   }
 
   disconnectedCallback() {
-    if (this.#overlay && this.#overlay.parentNode) this.#overlay.remove();
+    if (this.#onClickOutside) document.removeEventListener('click', this.#onClickOutside);
     if (this.#scrollHandler) window.removeEventListener('scroll', this.#scrollHandler);
     document.removeEventListener('keydown', this.#onKey);
     // Clean up per-instance responsive style
@@ -533,7 +520,10 @@ class DvfyHeader extends HTMLElement {
       line.className = `dvfy-hdr__line dvfy-hdr__line--${pos}`;
       this.#trigger.appendChild(line);
     }
-    this.#trigger.addEventListener('click', () => this.#cycleMenu());
+    this.#trigger.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.#cycleMenu();
+    });
     actions.appendChild(this.#trigger);
 
     this.#bar.appendChild(actions);
@@ -621,11 +611,13 @@ class DvfyHeader extends HTMLElement {
 
     this.appendChild(this.#menu);
 
-    // Overlay
-    this.#overlay = document.createElement('div');
-    this.#overlay.className = 'dvfy-hdr__overlay';
-    this.#overlay.addEventListener('click', () => this.#setMenuState('closed'));
-    document.body.appendChild(this.#overlay);
+    // Click-outside detection (no overlay — dropdowns don't need page dimming)
+    this.#onClickOutside = (e) => {
+      if (this.#menuState !== 'closed' && !this.contains(e.target)) {
+        this.#setMenuState('closed');
+      }
+    };
+    document.addEventListener('click', this.#onClickOutside);
 
     // Keyboard
     this.#onKey = this.#onKey.bind(this);
@@ -665,11 +657,7 @@ class DvfyHeader extends HTMLElement {
     this.#trigger.setAttribute('aria-expanded', String(state !== 'closed'));
     const labels = { closed: 'Open menu', expanded: 'Collapse menu', icons: 'Close menu' };
     this.#trigger.setAttribute('aria-label', labels[state]);
-    if (state === 'closed') {
-      this.#overlay.classList.remove('dvfy-hdr__overlay--active');
-    } else {
-      this.#overlay.classList.add('dvfy-hdr__overlay--active');
-    }
+    // No overlay to toggle — click-outside listener handles closing
   }
 }
 
