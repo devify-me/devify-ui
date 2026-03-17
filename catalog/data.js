@@ -42,6 +42,7 @@ export const COMPONENT_CATEGORIES = {
   'Layout': [
     'dvfy-header',
     'dvfy-section',
+    'dvfy-accordion',
   ],
   'Utility': [
     'dvfy-theme-switcher',
