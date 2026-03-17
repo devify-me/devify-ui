@@ -12,12 +12,19 @@ Browse all components, themes, and patterns:
 # Clone and serve locally
 git clone git@github.com:devify-me/devify-ui.git
 cd devify-ui
-python3 -m http.server 8090
+
+# Install and serve
+npm install
+npm run serve
 
 # Open http://localhost:8090/catalog/
 ```
 
-The catalog showcases every component with live examples, theme switching (Cyan/Pink, light/dark), and responsive previews.
+The catalog showcases every component with:
+- Live interactive examples
+- Theme switching (Cyan/Pink, light/dark)
+- Responsive previews
+- **Interactive API Viewer** — prop playground, live documentation, source code view (powered by `<api-viewer>` and `custom-elements.json`)
 
 ## Quick Start
 

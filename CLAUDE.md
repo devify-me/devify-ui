@@ -63,12 +63,56 @@ When creating or modifying components:
 - **Open WC** → testing (`@open-wc/testing`) and linting (`@open-wc/eslint-config`)
 - **No Storybook** — WCA + api-viewer is the chosen path (zero-build, web-standards-first)
 
+## JSDoc Format (Web Component Analyzer compatible)
+
+Every component must have JSDoc with `@attr`, `@event`, `@slot`, `@cssProperty` tags for WCA to generate the `custom-elements.json` manifest.
+
+```javascript
+/**
+ * Brief one-line description.
+ *
+ * @attr {string} variant - Description of variant attribute
+ * @attr {boolean} disabled - Disable the component
+ *
+ * @event {CustomEvent} change - Fires when value changes, detail: { value }
+ * @event {CustomEvent} submit - Fires on form submit
+ *
+ * @slot - Default slot for button label
+ * @slot icon - Slot for icon element
+ *
+ * @cssProperty {color} --dvfy-primary-bg - Background color
+ *
+ * @example
+ * <dvfy-button variant="primary" disabled>
+ *   <span slot="icon">→</span>
+ *   Click me
+ * </dvfy-button>
+ */
+```
+
+## WCA Analyzer
+
+Generates `custom-elements.json` from JSDoc-annotated components (W3C standard manifest).
+
+```bash
+# Install dependencies
+npm install
+
+# Generate custom-elements.json from all components/patterns
+npm run analyze
+
+# Serve locally with api-viewer playground
+npm run serve
+```
+
+The manifest drives the interactive `<api-viewer>` playground in the catalog (props, events, docs, source view).
+
 ## Commands
 
 ```bash
-# Serve catalog locally
-python3 -m http.server 8090
+# Analyze components and generate custom-elements.json
+npm run analyze
 
-# Validate package.json
-node -e "console.log(require('./package.json').name)"
+# Serve catalog locally (with api-viewer playground)
+npm run serve
 ```

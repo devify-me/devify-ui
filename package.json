@@ -36,5 +36,13 @@
     "./tokens/*": "./tokens/*"
   },
   "main": "./devify.js",
-  "style": "./devify.css"
+  "style": "./devify.css",
+  "devDependencies": {
+    "web-component-analyzer": "^1.2.1",
+    "api-viewer-element": "^3.3.0"
+  },
+  "scripts": {
+    "analyze": "wca analyze components/ patterns/ --format json --outDir . --outFile custom-elements.json",
+    "serve": "python3 -m http.server 8090"
+  }
 }

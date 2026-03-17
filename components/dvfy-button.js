@@ -1,17 +1,27 @@
 /**
- * <dvfy-button> — Button component
+ * Button component with multiple variants and sizes.
  *
- * Attributes:
- *   variant:  default | subtle | outline | ghost | danger (default: "default")
- *   size:     sm | md | lg (default: "md")
- *   disabled: boolean
- *   loading:  boolean
- *   type:     button | submit | reset (default: "button")
+ * @attr {string} variant - Button style: default | subtle | outline | ghost | danger (default: "default")
+ * @attr {string} size - Size: sm | md | lg (default: "md")
+ * @attr {boolean} disabled - Disable button and prevent interaction
+ * @attr {boolean} loading - Show loading state with spinner indicator
+ * @attr {string} type - HTML button type: button | submit | reset (default: "button")
  *
- * Usage:
- *   <dvfy-button variant="primary" size="lg">Save</dvfy-button>
- *   <dvfy-button variant="danger" loading>Deleting...</dvfy-button>
- *   <dvfy-button variant="outline" hx-get="/api/data">Load</dvfy-button>
+ * @cssProperty {color} --dvfy-primary-bg - Primary background color
+ * @cssProperty {color} --dvfy-primary-text - Primary text color
+ * @cssProperty {color} --dvfy-danger-bg - Danger variant background
+ *
+ * @example
+ * <!-- Primary button -->
+ * <dvfy-button variant="default" size="lg">Save</dvfy-button>
+ *
+ * @example
+ * <!-- Danger button with loading state -->
+ * <dvfy-button variant="danger" loading>Deleting...</dvfy-button>
+ *
+ * @example
+ * <!-- Outline button with HTMX -->
+ * <dvfy-button variant="outline" hx-get="/api/data">Load</dvfy-button>
  */
 
 const STYLES = `
