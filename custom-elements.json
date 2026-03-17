@@ -2,6 +2,36 @@
   "version": "experimental",
   "tags": [
     {
+      "name": "dvfy-accordion",
+      "path": "./components/dvfy-accordion.js",
+      "description": "Grouped accordion that wraps dvfy-section elements.\n\nIn exclusive mode, opening one section automatically closes the others.\nSupports keyboard navigation with arrow keys between section headers.",
+      "attributes": [
+        {
+          "name": "exclusive",
+          "description": "Only one section open at a time",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "dvfy-section elements"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-border-muted",
+          "description": "Border between sections",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-radius-xl",
+          "description": "Corner radius of first/last sections",
+          "type": "length"
+        }
+      ]
+    },
+    {
       "name": "dvfy-alert",
       "path": "./components/dvfy-alert.js",
       "description": "Alert/notification banner with status-based styling.",

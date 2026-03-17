@@ -30,7 +30,7 @@ devify-ui/
 │       ├── dark.css
 │       ├── devify-cyan.css
 │       └── devify-pink.css
-├── components/            # 30 Web Components (dvfy-*.js)
+├── components/            # 31 Web Components (dvfy-*.js)
 ├── patterns/              # 5 HTMX integration patterns (dvfy-*.js)
 └── catalog/               # Design System Explorer
     ├── index.html         # Shell: header + sidebar + main layout
@@ -119,10 +119,15 @@ The catalog (`catalog/index.html`) is a full Design System Explorer with:
 - **Component views** — `dvfy-component-playground` with `component` attr set (picker hidden, sidebar navigates)
 - **Brand Settings** — live-edit semantic tokens with color pickers, reset per section, export as CSS theme block
 
-### Adding a new component to the catalog
-1. Add the tag name to the appropriate category in `catalog/data.js` → `COMPONENT_CATEGORIES`
-2. If it needs default innerHTML, add an entry to `DEFAULT_CONTENT` in `components/dvfy-component-playground.js`
-3. Run `npm run analyze` to include it in `custom-elements.json`
+### Adding a new component
+
+Use the `/new-component dvfy-{name}` Claude Code skill — it handles all steps:
+1. Researches similar existing components and plans the new one
+2. Creates `components/dvfy-{name}.js` with full implementation
+3. Adds import to `devify.js`
+4. Adds `DEFAULT_CONTENT` entry (demo HTML) in `components/dvfy-component-playground.js`
+5. Adds tag to `COMPONENT_CATEGORIES` in `catalog/data.js`
+6. Runs `npm run analyze` to regenerate `custom-elements.json`
 
 ## Commands
 
@@ -133,3 +138,14 @@ npm run analyze
 # Serve catalog locally (with api-viewer playground)
 npm run serve
 ```
+
+## Catalog Service
+
+The catalog runs as a systemd user unit on sergio, bound to the Tailscale IP:
+
+```bash
+systemctl --user status devify-catalog    # check status
+systemctl --user restart devify-catalog   # restart after changes
+```
+
+Accessible at `sergio-1:8090` from the tailnet.
