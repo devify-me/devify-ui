@@ -46,8 +46,8 @@ dvfy-component-playground .sc__preview-area {
   min-height: 120px;
   padding: var(--dvfy-space-6);
   background: var(--dvfy-surface-sunken);
+  border: var(--dvfy-border-1) dashed var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-xl);
-  border: var(--dvfy-border-1) solid var(--dvfy-border-muted);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -196,6 +196,7 @@ const DEFAULT_CONTENT = {
   'dvfy-hamburger': '',
   'dvfy-section': '<p>Section content here.</p>',
   'dvfy-theme-switcher': '<option value="devify-cyan">Cyan</option><option value="devify-pink">Pink</option>',
+  'dvfy-accordion': '<dvfy-section label="Section One" open><p>First section content.</p></dvfy-section><dvfy-section label="Section Two" collapsed><p>Second section content.</p></dvfy-section><dvfy-section label="Section Three" collapsed><p>Third section content.</p></dvfy-section>',
 };
 
 /* ── Utilities ── */

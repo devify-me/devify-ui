@@ -43,6 +43,7 @@ import './components/dvfy-hamburger.js';
 import './components/dvfy-section.js';
 import './components/dvfy-header.js';
 import './components/dvfy-component-playground.js';
+import './components/dvfy-accordion.js';
 
 // HTMX Integration Patterns
 import './patterns/dvfy-htmx-form.js';
