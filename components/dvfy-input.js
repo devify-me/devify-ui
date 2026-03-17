@@ -64,7 +64,8 @@ dvfy-input[disabled] .dvfy-input__label { color: var(--dvfy-disabled-text); }
 dvfy-input .dvfy-input__help { font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted); }
 dvfy-input .dvfy-input__error-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-input-error); }
 
-dvfy-input .dvfy-input__toggle {
+dvfy-input .dvfy-input__toggle,
+dvfy-input .dvfy-input__clear {
   position: absolute;
   right: var(--dvfy-space-2);
   top: 50%;
@@ -80,13 +81,18 @@ dvfy-input .dvfy-input__toggle {
   border-radius: var(--dvfy-radius-sm);
   transition: color var(--dvfy-duration-fast) var(--dvfy-ease-out);
 }
-dvfy-input .dvfy-input__toggle:hover {
+dvfy-input .dvfy-input__toggle:hover,
+dvfy-input .dvfy-input__clear:hover {
   color: var(--dvfy-text-primary);
 }
-dvfy-input .dvfy-input__toggle:focus-visible {
+dvfy-input .dvfy-input__toggle:focus-visible,
+dvfy-input .dvfy-input__clear:focus-visible {
   outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);
   outline-offset: var(--dvfy-ring-offset);
 }
+dvfy-input .dvfy-input__clear { display: none; }
+dvfy-input .dvfy-input__clear--visible { display: block; }
+dvfy-input[clearable] .dvfy-input__field { padding-right: 2.5rem; }
 `;
 
 /**
@@ -105,6 +111,7 @@ dvfy-input .dvfy-input__toggle:focus-visible {
  * @attr {boolean} disabled - Disable input
  * @attr {string} size - Size: sm | md | lg (default: "md")
  * @attr {boolean} no-preview - Disable password visibility toggle for password inputs
+ * @attr {boolean} clearable - Show clear icon when input has a value
  *
  * @cssprop {color} --dvfy-input-bg - Input background
  * @cssprop {color} --dvfy-input-border - Input border color
@@ -126,7 +133,7 @@ class DvfyInput extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'no-preview'];
+    return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'no-preview', 'clearable'];
   }
 
   attributeChangedCallback() {
@@ -240,6 +247,51 @@ class DvfyInput extends HTMLElement {
         input.focus();
       });
       wrapper.appendChild(toggle);
+    }
+
+    // Clear button (when clearable attribute is set)
+    if (this.hasAttribute('clearable') && !hasPreview) {
+      input.classList.add('dvfy-input__field--has-toggle');
+      const clearBtn = document.createElement('button');
+      clearBtn.type = 'button';
+      clearBtn.className = 'dvfy-input__clear';
+      clearBtn.setAttribute('aria-label', 'Clear input');
+      clearBtn.setAttribute('tabindex', '-1');
+
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '16');
+      svg.setAttribute('height', '16');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('fill', 'none');
+      svg.setAttribute('stroke', 'currentColor');
+      svg.setAttribute('stroke-width', '2');
+      svg.setAttribute('stroke-linecap', 'round');
+      svg.setAttribute('stroke-linejoin', 'round');
+      const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line1.setAttribute('x1', '18'); line1.setAttribute('y1', '6');
+      line1.setAttribute('x2', '6');  line1.setAttribute('y2', '18');
+      svg.appendChild(line1);
+      const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line2.setAttribute('x1', '6');  line2.setAttribute('y1', '6');
+      line2.setAttribute('x2', '18'); line2.setAttribute('y2', '18');
+      svg.appendChild(line2);
+      clearBtn.appendChild(svg);
+
+      // Show/hide based on input value
+      const updateVisibility = () => {
+        clearBtn.classList.toggle('dvfy-input__clear--visible', input.value.length > 0);
+      };
+      input.addEventListener('input', updateVisibility);
+      updateVisibility();
+
+      clearBtn.addEventListener('click', () => {
+        input.value = '';
+        updateVisibility();
+        input.focus();
+        input.dispatchEvent(new Event('input', { bubbles: true }));
+      });
+
+      wrapper.appendChild(clearBtn);
     }
 
     this.appendChild(wrapper);
