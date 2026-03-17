@@ -21,14 +21,40 @@ The catalog showcases every component with live examples, theme switching (Cyan/
 
 ## Quick Start
 
+### Via npm
+
+```bash
+npm install @devify/ui
+```
+
+```html
+<!-- Load tokens + themes -->
+<link rel="stylesheet" href="node_modules/@devify/ui/devify.css">
+
+<!-- Load all components -->
+<script type="module" src="node_modules/@devify/ui/devify.js"></script>
+```
+
+Or import individual components:
+
+```js
+import '@devify/ui/components/dvfy-button.js';
+import '@devify/ui/components/dvfy-input.js';
+```
+
+### Via HTML (no npm)
+
 ```html
 <!-- Load tokens + themes -->
 <link rel="stylesheet" href="devify.css">
 
 <!-- Load all components -->
 <script type="module" src="devify.js"></script>
+```
 
-<!-- Use components -->
+### Use components
+
+```html
 <dvfy-button variant="primary">Save</dvfy-button>
 <dvfy-input label="Email" type="email" name="email" required></dvfy-input>
 <dvfy-badge status="success">Active</dvfy-badge>
