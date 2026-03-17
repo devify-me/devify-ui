@@ -32,8 +32,15 @@ devify-ui/
 │       └── devify-pink.css
 ├── components/            # 30 Web Components (dvfy-*.js)
 ├── patterns/              # 5 HTMX integration patterns (dvfy-*.js)
-└── catalog/               # Live component showcase
-    └── index.html
+└── catalog/               # Design System Explorer
+    ├── index.html         # Shell: header + sidebar + main layout
+    ├── catalog.js         # Entry point: init sidebar, router, theme observer
+    ├── router.js          # Hash-based routing + view dispatch
+    ├── sidebar.js         # Sidebar construction + search filtering
+    ├── data.js            # All hardcoded maps (categories, tokens, patterns)
+    ├── tokens.js          # Token showcase renderers (colors, typography, etc.)
+    ├── brand.js           # Live-editable brand settings sandbox
+    └── overview.js        # Landing page renderer
 ```
 
 ## Conventions
@@ -54,12 +61,13 @@ When creating or modifying components:
 4. Support keyboard navigation (Tab, Enter, Space, Escape)
 5. Add ARIA roles and labels
 6. Add component to `devify.js` barrel file
-7. Add demo to `catalog/index.html`
+7. Add component to `COMPONENT_CATEGORIES` in `catalog/data.js`
+8. Run `npm run analyze` to regenerate manifest
 
 ## Tooling Roadmap
 
 - **WCA (web-component-analyzer)** → generates `custom-elements.json` manifest from JSDoc
-- **Built-in API Reference** → lightweight inline viewer in catalog (no external dep)
+- **`dvfy-component-playground`** → interactive playground in catalog (picker, live controls, preview, code gen, API docs)
 - **Open WC** → testing (`@open-wc/testing`) and linting (`@open-wc/eslint-config`)
 - **No Storybook** — WCA + inline viewer is the chosen path (zero-build, web-standards-first)
 
@@ -100,7 +108,21 @@ npm run analyze    # generate custom-elements.json
 npm run serve      # serve catalog at localhost:8090
 ```
 
-The manifest drives the **API Reference** section in the catalog — a lightweight inline viewer that renders attribute tables, events, CSS custom properties, and slots from the WCA-generated manifest. No external playground dependency needed.
+The manifest drives the **Playground** in the catalog via `<dvfy-component-playground>` — an interactive playground that auto-generates controls from the manifest, provides live preview, generated code, and API docs. No external playground dependency needed.
+
+## Design System Explorer (Catalog)
+
+The catalog (`catalog/index.html`) is a full Design System Explorer with:
+- **Sidebar navigation** with search, organized by: Tokens, Components (by category), HTMX Patterns, Brand Settings
+- **Hash-based routing** (`#tokens/colors`, `#components/dvfy-button`, `#patterns/dvfy-confirm`, `#brand`, `#overview`)
+- **Token showcases** — live computed values from active theme (colors grid, typography samples, spacing bars, elevation cards)
+- **Component views** — `dvfy-component-playground` with `component` attr set (picker hidden, sidebar navigates)
+- **Brand Settings** — live-edit semantic tokens with color pickers, reset per section, export as CSS theme block
+
+### Adding a new component to the catalog
+1. Add the tag name to the appropriate category in `catalog/data.js` → `COMPONENT_CATEGORIES`
+2. If it needs default innerHTML, add an entry to `DEFAULT_CONTENT` in `components/dvfy-component-playground.js`
+3. Run `npm run analyze` to include it in `custom-elements.json`
 
 ## Commands
 

@@ -440,6 +440,18 @@
       ]
     },
     {
+      "name": "dvfy-component-playground",
+      "path": "./components/dvfy-component-playground.js",
+      "attributes": [
+        {
+          "name": "component"
+        },
+        {
+          "name": "src"
+        }
+      ]
+    },
+    {
       "name": "dvfy-dropdown",
       "path": "./components/dvfy-dropdown.js",
       "description": "Dropdown menu with keyboard navigation and click-outside closing.",
@@ -693,6 +705,11 @@
           "name": "no-preview",
           "description": "Disable password visibility toggle for password inputs",
           "type": "boolean"
+        },
+        {
+          "name": "clearable",
+          "description": "Show clear icon when input has a value",
+          "type": "boolean"
         }
       ],
       "properties": [
@@ -701,6 +718,11 @@
           "attribute": "value",
           "description": "Input value",
           "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "input"
         }
       ],
       "cssProperties": [
