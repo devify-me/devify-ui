@@ -102,6 +102,20 @@ dvfy-theme-switcher[data-mode="dark"] .dvfy-ts__toggle {
 }
 `;
 
+/**
+ * Theme dropdown and dark/light toggle. Hides dropdown when only one theme is available.
+ *
+ * @element dvfy-theme-switcher
+ *
+ * @attr {string} default-theme - Initial theme name (default: first option's value)
+ * @attr {string} default-mode - Initial mode: light | dark (default: "light")
+ *
+ * @slot - <option value="theme-name">Label</option> elements defining available themes
+ *
+ * @cssprop {color} --dvfy-surface-muted - Toggle track background (light mode)
+ * @cssprop {color} --dvfy-neutral-0 - Toggle thumb color (light mode)
+ * @cssprop {color} --dvfy-indigo-950 - Toggle track background (dark mode)
+ */
 class DvfyThemeSwitcher extends HTMLElement {
   static #styled = false;
   #themes = [];

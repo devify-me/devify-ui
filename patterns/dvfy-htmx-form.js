@@ -100,6 +100,28 @@ dvfy-htmx-form .dvfy-htmx-form__field-error {
 @keyframes dvfy-htmx-form-spin { to { transform: rotate(360deg); } }
 `;
 
+/**
+ * Enhanced form with HTMX submission, validation, loading overlay, and toast feedback.
+ *
+ * @element dvfy-htmx-form
+ *
+ * @attr {string} action - URL to submit to
+ * @attr {string} method - HTTP method: post | put | patch | delete (default: "post")
+ * @attr {string} target - CSS selector for response target (default: self)
+ * @attr {string} swap - HTMX swap strategy (default: "innerHTML")
+ * @attr {string} success-message - Toast message on successful submission
+ * @attr {string} error-message - Toast message on error (default: "Something went wrong")
+ * @attr {string} confirm - Confirmation text (shows modal before submitting)
+ * @attr {boolean} reset-on-success - Reset form after successful submission
+ *
+ * @fires form-success - Successful submission completed
+ * @fires form-error - Submission failed, detail: { errors }
+ *
+ * @slot - Form content (inputs, buttons, etc.)
+ *
+ * @cssprop {color} --dvfy-primary-bg - Submit button spinner accent
+ * @cssprop {color} --dvfy-danger-text - Field error text color
+ */
 class DvfyHtmxForm extends HTMLElement {
   static #styled = false;
   #form = null;

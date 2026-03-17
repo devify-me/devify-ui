@@ -58,10 +58,10 @@ When creating or modifying components:
 
 ## Tooling Roadmap
 
-- **WCA (web-component-analyzer)** → generates `custom-elements.json` manifest
-- **api-viewer-element** → interactive playground in catalog
+- **WCA (web-component-analyzer)** → generates `custom-elements.json` manifest from JSDoc
+- **Built-in API Reference** → lightweight inline viewer in catalog (no external dep)
 - **Open WC** → testing (`@open-wc/testing`) and linting (`@open-wc/eslint-config`)
-- **No Storybook** — WCA + api-viewer is the chosen path (zero-build, web-standards-first)
+- **No Storybook** — WCA + inline viewer is the chosen path (zero-build, web-standards-first)
 
 ## JSDoc Format (Web Component Analyzer compatible)
 
@@ -92,20 +92,15 @@ Every component must have JSDoc with `@attr`, `@event`, `@slot`, `@cssProperty` 
 
 ## WCA Analyzer
 
-Generates `custom-elements.json` from JSDoc-annotated components (W3C standard manifest).
+Generates `custom-elements.json` from JSDoc-annotated components (W3C community standard manifest).
 
 ```bash
-# Install dependencies
 npm install
-
-# Generate custom-elements.json from all components/patterns
-npm run analyze
-
-# Serve locally with api-viewer playground
-npm run serve
+npm run analyze    # generate custom-elements.json
+npm run serve      # serve catalog at localhost:8090
 ```
 
-The manifest drives the interactive `<api-viewer>` playground in the catalog (props, events, docs, source view).
+The manifest drives the **API Reference** section in the catalog — a lightweight inline viewer that renders attribute tables, events, CSS custom properties, and slots from the WCA-generated manifest. No external playground dependency needed.
 
 ## Commands
 

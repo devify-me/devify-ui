@@ -184,6 +184,28 @@ dvfy-select .dvfy-select__native {
 }
 `;
 
+/**
+ * Enhanced select dropdown with search, keyboard navigation, and native mobile fallback.
+ *
+ * @element dvfy-select
+ *
+ * @attr {string} label - Label text
+ * @attr {string} name - Form field name
+ * @attr {string} placeholder - Placeholder text (default: "Select...")
+ * @attr {string} error - Error message (enables error styling)
+ * @attr {string} help - Help text shown below select
+ * @attr {boolean} required - Mark field as required
+ * @attr {boolean} disabled - Disable interaction
+ * @attr {boolean} searchable - Enable filter input in dropdown
+ *
+ * @fires change - Selection changed, detail: { value }
+ *
+ * @slot - <option> elements defining available choices
+ *
+ * @cssprop {color} --dvfy-surface-primary - Dropdown background
+ * @cssprop {color} --dvfy-hover-bg - Option hover background
+ * @cssprop {color} --dvfy-active-bg - Selected option background
+ */
 class DvfySelect extends HTMLElement {
   static #styled = false;
   #options = [];

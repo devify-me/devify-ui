@@ -119,6 +119,25 @@ dvfy-live-search--loading .dvfy-live-search__spinner {
 @keyframes dvfy-live-search-spin { to { transform: rotate(360deg); } }
 `;
 
+/**
+ * Debounced search input that loads results via HTMX or fetch fallback.
+ *
+ * @element dvfy-live-search
+ *
+ * @attr {string} src - URL to search against
+ * @attr {string} param - Query parameter name (default: "q")
+ * @attr {string} target - CSS selector for results container (default: auto-created sibling)
+ * @attr {number} debounce - Debounce delay in ms (default: 300)
+ * @attr {number} min-chars - Minimum characters before searching (default: 2)
+ * @attr {string} placeholder - Input placeholder text (default: "Search...")
+ * @attr {string} swap - HTMX swap strategy (default: "innerHTML")
+ *
+ * @fires search - Search request dispatched, detail: { query }
+ *
+ * @cssprop {color} --dvfy-input-bg - Search input background
+ * @cssprop {color} --dvfy-input-border - Search input border color
+ * @cssprop {color} --dvfy-primary-bg - Loading spinner accent color
+ */
 class DvfyLiveSearch extends HTMLElement {
   static #styled = false;
   #input = null;

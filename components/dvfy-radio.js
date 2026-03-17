@@ -71,6 +71,22 @@ dvfy-radio .dvfy-radio__label {
 dvfy-radio[disabled] .dvfy-radio__label { color: var(--dvfy-disabled-text); }
 `;
 
+/**
+ * Radio button with label and automatic group management.
+ *
+ * @element dvfy-radio
+ *
+ * @attr {boolean} checked - Selected state
+ * @attr {boolean} disabled - Disable interaction
+ * @attr {string} name - Form field name (groups radios with same name)
+ * @attr {string} value - Form field value
+ * @attr {string} label - Label text
+ *
+ * @fires change - Selection changed
+ *
+ * @cssprop {color} --dvfy-primary-bg - Selected radio dot and border color
+ * @cssprop {color} --dvfy-input-border - Unselected border color
+ */
 class DvfyRadio extends HTMLElement {
   static #styled = false;
 

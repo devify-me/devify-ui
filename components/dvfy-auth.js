@@ -219,6 +219,29 @@ const STYLES = `
 }
 `;
 
+/**
+ * Authentication forms with sign-in and sign-up modes, OAuth support, and optional modal wrapping.
+ *
+ * @element dvfy-auth
+ *
+ * @attr {string} mode - Form mode: signin | signup (default: "signin")
+ * @attr {string} action - Form action URL
+ * @attr {string} method - Form method (default: "post")
+ * @attr {string} brand - Brand name text (hidden when logo is present)
+ * @attr {string} logo - Logo image URL (shown instead of brand text)
+ * @attr {boolean} modal - Wrap form in a modal dialog
+ * @attr {string} forgot-url - "Forgot password?" link URL
+ * @attr {string} signup-url - "Create account" link URL (sign-in mode)
+ * @attr {string} signin-url - "Already have an account?" link URL (sign-up mode)
+ * @attr {string} oauth-google - Google OAuth URL
+ * @attr {string} oauth-github - GitHub OAuth URL
+ *
+ * @fires auth-submit - Form submitted, detail: { email, password, ... }
+ *
+ * @cssprop {color} --dvfy-primary-bg - Primary button background
+ * @cssprop {color} --dvfy-primary-text - Primary button text color
+ * @cssprop {color} --dvfy-surface-raised - Card background
+ */
 class DvfyAuth extends HTMLElement {
   static #styled = false;
 

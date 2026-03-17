@@ -57,6 +57,21 @@ dvfy-card[interactive]:focus-visible {
 }
 `;
 
+/**
+ * Content card with elevation and interactive variants.
+ *
+ * @element dvfy-card
+ *
+ * @attr {boolean} elevated - Add shadow elevation
+ * @attr {boolean} interactive - Enable hover effect and cursor pointer
+ * @attr {string} padded - Enable padding: "true" | "false" (default: "true")
+ *
+ * @slot - Card content
+ *
+ * @cssprop {color} --dvfy-surface-primary - Card background
+ * @cssprop {color} --dvfy-border-default - Card border color
+ * @cssprop {color} --dvfy-shadow-md - Elevated shadow
+ */
 class DvfyCard extends HTMLElement {
   static #styled = false;
 

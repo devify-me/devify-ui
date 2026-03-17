@@ -96,6 +96,20 @@ const STATUS_ICONS = {
   danger: '\u2716',   // heavy x
 };
 
+/**
+ * Alert/notification banner with status-based styling.
+ *
+ * @element dvfy-alert
+ *
+ * @attr {string} status - Alert status: info | success | warning | danger (default: "info")
+ * @attr {string} title - Alert title text
+ * @attr {boolean} dismissible - Show close button to dismiss the alert
+ *
+ * @cssprop {color} --dvfy-info-bg-subtle - Info status background
+ * @cssprop {color} --dvfy-success-bg-subtle - Success status background
+ * @cssprop {color} --dvfy-warning-bg-subtle - Warning status background
+ * @cssprop {color} --dvfy-danger-bg-subtle - Danger status background
+ */
 class DvfyAlert extends HTMLElement {
   static #styled = false;
 

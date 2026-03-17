@@ -114,6 +114,21 @@ dvfy-tooltip[position="right"] .dvfy-tooltip__tip::after {
 }
 `;
 
+/**
+ * Tooltip shown on hover/focus with configurable position and delay.
+ *
+ * @element dvfy-tooltip
+ *
+ * @attr {string} text - Tooltip content text
+ * @attr {string} position - Placement: top | right | bottom | left (default: "top")
+ * @attr {number} delay - Delay in ms before showing (default: 200)
+ *
+ * @slot - Trigger element that the tooltip is attached to
+ *
+ * @cssprop {color} --dvfy-neutral-700 - Tooltip background (light mode)
+ * @cssprop {color} --dvfy-neutral-100 - Tooltip text color (light mode)
+ * @cssprop {color} --dvfy-neutral-200 - Tooltip background (dark mode)
+ */
 class DvfyTooltip extends HTMLElement {
   static #styled = false;
   #tip = null;

@@ -77,6 +77,18 @@ dvfy-loader[size="lg"] .dvfy-loader__dot { width: 0.75rem; height: 0.75rem; }
 }
 `;
 
+/**
+ * Loading spinner with spinner and dots variants, optional brand icon overlay.
+ *
+ * @element dvfy-loader
+ *
+ * @attr {string} size - Size: sm | md | lg (default: "md")
+ * @attr {string} variant - Animation style: spinner | dots (default: "spinner")
+ * @attr {string} icon - URL to brand icon shown at center of spinner
+ *
+ * @cssprop {color} --dvfy-primary-bg - Spinner accent color and dot color
+ * @cssprop {color} --dvfy-border-default - Spinner track color
+ */
 class DvfyLoader extends HTMLElement {
   static #styled = false;
 

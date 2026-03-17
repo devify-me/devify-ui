@@ -64,6 +64,20 @@ dvfy-pagination .dvfy-pagination__ellipsis {
 }
 `;
 
+/**
+ * Page navigation with ellipsis and prev/next controls.
+ *
+ * @element dvfy-pagination
+ *
+ * @attr {number} total - Total number of pages
+ * @attr {number} current - Current page number (default: 1)
+ * @attr {number} max-visible - Maximum page buttons shown (default: 5)
+ *
+ * @fires page-change - Page changed, detail: { page }
+ *
+ * @cssprop {color} --dvfy-primary-bg - Active page button background
+ * @cssprop {color} --dvfy-primary-text - Active page button text
+ */
 class DvfyPagination extends HTMLElement {
   static #styled = false;
 

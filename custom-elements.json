@@ -1,0 +1,1994 @@
+{
+  "version": "experimental",
+  "tags": [
+    {
+      "name": "dvfy-alert",
+      "path": "./components/dvfy-alert.js",
+      "description": "Alert/notification banner with status-based styling.",
+      "attributes": [
+        {
+          "name": "status",
+          "description": "Alert status: info | success | warning | danger (default: \"info\")",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "description": "Alert title text",
+          "type": "string"
+        },
+        {
+          "name": "dismissible",
+          "description": "Show close button to dismiss the alert",
+          "type": "boolean"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-info-bg-subtle",
+          "description": "Info status background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-success-bg-subtle",
+          "description": "Success status background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-warning-bg-subtle",
+          "description": "Warning status background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-danger-bg-subtle",
+          "description": "Danger status background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-auth",
+      "path": "./components/dvfy-auth.js",
+      "description": "Authentication forms with sign-in and sign-up modes, OAuth support, and optional modal wrapping.",
+      "attributes": [
+        {
+          "name": "mode",
+          "description": "Form mode: signin | signup (default: \"signin\")",
+          "type": "string"
+        },
+        {
+          "name": "action",
+          "description": "Form action URL",
+          "type": "string"
+        },
+        {
+          "name": "method",
+          "description": "Form method (default: \"post\")",
+          "type": "string"
+        },
+        {
+          "name": "brand",
+          "description": "Brand name text (hidden when logo is present)",
+          "type": "string"
+        },
+        {
+          "name": "logo",
+          "description": "Logo image URL (shown instead of brand text)",
+          "type": "string"
+        },
+        {
+          "name": "modal",
+          "description": "Wrap form in a modal dialog",
+          "type": "boolean"
+        },
+        {
+          "name": "forgot-url",
+          "description": "\"Forgot password?\" link URL",
+          "type": "string"
+        },
+        {
+          "name": "signup-url",
+          "description": "\"Create account\" link URL (sign-in mode)",
+          "type": "string"
+        },
+        {
+          "name": "signin-url",
+          "description": "\"Already have an account?\" link URL (sign-up mode)",
+          "type": "string"
+        },
+        {
+          "name": "oauth-google",
+          "description": "Google OAuth URL",
+          "type": "string"
+        },
+        {
+          "name": "oauth-github",
+          "description": "GitHub OAuth URL",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "auth-submit",
+          "description": "Form submitted, detail: { email, password, ... }"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Primary button background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-text",
+          "description": "Primary button text color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Card background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-avatar",
+      "path": "./components/dvfy-avatar.js",
+      "description": "User avatar with image and initials fallback.",
+      "attributes": [
+        {
+          "name": "src",
+          "description": "Image URL",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "description": "User name (used for initials fallback and alt text)",
+          "type": "string"
+        },
+        {
+          "name": "size",
+          "description": "Size: sm | md | lg (default: \"md\")",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "description": "Status indicator dot: online | offline | busy",
+          "type": "string"
+        },
+        {
+          "name": "interactive",
+          "description": "Add hover effect and dispatch click event",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "avatar-click",
+          "description": "Interactive avatar clicked, detail: { name, src }"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-neutral-400",
+          "description": "Initials background color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-success-text",
+          "description": "Online status dot color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-danger-text",
+          "description": "Busy status dot color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-avatar-group",
+      "path": "./components/dvfy-avatar.js",
+      "description": "Overlapping avatar stack with overflow indicator.",
+      "attributes": [
+        {
+          "name": "max",
+          "description": "Maximum avatars to show before \"+N\" overflow badge",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-badge",
+      "path": "./components/dvfy-badge.js",
+      "description": "Status badge with dot indicator and outline variant.",
+      "attributes": [
+        {
+          "name": "variant",
+          "description": "Badge style: default | outline (default: \"default\")",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "description": "Status color: neutral | success | warning | danger | info (default: \"neutral\")",
+          "type": "string"
+        },
+        {
+          "name": "size",
+          "description": "Size: sm | md (default: \"md\")",
+          "type": "string"
+        },
+        {
+          "name": "dot",
+          "description": "Show dot indicator before text",
+          "type": "boolean"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-success-bg-subtle",
+          "description": "Success status background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-warning-bg-subtle",
+          "description": "Warning status background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-danger-bg-subtle",
+          "description": "Danger status background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-info-bg-subtle",
+          "description": "Info status background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-breadcrumb",
+      "path": "./components/dvfy-breadcrumb.js",
+      "description": "Breadcrumb navigation with automatic separator insertion.",
+      "attributes": [
+        {
+          "name": "separator",
+          "description": "Character between items (default: \"/\")",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Breadcrumb items as <a> elements; last child is marked as current page"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-text-link",
+          "description": "Link text color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-text-muted",
+          "description": "Separator color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-button",
+      "path": "./components/dvfy-button.js",
+      "description": "Button component with multiple variants and sizes.",
+      "attributes": [
+        {
+          "name": "variant",
+          "description": "Button style: default | subtle | outline | ghost | danger (default: \"default\")",
+          "type": "string"
+        },
+        {
+          "name": "size",
+          "description": "Size: sm | md | lg (default: \"md\")",
+          "type": "string"
+        },
+        {
+          "name": "loading",
+          "description": "Show loading state with spinner indicator",
+          "type": "boolean"
+        },
+        {
+          "name": "type",
+          "description": "HTML button type: button | submit | reset (default: \"button\")",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "description": "Disable button and prevent interaction",
+          "type": "boolean"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Primary background color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-text",
+          "description": "Primary text color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-danger-bg",
+          "description": "Danger variant background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-card",
+      "path": "./components/dvfy-card.js",
+      "description": "Content card with elevation and interactive variants.",
+      "attributes": [
+        {
+          "name": "elevated",
+          "description": "Add shadow elevation",
+          "type": "boolean"
+        },
+        {
+          "name": "padded",
+          "description": "Enable padding: \"true\" | \"false\" (default: \"true\")",
+          "type": "string"
+        },
+        {
+          "name": "interactive",
+          "description": "Enable hover effect and cursor pointer",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Card content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-primary",
+          "description": "Card background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-default",
+          "description": "Card border color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-shadow-md",
+          "description": "Elevated shadow",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-checkbox",
+      "path": "./components/dvfy-checkbox.js",
+      "description": "Checkbox input with label and indeterminate state support.",
+      "attributes": [
+        {
+          "name": "checked",
+          "description": "Checked state",
+          "type": "boolean"
+        },
+        {
+          "name": "indeterminate",
+          "description": "Show indeterminate (dash) state",
+          "type": "boolean"
+        },
+        {
+          "name": "name",
+          "description": "Form field name",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "description": "Form field value (default: \"on\")",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "description": "Disable interaction",
+          "type": "boolean"
+        },
+        {
+          "name": "label",
+          "description": "Label text",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "checked",
+          "attribute": "checked",
+          "description": "Checked state",
+          "type": "boolean"
+        },
+        {
+          "name": "indeterminate",
+          "attribute": "indeterminate",
+          "description": "Show indeterminate (dash) state",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "description": "Checkbox state changed"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Checked/indeterminate background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-input-border",
+          "description": "Unchecked border color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-dropdown",
+      "path": "./components/dvfy-dropdown.js",
+      "description": "Dropdown menu with keyboard navigation and click-outside closing.",
+      "attributes": [
+        {
+          "name": "align",
+          "description": "Menu alignment: left | right (default: \"left\")",
+          "type": "string"
+        },
+        {
+          "name": "open",
+          "description": "Menu visibility state",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "First child element is the trigger; remaining children become menu items"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-overlay",
+          "description": "Menu background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-shadow-lg",
+          "description": "Menu shadow",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-selected-bg",
+          "description": "Selected item background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-empty",
+      "path": "./components/dvfy-empty.js",
+      "description": "Empty state placeholder with icon, title, description, and action area.",
+      "attributes": [
+        {
+          "name": "title",
+          "description": "Heading text",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "description": "Secondary descriptive text",
+          "type": "string"
+        },
+        {
+          "name": "icon",
+          "description": "Emoji or text icon shown above the title",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Action area content (e.g., buttons)"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-text-muted",
+          "description": "Description and icon color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-text-secondary",
+          "description": "Title color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-hamburger",
+      "path": "./components/dvfy-hamburger.js",
+      "description": "Responsive header with 3-stage mobile hamburger menu (closed, expanded, icons).\nUses CSS Container Queries to respond to parent width, not viewport.",
+      "attributes": [
+        {
+          "name": "brand",
+          "description": "Brand name text",
+          "type": "string"
+        },
+        {
+          "name": "tagline",
+          "description": "Smaller text below brand name",
+          "type": "string"
+        },
+        {
+          "name": "logo",
+          "description": "Logo image URL (replaces brand text)",
+          "type": "string"
+        },
+        {
+          "name": "breakpoint",
+          "description": "Pixel width below which hamburger activates (default: 768)",
+          "type": "number"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Menu items as <a data-icon=\"...\"> and utility items as <a data-utility data-icon=\"...\">"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Header bar background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-text",
+          "description": "Header bar text color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Mobile menu background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-header",
+      "path": "./components/dvfy-header.js",
+      "description": "Responsive application header with nav tabs, actions, user zone, and mobile hamburger menu.\nUses CSS Container Queries for responsive behavior.",
+      "attributes": [
+        {
+          "name": "tagline",
+          "description": "Tagline text below brand (mobile)",
+          "type": "string"
+        },
+        {
+          "name": "breakpoint",
+          "description": "Pixel width for mobile breakpoint (default: 768)",
+          "type": "number"
+        },
+        {
+          "name": "brand",
+          "description": "Brand name text",
+          "type": "string"
+        },
+        {
+          "name": "logo",
+          "description": "Logo image URL",
+          "type": "string"
+        },
+        {
+          "name": "preset",
+          "description": "Visual preset: default | landing | store | dashboard | docs",
+          "type": "string"
+        },
+        {
+          "name": "sticky",
+          "description": "Stick header to top on scroll",
+          "type": "boolean"
+        },
+        {
+          "name": "scroll-shrink",
+          "description": "Reduce padding and add shadow on scroll",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Nav items as <a data-icon=\"...\">, actions as [data-action], user as [data-user]"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Header bar background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Active nav indicator and brand accent",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-muted",
+          "description": "Bottom border color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-input",
+      "path": "./components/dvfy-input.js",
+      "description": "Text input with label, error/help text, and password visibility toggle.",
+      "attributes": [
+        {
+          "name": "value",
+          "description": "Input value",
+          "type": "string"
+        },
+        {
+          "name": "size",
+          "description": "Size: sm | md | lg (default: \"md\")",
+          "type": "string"
+        },
+        {
+          "name": "label",
+          "description": "Label text",
+          "type": "string"
+        },
+        {
+          "name": "type",
+          "description": "Input type: text | email | password | etc. (default: \"text\")",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "description": "Form field name",
+          "type": "string"
+        },
+        {
+          "name": "placeholder",
+          "description": "Placeholder text",
+          "type": "string"
+        },
+        {
+          "name": "error",
+          "description": "Error message (enables error styling)",
+          "type": "string"
+        },
+        {
+          "name": "help",
+          "description": "Help text shown below input",
+          "type": "string"
+        },
+        {
+          "name": "required",
+          "description": "Mark field as required",
+          "type": "boolean"
+        },
+        {
+          "name": "disabled",
+          "description": "Disable input",
+          "type": "boolean"
+        },
+        {
+          "name": "no-preview",
+          "description": "Disable password visibility toggle for password inputs",
+          "type": "boolean"
+        }
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "attribute": "value",
+          "description": "Input value",
+          "type": "string"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-input-bg",
+          "description": "Input background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-input-border",
+          "description": "Input border color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-input-error",
+          "description": "Error border and message color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-loader",
+      "path": "./components/dvfy-loader.js",
+      "description": "Loading spinner with spinner and dots variants, optional brand icon overlay.",
+      "attributes": [
+        {
+          "name": "variant",
+          "description": "Animation style: spinner | dots (default: \"spinner\")",
+          "type": "string"
+        },
+        {
+          "name": "size",
+          "description": "Size: sm | md | lg (default: \"md\")",
+          "type": "string"
+        },
+        {
+          "name": "icon",
+          "description": "URL to brand icon shown at center of spinner",
+          "type": "string"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Spinner accent color and dot color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-default",
+          "description": "Spinner track color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-modal",
+      "path": "./components/dvfy-modal.js",
+      "description": "Modal dialog with backdrop, focus trap, and keyboard support.",
+      "attributes": [
+        {
+          "name": "size",
+          "description": "Dialog size: sm | md | lg (default: \"md\")",
+          "type": "string"
+        },
+        {
+          "name": "open",
+          "description": "Show/hide the modal",
+          "type": "boolean"
+        },
+        {
+          "name": "title",
+          "description": "Header title text",
+          "type": "string"
+        },
+        {
+          "name": "required",
+          "description": "Prevent dismissal via backdrop click or Escape key",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "close",
+          "description": "Modal closed"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Modal body content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Dialog background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-shadow-xl",
+          "description": "Dialog shadow",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-nav",
+      "path": "./components/dvfy-nav.js",
+      "description": "Top navigation bar with mobile hamburger toggle.",
+      "attributes": [
+        {
+          "name": "sticky",
+          "description": "Stick to top on scroll",
+          "type": "boolean"
+        },
+        {
+          "name": "brand",
+          "description": "Brand text in left area",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Navigation links and action elements"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-primary",
+          "description": "Nav background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-default",
+          "description": "Bottom border color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-text-primary",
+          "description": "Brand text color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-pagination",
+      "path": "./components/dvfy-pagination.js",
+      "description": "Page navigation with ellipsis and prev/next controls.",
+      "attributes": [
+        {
+          "name": "total",
+          "description": "Total number of pages",
+          "type": "number"
+        },
+        {
+          "name": "current",
+          "description": "Current page number (default: 1)",
+          "type": "number"
+        },
+        {
+          "name": "max-visible",
+          "description": "Maximum page buttons shown (default: 5)",
+          "type": "number"
+        }
+      ],
+      "events": [
+        {
+          "name": "page-change",
+          "description": "Page changed, detail: { page }"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Active page button background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-text",
+          "description": "Active page button text",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-progress",
+      "path": "./components/dvfy-progress.js",
+      "description": "Progress indicator with bar and circle variants.",
+      "attributes": [
+        {
+          "name": "value",
+          "description": "Progress value from 0 to 100",
+          "type": "number"
+        },
+        {
+          "name": "variant",
+          "description": "Display style: bar | circle (default: \"bar\")",
+          "type": "string"
+        },
+        {
+          "name": "size",
+          "description": "Size: sm | md | lg (default: \"md\")",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "description": "Color status: default | success | warning | danger",
+          "type": "string"
+        },
+        {
+          "name": "label",
+          "description": "Show percentage text",
+          "type": "boolean"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Default progress fill color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-success-bg",
+          "description": "Success progress fill color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-warning-bg",
+          "description": "Warning progress fill color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-danger-bg",
+          "description": "Danger progress fill color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-radio",
+      "path": "./components/dvfy-radio.js",
+      "description": "Radio button with label and automatic group management.",
+      "attributes": [
+        {
+          "name": "checked",
+          "description": "Selected state",
+          "type": "boolean"
+        },
+        {
+          "name": "name",
+          "description": "Form field name (groups radios with same name)",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "description": "Form field value",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "description": "Disable interaction",
+          "type": "boolean"
+        },
+        {
+          "name": "label",
+          "description": "Label text",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "checked",
+          "attribute": "checked",
+          "description": "Selected state",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "description": "Selection changed"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Selected radio dot and border color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-input-border",
+          "description": "Unselected border color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-section",
+      "path": "./components/dvfy-section.js",
+      "description": "Collapsible section with summary header and toggle animation.",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "Section title text",
+          "type": "string"
+        },
+        {
+          "name": "icon",
+          "description": "Optional icon/emoji before the label",
+          "type": "string"
+        },
+        {
+          "name": "open",
+          "description": "Expanded state (default: true unless collapsed is set)",
+          "type": "boolean"
+        },
+        {
+          "name": "collapsed",
+          "description": "Start in collapsed state",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Section body content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-muted",
+          "description": "Summary header background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-muted",
+          "description": "Section border color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-select",
+      "path": "./components/dvfy-select.js",
+      "description": "Enhanced select dropdown with search, keyboard navigation, and native mobile fallback.",
+      "attributes": [
+        {
+          "name": "name",
+          "description": "Form field name",
+          "type": "string"
+        },
+        {
+          "name": "searchable",
+          "description": "Enable filter input in dropdown",
+          "type": "boolean"
+        },
+        {
+          "name": "error",
+          "description": "Error message (enables error styling)",
+          "type": "string"
+        },
+        {
+          "name": "help",
+          "description": "Help text shown below select",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "description": "Disable interaction",
+          "type": "boolean"
+        },
+        {
+          "name": "label",
+          "description": "Label text",
+          "type": "string"
+        },
+        {
+          "name": "placeholder",
+          "description": "Placeholder text (default: \"Select...\")",
+          "type": "string"
+        },
+        {
+          "name": "required",
+          "description": "Mark field as required",
+          "type": "boolean"
+        }
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "description": "Selection changed, detail: { value }"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "<option> elements defining available choices"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-primary",
+          "description": "Dropdown background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-hover-bg",
+          "description": "Option hover background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-active-bg",
+          "description": "Selected option background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-sidebar",
+      "path": "./components/dvfy-sidebar.js",
+      "description": "Side navigation with collapsible compact mode and automatic active link highlighting.",
+      "attributes": [
+        {
+          "name": "collapsible",
+          "description": "Show collapse toggle button",
+          "type": "boolean"
+        },
+        {
+          "name": "collapsed",
+          "description": "Compact icon-only mode",
+          "type": "boolean"
+        },
+        {
+          "name": "width",
+          "description": "Expanded width (default: \"16rem\")",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Navigation sections as <dvfy-sidebar-section> elements"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-secondary",
+          "description": "Sidebar background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-active-bg",
+          "description": "Active link background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-hover-bg",
+          "description": "Link hover background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-sidebar-section",
+      "path": "./components/dvfy-sidebar.js",
+      "description": "Sidebar section with label heading.",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "Section heading text (hidden when sidebar is collapsed)",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Navigation links as <a> elements"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-switch",
+      "path": "./components/dvfy-switch.js",
+      "description": "Toggle switch with label and description text.",
+      "attributes": [
+        {
+          "name": "checked",
+          "description": "On state",
+          "type": "boolean"
+        },
+        {
+          "name": "name",
+          "description": "Form field name",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "description": "Form field value when checked (default: \"on\")",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "description": "Disable interaction",
+          "type": "boolean"
+        },
+        {
+          "name": "label",
+          "description": "Label text",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "description": "Optional description text below label",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "checked",
+          "attribute": "checked",
+          "description": "On state",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "change",
+          "description": "Toggle state changed"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Track color when checked",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-neutral-300",
+          "description": "Track color when unchecked",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-neutral-0",
+          "description": "Thumb color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-table",
+      "path": "./components/dvfy-table.js",
+      "description": "Enhanced data table with sorting, filtering, selection, and global search.",
+      "attributes": [
+        {
+          "name": "striped",
+          "description": "Alternating row backgrounds",
+          "type": "boolean"
+        },
+        {
+          "name": "hoverable",
+          "description": "Row hover highlight",
+          "type": "boolean"
+        },
+        {
+          "name": "compact",
+          "description": "Smaller cell padding",
+          "type": "boolean"
+        },
+        {
+          "name": "responsive",
+          "description": "Horizontal scroll on overflow",
+          "type": "boolean"
+        },
+        {
+          "name": "selectable",
+          "description": "Checkbox column with select-all",
+          "type": "boolean"
+        },
+        {
+          "name": "filterable",
+          "description": "Excel-style dropdown filters on data-filter columns",
+          "type": "boolean"
+        },
+        {
+          "name": "searchable",
+          "description": "Global search input above table",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "sort",
+          "description": "Column sorted, detail: { column, direction }"
+        },
+        {
+          "name": "selection-change",
+          "description": "Row selection changed, detail: { selected: number[] }"
+        },
+        {
+          "name": "filter-change",
+          "description": "Column filter changed, detail: { column, values }"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "A <table> element with <thead> and <tbody>"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-sunken",
+          "description": "Header row background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-hover-bg",
+          "description": "Row hover background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Active filter icon and sort indicator color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-selected-bg",
+          "description": "Selected row background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-tabs",
+      "path": "./components/dvfy-tabs.js",
+      "description": "Tabbed content container with keyboard navigation.",
+      "attributes": [
+        {
+          "name": "active",
+          "description": "Active tab index (default: 0)",
+          "type": "number"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "<dvfy-tab label=\"...\"> elements as tab panels"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Active tab underline color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-text-muted",
+          "description": "Inactive tab text color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-default",
+          "description": "Tab list border color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-tab",
+      "path": "./components/dvfy-tabs.js",
+      "description": "Individual tab panel within a dvfy-tabs container.",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "Tab button text",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-tag",
+      "path": "./components/dvfy-tag.js",
+      "description": "Interactive tag/chip with removable variant.",
+      "attributes": [
+        {
+          "name": "variant",
+          "description": "Tag style: default | outline (default: \"default\")",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "description": "Status color: neutral | success | warning | danger | info (default: \"neutral\")",
+          "type": "string"
+        },
+        {
+          "name": "size",
+          "description": "Size: sm | md (default: \"md\")",
+          "type": "string"
+        },
+        {
+          "name": "removable",
+          "description": "Show remove button and dispatch remove event",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "remove",
+          "description": "Remove button clicked"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-success-bg-subtle",
+          "description": "Success tag background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-danger-bg-subtle",
+          "description": "Danger tag background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-info-bg-subtle",
+          "description": "Info tag background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-textarea",
+      "path": "./components/dvfy-textarea.js",
+      "description": "Multiline text input with auto-resize, character count, and error/help text.",
+      "attributes": [
+        {
+          "name": "value",
+          "description": "Initial value",
+          "type": "string"
+        },
+        {
+          "name": "label",
+          "description": "Label text",
+          "type": "string"
+        },
+        {
+          "name": "name",
+          "description": "Form field name",
+          "type": "string"
+        },
+        {
+          "name": "placeholder",
+          "description": "Placeholder text",
+          "type": "string"
+        },
+        {
+          "name": "error",
+          "description": "Error message (enables error styling)",
+          "type": "string"
+        },
+        {
+          "name": "help",
+          "description": "Help text shown below textarea",
+          "type": "string"
+        },
+        {
+          "name": "required",
+          "description": "Mark field as required",
+          "type": "boolean"
+        },
+        {
+          "name": "disabled",
+          "description": "Disable input",
+          "type": "boolean"
+        },
+        {
+          "name": "rows",
+          "description": "Initial row count (default: 3)",
+          "type": "number"
+        },
+        {
+          "name": "maxlength",
+          "description": "Maximum character count (shows counter)",
+          "type": "number"
+        }
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "attribute": "value",
+          "description": "Initial value",
+          "type": "string"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-input-bg",
+          "description": "Textarea background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-input-border",
+          "description": "Textarea border color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-input-error",
+          "description": "Error border and message color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-theme-switcher",
+      "path": "./components/dvfy-theme-switcher.js",
+      "description": "Theme dropdown and dark/light toggle. Hides dropdown when only one theme is available.",
+      "attributes": [
+        {
+          "name": "default-theme",
+          "description": "Initial theme name (default: first option's value)",
+          "type": "string"
+        },
+        {
+          "name": "default-mode",
+          "description": "Initial mode: light | dark (default: \"light\")",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "<option value=\"theme-name\">Label</option> elements defining available themes"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-muted",
+          "description": "Toggle track background (light mode)",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-neutral-0",
+          "description": "Toggle thumb color (light mode)",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-indigo-950",
+          "description": "Toggle track background (dark mode)",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-toast",
+      "path": "./components/dvfy-toast.js",
+      "description": "Toast notification with auto-dismiss and status-based styling.\nUse the static `DvfyToast.show()` method to create toasts programmatically.",
+      "attributes": [
+        {
+          "name": "status",
+          "description": "Toast status: info | success | warning | danger (default: \"info\")",
+          "type": "string"
+        },
+        {
+          "name": "duration",
+          "description": "Auto-dismiss delay in ms (default: 4000, 0 = persistent)",
+          "type": "number"
+        },
+        {
+          "name": "position",
+          "description": "Screen position: top-right | top-left | bottom-right | bottom-left (default: \"top-right\")",
+          "type": "string"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-info-bg-subtle",
+          "description": "Info toast background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-success-bg-subtle",
+          "description": "Success toast background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-warning-bg-subtle",
+          "description": "Warning toast background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-danger-bg-subtle",
+          "description": "Danger toast background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-tooltip",
+      "path": "./components/dvfy-tooltip.js",
+      "description": "Tooltip shown on hover/focus with configurable position and delay.",
+      "attributes": [
+        {
+          "name": "position",
+          "description": "Placement: top | right | bottom | left (default: \"top\")",
+          "type": "string"
+        },
+        {
+          "name": "delay",
+          "description": "Delay in ms before showing (default: 200)",
+          "type": "number"
+        },
+        {
+          "name": "text",
+          "description": "Tooltip content text",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Trigger element that the tooltip is attached to"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-neutral-700",
+          "description": "Tooltip background (light mode)",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-neutral-100",
+          "description": "Tooltip text color (light mode)",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-neutral-200",
+          "description": "Tooltip background (dark mode)",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-confirm",
+      "path": "./patterns/dvfy-confirm.js",
+      "description": "Confirmation modal that intercepts a trigger action. Supports HTMX attribute interception.",
+      "attributes": [
+        {
+          "name": "title",
+          "description": "Modal title (default: \"Are you sure?\")",
+          "type": "string"
+        },
+        {
+          "name": "message",
+          "description": "Confirmation message body",
+          "type": "string"
+        },
+        {
+          "name": "confirm-text",
+          "description": "Confirm button text (default: \"Confirm\")",
+          "type": "string"
+        },
+        {
+          "name": "cancel-text",
+          "description": "Cancel button text (default: \"Cancel\")",
+          "type": "string"
+        },
+        {
+          "name": "variant",
+          "description": "Confirm button variant: default | danger (default: \"default\")",
+          "type": "string"
+        },
+        {
+          "name": "action",
+          "description": "URL to call on confirm",
+          "type": "string"
+        },
+        {
+          "name": "method",
+          "description": "HTTP method: post | put | patch | delete (default: \"post\")",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "confirmed",
+          "description": "User clicked Confirm"
+        },
+        {
+          "name": "cancelled",
+          "description": "User clicked Cancel"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Trigger element (button, link) that opens the confirmation modal"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Confirm button background (default variant)",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-danger-bg",
+          "description": "Confirm button background (danger variant)",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-htmx-form",
+      "path": "./patterns/dvfy-htmx-form.js",
+      "description": "Enhanced form with HTMX submission, validation, loading overlay, and toast feedback.",
+      "attributes": [
+        {
+          "name": "action",
+          "description": "URL to submit to",
+          "type": "string"
+        },
+        {
+          "name": "method",
+          "description": "HTTP method: post | put | patch | delete (default: \"post\")",
+          "type": "string"
+        },
+        {
+          "name": "target",
+          "description": "CSS selector for response target (default: self)",
+          "type": "string"
+        },
+        {
+          "name": "swap",
+          "description": "HTMX swap strategy (default: \"innerHTML\")",
+          "type": "string"
+        },
+        {
+          "name": "success-message",
+          "description": "Toast message on successful submission",
+          "type": "string"
+        },
+        {
+          "name": "error-message",
+          "description": "Toast message on error (default: \"Something went wrong\")",
+          "type": "string"
+        },
+        {
+          "name": "confirm",
+          "description": "Confirmation text (shows modal before submitting)",
+          "type": "string"
+        },
+        {
+          "name": "reset-on-success",
+          "description": "Reset form after successful submission",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "form-success",
+          "description": "Successful submission completed"
+        },
+        {
+          "name": "form-error",
+          "description": "Submission failed, detail: { errors }"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Form content (inputs, buttons, etc.)"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Submit button spinner accent",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-danger-text",
+          "description": "Field error text color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-htmx-table",
+      "path": "./patterns/dvfy-htmx-table.js",
+      "description": "Server-side sorted, filtered, paginated table via HTMX or fetch fallback.",
+      "attributes": [
+        {
+          "name": "src",
+          "description": "Base URL for table data",
+          "type": "string"
+        },
+        {
+          "name": "page-param",
+          "description": "Pagination query parameter (default: \"page\")",
+          "type": "string"
+        },
+        {
+          "name": "sort-param",
+          "description": "Sort column query parameter (default: \"sort\")",
+          "type": "string"
+        },
+        {
+          "name": "order-param",
+          "description": "Sort order query parameter (default: \"order\")",
+          "type": "string"
+        },
+        {
+          "name": "search-param",
+          "description": "Search query parameter (default: \"q\")",
+          "type": "string"
+        },
+        {
+          "name": "searchable",
+          "description": "Show search input above table",
+          "type": "boolean"
+        },
+        {
+          "name": "page-size",
+          "description": "Items per page (default: 20)",
+          "type": "number"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "A <table> with <thead> defining columns; use <th data-sort=\"col\"> for sortable columns"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-sunken",
+          "description": "Table header background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-hover-bg",
+          "description": "Row hover background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Active sort indicator and pagination button color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-input-border",
+          "description": "Search input border color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-infinite-scroll",
+      "path": "./patterns/dvfy-infinite-scroll.js",
+      "description": "Infinite scroll loader using IntersectionObserver. Loads pages via HTMX or fetch fallback.",
+      "attributes": [
+        {
+          "name": "src",
+          "description": "Base URL for loading more items",
+          "type": "string"
+        },
+        {
+          "name": "page-param",
+          "description": "Query parameter name for page number (default: \"page\")",
+          "type": "string"
+        },
+        {
+          "name": "start-page",
+          "description": "Starting page number (default: 1)",
+          "type": "number"
+        },
+        {
+          "name": "threshold",
+          "description": "Pixels from bottom to trigger load (default: 200)",
+          "type": "number"
+        },
+        {
+          "name": "no-more-text",
+          "description": "Text shown when all items loaded (default: \"No more items\")",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "page-loaded",
+          "description": "New page loaded, detail: { page }"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Initial content (first page items)"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Loading spinner accent color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-text-muted",
+          "description": "\"No more items\" text color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-live-search",
+      "path": "./patterns/dvfy-live-search.js",
+      "description": "Debounced search input that loads results via HTMX or fetch fallback.",
+      "attributes": [
+        {
+          "name": "src",
+          "description": "URL to search against",
+          "type": "string"
+        },
+        {
+          "name": "param",
+          "description": "Query parameter name (default: \"q\")",
+          "type": "string"
+        },
+        {
+          "name": "target",
+          "description": "CSS selector for results container (default: auto-created sibling)",
+          "type": "string"
+        },
+        {
+          "name": "debounce",
+          "description": "Debounce delay in ms (default: 300)",
+          "type": "number"
+        },
+        {
+          "name": "min-chars",
+          "description": "Minimum characters before searching (default: 2)",
+          "type": "number"
+        },
+        {
+          "name": "placeholder",
+          "description": "Input placeholder text (default: \"Search...\")",
+          "type": "string"
+        },
+        {
+          "name": "swap",
+          "description": "HTMX swap strategy (default: \"innerHTML\")",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "description": "Programmatic access to current search value"
+        }
+      ],
+      "events": [
+        {
+          "name": "search",
+          "description": "Search request dispatched, detail: { query }"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-input-bg",
+          "description": "Search input background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-input-border",
+          "description": "Search input border color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Loading spinner accent color",
+          "type": "color"
+        }
+      ]
+    }
+  ]
+}

@@ -1,28 +1,4 @@
-/**
- * Button component with multiple variants and sizes.
- *
- * @attr {string} variant - Button style: default | subtle | outline | ghost | danger (default: "default")
- * @attr {string} size - Size: sm | md | lg (default: "md")
- * @attr {boolean} disabled - Disable button and prevent interaction
- * @attr {boolean} loading - Show loading state with spinner indicator
- * @attr {string} type - HTML button type: button | submit | reset (default: "button")
- *
- * @cssProperty {color} --dvfy-primary-bg - Primary background color
- * @cssProperty {color} --dvfy-primary-text - Primary text color
- * @cssProperty {color} --dvfy-danger-bg - Danger variant background
- *
- * @example
- * <!-- Primary button -->
- * <dvfy-button variant="default" size="lg">Save</dvfy-button>
- *
- * @example
- * <!-- Danger button with loading state -->
- * <dvfy-button variant="danger" loading>Deleting...</dvfy-button>
- *
- * @example
- * <!-- Outline button with HTMX -->
- * <dvfy-button variant="outline" hx-get="/api/data">Load</dvfy-button>
- */
+/* <dvfy-button> — Button component */
 
 const STYLES = `
 dvfy-button {
@@ -125,6 +101,21 @@ dvfy-button[loading]::after {
 @keyframes dvfy-spin { to { transform: rotate(360deg); } }
 `;
 
+/**
+ * Button component with multiple variants and sizes.
+ *
+ * @element dvfy-button
+ *
+ * @attr {string} variant - Button style: default | subtle | outline | ghost | danger (default: "default")
+ * @attr {string} size - Size: sm | md | lg (default: "md")
+ * @attr {boolean} disabled - Disable button and prevent interaction
+ * @attr {boolean} loading - Show loading state with spinner indicator
+ * @attr {string} type - HTML button type: button | submit | reset (default: "button")
+ *
+ * @cssprop {color} --dvfy-primary-bg - Primary background color
+ * @cssprop {color} --dvfy-primary-text - Primary text color
+ * @cssprop {color} --dvfy-danger-bg - Danger variant background
+ */
 class DvfyButton extends HTMLElement {
   static #styled = false;
 

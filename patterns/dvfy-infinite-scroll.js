@@ -76,6 +76,24 @@ dvfy-infinite-scroll .dvfy-infinite-scroll__htmx-target {
 @keyframes dvfy-infinite-scroll-spin { to { transform: rotate(360deg); } }
 `;
 
+/**
+ * Infinite scroll loader using IntersectionObserver. Loads pages via HTMX or fetch fallback.
+ *
+ * @element dvfy-infinite-scroll
+ *
+ * @attr {string} src - Base URL for loading more items
+ * @attr {string} page-param - Query parameter name for page number (default: "page")
+ * @attr {number} start-page - Starting page number (default: 1)
+ * @attr {number} threshold - Pixels from bottom to trigger load (default: 200)
+ * @attr {string} no-more-text - Text shown when all items loaded (default: "No more items")
+ *
+ * @fires page-loaded - New page loaded, detail: { page }
+ *
+ * @slot - Initial content (first page items)
+ *
+ * @cssprop {color} --dvfy-primary-bg - Loading spinner accent color
+ * @cssprop {color} --dvfy-text-muted - "No more items" text color
+ */
 class DvfyInfiniteScroll extends HTMLElement {
   static #styled = false;
   #content = null;

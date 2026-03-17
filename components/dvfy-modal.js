@@ -81,6 +81,23 @@ dvfy-modal .dvfy-modal__body {
 }
 `;
 
+/**
+ * Modal dialog with backdrop, focus trap, and keyboard support.
+ *
+ * @element dvfy-modal
+ *
+ * @attr {boolean} open - Show/hide the modal
+ * @attr {string} title - Header title text
+ * @attr {string} size - Dialog size: sm | md | lg (default: "md")
+ * @attr {boolean} required - Prevent dismissal via backdrop click or Escape key
+ *
+ * @fires close - Modal closed
+ *
+ * @slot - Modal body content
+ *
+ * @cssprop {color} --dvfy-surface-raised - Dialog background
+ * @cssprop {color} --dvfy-shadow-xl - Dialog shadow
+ */
 class DvfyModal extends HTMLElement {
   static #styled = false;
   #backdrop = null;

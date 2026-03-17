@@ -91,6 +91,21 @@ dvfy-badge[status="info"] .dvfy-badge__dot { background: var(--dvfy-info-bg); }
 dvfy-badge[variant="outline"] { background: transparent; }
 `;
 
+/**
+ * Status badge with dot indicator and outline variant.
+ *
+ * @element dvfy-badge
+ *
+ * @attr {string} variant - Badge style: default | outline (default: "default")
+ * @attr {string} status - Status color: neutral | success | warning | danger | info (default: "neutral")
+ * @attr {string} size - Size: sm | md (default: "md")
+ * @attr {boolean} dot - Show dot indicator before text
+ *
+ * @cssprop {color} --dvfy-success-bg-subtle - Success status background
+ * @cssprop {color} --dvfy-warning-bg-subtle - Warning status background
+ * @cssprop {color} --dvfy-danger-bg-subtle - Danger status background
+ * @cssprop {color} --dvfy-info-bg-subtle - Info status background
+ */
 class DvfyBadge extends HTMLElement {
   static #styled = false;
 

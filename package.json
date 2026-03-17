@@ -38,11 +38,10 @@
   "main": "./devify.js",
   "style": "./devify.css",
   "devDependencies": {
-    "web-component-analyzer": "^1.2.1",
-    "api-viewer-element": "^3.3.0"
+    "web-component-analyzer": "^2.0.0"
   },
   "scripts": {
-    "analyze": "wca analyze components/ patterns/ --format json --outDir . --outFile custom-elements.json",
+    "analyze": "wca analyze components/ patterns/ --format json --outFile custom-elements.json",
     "serve": "python3 -m http.server 8090"
   }
 }

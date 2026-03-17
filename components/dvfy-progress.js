@@ -93,6 +93,22 @@ dvfy-progress .dvfy-progress__circle-label {
 
 const SIZES = { sm: { dim: 48, stroke: 4, font: 10 }, md: { dim: 64, stroke: 5, font: 13 }, lg: { dim: 96, stroke: 6, font: 18 } };
 
+/**
+ * Progress indicator with bar and circle variants.
+ *
+ * @element dvfy-progress
+ *
+ * @attr {number} value - Progress value from 0 to 100
+ * @attr {string} variant - Display style: bar | circle (default: "bar")
+ * @attr {string} size - Size: sm | md | lg (default: "md")
+ * @attr {string} status - Color status: default | success | warning | danger
+ * @attr {boolean} label - Show percentage text
+ *
+ * @cssprop {color} --dvfy-primary-bg - Default progress fill color
+ * @cssprop {color} --dvfy-success-bg - Success progress fill color
+ * @cssprop {color} --dvfy-warning-bg - Warning progress fill color
+ * @cssprop {color} --dvfy-danger-bg - Danger progress fill color
+ */
 class DvfyProgress extends HTMLElement {
   static #styled = false;
 

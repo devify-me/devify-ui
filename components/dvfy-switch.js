@@ -75,6 +75,24 @@ dvfy-switch:focus-visible .dvfy-switch__track {
 }
 `;
 
+/**
+ * Toggle switch with label and description text.
+ *
+ * @element dvfy-switch
+ *
+ * @attr {boolean} checked - On state
+ * @attr {boolean} disabled - Disable interaction
+ * @attr {string} name - Form field name
+ * @attr {string} value - Form field value when checked (default: "on")
+ * @attr {string} label - Label text
+ * @attr {string} description - Optional description text below label
+ *
+ * @fires change - Toggle state changed
+ *
+ * @cssprop {color} --dvfy-primary-bg - Track color when checked
+ * @cssprop {color} --dvfy-neutral-300 - Track color when unchecked
+ * @cssprop {color} --dvfy-neutral-0 - Thumb color
+ */
 class DvfySwitch extends HTMLElement {
   static #styled = false;
 

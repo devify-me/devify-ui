@@ -225,6 +225,26 @@ dvfy-htmx-table .dvfy-htmx-table__page-ellipsis {
 }
 `;
 
+/**
+ * Server-side sorted, filtered, paginated table via HTMX or fetch fallback.
+ *
+ * @element dvfy-htmx-table
+ *
+ * @attr {string} src - Base URL for table data
+ * @attr {string} page-param - Pagination query parameter (default: "page")
+ * @attr {string} sort-param - Sort column query parameter (default: "sort")
+ * @attr {string} order-param - Sort order query parameter (default: "order")
+ * @attr {string} search-param - Search query parameter (default: "q")
+ * @attr {boolean} searchable - Show search input above table
+ * @attr {number} page-size - Items per page (default: 20)
+ *
+ * @slot - A <table> with <thead> defining columns; use <th data-sort="col"> for sortable columns
+ *
+ * @cssprop {color} --dvfy-surface-sunken - Table header background
+ * @cssprop {color} --dvfy-hover-bg - Row hover background
+ * @cssprop {color} --dvfy-primary-bg - Active sort indicator and pagination button color
+ * @cssprop {color} --dvfy-input-border - Search input border color
+ */
 class DvfyHtmxTable extends HTMLElement {
   static #styled = false;
   #table = null;

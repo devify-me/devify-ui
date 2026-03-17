@@ -103,6 +103,22 @@ dvfy-tag .dvfy-tag__remove:focus-visible {
 }
 `;
 
+/**
+ * Interactive tag/chip with removable variant.
+ *
+ * @element dvfy-tag
+ *
+ * @attr {string} variant - Tag style: default | outline (default: "default")
+ * @attr {string} status - Status color: neutral | success | warning | danger | info (default: "neutral")
+ * @attr {boolean} removable - Show remove button and dispatch remove event
+ * @attr {string} size - Size: sm | md (default: "md")
+ *
+ * @fires remove - Remove button clicked
+ *
+ * @cssprop {color} --dvfy-success-bg-subtle - Success tag background
+ * @cssprop {color} --dvfy-danger-bg-subtle - Danger tag background
+ * @cssprop {color} --dvfy-info-bg-subtle - Info tag background
+ */
 class DvfyTag extends HTMLElement {
   static #styled = false;
 

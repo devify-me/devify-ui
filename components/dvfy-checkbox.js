@@ -87,6 +87,23 @@ dvfy-checkbox .dvfy-checkbox__label {
 dvfy-checkbox[disabled] .dvfy-checkbox__label { color: var(--dvfy-disabled-text); }
 `;
 
+/**
+ * Checkbox input with label and indeterminate state support.
+ *
+ * @element dvfy-checkbox
+ *
+ * @attr {boolean} checked - Checked state
+ * @attr {boolean} disabled - Disable interaction
+ * @attr {boolean} indeterminate - Show indeterminate (dash) state
+ * @attr {string} name - Form field name
+ * @attr {string} value - Form field value (default: "on")
+ * @attr {string} label - Label text
+ *
+ * @fires change - Checkbox state changed
+ *
+ * @cssprop {color} --dvfy-primary-bg - Checked/indeterminate background
+ * @cssprop {color} --dvfy-input-border - Unchecked border color
+ */
 class DvfyCheckbox extends HTMLElement {
   static #styled = false;
 

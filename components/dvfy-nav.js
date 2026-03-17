@@ -96,6 +96,20 @@ dvfy-nav .dvfy-nav__toggle:focus-visible {
 }
 `;
 
+/**
+ * Top navigation bar with mobile hamburger toggle.
+ *
+ * @element dvfy-nav
+ *
+ * @attr {boolean} sticky - Stick to top on scroll
+ * @attr {string} brand - Brand text in left area
+ *
+ * @slot - Navigation links and action elements
+ *
+ * @cssprop {color} --dvfy-surface-primary - Nav background
+ * @cssprop {color} --dvfy-border-default - Bottom border color
+ * @cssprop {color} --dvfy-text-primary - Brand text color
+ */
 class DvfyNav extends HTMLElement {
   static #styled = false;
 

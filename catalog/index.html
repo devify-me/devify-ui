@@ -74,6 +74,7 @@
     <a href="#feedback" data-icon="💬">Feedback</a>
     <a href="#layout" data-icon="📐">Layout</a>
     <a href="#htmx-patterns" data-icon="⚡">HTMX</a>
+    <a href="#api" data-icon="🔍">API</a>
     <dvfy-theme-switcher data-action default-theme="devify-cyan">
       <option value="devify-cyan">Cyan</option>
       <option value="devify-pink">Pink</option>
@@ -607,7 +608,102 @@
       </div>
     </dvfy-section>
 
+    <!-- ═══ API REFERENCE ═══ -->
+    <dvfy-section collapsed id="api" label="API Reference">
+      <p class="section-subtitle">Browse attributes, events, CSS custom properties, and slots for all 38 components</p>
+      <div style="margin-bottom: var(--dvfy-space-4)">
+        <label for="api-select" style="font-size: var(--dvfy-text-sm); color: var(--dvfy-text-secondary); margin-right: var(--dvfy-space-2)">Component:</label>
+        <select id="api-select" style="padding: var(--dvfy-space-1-5) var(--dvfy-space-3); border-radius: var(--dvfy-radius-md); border: var(--dvfy-border-1) solid var(--dvfy-border-default); background: var(--dvfy-surface-raised); color: var(--dvfy-text-primary); font-family: var(--dvfy-font-sans); font-size: var(--dvfy-text-sm);">
+          <option value="">— pick a component —</option>
+        </select>
+      </div>
+      <div id="api-output"></div>
+    </dvfy-section>
+
   </main>
+  <script type="module">
+    // API Reference viewer — reads WCA custom-elements.json (v1 tags format)
+    // Data source: local manifest generated from our own source code. All values escaped before insertion.
+    const API_CSS = `
+      .api-card { background: var(--dvfy-surface-raised); border: var(--dvfy-border-1) solid var(--dvfy-border-muted); border-radius: var(--dvfy-radius-xl); padding: var(--dvfy-space-5); }
+      .api-card h3 { font-family: var(--dvfy-font-mono); font-size: var(--dvfy-text-lg); color: var(--dvfy-text-primary); margin: 0 0 var(--dvfy-space-1) 0; }
+      .api-card .api-desc { font-size: var(--dvfy-text-sm); color: var(--dvfy-text-secondary); margin: 0 0 var(--dvfy-space-4) 0; }
+      .api-card .api-path { font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted); font-family: var(--dvfy-font-mono); margin: 0 0 var(--dvfy-space-4) 0; }
+      .api-section { margin-bottom: var(--dvfy-space-4); }
+      .api-section-title { font-size: var(--dvfy-text-xs); font-weight: var(--dvfy-weight-semibold); text-transform: uppercase; letter-spacing: var(--dvfy-tracking-wider); color: var(--dvfy-text-muted); margin: 0 0 var(--dvfy-space-2) 0; }
+      .api-table { width: 100%; border-collapse: collapse; font-size: var(--dvfy-text-sm); }
+      .api-table th { text-align: left; padding: var(--dvfy-space-2) var(--dvfy-space-3); background: var(--dvfy-surface-sunken); color: var(--dvfy-text-secondary); font-weight: var(--dvfy-weight-medium); font-size: var(--dvfy-text-xs); text-transform: uppercase; letter-spacing: var(--dvfy-tracking-wider); }
+      .api-table td { padding: var(--dvfy-space-2) var(--dvfy-space-3); border-top: var(--dvfy-border-1) solid var(--dvfy-border-muted); }
+      .api-table td:first-child { font-family: var(--dvfy-font-mono); font-size: var(--dvfy-text-xs); color: var(--dvfy-text-link); white-space: nowrap; }
+      .api-table td:nth-child(2) { font-family: var(--dvfy-font-mono); font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted); white-space: nowrap; }
+      .api-empty { color: var(--dvfy-text-muted); font-size: var(--dvfy-text-sm); font-style: italic; }
+    `;
+    { const s = document.createElement('style'); s.textContent = API_CSS; document.head.appendChild(s); }
+
+    const esc = s => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+    function apiTable(items, cols) {
+      if (!items || !items.length) return '<p class="api-empty">None</p>';
+      return '<table class="api-table"><thead><tr>' +
+        cols.map(c => `<th>${c.label}</th>`).join('') +
+        '</tr></thead><tbody>' +
+        items.map(i => '<tr>' + cols.map(c => `<td>${c.get(i)}</td>`).join('') + '</tr>').join('') +
+        '</tbody></table>';
+    }
+
+    function renderTag(tag) {
+      let h = `<div class="api-card"><h3>&lt;${esc(tag.name)}&gt;</h3>`;
+      h += `<p class="api-desc">${esc(tag.description)}</p>`;
+      h += `<p class="api-path">${esc(tag.path)}</p>`;
+      h += `<div class="api-section"><p class="api-section-title">Attributes</p>`;
+      h += apiTable(tag.attributes, [
+        { label: 'Name', get: a => esc(a.name) },
+        { label: 'Type', get: a => esc(a.type || '\u2014') },
+        { label: 'Description', get: a => esc(a.description || '\u2014') }
+      ]) + '</div>';
+      if (tag.events?.length) {
+        h += `<div class="api-section"><p class="api-section-title">Events</p>`;
+        h += apiTable(tag.events, [
+          { label: 'Name', get: e => esc(e.name) },
+          { label: 'Description', get: e => esc(e.description || '\u2014') }
+        ]) + '</div>';
+      }
+      if (tag.cssProperties?.length) {
+        h += `<div class="api-section"><p class="api-section-title">CSS Custom Properties</p>`;
+        h += apiTable(tag.cssProperties, [
+          { label: 'Property', get: p => esc(p.name) },
+          { label: 'Type', get: p => esc(p.type || 'color') },
+          { label: 'Description', get: p => esc(p.description || '\u2014') }
+        ]) + '</div>';
+      }
+      if (tag.slots?.length) {
+        h += `<div class="api-section"><p class="api-section-title">Slots</p>`;
+        h += apiTable(tag.slots, [
+          { label: 'Name', get: s => esc(s.name || '(default)') },
+          { label: 'Description', get: s => esc(s.description || '\u2014') }
+        ]) + '</div>';
+      }
+      return h + '</div>';
+    }
+
+    fetch('../custom-elements.json').then(r => r.json()).then(manifest => {
+      const select = document.getElementById('api-select');
+      const output = document.getElementById('api-output');
+      const tags = manifest.tags.sort((a, b) => a.name.localeCompare(b.name));
+      tags.forEach(tag => {
+        const opt = document.createElement('option');
+        opt.value = tag.name;
+        opt.textContent = `<${tag.name}>\u2002\u2014\u2002${tag.description || ''}`;
+        select.appendChild(opt);
+      });
+      select.addEventListener('change', () => {
+        if (!select.value) { output.textContent = ''; return; }
+        const tag = tags.find(t => t.name === select.value);
+        // Safe: data from our own WCA manifest, all values escaped via esc()
+        if (tag) output.innerHTML = renderTag(tag);
+      });
+    });
+  </script>
   <script>
     // Nav click opens the target section and scrolls to it
     document.addEventListener('click', (e) => {

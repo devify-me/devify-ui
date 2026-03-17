@@ -70,6 +70,26 @@ dvfy-textarea .dvfy-textarea__count {
 dvfy-textarea .dvfy-textarea__count[data-over="true"] { color: var(--dvfy-danger-text); }
 `;
 
+/**
+ * Multiline text input with auto-resize, character count, and error/help text.
+ *
+ * @element dvfy-textarea
+ *
+ * @attr {string} label - Label text
+ * @attr {string} name - Form field name
+ * @attr {string} value - Initial value
+ * @attr {string} placeholder - Placeholder text
+ * @attr {string} error - Error message (enables error styling)
+ * @attr {string} help - Help text shown below textarea
+ * @attr {boolean} required - Mark field as required
+ * @attr {boolean} disabled - Disable input
+ * @attr {number} rows - Initial row count (default: 3)
+ * @attr {number} maxlength - Maximum character count (shows counter)
+ *
+ * @cssprop {color} --dvfy-input-bg - Textarea background
+ * @cssprop {color} --dvfy-input-border - Textarea border color
+ * @cssprop {color} --dvfy-input-error - Error border and message color
+ */
 class DvfyTextarea extends HTMLElement {
   static #styled = false;
 

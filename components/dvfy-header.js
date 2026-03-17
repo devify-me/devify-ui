@@ -355,6 +355,26 @@ const HDR_RESPONSIVE_FN = (id, bp) => `
 }
 `;
 
+/**
+ * Responsive application header with nav tabs, actions, user zone, and mobile hamburger menu.
+ * Uses CSS Container Queries for responsive behavior.
+ *
+ * @element dvfy-header
+ *
+ * @attr {string} brand - Brand name text
+ * @attr {string} logo - Logo image URL
+ * @attr {string} tagline - Tagline text below brand (mobile)
+ * @attr {boolean} sticky - Stick header to top on scroll
+ * @attr {boolean} scroll-shrink - Reduce padding and add shadow on scroll
+ * @attr {string} preset - Visual preset: default | landing | store | dashboard | docs
+ * @attr {number} breakpoint - Pixel width for mobile breakpoint (default: 768)
+ *
+ * @slot - Nav items as <a data-icon="...">, actions as [data-action], user as [data-user]
+ *
+ * @cssprop {color} --dvfy-surface-raised - Header bar background
+ * @cssprop {color} --dvfy-primary-bg - Active nav indicator and brand accent
+ * @cssprop {color} --dvfy-border-muted - Bottom border color
+ */
 class DvfyHeader extends HTMLElement {
   static #baseStyled = false;
   #hdrId = null;

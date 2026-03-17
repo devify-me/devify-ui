@@ -129,6 +129,27 @@ const HX_ATTRS = [
   'hx-include', 'hx-select', 'hx-push-url', 'hx-indicator'
 ];
 
+/**
+ * Confirmation modal that intercepts a trigger action. Supports HTMX attribute interception.
+ *
+ * @element dvfy-confirm
+ *
+ * @attr {string} title - Modal title (default: "Are you sure?")
+ * @attr {string} message - Confirmation message body
+ * @attr {string} confirm-text - Confirm button text (default: "Confirm")
+ * @attr {string} cancel-text - Cancel button text (default: "Cancel")
+ * @attr {string} variant - Confirm button variant: default | danger (default: "default")
+ * @attr {string} action - URL to call on confirm
+ * @attr {string} method - HTTP method: post | put | patch | delete (default: "post")
+ *
+ * @fires confirmed - User clicked Confirm
+ * @fires cancelled - User clicked Cancel
+ *
+ * @slot - Trigger element (button, link) that opens the confirmation modal
+ *
+ * @cssprop {color} --dvfy-primary-bg - Confirm button background (default variant)
+ * @cssprop {color} --dvfy-danger-bg - Confirm button background (danger variant)
+ */
 class DvfyConfirm extends HTMLElement {
   static #styled = false;
   #triggerEl = null;

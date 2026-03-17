@@ -37,6 +37,18 @@ dvfy-breadcrumb > :last-child {
 }
 `;
 
+/**
+ * Breadcrumb navigation with automatic separator insertion.
+ *
+ * @element dvfy-breadcrumb
+ *
+ * @attr {string} separator - Character between items (default: "/")
+ *
+ * @slot - Breadcrumb items as <a> elements; last child is marked as current page
+ *
+ * @cssprop {color} --dvfy-text-link - Link text color
+ * @cssprop {color} --dvfy-text-muted - Separator color
+ */
 class DvfyBreadcrumb extends HTMLElement {
   static #styled = false;
 

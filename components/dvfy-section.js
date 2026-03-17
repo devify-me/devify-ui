@@ -73,6 +73,21 @@ dvfy-section[open] .dvfy-section__body {
 }
 `;
 
+/**
+ * Collapsible section with summary header and toggle animation.
+ *
+ * @element dvfy-section
+ *
+ * @attr {string} label - Section title text
+ * @attr {boolean} open - Expanded state (default: true unless collapsed is set)
+ * @attr {boolean} collapsed - Start in collapsed state
+ * @attr {string} icon - Optional icon/emoji before the label
+ *
+ * @slot - Section body content
+ *
+ * @cssprop {color} --dvfy-surface-muted - Summary header background
+ * @cssprop {color} --dvfy-border-muted - Section border color
+ */
 class DvfySection extends HTMLElement {
   static #styled = false;
   #summary = null;

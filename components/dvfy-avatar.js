@@ -117,6 +117,23 @@ dvfy-avatar-group .dvfy-avatar-group__overflow {
 }
 `;
 
+/**
+ * User avatar with image and initials fallback.
+ *
+ * @element dvfy-avatar
+ *
+ * @attr {string} src - Image URL
+ * @attr {string} name - User name (used for initials fallback and alt text)
+ * @attr {string} size - Size: sm | md | lg (default: "md")
+ * @attr {string} status - Status indicator dot: online | offline | busy
+ * @attr {boolean} interactive - Add hover effect and dispatch click event
+ *
+ * @fires avatar-click - Interactive avatar clicked, detail: { name, src }
+ *
+ * @cssprop {color} --dvfy-neutral-400 - Initials background color
+ * @cssprop {color} --dvfy-success-text - Online status dot color
+ * @cssprop {color} --dvfy-danger-text - Busy status dot color
+ */
 class DvfyAvatar extends HTMLElement {
   static #styled = false;
 
@@ -201,6 +218,13 @@ class DvfyAvatar extends HTMLElement {
   }
 }
 
+/**
+ * Overlapping avatar stack with overflow indicator.
+ *
+ * @element dvfy-avatar-group
+ *
+ * @attr {number} max - Maximum avatars to show before "+N" overflow badge
+ */
 class DvfyAvatarGroup extends HTMLElement {
   static get observedAttributes() { return ['max']; }
 

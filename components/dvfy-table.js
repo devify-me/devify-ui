@@ -292,6 +292,30 @@ dvfy-table[hoverable] tbody tr:hover {
 }
 `;
 
+/**
+ * Enhanced data table with sorting, filtering, selection, and global search.
+ *
+ * @element dvfy-table
+ *
+ * @attr {boolean} striped - Alternating row backgrounds
+ * @attr {boolean} hoverable - Row hover highlight
+ * @attr {boolean} compact - Smaller cell padding
+ * @attr {boolean} responsive - Horizontal scroll on overflow
+ * @attr {boolean} selectable - Checkbox column with select-all
+ * @attr {boolean} filterable - Excel-style dropdown filters on data-filter columns
+ * @attr {boolean} searchable - Global search input above table
+ *
+ * @fires sort - Column sorted, detail: { column, direction }
+ * @fires selection-change - Row selection changed, detail: { selected: number[] }
+ * @fires filter-change - Column filter changed, detail: { column, values }
+ *
+ * @slot - A <table> element with <thead> and <tbody>
+ *
+ * @cssprop {color} --dvfy-surface-sunken - Header row background
+ * @cssprop {color} --dvfy-hover-bg - Row hover background
+ * @cssprop {color} --dvfy-primary-bg - Active filter icon and sort indicator color
+ * @cssprop {color} --dvfy-selected-bg - Selected row background
+ */
 class DvfyTable extends HTMLElement {
   static #styled = false;
 

@@ -89,6 +89,27 @@ dvfy-input .dvfy-input__toggle:focus-visible {
 }
 `;
 
+/**
+ * Text input with label, error/help text, and password visibility toggle.
+ *
+ * @element dvfy-input
+ *
+ * @attr {string} label - Label text
+ * @attr {string} type - Input type: text | email | password | etc. (default: "text")
+ * @attr {string} name - Form field name
+ * @attr {string} value - Input value
+ * @attr {string} placeholder - Placeholder text
+ * @attr {string} error - Error message (enables error styling)
+ * @attr {string} help - Help text shown below input
+ * @attr {boolean} required - Mark field as required
+ * @attr {boolean} disabled - Disable input
+ * @attr {string} size - Size: sm | md | lg (default: "md")
+ * @attr {boolean} no-preview - Disable password visibility toggle for password inputs
+ *
+ * @cssprop {color} --dvfy-input-bg - Input background
+ * @cssprop {color} --dvfy-input-border - Input border color
+ * @cssprop {color} --dvfy-input-error - Error border and message color
+ */
 class DvfyInput extends HTMLElement {
   static #styled = false;
   /** @type {boolean} tracks password visibility state */

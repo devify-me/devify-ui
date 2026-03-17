@@ -313,6 +313,23 @@ dvfy-hamburger {
 }
 `;
 
+/**
+ * Responsive header with 3-stage mobile hamburger menu (closed, expanded, icons).
+ * Uses CSS Container Queries to respond to parent width, not viewport.
+ *
+ * @element dvfy-hamburger
+ *
+ * @attr {string} brand - Brand name text
+ * @attr {string} tagline - Smaller text below brand name
+ * @attr {string} logo - Logo image URL (replaces brand text)
+ * @attr {number} breakpoint - Pixel width below which hamburger activates (default: 768)
+ *
+ * @slot - Menu items as <a data-icon="..."> and utility items as <a data-utility data-icon="...">
+ *
+ * @cssprop {color} --dvfy-primary-bg - Header bar background
+ * @cssprop {color} --dvfy-primary-text - Header bar text color
+ * @cssprop {color} --dvfy-surface-raised - Mobile menu background
+ */
 class DvfyHamburger extends HTMLElement {
   static #styled = false;
   static #styleBreakpoint = 0;

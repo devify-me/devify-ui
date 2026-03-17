@@ -54,6 +54,19 @@ dvfy-tab {
 dvfy-tab[active] { display: block; }
 `;
 
+/**
+ * Tabbed content container with keyboard navigation.
+ *
+ * @element dvfy-tabs
+ *
+ * @attr {number} active - Active tab index (default: 0)
+ *
+ * @slot - <dvfy-tab label="..."> elements as tab panels
+ *
+ * @cssprop {color} --dvfy-primary-bg - Active tab underline color
+ * @cssprop {color} --dvfy-text-muted - Inactive tab text color
+ * @cssprop {color} --dvfy-border-default - Tab list border color
+ */
 class DvfyTabs extends HTMLElement {
   static #styled = false;
   #list = null;
@@ -136,6 +149,13 @@ class DvfyTabs extends HTMLElement {
   };
 }
 
+/**
+ * Individual tab panel within a dvfy-tabs container.
+ *
+ * @element dvfy-tab
+ *
+ * @attr {string} label - Tab button text
+ */
 class DvfyTab extends HTMLElement {
   connectedCallback() {
     this.setAttribute('role', 'tabpanel');

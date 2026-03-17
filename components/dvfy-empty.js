@@ -53,6 +53,20 @@ dvfy-empty .dvfy-empty__actions {
 }
 `;
 
+/**
+ * Empty state placeholder with icon, title, description, and action area.
+ *
+ * @element dvfy-empty
+ *
+ * @attr {string} title - Heading text
+ * @attr {string} description - Secondary descriptive text
+ * @attr {string} icon - Emoji or text icon shown above the title
+ *
+ * @slot - Action area content (e.g., buttons)
+ *
+ * @cssprop {color} --dvfy-text-muted - Description and icon color
+ * @cssprop {color} --dvfy-text-secondary - Title color
+ */
 class DvfyEmpty extends HTMLElement {
   static #styled = false;
 

@@ -99,6 +99,21 @@ function getContainer(position) {
   return el;
 }
 
+/**
+ * Toast notification with auto-dismiss and status-based styling.
+ * Use the static `DvfyToast.show()` method to create toasts programmatically.
+ *
+ * @element dvfy-toast
+ *
+ * @attr {string} status - Toast status: info | success | warning | danger (default: "info")
+ * @attr {number} duration - Auto-dismiss delay in ms (default: 4000, 0 = persistent)
+ * @attr {string} position - Screen position: top-right | top-left | bottom-right | bottom-left (default: "top-right")
+ *
+ * @cssprop {color} --dvfy-info-bg-subtle - Info toast background
+ * @cssprop {color} --dvfy-success-bg-subtle - Success toast background
+ * @cssprop {color} --dvfy-warning-bg-subtle - Warning toast background
+ * @cssprop {color} --dvfy-danger-bg-subtle - Danger toast background
+ */
 class DvfyToast extends HTMLElement {
   static #styled = false;
   #timer = null;

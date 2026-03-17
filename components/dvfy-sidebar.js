@@ -104,6 +104,21 @@ dvfy-sidebar a:focus-visible {
 }
 `;
 
+/**
+ * Side navigation with collapsible compact mode and automatic active link highlighting.
+ *
+ * @element dvfy-sidebar
+ *
+ * @attr {boolean} collapsed - Compact icon-only mode
+ * @attr {string} width - Expanded width (default: "16rem")
+ * @attr {boolean} collapsible - Show collapse toggle button
+ *
+ * @slot - Navigation sections as <dvfy-sidebar-section> elements
+ *
+ * @cssprop {color} --dvfy-surface-secondary - Sidebar background
+ * @cssprop {color} --dvfy-active-bg - Active link background
+ * @cssprop {color} --dvfy-hover-bg - Link hover background
+ */
 class DvfySidebar extends HTMLElement {
   static #styled = false;
 
@@ -162,6 +177,15 @@ class DvfySidebar extends HTMLElement {
   }
 }
 
+/**
+ * Sidebar section with label heading.
+ *
+ * @element dvfy-sidebar-section
+ *
+ * @attr {string} label - Section heading text (hidden when sidebar is collapsed)
+ *
+ * @slot - Navigation links as <a> elements
+ */
 class DvfySidebarSection extends HTMLElement {
   connectedCallback() {
     const label = this.getAttribute('label');

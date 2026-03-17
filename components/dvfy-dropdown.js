@@ -74,6 +74,20 @@ dvfy-dropdown .dvfy-dropdown__item + .dvfy-dropdown__item {
 }
 `;
 
+/**
+ * Dropdown menu with keyboard navigation and click-outside closing.
+ *
+ * @element dvfy-dropdown
+ *
+ * @attr {boolean} open - Menu visibility state
+ * @attr {string} align - Menu alignment: left | right (default: "left")
+ *
+ * @slot - First child element is the trigger; remaining children become menu items
+ *
+ * @cssprop {color} --dvfy-surface-overlay - Menu background
+ * @cssprop {color} --dvfy-shadow-lg - Menu shadow
+ * @cssprop {color} --dvfy-selected-bg - Selected item background
+ */
 class DvfyDropdown extends HTMLElement {
   static #styled = false;
   #menu = null;
