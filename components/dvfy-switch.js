@@ -185,7 +185,7 @@ class DvfySwitch extends HTMLElement {
   };
 
   #onKey = (e) => {
-    if (e.key === ' ') {
+    if (e.key === ' ' || e.key === 'Enter') {
       e.preventDefault();
       this.#toggle();
     }

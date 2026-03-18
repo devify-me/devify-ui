@@ -141,11 +141,17 @@ class DvfyTooltip extends HTMLElement {
       document.head.appendChild(s);
       DvfyTooltip.#styled = true;
     }
+    const tipId = `dvfy-tip-${Math.random().toString(36).slice(2, 8)}`;
     this.#tip = document.createElement('span');
     this.#tip.className = 'dvfy-tooltip__tip';
     this.#tip.setAttribute('role', 'tooltip');
+    this.#tip.id = tipId;
     this.#tip.textContent = this.getAttribute('text') || '';
     this.appendChild(this.#tip);
+
+    // Link trigger element to tooltip via aria-describedby
+    const trigger = this.firstElementChild !== this.#tip ? this.firstElementChild : null;
+    if (trigger) trigger.setAttribute('aria-describedby', tipId);
 
     this.addEventListener('mouseenter', this.#show);
     this.addEventListener('mouseleave', this.#hide);

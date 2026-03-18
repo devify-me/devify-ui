@@ -322,11 +322,6 @@
           "type": "string"
         },
         {
-          "name": "loading",
-          "description": "Show loading state with spinner indicator",
-          "type": "boolean"
-        },
-        {
           "name": "type",
           "description": "HTML button type: button | submit | reset (default: \"button\")",
           "type": "string"
@@ -335,6 +330,17 @@
           "name": "disabled",
           "description": "Disable button and prevent interaction",
           "type": "boolean"
+        },
+        {
+          "name": "loading",
+          "description": "Show loading state with spinner indicator",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Button label content"
         }
       ],
       "cssProperties": [

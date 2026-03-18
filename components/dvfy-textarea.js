@@ -152,6 +152,12 @@ class DvfyTextarea extends HTMLElement {
     if (required) ta.required = true;
     if (disabled) ta.disabled = true;
     if (maxlength) ta.maxLength = parseInt(maxlength, 10);
+    if (error) {
+      ta.setAttribute('aria-invalid', 'true');
+      ta.setAttribute('aria-describedby', `${id}-error`);
+    } else if (help) {
+      ta.setAttribute('aria-describedby', `${id}-help`);
+    }
 
     ta.addEventListener('input', () => this.#autoResize(ta));
 
@@ -164,11 +170,14 @@ class DvfyTextarea extends HTMLElement {
     if (error) {
       const err = document.createElement('span');
       err.className = 'dvfy-textarea__error-msg';
+      err.id = `${id}-error`;
+      err.setAttribute('role', 'alert');
       err.textContent = error;
       footer.appendChild(err);
     } else if (help) {
       const hlp = document.createElement('span');
       hlp.className = 'dvfy-textarea__help';
+      hlp.id = `${id}-help`;
       hlp.textContent = help;
       footer.appendChild(hlp);
     }
