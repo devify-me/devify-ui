@@ -1,7 +1,7 @@
 /**
  * catalog/router.js — Hash-based routing + view dispatch
  */
-import { HTMX_PATTERNS } from './data.js';
+import { HTMX_PATTERNS, TIERS, COMPONENT_REGISTRY, DOMAINS, getComponentsByTier } from './data.js';
 import { renderOverview } from './overview.js';
 import { renderTokenView } from './tokens.js';
 import { renderBrandSettings } from './brand.js';
@@ -71,6 +71,10 @@ function render(mainEl, section, item) {
       renderBrandSettings(mainEl);
       break;
 
+    case 'tier':
+      renderTierView(mainEl, item);
+      break;
+
     default:
       renderOverview(mainEl);
       break;
@@ -130,4 +134,97 @@ function renderPatternView(mainEl, tagName) {
   playground.setAttribute('component', tagName);
   playground.setAttribute('src', '../custom-elements.json');
   mainEl.appendChild(playground);
+}
+
+function renderTierView(mainEl, tierNum) {
+  const n = parseInt(tierNum, 10);
+  const tier = TIERS[n];
+
+  if (!tier) {
+    const p = document.createElement('p');
+    p.textContent = 'Unknown tier.';
+    p.style.color = 'var(--dvfy-text-muted)';
+    mainEl.appendChild(p);
+    return;
+  }
+
+  // Header
+  const heading = document.createElement('h2');
+  heading.textContent = tier.label;
+  heading.style.cssText = 'font-size: var(--dvfy-text-2xl); font-weight: var(--dvfy-weight-bold); margin-bottom: var(--dvfy-space-2);';
+  mainEl.appendChild(heading);
+
+  const desc = document.createElement('p');
+  desc.textContent = tier.description;
+  desc.style.cssText = 'color: var(--dvfy-text-secondary); margin-bottom: var(--dvfy-space-2);';
+  mainEl.appendChild(desc);
+
+  // Dependency rules
+  const rulesAlert = document.createElement('dvfy-alert');
+  rulesAlert.setAttribute('status', 'info');
+  rulesAlert.setAttribute('title', 'Dependency Rules');
+  rulesAlert.textContent = tier.rules;
+  rulesAlert.style.marginBottom = 'var(--dvfy-space-6)';
+  mainEl.appendChild(rulesAlert);
+
+  // Tier nav
+  const tierNav = document.createElement('div');
+  tierNav.style.cssText = 'display: flex; gap: var(--dvfy-space-2); margin-bottom: var(--dvfy-space-6);';
+  for (const tn of [1, 2, 3, 4]) {
+    const btn = document.createElement('dvfy-button');
+    btn.textContent = `T${tn}: ${TIERS[tn].name}`;
+    btn.setAttribute('variant', tn === n ? 'primary' : 'outline');
+    btn.setAttribute('size', 'sm');
+    btn.addEventListener('click', () => { location.hash = `#tier/${tn}`; });
+    tierNav.appendChild(btn);
+  }
+  mainEl.appendChild(tierNav);
+
+  // Component grid
+  const tags = getComponentsByTier(n);
+  const grid = document.createElement('div');
+  grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); gap: var(--dvfy-space-4);';
+
+  for (const tag of tags) {
+    const meta = COMPONENT_REGISTRY[tag];
+    const card = document.createElement('dvfy-card');
+    card.style.cssText = 'cursor: pointer; padding: var(--dvfy-space-4);';
+    card.addEventListener('click', () => {
+      location.hash = n === 4 ? `#patterns/${tag}` : `#components/${tag}`;
+    });
+
+    // Component name
+    const name = document.createElement('div');
+    name.textContent = `<${tag}>`;
+    name.style.cssText = 'font-weight: var(--dvfy-weight-semibold); font-family: var(--dvfy-font-mono); font-size: var(--dvfy-text-sm); margin-bottom: var(--dvfy-space-2);';
+    card.appendChild(name);
+
+    // Domain badge
+    const domainLabel = DOMAINS[meta.domain] || meta.domain;
+    const badge = document.createElement('dvfy-badge');
+    badge.textContent = domainLabel;
+    badge.setAttribute('variant', 'secondary');
+    badge.style.cssText = 'margin-bottom: var(--dvfy-space-2); display: inline-block;';
+    card.appendChild(badge);
+
+    // Dependencies
+    if (meta.deps.length > 0) {
+      const depsRow = document.createElement('div');
+      depsRow.style.cssText = 'display: flex; flex-wrap: wrap; gap: var(--dvfy-space-1); margin-top: var(--dvfy-space-1);';
+      const depsLabel = document.createElement('span');
+      depsLabel.textContent = 'Deps:';
+      depsLabel.style.cssText = 'font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted); margin-right: var(--dvfy-space-1);';
+      depsRow.appendChild(depsLabel);
+      for (const dep of meta.deps) {
+        const depTag = document.createElement('dvfy-tag');
+        depTag.textContent = dep.replace('dvfy-', '');
+        depTag.setAttribute('size', 'sm');
+        depsRow.appendChild(depTag);
+      }
+      card.appendChild(depsRow);
+    }
+
+    grid.appendChild(card);
+  }
+  mainEl.appendChild(grid);
 }

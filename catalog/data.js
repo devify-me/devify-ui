@@ -1,55 +1,122 @@
 /**
  * catalog/data.js — All hardcoded maps for the Design System Explorer
  *
- * Component categories, HTMX patterns, token groups, and semantic tokens.
+ * Taxonomy (tiers, domains, registry), HTMX patterns, token groups, and semantic tokens.
  */
 
-/** Components grouped by function for sidebar navigation */
-export const COMPONENT_CATEGORIES = {
-  'Forms': [
-    'dvfy-button',
-    'dvfy-input',
-    'dvfy-textarea',
-    'dvfy-select',
-    'dvfy-checkbox',
-    'dvfy-radio',
-    'dvfy-switch',
-  ],
-  'Data Display': [
-    'dvfy-badge',
-    'dvfy-tag',
-    'dvfy-avatar',
-    'dvfy-card',
-    'dvfy-table',
-    'dvfy-progress',
-    'dvfy-empty',
-  ],
-  'Feedback': [
-    'dvfy-alert',
-    'dvfy-loader',
-    'dvfy-toast',
-    'dvfy-modal',
-  ],
-  'Navigation': [
-    'dvfy-breadcrumb',
-    'dvfy-pagination',
-    'dvfy-tabs',
-    'dvfy-dropdown',
-    'dvfy-nav',
-    'dvfy-sidebar',
-    'dvfy-hamburger',
-  ],
-  'Layout': [
-    'dvfy-header',
-    'dvfy-section',
-    'dvfy-accordion',
-  ],
-  'Utility': [
-    'dvfy-theme-switcher',
-    'dvfy-tooltip',
-    'dvfy-auth',
-  ],
+/** Tier definitions — complexity/dependency classification */
+export const TIERS = {
+  1: {
+    name: 'Primitives',
+    label: 'Tier 1 — Primitives',
+    description: 'Zero dvfy-* structural dependencies. Pure tokens + native HTML.',
+    rules: 'Must not import or render other dvfy-* components.',
+  },
+  2: {
+    name: 'Composites',
+    label: 'Tier 2 — Composites',
+    description: 'May use 0–2 Tier 1 components. Enhanced behavior over native.',
+    rules: 'May depend on up to 2 Tier 1 components. No Tier 2+ deps.',
+  },
+  3: {
+    name: 'Organisms',
+    label: 'Tier 3 — Organisms',
+    description: 'Compose 2+ components. Cross-component state management.',
+    rules: 'May depend on Tier 1 and Tier 2 components. Complex composition.',
+  },
+  4: {
+    name: 'Patterns',
+    label: 'Tier 4 — HTMX Patterns',
+    description: 'HTMX server-interaction orchestration. Can use any tier.',
+    rules: 'Requires server backend. May depend on any tier.',
+  },
 };
+
+/** Domain keys → display labels */
+export const DOMAINS = {
+  forms:      'Forms',
+  display:    'Data Display',
+  feedback:   'Feedback',
+  navigation: 'Navigation',
+  layout:     'Layout',
+  utility:    'Utility',
+  htmx:       'HTMX Patterns',
+};
+
+/** Component registry — single source of truth for classification */
+export const COMPONENT_REGISTRY = {
+  // Tier 1 — Primitives
+  'dvfy-button':    { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-input':     { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-textarea':  { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-checkbox':  { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-radio':     { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-switch':    { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-badge':     { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-tag':       { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-avatar':    { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-progress':  { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-alert':     { tier: 1, domain: 'feedback',   deps: [] },
+  'dvfy-loader':    { tier: 1, domain: 'feedback',   deps: [] },
+  'dvfy-hamburger': { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-section':   { tier: 1, domain: 'layout',     deps: [] },
+  'dvfy-tooltip':   { tier: 1, domain: 'utility',    deps: [] },
+
+  // Tier 2 — Composites
+  'dvfy-select':         { tier: 2, domain: 'forms',      deps: [] },
+  'dvfy-card':           { tier: 2, domain: 'display',    deps: [] },
+  'dvfy-empty':          { tier: 2, domain: 'display',    deps: ['dvfy-button'] },
+  'dvfy-table':          { tier: 2, domain: 'display',    deps: ['dvfy-checkbox'] },
+  'dvfy-modal':          { tier: 2, domain: 'feedback',   deps: ['dvfy-button'] },
+  'dvfy-toast':          { tier: 2, domain: 'feedback',   deps: [] },
+  'dvfy-breadcrumb':     { tier: 2, domain: 'navigation', deps: [] },
+  'dvfy-pagination':     { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
+  'dvfy-tabs':           { tier: 2, domain: 'navigation', deps: [] },
+  'dvfy-dropdown':       { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
+  'dvfy-nav':            { tier: 2, domain: 'navigation', deps: [] },
+  'dvfy-theme-switcher': { tier: 2, domain: 'utility',    deps: [] },
+
+  // Tier 3 — Organisms
+  'dvfy-header':    { tier: 3, domain: 'layout',     deps: ['dvfy-hamburger', 'dvfy-avatar', 'dvfy-theme-switcher'] },
+  'dvfy-accordion': { tier: 3, domain: 'layout',     deps: ['dvfy-section'] },
+  'dvfy-sidebar':   { tier: 3, domain: 'navigation', deps: [] },
+  'dvfy-auth':      { tier: 3, domain: 'utility',    deps: ['dvfy-input', 'dvfy-button'] },
+
+  // Tier 4 — HTMX Patterns
+  'dvfy-htmx-form':       { tier: 4, domain: 'htmx', deps: [] },
+  'dvfy-confirm':         { tier: 4, domain: 'htmx', deps: [] },
+  'dvfy-infinite-scroll':  { tier: 4, domain: 'htmx', deps: [] },
+  'dvfy-live-search':      { tier: 4, domain: 'htmx', deps: [] },
+  'dvfy-htmx-table':       { tier: 4, domain: 'htmx', deps: [] },
+};
+
+/** Get tags for a given tier number (excludes Tier 4 patterns) */
+export function getComponentsByTier(n) {
+  return Object.entries(COMPONENT_REGISTRY)
+    .filter(([, meta]) => meta.tier === n)
+    .map(([tag]) => tag);
+}
+
+/** Get tags for a given domain key */
+export function getComponentsByDomain(key) {
+  return Object.entries(COMPONENT_REGISTRY)
+    .filter(([, meta]) => meta.domain === key)
+    .map(([tag]) => tag);
+}
+
+/** Get tier metadata for a component tag */
+export function getTierForComponent(tag) {
+  const meta = COMPONENT_REGISTRY[tag];
+  return meta ? TIERS[meta.tier] : null;
+}
+
+/** Components grouped by domain for sidebar navigation — derived from registry */
+export const COMPONENT_CATEGORIES = Object.fromEntries(
+  Object.entries(DOMAINS)
+    .filter(([k]) => k !== 'htmx')
+    .map(([key, label]) => [label, getComponentsByDomain(key)])
+    .filter(([, tags]) => tags.length)
+);
 
 /** HTMX integration patterns with descriptions */
 export const HTMX_PATTERNS = {

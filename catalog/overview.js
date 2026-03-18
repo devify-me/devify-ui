@@ -1,7 +1,7 @@
 /**
  * catalog/overview.js — Landing page renderer
  */
-import { COMPONENT_CATEGORIES, HTMX_PATTERNS, TOKEN_GROUPS } from './data.js';
+import { COMPONENT_CATEGORIES, HTMX_PATTERNS, TOKEN_GROUPS, TIERS, getComponentsByTier } from './data.js';
 
 export function renderOverview(mainEl) {
   const componentCount = Object.values(COMPONENT_CATEGORIES).flat().length;
@@ -27,6 +27,7 @@ export function renderOverview(mainEl) {
     { label: 'Components', value: componentCount, hash: '#components/dvfy-button' },
     { label: 'HTMX Patterns', value: patternCount, hash: '#patterns/dvfy-htmx-form' },
     { label: 'Token Groups', value: tokenGroupCount, hash: '#tokens/colors' },
+    { label: 'Architecture Tiers', value: 4, hash: '#tier/1' },
   ];
 
   for (const stat of stats) {
@@ -47,6 +48,64 @@ export function renderOverview(mainEl) {
     statsRow.appendChild(card);
   }
   mainEl.appendChild(statsRow);
+
+  // Component Architecture — tier visualization
+  const archTitle = document.createElement('h2');
+  archTitle.textContent = 'Component Architecture';
+  archTitle.style.cssText = 'font-size: var(--dvfy-text-xl); font-weight: var(--dvfy-weight-semibold); margin-bottom: var(--dvfy-space-4);';
+  mainEl.appendChild(archTitle);
+
+  const tierRow = document.createElement('div');
+  tierRow.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: var(--dvfy-space-4); margin-bottom: var(--dvfy-space-8); align-items: start;';
+
+  for (const n of [1, 2, 3, 4]) {
+    const tier = TIERS[n];
+    const tags = getComponentsByTier(n);
+    const examples = tags.slice(0, 3).map(t => t.replace('dvfy-', ''));
+
+    const card = document.createElement('dvfy-card');
+    card.style.cssText = 'cursor: pointer; padding: var(--dvfy-space-4); position: relative;';
+    card.addEventListener('click', () => { location.hash = `#tier/${n}`; });
+
+    // Tier badge
+    const tierBadge = document.createElement('dvfy-badge');
+    tierBadge.textContent = `T${n}`;
+    tierBadge.setAttribute('variant', n === 1 ? 'primary' : n === 2 ? 'secondary' : n === 3 ? 'warning' : 'info');
+    tierBadge.style.cssText = 'margin-bottom: var(--dvfy-space-2); display: inline-block;';
+    card.appendChild(tierBadge);
+
+    // Name
+    const name = document.createElement('div');
+    name.textContent = tier.name;
+    name.style.cssText = 'font-weight: var(--dvfy-weight-semibold); margin-bottom: var(--dvfy-space-1);';
+    card.appendChild(name);
+
+    // Count
+    const count = document.createElement('div');
+    count.textContent = `${tags.length} component${tags.length !== 1 ? 's' : ''}`;
+    count.style.cssText = 'font-size: var(--dvfy-text-sm); color: var(--dvfy-text-secondary); margin-bottom: var(--dvfy-space-2);';
+    card.appendChild(count);
+
+    // Examples
+    const exRow = document.createElement('div');
+    exRow.style.cssText = 'display: flex; flex-wrap: wrap; gap: var(--dvfy-space-1);';
+    for (const ex of examples) {
+      const tag = document.createElement('dvfy-tag');
+      tag.textContent = ex;
+      tag.setAttribute('size', 'sm');
+      exRow.appendChild(tag);
+    }
+    card.appendChild(exRow);
+
+    // Rule summary
+    const rule = document.createElement('div');
+    rule.textContent = tier.rules;
+    rule.style.cssText = 'font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted); margin-top: var(--dvfy-space-2);';
+    card.appendChild(rule);
+
+    tierRow.appendChild(card);
+  }
+  mainEl.appendChild(tierRow);
 
   // Quick links
   const linksTitle = document.createElement('h2');
