@@ -114,6 +114,10 @@ dvfy-button[loading]::after {
  *
  * @cssprop {color} --dvfy-primary-bg - Primary background color
  * @cssprop {color} --dvfy-primary-text - Primary text color
+ * @slot - Button label content
+ *
+ * @cssprop {color} --dvfy-primary-bg - Primary background color
+ * @cssprop {color} --dvfy-primary-text - Primary text color
  * @cssprop {color} --dvfy-danger-bg - Danger variant background
  */
 class DvfyButton extends HTMLElement {
@@ -131,8 +135,13 @@ class DvfyButton extends HTMLElement {
     if (!this.getAttribute('tabindex') && !this.hasAttribute('disabled')) {
       this.setAttribute('tabindex', '0');
     }
+    this.#syncAria();
 
     this.addEventListener('keydown', this.#onKey);
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener('keydown', this.#onKey);
   }
 
   #onKey = (e) => {
@@ -142,12 +151,22 @@ class DvfyButton extends HTMLElement {
     }
   };
 
-  static get observedAttributes() { return ['disabled']; }
+  static get observedAttributes() { return ['disabled', 'loading']; }
 
-  attributeChangedCallback(name, _, val) {
+  attributeChangedCallback(name) {
     if (name === 'disabled') {
-      this.setAttribute('tabindex', val !== null ? '-1' : '0');
+      const disabled = this.hasAttribute('disabled');
+      this.setAttribute('tabindex', disabled ? '-1' : '0');
+      this.setAttribute('aria-disabled', String(disabled));
     }
+    if (name === 'loading') {
+      this.setAttribute('aria-busy', String(this.hasAttribute('loading')));
+    }
+  }
+
+  #syncAria() {
+    if (this.hasAttribute('disabled')) this.setAttribute('aria-disabled', 'true');
+    if (this.hasAttribute('loading')) this.setAttribute('aria-busy', 'true');
   }
 }
 

@@ -182,10 +182,21 @@ class DvfyAvatar extends HTMLElement {
       this.appendChild(dot);
     }
 
-    // Interactive click handling
+    // Interactive: keyboard + click support
     if (interactive) {
+      if (!this.getAttribute('role')) this.setAttribute('role', 'button');
+      if (!this.getAttribute('tabindex')) this.setAttribute('tabindex', '0');
+      if (!this.getAttribute('aria-label')) {
+        this.setAttribute('aria-label', name || 'User avatar');
+      }
       this.addEventListener('click', this.#handleClick);
+      this.addEventListener('keydown', this.#handleKey);
     }
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener('click', this.#handleClick);
+    this.removeEventListener('keydown', this.#handleKey);
   }
 
   #handleClick = () => {
@@ -193,6 +204,13 @@ class DvfyAvatar extends HTMLElement {
       bubbles: true,
       detail: { name: this.getAttribute('name') || '', src: this.getAttribute('src') || '' }
     }));
+  };
+
+  #handleKey = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this.#handleClick();
+    }
   };
 
   #showInitials(name) {

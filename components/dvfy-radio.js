@@ -118,6 +118,7 @@ class DvfyRadio extends HTMLElement {
     input.value = this.getAttribute('value') || '';
     if (this.hasAttribute('checked')) input.checked = true;
     if (this.hasAttribute('disabled')) input.disabled = true;
+    if (this.hasAttribute('required')) input.required = true;
 
     input.addEventListener('change', () => {
       if (input.checked) {

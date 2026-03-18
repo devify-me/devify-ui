@@ -189,6 +189,12 @@ class DvfyInput extends HTMLElement {
     input.placeholder = placeholder;
     if (required) input.required = true;
     if (disabled) input.disabled = true;
+    if (error) {
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', `${id}-error`);
+    } else if (help) {
+      input.setAttribute('aria-describedby', `${id}-help`);
+    }
     wrapper.appendChild(input);
 
     // Password toggle with eye SVG icon (only when preview attribute is set)
@@ -197,7 +203,7 @@ class DvfyInput extends HTMLElement {
       toggle.type = 'button';
       toggle.className = 'dvfy-input__toggle';
       toggle.setAttribute('aria-label', this.#passwordVisible ? 'Hide password' : 'Show password');
-      toggle.setAttribute('tabindex', '-1');
+      toggle.setAttribute('tabindex', '0');
 
       const setIcon = (visible) => {
         toggle.textContent = '';
@@ -300,11 +306,14 @@ class DvfyInput extends HTMLElement {
     if (error) {
       const err = document.createElement('span');
       err.className = 'dvfy-input__error-msg';
+      err.id = `${id}-error`;
+      err.setAttribute('role', 'alert');
       err.textContent = error;
       this.appendChild(err);
     } else if (help) {
       const hlp = document.createElement('span');
       hlp.className = 'dvfy-input__help';
+      hlp.id = `${id}-help`;
       hlp.textContent = help;
       this.appendChild(hlp);
     }

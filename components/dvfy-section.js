@@ -127,12 +127,15 @@ class DvfySection extends HTMLElement {
     // Clear
     while (this.firstChild) this.removeChild(this.firstChild);
 
+    const bodyId = `dvfy-section-${Math.random().toString(36).slice(2, 8)}`;
+
     // Summary
     this.#summary = document.createElement('div');
     this.#summary.className = 'dvfy-section__summary';
     this.#summary.setAttribute('role', 'button');
     this.#summary.setAttribute('tabindex', '0');
     this.#summary.setAttribute('aria-expanded', String(this.hasAttribute('open')));
+    this.#summary.setAttribute('aria-controls', bodyId);
 
     const icon = this.getAttribute('icon');
     if (icon) {
@@ -166,6 +169,7 @@ class DvfySection extends HTMLElement {
     // Body
     this.#body = document.createElement('div');
     this.#body.className = 'dvfy-section__body';
+    this.#body.id = bodyId;
     for (const child of children) this.#body.appendChild(child);
     this.appendChild(this.#body);
   }
