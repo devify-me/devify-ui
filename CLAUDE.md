@@ -37,7 +37,7 @@ devify-ui/
     ├── catalog.js         # Entry point: init sidebar, router, theme observer
     ├── router.js          # Hash-based routing + view dispatch
     ├── sidebar.js         # Sidebar construction + search filtering
-    ├── data.js            # All hardcoded maps (categories, tokens, patterns)
+    ├── data.js            # Taxonomy (TIERS, DOMAINS, COMPONENT_REGISTRY), tokens, patterns
     ├── tokens.js          # Token showcase renderers (colors, typography, etc.)
     ├── brand.js           # Live-editable brand settings sandbox
     └── overview.js        # Landing page renderer
@@ -61,8 +61,9 @@ When creating or modifying components:
 4. Support keyboard navigation (Tab, Enter, Space, Escape)
 5. Add ARIA roles and labels
 6. Add component to `devify.js` barrel file
-7. Add component to `COMPONENT_CATEGORIES` in `catalog/data.js`
-8. Run `npm run analyze` to regenerate manifest
+7. Add entry to `COMPONENT_REGISTRY` in `catalog/data.js` with tier, domain, and deps (see `docs/taxonomy.md` for classification rules)
+8. Add `DEFAULT_CONTENT` entry in `components/dvfy-component-playground.js`
+9. Run `npm run analyze` to regenerate manifest
 
 ## Tooling Roadmap
 
