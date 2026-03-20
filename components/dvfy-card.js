@@ -4,7 +4,7 @@
  * Attributes:
  *   elevated:    boolean — adds shadow
  *   interactive: boolean — hover effect
- *   padded:      boolean (default: true) — adds padding
+ *   padded:      boolean — adds padding (default: true)
  *
  * Usage:
  *   <dvfy-card elevated>Content here</dvfy-card>
@@ -21,12 +21,9 @@ dvfy-card {
   color: var(--dvfy-text-primary);
 }
 
-/* Padded (default) */
-dvfy-card:not([padded="false"]) {
+/* Padded */
+dvfy-card[padded] {
   padding: var(--dvfy-space-5);
-}
-dvfy-card[padded="false"] {
-  padding: 0;
 }
 
 /* Elevated */
@@ -64,7 +61,7 @@ dvfy-card[interactive]:focus-visible {
  *
  * @attr {boolean} elevated - Add shadow elevation
  * @attr {boolean} interactive - Enable hover effect and cursor pointer
- * @attr {string} padded - Enable padding: "true" | "false" (default: "true")
+ * @attr {boolean} padded - Enable padding (default: true)
  *
  * @slot - Card content
  *

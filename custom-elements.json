@@ -378,8 +378,8 @@
         },
         {
           "name": "padded",
-          "description": "Enable padding: \"true\" | \"false\" (default: \"true\")",
-          "type": "string"
+          "description": "Enable padding (default: true)",
+          "type": "boolean"
         },
         {
           "name": "interactive",
