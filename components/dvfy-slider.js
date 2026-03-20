@@ -1,15 +1,15 @@
 /**
- * <dvfy-slider> — Knob-primitive slider with optional fill and range mode
+ * <dvfy-slider> — Knob-primitive slider with fill bar and range mode
  *
  * Architecture: knobs are the primitive. The track groove is always visible.
- * `fill` adds a colored progress bar. `range` adds a second knob.
+ * Fill bar is shown by default (use `no-fill` to hide). `range` adds a second knob.
  * Native <input type="range"> provides accessibility and form integration;
  * their tracks are invisible — all visuals are dedicated overlay elements.
  *
  * Usage:
  *   <dvfy-slider label="Volume" value="50" show-value></dvfy-slider>
- *   <dvfy-slider label="Volume" value="50" fill show-value></dvfy-slider>
- *   <dvfy-slider label="Price" min="0" max="1000" value="200" value-end="800" range fill show-value></dvfy-slider>
+ *   <dvfy-slider label="Volume" value="50" no-fill show-value></dvfy-slider>
+ *   <dvfy-slider label="Price" min="0" max="1000" value="200" value-end="800" range show-value></dvfy-slider>
  *   <dvfy-slider label="Rating" min="0" max="10" steps="10" value="5"></dvfy-slider>
  */
 
@@ -72,30 +72,18 @@ dvfy-slider .dvfy-slider__track {
   pointer-events: none;
 }
 
-/* ── Fill bar — only when [fill] is present ────── */
+/* ── Fill bar — on by default, hide with [no-fill] ─ */
 dvfy-slider .dvfy-slider__fill {
-  display: none;
-}
-dvfy-slider[fill] .dvfy-slider__fill {
-  display: block;
   position: absolute;
   top: 50%;
-  left: 0;
-  right: 0;
   height: var(--_track-h);
   transform: translateY(-50%);
   border-radius: var(--_track-radius);
-  background: linear-gradient(to right,
-    transparent calc(var(--fill-start, 0) * 1%),
-    var(--dvfy-primary-bg) calc(var(--fill-start, 0) * 1%),
-    var(--dvfy-primary-bg) calc(var(--fill-end, 0) * 1%),
-    transparent calc(var(--fill-end, 0) * 1%));
-  background-size: calc(100% - var(--_thumb-d)) var(--_track-h);
-  background-position: center;
-  background-repeat: no-repeat;
+  background: var(--dvfy-primary-bg);
   pointer-events: none;
   z-index: 1;
 }
+dvfy-slider[no-fill] .dvfy-slider__fill { display: none; }
 
 /* ── Native input — transparent track, thumb only ─ */
 dvfy-slider input[type="range"] {
@@ -278,7 +266,7 @@ dvfy-slider[range] input[type="range"]::-moz-range-thumb {
  * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {boolean} show-value - Show current value next to slider
  * @attr {string} variant - Track shape: default | oval (default: "default")
- * @attr {boolean} fill - Show colored progress bar between knobs (or from min to value in single mode)
+ * @attr {boolean} no-fill - Hide the fill bar (shown by default)
  * @attr {boolean} range - Enable dual-thumb range mode
  * @attr {number} steps - Number of divisions for tick marks (e.g. 5 = 6 ticks)
  *
@@ -294,10 +282,10 @@ dvfy-slider[range] input[type="range"]::-moz-range-thumb {
  * <dvfy-slider label="Volume" value="50" show-value></dvfy-slider>
  *
  * @example
- * <dvfy-slider label="Volume" value="50" fill show-value></dvfy-slider>
+ * <dvfy-slider label="Knobs Only" value="40" no-fill show-value></dvfy-slider>
  *
  * @example
- * <dvfy-slider label="Price" min="0" max="1000" value="200" value-end="800" range fill show-value></dvfy-slider>
+ * <dvfy-slider label="Price" min="0" max="1000" value="200" value-end="800" range show-value></dvfy-slider>
  *
  * @example
  * <dvfy-slider label="Rating" min="0" max="10" steps="10" value="5" show-value></dvfy-slider>
@@ -316,15 +304,27 @@ class DvfySlider extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['label', 'label-position', 'min', 'max', 'step', 'value', 'value-end', 'name', 'disabled', 'size', 'show-value', 'variant', 'fill', 'range', 'steps'];
+    return ['label', 'label-position', 'min', 'max', 'step', 'value', 'value-end', 'name', 'disabled', 'size', 'show-value', 'variant', 'no-fill', 'range', 'steps'];
   }
 
   attributeChangedCallback() {
     if (this.isConnected) this.#render();
   }
 
-  #pct(v, min, max) {
-    return max > min ? ((v - min) / (max - min)) * 100 : 0;
+  #frac(v, min, max) {
+    return max > min ? (v - min) / (max - min) : 0;
+  }
+
+  /** Position fill bar edges to align with thumb centers */
+  #updateFill(fill, startFrac, endFrac, isRange) {
+    // Thumb center at fraction f: thumbD/2 + (100% - thumbD) * f
+    // Single mode: left edge touches track edge (no gap)
+    if (isRange) {
+      fill.style.left = `calc(var(--_thumb-d) / 2 + (100% - var(--_thumb-d)) * ${startFrac})`;
+    } else {
+      fill.style.left = '0';
+    }
+    fill.style.right = `calc(100% - var(--_thumb-d) / 2 - (100% - var(--_thumb-d)) * ${endFrac})`;
   }
 
   #render() {
@@ -400,9 +400,7 @@ class DvfySlider extends HTMLElement {
   }
 
   #renderSingle(trackWrap, fill, valueSpan, { min, max, step, value, id, name, disabled }) {
-    const pct = this.#pct(value, min, max);
-    fill.style.setProperty('--fill-start', 0);
-    fill.style.setProperty('--fill-end', pct);
+    this.#updateFill(fill, 0, this.#frac(value, min, max), false);
 
     if (valueSpan) valueSpan.textContent = value;
 
@@ -418,7 +416,7 @@ class DvfySlider extends HTMLElement {
 
     input.addEventListener('input', () => {
       const v = parseFloat(input.value);
-      fill.style.setProperty('--fill-end', this.#pct(v, min, max));
+      this.#updateFill(fill, 0, this.#frac(v, min, max), false);
       if (valueSpan) valueSpan.textContent = v;
       this.dispatchEvent(new CustomEvent('input', { bubbles: true, detail: { value: v } }));
     });
@@ -432,8 +430,7 @@ class DvfySlider extends HTMLElement {
 
   #renderRange(trackWrap, fill, valueSpan, { min, max, step, value, id, disabled }) {
     const valueEnd = parseFloat(this.getAttribute('value-end') ?? max);
-    fill.style.setProperty('--fill-start', this.#pct(value, min, max));
-    fill.style.setProperty('--fill-end', this.#pct(valueEnd, min, max));
+    this.#updateFill(fill, this.#frac(value, min, max), this.#frac(valueEnd, min, max), true);
 
     if (valueSpan) valueSpan.textContent = `${value} \u2013 ${valueEnd}`;
 
@@ -465,8 +462,7 @@ class DvfySlider extends HTMLElement {
       let hi = parseFloat(inputMax.value);
       if (lo > hi) { lo = hi; inputMin.value = lo; }
       if (hi < lo) { hi = lo; inputMax.value = hi; }
-      fill.style.setProperty('--fill-start', this.#pct(lo, min, max));
-      fill.style.setProperty('--fill-end', this.#pct(hi, min, max));
+      this.#updateFill(fill, this.#frac(lo, min, max), this.#frac(hi, min, max), true);
       if (valueSpan) valueSpan.textContent = `${lo} \u2013 ${hi}`;
     };
 
@@ -508,7 +504,7 @@ class DvfySlider extends HTMLElement {
         if (fill) {
           const min = parseFloat(i.min);
           const max = parseFloat(i.max);
-          fill.style.setProperty('--fill-end', this.#pct(parseFloat(v), min, max));
+          this.#updateFill(fill, 0, this.#frac(parseFloat(v), min, max), false);
         }
         const vs = this.querySelector('.dvfy-slider__value');
         if (vs) vs.textContent = v;
