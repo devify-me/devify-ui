@@ -66,6 +66,7 @@ Q4: None of the above (pure tokens + native HTML only)?
 | dvfy-alert     | Feedback   |
 | dvfy-loader    | Feedback   |
 | dvfy-hamburger | Navigation |
+| dvfy-drawer    | Layout     |
 | dvfy-section   | Layout     |
 | dvfy-tooltip   | Utility    |
 
@@ -83,14 +84,13 @@ Q4: None of the above (pure tokens + native HTML only)?
 | dvfy-pagination     | Navigation | dvfy-button         |
 | dvfy-tabs           | Navigation | —                   |
 | dvfy-dropdown       | Navigation | dvfy-button         |
-| dvfy-nav            | Navigation | —                   |
+| dvfy-nav            | Navigation | dvfy-hamburger, dvfy-drawer |
 | dvfy-theme-switcher | Utility    | —                   |
 
-### Tier 3 — Organisms (4)
+### Tier 3 — Organisms (3)
 
 | Component      | Domain     | Dependencies                              |
 |---------------|------------|-------------------------------------------|
-| dvfy-header   | Layout     | dvfy-hamburger, dvfy-avatar, dvfy-theme-switcher |
 | dvfy-accordion| Layout     | dvfy-section                              |
 | dvfy-sidebar  | Navigation | —                                         |
 | dvfy-auth     | Utility    | dvfy-input, dvfy-button                   |
