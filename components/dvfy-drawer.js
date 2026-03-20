@@ -172,11 +172,10 @@ dvfy-drawer[position="bottom"][collapsed] {
  *
  * @attr {boolean} collapsed - Collapsed state (reflected)
  * @attr {string} position - Edge position: top | right | bottom | left (default: "right")
- * @attr {string} width - CSS width value (default: "clamp(200px, 40%, 320px)")
- * @attr {string} label - Header title and reopen tab text (default: "Panel")
+ * @attr {string} width - CSS size value for the drawer dimension (default: "clamp(200px, 40%, 320px)")
+ * @attr {string} header - Header title and reopen tab text (default: "Panel")
  * @attr {boolean} fixed - Disable collapse toggle and reopen tab (always open)
  * @attr {boolean} no-header - Hide the header bar (for embedding inside other components)
- * @attr {string} label-position - Label placement: top | right | bottom | left
  *
  * @event {CustomEvent} toggle - Fires on collapse/expand, detail: { collapsed }
  *
@@ -211,7 +210,7 @@ class DvfyDrawer extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['collapsed', 'label', 'position', 'width', 'fixed', 'no-header'];
+    return ['collapsed', 'header', 'position', 'width', 'fixed', 'no-header'];
   }
 
   attributeChangedCallback(name, oldVal, newVal) {
@@ -249,12 +248,11 @@ class DvfyDrawer extends HTMLElement {
     const pos = this.getAttribute('position') || 'right';
     if (pos === 'top' || pos === 'bottom') {
       this.style.removeProperty('width');
-      const w = this.getAttribute('width');
-      if (w) this.style.maxHeight = w;
+      // Explicit max-height required for CSS transition to animate
+      this.style.maxHeight = this.getAttribute('width') || 'var(--dvfy-drawer-width, 50vh)';
     } else {
       this.style.removeProperty('max-height');
-      const w = this.getAttribute('width') || 'var(--dvfy-drawer-width, clamp(200px, 40%, 320px))';
-      this.style.width = w;
+      this.style.width = this.getAttribute('width') || 'var(--dvfy-drawer-width, clamp(200px, 40%, 320px))';
     }
   }
 
@@ -268,7 +266,7 @@ class DvfyDrawer extends HTMLElement {
     this.textContent = '';
     const showHeader = !this.hasAttribute('no-header');
     const collapsible = !this.hasAttribute('fixed');
-    const label = this.getAttribute('label') || 'Panel';
+    const headerText = this.getAttribute('header') || 'Panel';
     const position = this.getAttribute('position') || 'right';
 
     // ── Header ──
@@ -278,7 +276,7 @@ class DvfyDrawer extends HTMLElement {
 
       const title = document.createElement('p');
       title.className = 'dvfy-drawer__title';
-      title.textContent = label;
+      title.textContent = headerText;
       header.appendChild(title);
 
       if (collapsible) {
@@ -318,8 +316,8 @@ class DvfyDrawer extends HTMLElement {
       this.#reopen = document.createElement('button');
       this.#reopen.className = 'dvfy-drawer__reopen';
       this.#reopen.setAttribute('data-position', position);
-      this.#reopen.textContent = label;
-      this.#reopen.setAttribute('aria-label', `Open ${label.toLowerCase()}`);
+      this.#reopen.textContent = headerText;
+      this.#reopen.setAttribute('aria-label', `Open ${headerText.toLowerCase()}`);
       this.#reopen.addEventListener('click', () => this.#expand());
 
       if (this.hasAttribute('collapsed')) {
