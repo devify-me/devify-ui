@@ -41,7 +41,7 @@ dvfy-slider .dvfy-slider__value {
   font-size: var(--dvfy-text-sm);
   font-weight: var(--dvfy-weight-medium);
   color: var(--dvfy-text-secondary);
-  text-align: right;
+  text-align: left;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
   flex-shrink: 0;
