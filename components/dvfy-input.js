@@ -151,6 +151,7 @@ class DvfyInput extends HTMLElement {
   static #styled = false;
   /** @type {boolean} tracks password visibility state */
   #passwordVisible = false;
+  #id = null;
 
   connectedCallback() {
     if (!DvfyInput.#styled) {
@@ -159,47 +160,61 @@ class DvfyInput extends HTMLElement {
       document.head.appendChild(s);
       DvfyInput.#styled = true;
     }
-    this.#render();
+    this.#id = this.getAttribute('name') || `dvfy-input-${Math.random().toString(36).slice(2, 8)}`;
+    this.#build();
   }
 
   static get observedAttributes() {
     return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'no-preview', 'clearable', 'label-position'];
   }
 
-  attributeChangedCallback() {
-    if (this.isConnected) this.#render();
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (!this.isConnected) return;
+    const input = this.querySelector('.dvfy-input__field');
+    if (!input) return;
+
+    // Structural changes need full rebuild with focus preservation
+    if (name === 'type' || name === 'no-preview' || name === 'clearable') {
+      this.#rebuildPreservingFocus();
+      return;
+    }
+
+    switch (name) {
+      case 'label':
+      case 'required':
+        this.#patchLabel();
+        if (name === 'required') input.required = this.hasAttribute('required');
+        break;
+      case 'name':
+        input.name = newValue || '';
+        break;
+      case 'value':
+        if (document.activeElement !== input) input.value = newValue || '';
+        break;
+      case 'placeholder':
+        input.placeholder = newValue || '';
+        break;
+      case 'disabled':
+        input.disabled = this.hasAttribute('disabled');
+        break;
+      case 'error':
+      case 'help':
+        this.#patchMessages(input);
+        break;
+      case 'label-position':
+        break; // CSS-only
+    }
   }
 
-  #render() {
-    const label = this.getAttribute('label');
-    const type = this.getAttribute('type') || 'text';
-    const name = this.getAttribute('name') || '';
-    const value = this.getAttribute('value') || '';
-    const placeholder = this.getAttribute('placeholder') || '';
-    const error = this.getAttribute('error');
-    const help = this.getAttribute('help');
-    const required = this.hasAttribute('required');
-    const disabled = this.hasAttribute('disabled');
-    const id = name || `dvfy-input-${Math.random().toString(36).slice(2, 8)}`;
-    const isPassword = type === 'password';
-
-    // Clear existing content
+  #build() {
     this.textContent = '';
+    const id = this.#id;
+    const type = this.getAttribute('type') || 'text';
+    const isPassword = type === 'password';
+    const hasPreview = isPassword && !this.hasAttribute('no-preview');
 
     // Label
-    if (label) {
-      const lbl = document.createElement('label');
-      lbl.className = 'dvfy-input__label';
-      lbl.setAttribute('for', id);
-      lbl.textContent = label;
-      if (required) {
-        const star = document.createElement('span');
-        star.className = 'dvfy-input__required';
-        star.textContent = '*';
-        lbl.appendChild(star);
-      }
-      this.appendChild(lbl);
-    }
+    this.#appendLabel();
 
     // Wrapper for input + toggle
     const wrapper = document.createElement('div');
@@ -208,144 +223,217 @@ class DvfyInput extends HTMLElement {
     // Input
     const input = document.createElement('input');
     input.className = 'dvfy-input__field';
-    const hasPreview = isPassword && !this.hasAttribute('no-preview');
-    if (hasPreview) {
+    if (hasPreview || this.hasAttribute('clearable')) {
       input.classList.add('dvfy-input__field--has-toggle');
     }
     input.id = id;
     input.type = isPassword && this.#passwordVisible ? 'text' : type;
-    input.name = name;
-    input.value = value;
-    input.placeholder = placeholder;
-    if (required) input.required = true;
-    if (disabled) input.disabled = true;
-    if (error) {
-      input.setAttribute('aria-invalid', 'true');
-      input.setAttribute('aria-describedby', `${id}-error`);
-    } else if (help) {
-      input.setAttribute('aria-describedby', `${id}-help`);
-    }
+    input.name = this.getAttribute('name') || '';
+    input.value = this.getAttribute('value') || '';
+    input.placeholder = this.getAttribute('placeholder') || '';
+    if (this.hasAttribute('required')) input.required = true;
+    if (this.hasAttribute('disabled')) input.disabled = true;
+    this.#setAriaOnInput(input);
     wrapper.appendChild(input);
 
-    // Password toggle with eye SVG icon (only when preview attribute is set)
-    if (hasPreview) {
-      const toggle = document.createElement('button');
-      toggle.type = 'button';
-      toggle.className = 'dvfy-input__toggle';
-      toggle.setAttribute('aria-label', this.#passwordVisible ? 'Hide password' : 'Show password');
-      toggle.setAttribute('tabindex', '0');
+    // Password toggle
+    if (hasPreview) this.#appendPasswordToggle(wrapper, input);
 
-      const setIcon = (visible) => {
-        toggle.textContent = '';
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.setAttribute('width', '18');
-        svg.setAttribute('height', '18');
-        svg.setAttribute('viewBox', '0 0 24 24');
-        svg.setAttribute('fill', 'none');
-        svg.setAttribute('stroke', 'currentColor');
-        svg.setAttribute('stroke-width', '2');
-        svg.setAttribute('stroke-linecap', 'round');
-        svg.setAttribute('stroke-linejoin', 'round');
-        const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-        if (visible) {
-          // Eye open
-          path1.setAttribute('d', 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z');
-          svg.appendChild(path1);
-          const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-          circle.setAttribute('cx', '12');
-          circle.setAttribute('cy', '12');
-          circle.setAttribute('r', '3');
-          svg.appendChild(circle);
-        } else {
-          // Eye closed (with slash)
-          path1.setAttribute('d', 'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94');
-          svg.appendChild(path1);
-          const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-          path2.setAttribute('d', 'M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19');
-          svg.appendChild(path2);
-          const path3 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-          path3.setAttribute('d', 'M14.12 14.12a3 3 0 1 1-4.24-4.24');
-          svg.appendChild(path3);
-          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-          line.setAttribute('x1', '1'); line.setAttribute('y1', '1');
-          line.setAttribute('x2', '23'); line.setAttribute('y2', '23');
-          svg.appendChild(line);
-        }
-        toggle.appendChild(svg);
-      };
-
-      setIcon(this.#passwordVisible);
-      toggle.addEventListener('click', () => {
-        this.#passwordVisible = !this.#passwordVisible;
-        input.type = this.#passwordVisible ? 'text' : 'password';
-        setIcon(this.#passwordVisible);
-        toggle.setAttribute('aria-label', this.#passwordVisible ? 'Hide password' : 'Show password');
-        input.focus();
-      });
-      wrapper.appendChild(toggle);
-    }
-
-    // Clear button (when clearable attribute is set)
-    if (this.hasAttribute('clearable') && !hasPreview) {
-      input.classList.add('dvfy-input__field--has-toggle');
-      const clearBtn = document.createElement('button');
-      clearBtn.type = 'button';
-      clearBtn.className = 'dvfy-input__clear';
-      clearBtn.setAttribute('aria-label', 'Clear input');
-      clearBtn.setAttribute('tabindex', '-1');
-
-      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-      svg.setAttribute('width', '16');
-      svg.setAttribute('height', '16');
-      svg.setAttribute('viewBox', '0 0 24 24');
-      svg.setAttribute('fill', 'none');
-      svg.setAttribute('stroke', 'currentColor');
-      svg.setAttribute('stroke-width', '2');
-      svg.setAttribute('stroke-linecap', 'round');
-      svg.setAttribute('stroke-linejoin', 'round');
-      const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line1.setAttribute('x1', '18'); line1.setAttribute('y1', '6');
-      line1.setAttribute('x2', '6');  line1.setAttribute('y2', '18');
-      svg.appendChild(line1);
-      const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line2.setAttribute('x1', '6');  line2.setAttribute('y1', '6');
-      line2.setAttribute('x2', '18'); line2.setAttribute('y2', '18');
-      svg.appendChild(line2);
-      clearBtn.appendChild(svg);
-
-      // Show/hide based on input value
-      const updateVisibility = () => {
-        clearBtn.classList.toggle('dvfy-input__clear--visible', input.value.length > 0);
-      };
-      input.addEventListener('input', updateVisibility);
-      updateVisibility();
-
-      clearBtn.addEventListener('click', () => {
-        input.value = '';
-        updateVisibility();
-        input.focus();
-        input.dispatchEvent(new Event('input', { bubbles: true }));
-      });
-
-      wrapper.appendChild(clearBtn);
-    }
+    // Clear button
+    if (this.hasAttribute('clearable') && !hasPreview) this.#appendClearButton(wrapper, input);
 
     this.appendChild(wrapper);
 
     // Error or help text
+    this.#appendMessages();
+  }
+
+  #appendLabel() {
+    const label = this.getAttribute('label');
+    if (!label) return;
+    const lbl = document.createElement('label');
+    lbl.className = 'dvfy-input__label';
+    lbl.setAttribute('for', this.#id);
+    lbl.textContent = label;
+    if (this.hasAttribute('required')) {
+      const star = document.createElement('span');
+      star.className = 'dvfy-input__required';
+      star.textContent = '*';
+      lbl.appendChild(star);
+    }
+    this.insertBefore(lbl, this.firstChild);
+  }
+
+  #patchLabel() {
+    const label = this.getAttribute('label');
+    let lbl = this.querySelector('.dvfy-input__label');
+    if (label) {
+      if (!lbl) {
+        this.#appendLabel();
+        return;
+      }
+      lbl.textContent = label;
+      if (this.hasAttribute('required')) {
+        const star = document.createElement('span');
+        star.className = 'dvfy-input__required';
+        star.textContent = '*';
+        lbl.appendChild(star);
+      }
+    } else if (lbl) {
+      lbl.remove();
+    }
+  }
+
+  #setAriaOnInput(input) {
+    const error = this.getAttribute('error');
+    const help = this.getAttribute('help');
+    input.removeAttribute('aria-invalid');
+    input.removeAttribute('aria-describedby');
+    if (error) {
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', `${this.#id}-error`);
+    } else if (help) {
+      input.setAttribute('aria-describedby', `${this.#id}-help`);
+    }
+  }
+
+  #appendMessages() {
+    const error = this.getAttribute('error');
+    const help = this.getAttribute('help');
     if (error) {
       const err = document.createElement('span');
       err.className = 'dvfy-input__error-msg';
-      err.id = `${id}-error`;
+      err.id = `${this.#id}-error`;
       err.setAttribute('role', 'alert');
       err.textContent = error;
       this.appendChild(err);
     } else if (help) {
       const hlp = document.createElement('span');
       hlp.className = 'dvfy-input__help';
-      hlp.id = `${id}-help`;
+      hlp.id = `${this.#id}-help`;
       hlp.textContent = help;
       this.appendChild(hlp);
+    }
+  }
+
+  #patchMessages(input) {
+    this.querySelector('.dvfy-input__error-msg')?.remove();
+    this.querySelector('.dvfy-input__help')?.remove();
+    this.#setAriaOnInput(input);
+    this.#appendMessages();
+  }
+
+  #appendPasswordToggle(wrapper, input) {
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'dvfy-input__toggle';
+    toggle.setAttribute('aria-label', this.#passwordVisible ? 'Hide password' : 'Show password');
+    toggle.setAttribute('tabindex', '0');
+
+    const setIcon = (visible) => {
+      toggle.textContent = '';
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      svg.setAttribute('width', '18');
+      svg.setAttribute('height', '18');
+      svg.setAttribute('viewBox', '0 0 24 24');
+      svg.setAttribute('fill', 'none');
+      svg.setAttribute('stroke', 'currentColor');
+      svg.setAttribute('stroke-width', '2');
+      svg.setAttribute('stroke-linecap', 'round');
+      svg.setAttribute('stroke-linejoin', 'round');
+      const path1 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      if (visible) {
+        path1.setAttribute('d', 'M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z');
+        svg.appendChild(path1);
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', '12');
+        circle.setAttribute('cy', '12');
+        circle.setAttribute('r', '3');
+        svg.appendChild(circle);
+      } else {
+        path1.setAttribute('d', 'M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94');
+        svg.appendChild(path1);
+        const path2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path2.setAttribute('d', 'M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19');
+        svg.appendChild(path2);
+        const path3 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path3.setAttribute('d', 'M14.12 14.12a3 3 0 1 1-4.24-4.24');
+        svg.appendChild(path3);
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', '1'); line.setAttribute('y1', '1');
+        line.setAttribute('x2', '23'); line.setAttribute('y2', '23');
+        svg.appendChild(line);
+      }
+      toggle.appendChild(svg);
+    };
+
+    setIcon(this.#passwordVisible);
+    toggle.addEventListener('click', () => {
+      this.#passwordVisible = !this.#passwordVisible;
+      input.type = this.#passwordVisible ? 'text' : 'password';
+      setIcon(this.#passwordVisible);
+      toggle.setAttribute('aria-label', this.#passwordVisible ? 'Hide password' : 'Show password');
+      input.focus();
+    });
+    wrapper.appendChild(toggle);
+  }
+
+  #appendClearButton(wrapper, input) {
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.className = 'dvfy-input__clear';
+    clearBtn.setAttribute('aria-label', 'Clear input');
+    clearBtn.setAttribute('tabindex', '-1');
+
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '16');
+    svg.setAttribute('height', '16');
+    svg.setAttribute('viewBox', '0 0 24 24');
+    svg.setAttribute('fill', 'none');
+    svg.setAttribute('stroke', 'currentColor');
+    svg.setAttribute('stroke-width', '2');
+    svg.setAttribute('stroke-linecap', 'round');
+    svg.setAttribute('stroke-linejoin', 'round');
+    const line1 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line1.setAttribute('x1', '18'); line1.setAttribute('y1', '6');
+    line1.setAttribute('x2', '6');  line1.setAttribute('y2', '18');
+    svg.appendChild(line1);
+    const line2 = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line2.setAttribute('x1', '6');  line2.setAttribute('y1', '6');
+    line2.setAttribute('x2', '18'); line2.setAttribute('y2', '18');
+    svg.appendChild(line2);
+    clearBtn.appendChild(svg);
+
+    const updateVisibility = () => {
+      clearBtn.classList.toggle('dvfy-input__clear--visible', input.value.length > 0);
+    };
+    input.addEventListener('input', updateVisibility);
+    updateVisibility();
+
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      updateVisibility();
+      input.focus();
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+    });
+
+    wrapper.appendChild(clearBtn);
+  }
+
+  #rebuildPreservingFocus() {
+    const input = this.querySelector('.dvfy-input__field');
+    const hasFocus = input && document.activeElement === input;
+    const selStart = input?.selectionStart;
+    const selEnd = input?.selectionEnd;
+    const curValue = input?.value;
+    this.#build();
+    if (hasFocus) {
+      const newInput = this.querySelector('.dvfy-input__field');
+      if (newInput) {
+        newInput.value = curValue;
+        newInput.focus();
+        try { newInput.setSelectionRange(selStart, selEnd); } catch {}
+      }
     }
   }
 
