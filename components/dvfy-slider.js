@@ -214,19 +214,20 @@ dvfy-slider[label-position="right"] .dvfy-slider__row { flex: 1; min-width: 0; }
 dvfy-slider .dvfy-slider__steps {
   position: absolute;
   top: 50%;
-  left: 0;
-  right: 0;
+  left: calc(var(--_thumb-d) / 2);
+  right: calc(var(--_thumb-d) / 2);
   display: flex;
   justify-content: space-between;
   transform: translateY(-50%);
   pointer-events: none;
-  z-index: 0;
+  z-index: 2;
 }
 dvfy-slider .dvfy-slider__tick {
-  width: 1px;
-  height: var(--_track-h);
-  background: var(--dvfy-border-default, var(--dvfy-border-muted));
-  opacity: 0.5;
+  width: 2px;
+  height: calc(var(--_track-h) + 0.5rem);
+  border-radius: 1px;
+  background: var(--dvfy-text-muted, var(--dvfy-border-default));
+  opacity: 0.4;
 }
 
 /* ── Range mode — stacked inputs ───────────────── */
