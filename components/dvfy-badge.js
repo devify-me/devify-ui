@@ -25,16 +25,35 @@ dvfy-badge {
   vertical-align: middle;
 }
 
-/* Sizes */
-dvfy-badge[size="sm"], dvfy-badge:not([size]) dvfy-badge[size="sm"] {
+/* Size: xs */
+dvfy-badge[size="xs"] {
+  padding: 0 var(--dvfy-space-1-5);
+  font-size: var(--dvfy-text-xs);
+  border-radius: var(--dvfy-radius-sm);
+}
+/* Size: sm */
+dvfy-badge[size="sm"] {
   padding: var(--dvfy-space-0-5) var(--dvfy-space-2);
   font-size: var(--dvfy-text-xs);
   border-radius: var(--dvfy-radius-md);
 }
+/* Size: md (default) */
 dvfy-badge:not([size]), dvfy-badge[size="md"] {
   padding: var(--dvfy-space-0-5) var(--dvfy-space-2-5);
   font-size: var(--dvfy-text-sm);
   border-radius: var(--dvfy-radius-md);
+}
+/* Size: lg */
+dvfy-badge[size="lg"] {
+  padding: var(--dvfy-space-1) var(--dvfy-space-3);
+  font-size: var(--dvfy-text-sm);
+  border-radius: var(--dvfy-radius-lg);
+}
+/* Size: xl */
+dvfy-badge[size="xl"] {
+  padding: var(--dvfy-space-1-5) var(--dvfy-space-3-5);
+  font-size: var(--dvfy-text-base);
+  border-radius: var(--dvfy-radius-lg);
 }
 
 /* Dot indicator */
@@ -98,7 +117,7 @@ dvfy-badge[variant="outline"] { background: transparent; }
  *
  * @attr {string} variant - Badge style: default | outline (default: "default")
  * @attr {string} status - Status color: neutral | success | warning | danger | info (default: "neutral")
- * @attr {string} size - Size: sm | md (default: "md")
+ * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {boolean} dot - Show dot indicator before text
  *
  * @cssprop {color} --dvfy-success-bg-subtle - Success status background

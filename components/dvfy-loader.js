@@ -41,14 +41,23 @@ dvfy-loader .dvfy-loader__icon {
   transform: translate(-50%, -50%);
 }
 
+/* Size: xs */
+dvfy-loader[size="xs"] .dvfy-loader__spinner { width: 0.75rem; height: 0.75rem; border-width: 1.5px; }
+dvfy-loader[size="xs"] .dvfy-loader__icon { width: 0.375rem; height: 0.375rem; }
+/* Size: sm */
 dvfy-loader[size="sm"] .dvfy-loader__spinner { width: 1rem; height: 1rem; border-width: 2px; }
 dvfy-loader[size="sm"] .dvfy-loader__icon { width: 0.5rem; height: 0.5rem; }
+/* Size: md (default) */
 dvfy-loader:not([size]) .dvfy-loader__spinner,
 dvfy-loader[size="md"] .dvfy-loader__spinner { width: 1.5rem; height: 1.5rem; border-width: 2px; }
 dvfy-loader:not([size]) .dvfy-loader__icon,
 dvfy-loader[size="md"] .dvfy-loader__icon { width: 0.75rem; height: 0.75rem; }
+/* Size: lg */
 dvfy-loader[size="lg"] .dvfy-loader__spinner { width: 2.5rem; height: 2.5rem; border-width: 3px; }
 dvfy-loader[size="lg"] .dvfy-loader__icon { width: 1.25rem; height: 1.25rem; }
+/* Size: xl */
+dvfy-loader[size="xl"] .dvfy-loader__spinner { width: 3.5rem; height: 3.5rem; border-width: 4px; }
+dvfy-loader[size="xl"] .dvfy-loader__icon { width: 1.75rem; height: 1.75rem; }
 
 @keyframes dvfy-spin { to { transform: rotate(360deg); } }
 
@@ -66,10 +75,12 @@ dvfy-loader .dvfy-loader__dot {
 dvfy-loader .dvfy-loader__dot:nth-child(2) { animation-delay: 0.2s; }
 dvfy-loader .dvfy-loader__dot:nth-child(3) { animation-delay: 0.4s; }
 
+dvfy-loader[size="xs"] .dvfy-loader__dot { width: 0.25rem; height: 0.25rem; }
 dvfy-loader[size="sm"] .dvfy-loader__dot { width: 0.375rem; height: 0.375rem; }
 dvfy-loader:not([size]) .dvfy-loader__dot,
 dvfy-loader[size="md"] .dvfy-loader__dot { width: 0.5rem; height: 0.5rem; }
 dvfy-loader[size="lg"] .dvfy-loader__dot { width: 0.75rem; height: 0.75rem; }
+dvfy-loader[size="xl"] .dvfy-loader__dot { width: 1rem; height: 1rem; }
 
 @keyframes dvfy-pulse {
   0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
@@ -82,7 +93,7 @@ dvfy-loader[size="lg"] .dvfy-loader__dot { width: 0.75rem; height: 0.75rem; }
  *
  * @element dvfy-loader
  *
- * @attr {string} size - Size: sm | md | lg (default: "md")
+ * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {string} variant - Animation style: spinner | dots (default: "spinner")
  * @attr {string} icon - URL to brand icon shown at center of spinner
  *

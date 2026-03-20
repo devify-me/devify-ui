@@ -58,15 +58,23 @@ dvfy-avatar .dvfy-avatar__initials {
   background: var(--dvfy-neutral-400);
 }
 
-/* Sizes */
+/* Size: xs */
+dvfy-avatar[size="xs"] .dvfy-avatar__img,
+dvfy-avatar[size="xs"] .dvfy-avatar__initials { width: 1.5rem; height: 1.5rem; font-size: var(--dvfy-text-xs); }
+/* Size: sm */
 dvfy-avatar[size="sm"] .dvfy-avatar__img,
 dvfy-avatar[size="sm"] .dvfy-avatar__initials { width: 2rem; height: 2rem; font-size: var(--dvfy-text-xs); }
+/* Size: md (default) */
 dvfy-avatar:not([size]) .dvfy-avatar__img,
 dvfy-avatar:not([size]) .dvfy-avatar__initials,
 dvfy-avatar[size="md"] .dvfy-avatar__img,
 dvfy-avatar[size="md"] .dvfy-avatar__initials { width: 2.5rem; height: 2.5rem; font-size: var(--dvfy-text-sm); }
+/* Size: lg */
 dvfy-avatar[size="lg"] .dvfy-avatar__img,
 dvfy-avatar[size="lg"] .dvfy-avatar__initials { width: 3.5rem; height: 3.5rem; font-size: var(--dvfy-text-lg); }
+/* Size: xl */
+dvfy-avatar[size="xl"] .dvfy-avatar__img,
+dvfy-avatar[size="xl"] .dvfy-avatar__initials { width: 4.5rem; height: 4.5rem; font-size: var(--dvfy-text-xl); }
 
 /* Status dot */
 dvfy-avatar .dvfy-avatar__status {
@@ -76,9 +84,11 @@ dvfy-avatar .dvfy-avatar__status {
   width: 0.625rem;
   height: 0.625rem;
   border-radius: var(--dvfy-radius-round);
-  border: 2px solid var(--dvfy-surface-primary);
+  border: 2px solid var(--dvfy-surface-raised);
 }
+dvfy-avatar[size="xs"] .dvfy-avatar__status { width: 0.5rem; height: 0.5rem; border-width: 1.5px; }
 dvfy-avatar[size="lg"] .dvfy-avatar__status { width: 0.75rem; height: 0.75rem; }
+dvfy-avatar[size="xl"] .dvfy-avatar__status { width: 0.875rem; height: 0.875rem; }
 
 dvfy-avatar .dvfy-avatar__status[data-status="online"] { background: var(--dvfy-success-text); }
 dvfy-avatar .dvfy-avatar__status[data-status="offline"] { background: var(--dvfy-neutral-400); }
@@ -124,7 +134,7 @@ dvfy-avatar-group .dvfy-avatar-group__overflow {
  *
  * @attr {string} src - Image URL
  * @attr {string} name - User name (used for initials fallback and alt text)
- * @attr {string} size - Size: sm | md | lg (default: "md")
+ * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {string} status - Status indicator dot: online | offline | busy
  * @attr {boolean} interactive - Add hover effect and dispatch click event
  *

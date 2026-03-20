@@ -23,7 +23,7 @@ dvfy-sidebar {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: var(--dvfy-surface-secondary);
+  background: var(--dvfy-surface-muted);
   border-right: var(--dvfy-border-1) solid var(--dvfy-border-default);
   font-family: var(--dvfy-font-sans);
   transition: width var(--dvfy-duration-normal) var(--dvfy-ease-out);

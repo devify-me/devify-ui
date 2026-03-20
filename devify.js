@@ -12,6 +12,7 @@ import './components/dvfy-button.js';
 import './components/dvfy-input.js';
 import './components/dvfy-badge.js';
 import './components/dvfy-switch.js';
+import './components/dvfy-slider.js';
 import './components/dvfy-checkbox.js';
 import './components/dvfy-radio.js';
 import './components/dvfy-textarea.js';
