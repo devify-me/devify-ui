@@ -330,10 +330,14 @@ class DvfyComponentPlayground extends HTMLElement {
     this.#attrValues = {};
     this.#contentValue = tag.name in DEFAULT_CONTENT ? DEFAULT_CONTENT[tag.name] : 'Sample content';
 
-    // Init all attributes to unset — only user-changed values appear in output
+    // Init all attributes — booleans respect (default: true) from description
     if (tag.attributes) {
       for (const attr of tag.attributes) {
-        this.#attrValues[attr.name] = attr.type === 'boolean' ? false : '';
+        if (attr.type === 'boolean') {
+          this.#attrValues[attr.name] = parseDefault(attr.description) === 'true';
+        } else {
+          this.#attrValues[attr.name] = '';
+        }
       }
     }
 
@@ -427,6 +431,7 @@ class DvfyComponentPlayground extends HTMLElement {
         const sw = document.createElement('dvfy-switch');
         sw.setAttribute('label', attr.name);
         if (attr.description) sw.setAttribute('description', attr.description);
+        if (this.#attrValues[attr.name]) sw.setAttribute('checked', '');
         sw.addEventListener('change', () => {
           this.#attrValues[attr.name] = sw.hasAttribute('checked');
           this.#updatePreview();
