@@ -523,7 +523,7 @@
         },
         {
           "name": "position",
-          "description": "Edge position: left | right | bottom (default: \"right\")",
+          "description": "Edge position: top | right | bottom | left (default: \"right\")",
           "type": "string"
         },
         {

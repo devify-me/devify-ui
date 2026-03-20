@@ -769,6 +769,10 @@ class DvfyComponentPlayground extends HTMLElement {
     if (pos === 'left') {
       area.appendChild(drawer);
       area.appendChild(main);
+    } else if (pos === 'top') {
+      area.style.flexDirection = 'column';
+      area.appendChild(drawer);
+      area.appendChild(main);
     } else if (pos === 'bottom') {
       area.style.flexDirection = 'column';
       area.appendChild(main);
