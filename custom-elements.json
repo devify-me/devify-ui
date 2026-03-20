@@ -584,49 +584,76 @@
     {
       "name": "dvfy-hamburger",
       "path": "./components/dvfy-hamburger.js",
-      "description": "Responsive header with 3-stage mobile hamburger menu (closed, expanded, icons).\nUses CSS Container Queries to respond to parent width, not viewport.",
+      "description": "Animated hamburger icon button — a Tier 1 primitive for menu toggles.\n\nSix animation variants transform three bars into different shapes on toggle.\nComposable into nav, header, and sidebar components.",
       "attributes": [
         {
-          "name": "brand",
-          "description": "Brand name text",
+          "name": "open",
+          "description": "Toggle state (reflected)",
+          "type": "boolean"
+        },
+        {
+          "name": "label",
+          "description": "Visible text label",
           "type": "string"
         },
         {
-          "name": "tagline",
-          "description": "Smaller text below brand name",
+          "name": "label-position",
+          "description": "top | right | bottom | left",
           "type": "string"
         },
         {
-          "name": "logo",
-          "description": "Logo image URL (replaces brand text)",
+          "name": "animation",
+          "description": "x | x-rotate-r | x-rotate-l | chevron-left | chevron-right | minus",
           "type": "string"
         },
         {
-          "name": "breakpoint",
-          "description": "Pixel width below which hamburger activates (default: 768)",
-          "type": "number"
+          "name": "size",
+          "description": "xs | sm | md | lg | xl",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "description": "Disables the button",
+          "type": "boolean"
+        },
+        {
+          "name": "bordered",
+          "description": "Adds a rounded border",
+          "type": "boolean"
+        },
+        {
+          "name": "float",
+          "description": "top-left | top-right | mid-top | mid-right | mid-bottom | mid-left | center | bottom-left | bottom-right",
+          "type": "string"
         }
       ],
-      "slots": [
+      "properties": [
         {
-          "name": "",
-          "description": "Menu items as <a data-icon=\"...\"> and utility items as <a data-utility data-icon=\"...\">"
+          "name": "open",
+          "attribute": "open",
+          "description": "Toggle state (reflected)",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "toggle"
         }
       ],
       "cssProperties": [
         {
-          "name": "--dvfy-primary-bg",
-          "description": "Header bar background",
+          "name": "--dvfy-hamburger-color",
+          "description": "Top and bottom bar + border color (default: var(--dvfy-primary-bg))",
           "type": "color"
         },
         {
-          "name": "--dvfy-primary-text",
-          "description": "Header bar text color",
+          "name": "--dvfy-hamburger-accent",
+          "description": "Middle bar color (default: var(--dvfy-accent-bg))",
           "type": "color"
         },
         {
-          "name": "--dvfy-surface-raised",
-          "description": "Mobile menu background",
+          "name": "--dvfy-hamburger-bg",
+          "description": "Button background (default: transparent)",
           "type": "color"
         }
       ]

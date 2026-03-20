@@ -1,592 +1,322 @@
-/**
- * <dvfy-hamburger> — Responsive header with 3-stage mobile hamburger menu
- *
- * States (below breakpoint):
- *   closed   — hamburger icon (☰), menu hidden
- *   expanded — arrow icon (▶), full dropdown menu with icons + labels
- *   icons    — X icon (✕), compact icon-only strip
- *
- * Transitions: closed → expanded → icons → closed
- *
- * Above breakpoint: renders as a standard horizontal nav bar.
- *
- * Attributes:
- *   brand:      brand name text
- *   tagline:    smaller text below brand
- *   logo:       image URL for logo (replaces brand text)
- *   breakpoint: pixel width below which hamburger activates (default: 768)
- *
- * Children:
- *   Menu items:    <a data-icon="🏠" href="/home">Home</a>
- *   Utility items: <a href="/cart" data-utility data-icon="🛒"></a>
- *
- * Usage:
- *   <dvfy-hamburger brand="Devify" tagline="build something" logo="/logo.svg">
- *     <a href="/cart" data-utility data-icon="🛒"></a>
- *     <a href="/notifications" data-utility data-icon="🔔"></a>
- *     <a href="/home" data-icon="🏠">Home</a>
- *     <a href="/about" data-icon="🧑">About</a>
- *     <a href="/projects" data-icon="💼">Projects</a>
- *   </dvfy-hamburger>
- */
-
-const HAMBURGER_STYLES_FN = (bp) => `
+const HAMBURGER_STYLES = `
+/* ── Host ── */
 dvfy-hamburger {
-  display: block;
-  font-family: var(--dvfy-font-sans);
-  position: relative;
-  container-type: inline-size;
-  container-name: dvfy-hamburger;
-}
-
-/* ── Header bar (always visible, ABOVE overlay so trigger stays clickable) ── */
-.dvfy-hb__bar {
-  display: flex;
-  align-items: center;
-  padding: var(--dvfy-space-3) var(--dvfy-space-4);
-  background: var(--dvfy-primary-bg);
-  color: var(--dvfy-primary-text);
-  position: relative;
-  z-index: calc(var(--dvfy-z-sticky, 100) + 3);
-  gap: var(--dvfy-space-3);
-}
-
-/* ── Brand ── */
-.dvfy-hb__brand-group {
-  display: flex;
-  align-items: center;
-  gap: var(--dvfy-space-2);
-  flex-shrink: 0;
-  text-decoration: none;
-  color: inherit;
-}
-.dvfy-hb__logo {
-  height: 2rem;
-  width: auto;
-  display: block;
-}
-.dvfy-hb__brand-text {
-  display: flex;
+  display: inline-flex;
   flex-direction: column;
-}
-.dvfy-hb__brand {
-  font-size: var(--dvfy-text-lg);
-  font-weight: var(--dvfy-weight-bold);
-  line-height: 1.2;
-}
-.dvfy-hb__tagline {
-  font-size: var(--dvfy-text-xs);
-  opacity: 0.8;
-  line-height: 1.2;
+  align-items: center;
+  gap: var(--dvfy-space-1-5);
+  --_btn: 2.5rem;
+  --_w: 1.375rem;
+  --_h: 2.5px;
+  --_gap: 5px;
+  --_r: 1.5px;
 }
 
-/* ── Utility zone (center) ── */
-.dvfy-hb__utility {
-  display: flex;
-  align-items: center;
-  gap: var(--dvfy-space-2);
-}
-.dvfy-hb__utility-item {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
-  color: inherit;
-  text-decoration: none;
-  font-size: var(--dvfy-text-xl);
-  border-radius: var(--dvfy-radius-md);
-  transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
-}
-.dvfy-hb__utility-item:hover {
-  background: rgba(255,255,255,0.15);
-}
+/* ── Sizes ── */
+dvfy-hamburger[size="xs"] { --_btn: 1.5rem; --_w: 0.875rem; --_h: 2px; --_gap: 3px; --_r: 1px; }
+dvfy-hamburger[size="sm"] { --_btn: 2rem; --_w: 1.125rem; --_h: 2px; --_gap: 4px; --_r: 1px; }
+dvfy-hamburger[size="lg"] { --_btn: 3rem; --_w: 1.75rem; --_h: 3px; --_gap: 6px; --_r: 2px; }
+dvfy-hamburger[size="xl"] { --_btn: 3.5rem; --_w: 2.125rem; --_h: 3.5px; --_gap: 7px; --_r: 2px; }
 
-/* ── Trigger button (animated 3-line icon) ── */
-.dvfy-hb__trigger {
+/* ── Button reset ── */
+.dvfy-hb__btn {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 5px;
-  width: 2.5rem;
-  height: 2.5rem;
-  background: none;
+  gap: var(--_gap);
+  width: var(--_btn);
+  height: var(--_btn);
+  padding: 0;
   border: none;
+  background: var(--dvfy-hamburger-bg, transparent);
   cursor: pointer;
   border-radius: var(--dvfy-radius-md);
-  transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
-  padding: 0;
-  flex-shrink: 0;
+  transition: transform var(--dvfy-duration-normal) var(--dvfy-ease-out);
 }
-.dvfy-hb__trigger:hover { background: rgba(255,255,255,0.15); }
-.dvfy-hb__trigger:focus-visible {
-  outline: var(--dvfy-ring-width, 2px) solid var(--dvfy-ring-color, currentColor);
+.dvfy-hb__btn:focus-visible {
+  outline: var(--dvfy-ring-width, 3px) solid var(--dvfy-ring-color, currentColor);
   outline-offset: var(--dvfy-ring-offset, 2px);
 }
 
-/* Three lines */
-.dvfy-hb__line {
+/* ── Bars ── */
+.dvfy-hb__bar {
   display: block;
-  width: 1.25rem;
-  height: 2px;
-  background: var(--dvfy-primary-text);
-  border-radius: 1px;
+  width: var(--_w);
+  height: var(--_h);
+  background: var(--dvfy-hamburger-color, var(--dvfy-primary-bg));
+  border-radius: var(--_r);
   transition: transform var(--dvfy-duration-normal) var(--dvfy-ease-out),
               opacity var(--dvfy-duration-normal) var(--dvfy-ease-out);
   transform-origin: center center;
 }
-
-/* ☰ → > (expanded): top fades, mid rotates to \, bot rotates to / forming > pointing RIGHT */
-[data-state="expanded"] .dvfy-hb__line--top {
-  opacity: 0;
-  transform: translateX(-4px);
-}
-[data-state="expanded"] .dvfy-hb__line--mid {
-  transform: rotate(40deg) translateX(-2px);
-}
-[data-state="expanded"] .dvfy-hb__line--bot {
-  transform: rotate(-40deg) translateX(-2px);
+.dvfy-hb__bar--mid {
+  background: var(--dvfy-hamburger-accent, var(--dvfy-accent-bg));
 }
 
-/* > → ✕ (icons): lines continue rotation to form X */
-[data-state="icons"] .dvfy-hb__line--top {
-  opacity: 0;
-  transform: translateX(-4px);
-}
-[data-state="icons"] .dvfy-hb__line--mid {
-  transform: rotate(45deg) translate(0, 3.5px);
-}
-[data-state="icons"] .dvfy-hb__line--bot {
-  transform: rotate(-45deg) translate(0, -3.5px);
-}
-
-/* ── Overlay ── */
-.dvfy-hb__overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.4);
-  z-index: calc(var(--dvfy-z-sticky, 100) + 1);
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity var(--dvfy-duration-normal) var(--dvfy-ease-out);
-}
-.dvfy-hb__overlay--active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-/* ── Menu panel ── */
-/* Fixed width, always fully laid out. Position controlled ONLY by translateX.
-   closed:   translateX(100%)                    — fully off-screen
-   expanded: translateX(0)                       — fully visible (icons + labels)
-   icons:    translateX(calc(100% - 4rem))       — only icon column peeks out
-*/
-.dvfy-hb__menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
-  width: min(80vw, 18rem);
-  max-height: calc(100vh - 4rem);
-  background: var(--dvfy-surface-raised);
-  border-bottom-left-radius: var(--dvfy-radius-2xl);
-  box-shadow: var(--dvfy-shadow-xl);
-  z-index: calc(var(--dvfy-z-sticky, 100) + 2);
-  display: flex;
-  flex-direction: column;
-  padding: var(--dvfy-space-2) 0;
-  overflow-y: auto;
-
-  transform: translateX(100%);
-  pointer-events: none;
-  transition: transform var(--dvfy-duration-normal) var(--dvfy-ease-out);
-}
-
-/* Expanded: fully visible */
-.dvfy-hb__menu[data-state="expanded"] {
-  transform: translateX(0);
-  pointer-events: auto;
-}
-
-/* Icons: slid right so only ~4rem of icon column shows */
-.dvfy-hb__menu[data-state="icons"] {
-  transform: translateX(calc(100% - 4rem));
-  pointer-events: auto;
-}
-
-/* Closed: fully off-screen (default transform already handles this) */
-
-/* ── Menu items ── */
-.dvfy-hb__item {
-  display: flex;
-  align-items: center;
-  gap: var(--dvfy-space-3);
-  padding: var(--dvfy-space-3) var(--dvfy-space-5);
-  color: var(--dvfy-text-primary);
-  text-decoration: none;
-  font-size: var(--dvfy-text-base);
-  font-weight: var(--dvfy-weight-medium);
-  transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
-  white-space: nowrap;
-}
-.dvfy-hb__item:hover { background: var(--dvfy-hover-bg); }
-
-.dvfy-hb__icon {
-  font-size: var(--dvfy-text-xl);
-  width: 2rem;
-  text-align: center;
-  flex-shrink: 0;
-}
+/* ── Label ── */
 .dvfy-hb__label {
-  overflow: hidden;
+  font-size: var(--dvfy-text-sm);
+  font-weight: var(--dvfy-weight-medium);
+  color: var(--dvfy-text-primary);
+}
+dvfy-hamburger[size="xs"] .dvfy-hb__label { font-size: var(--dvfy-text-xs); }
+dvfy-hamburger[size="sm"] .dvfy-hb__label { font-size: var(--dvfy-text-xs); }
+dvfy-hamburger[size="xl"] .dvfy-hb__label { font-size: var(--dvfy-text-base); }
+
+/* ── Label position ── */
+dvfy-hamburger[label-position="bottom"] .dvfy-hb__label { order: 1; }
+dvfy-hamburger[label-position="left"] { flex-direction: row; align-items: center; }
+dvfy-hamburger[label-position="right"] { flex-direction: row; align-items: center; }
+dvfy-hamburger[label-position="right"] .dvfy-hb__label { order: 1; }
+
+/* ── Bordered ── */
+dvfy-hamburger[bordered] .dvfy-hb__btn {
+  border: 2px solid var(--dvfy-hamburger-color, var(--dvfy-primary-bg));
+  border-radius: var(--dvfy-radius-lg);
 }
 
-/* ── Separator between items ── */
-.dvfy-hb__separator {
-  height: 1px;
-  background: var(--dvfy-border-muted);
-  margin: var(--dvfy-space-1) var(--dvfy-space-3);
+/* ── Disabled ── */
+dvfy-hamburger[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
-/* ── Desktop: horizontal nav bar (container query) ── */
-@container dvfy-hamburger (min-width: ${bp + 1}px) {
-  .dvfy-hb__trigger { display: none; }
-  .dvfy-hb__overlay { display: none !important; }
-  .dvfy-hb__menu,
-  .dvfy-hb__menu[data-state="expanded"],
-  .dvfy-hb__menu[data-state="icons"] {
-    position: static;
-    opacity: 1;
-    transform: none !important;
-    pointer-events: auto;
-    flex-direction: row;
-    align-items: center;
-    background: transparent;
-    box-shadow: none;
-    border-radius: 0;
-    padding: 0;
-    max-height: none;
-    max-width: none;
-    min-width: 0;
-    width: auto;
-    overflow: visible;
-    flex: 1;
-    justify-content: center;
-    gap: var(--dvfy-space-1);
-  }
-  .dvfy-hb__menu .dvfy-hb__item {
-    color: var(--dvfy-primary-text);
-    padding: var(--dvfy-space-2) var(--dvfy-space-3);
-    border-radius: var(--dvfy-radius-md);
-    font-size: var(--dvfy-text-sm);
-    gap: var(--dvfy-space-1-5);
-  }
-  .dvfy-hb__menu .dvfy-hb__item:hover {
-    background: rgba(255,255,255,0.15);
-  }
-  .dvfy-hb__menu .dvfy-hb__icon {
-    font-size: var(--dvfy-text-base);
-    width: auto;
-  }
-  .dvfy-hb__menu .dvfy-hb__label {
-    max-width: none;
-    opacity: 1;
-  }
-  .dvfy-hb__separator { display: none; }
-  .dvfy-hb__bar {
-    gap: var(--dvfy-space-4);
-  }
-  .dvfy-hb__utility {
-    order: 3;
-  }
+/* ── Float ── */
+dvfy-hamburger[float] {
+  position: absolute;
+  z-index: var(--dvfy-z-sticky);
+}
+dvfy-hamburger[float] .dvfy-hb__btn {
+  background: var(--dvfy-hamburger-bg, var(--dvfy-surface-raised));
+  border-radius: var(--dvfy-radius-round);
+  box-shadow: var(--dvfy-shadow-lg);
+}
+dvfy-hamburger[float="top-left"]     { top: var(--dvfy-space-4); left: var(--dvfy-space-4); }
+dvfy-hamburger[float="top-right"]    { top: var(--dvfy-space-4); right: var(--dvfy-space-4); }
+dvfy-hamburger[float="mid-top"]      { top: var(--dvfy-space-4); left: 50%; translate: -50% 0; }
+dvfy-hamburger[float="mid-right"]    { top: 50%; right: var(--dvfy-space-4); translate: 0 -50%; }
+dvfy-hamburger[float="mid-bottom"]   { bottom: var(--dvfy-space-4); left: 50%; translate: -50% 0; }
+dvfy-hamburger[float="mid-left"]     { top: 50%; left: var(--dvfy-space-4); translate: 0 -50%; }
+dvfy-hamburger[float="center"]       { top: 50%; left: 50%; translate: -50% -50%; }
+dvfy-hamburger[float="bottom-left"]  { bottom: var(--dvfy-space-4); left: var(--dvfy-space-4); }
+dvfy-hamburger[float="bottom-right"] { bottom: var(--dvfy-space-4); right: var(--dvfy-space-4); }
+
+/* ════════════════════════════════════════════════
+   Animation variants — [open] state transforms
+   ════════════════════════════════════════════════ */
+
+/* ── 1. x (default) ── */
+dvfy-hamburger:not([animation])[open] .dvfy-hb__bar--top,
+dvfy-hamburger[animation="x"][open] .dvfy-hb__bar--top {
+  transform: translateY(calc(var(--_gap) + var(--_h))) rotate(45deg);
+}
+dvfy-hamburger:not([animation])[open] .dvfy-hb__bar--mid,
+dvfy-hamburger[animation="x"][open] .dvfy-hb__bar--mid {
+  opacity: 0;
+  transform: scaleX(0);
+}
+dvfy-hamburger:not([animation])[open] .dvfy-hb__bar--bot,
+dvfy-hamburger[animation="x"][open] .dvfy-hb__bar--bot {
+  transform: translateY(calc(-1 * (var(--_gap) + var(--_h)))) rotate(-45deg);
 }
 
-/* ── Mobile: position relative to component (container query) ── */
-@container dvfy-hamburger (max-width: ${bp}px) {
-  .dvfy-hb__bar {
-    justify-content: space-between;
-  }
-  .dvfy-hb__utility {
-    flex: 1;
-    justify-content: center;
-  }
+/* ── 2. x-rotate-r (X with clockwise rotation) ── */
+dvfy-hamburger[animation="x-rotate-r"][open] .dvfy-hb__btn {
+  transform: rotate(180deg);
+}
+dvfy-hamburger[animation="x-rotate-r"][open] .dvfy-hb__bar--top {
+  transform: translateY(calc(var(--_gap) + var(--_h))) rotate(45deg);
+}
+dvfy-hamburger[animation="x-rotate-r"][open] .dvfy-hb__bar--mid {
+  opacity: 0;
+  transform: scaleX(0);
+}
+dvfy-hamburger[animation="x-rotate-r"][open] .dvfy-hb__bar--bot {
+  transform: translateY(calc(-1 * (var(--_gap) + var(--_h)))) rotate(-45deg);
+}
+
+/* ── 3. x-rotate-l (X with counter-clockwise rotation) ── */
+dvfy-hamburger[animation="x-rotate-l"][open] .dvfy-hb__btn {
+  transform: rotate(-180deg);
+}
+dvfy-hamburger[animation="x-rotate-l"][open] .dvfy-hb__bar--top {
+  transform: translateY(calc(var(--_gap) + var(--_h))) rotate(45deg);
+}
+dvfy-hamburger[animation="x-rotate-l"][open] .dvfy-hb__bar--mid {
+  opacity: 0;
+  transform: scaleX(0);
+}
+dvfy-hamburger[animation="x-rotate-l"][open] .dvfy-hb__bar--bot {
+  transform: translateY(calc(-1 * (var(--_gap) + var(--_h)))) rotate(-45deg);
+}
+
+/* ── 4. chevron-left (<) ── */
+dvfy-hamburger[animation="chevron-left"][open] .dvfy-hb__bar--top {
+  transform: translateY(calc(var(--_gap) + var(--_h))) rotate(-45deg) scaleX(0.6);
+  transform-origin: left center;
+}
+dvfy-hamburger[animation="chevron-left"][open] .dvfy-hb__bar--mid {
+  opacity: 0;
+  transform: scaleX(0);
+}
+dvfy-hamburger[animation="chevron-left"][open] .dvfy-hb__bar--bot {
+  transform: translateY(calc(-1 * (var(--_gap) + var(--_h)))) rotate(45deg) scaleX(0.6);
+  transform-origin: left center;
+}
+
+/* ── 5. chevron-right (>) ── */
+dvfy-hamburger[animation="chevron-right"][open] .dvfy-hb__bar--top {
+  transform: translateY(calc(var(--_gap) + var(--_h))) rotate(45deg) scaleX(0.6);
+  transform-origin: right center;
+}
+dvfy-hamburger[animation="chevron-right"][open] .dvfy-hb__bar--mid {
+  opacity: 0;
+  transform: scaleX(0);
+}
+dvfy-hamburger[animation="chevron-right"][open] .dvfy-hb__bar--bot {
+  transform: translateY(calc(-1 * (var(--_gap) + var(--_h)))) rotate(-45deg) scaleX(0.6);
+  transform-origin: right center;
+}
+
+/* ── 6. minus ── */
+dvfy-hamburger[animation="minus"][open] .dvfy-hb__bar--top {
+  opacity: 0;
+  transform: scaleX(0);
+}
+dvfy-hamburger[animation="minus"][open] .dvfy-hb__bar--bot {
+  opacity: 0;
+  transform: scaleX(0);
 }
 `;
 
 /**
- * Responsive header with 3-stage mobile hamburger menu (closed, expanded, icons).
- * Uses CSS Container Queries to respond to parent width, not viewport.
+ * Animated hamburger icon button — a Tier 1 primitive for menu toggles.
+ *
+ * Six animation variants transform three bars into different shapes on toggle.
+ * Composable into nav, header, and sidebar components.
  *
  * @element dvfy-hamburger
  *
- * @attr {string} brand - Brand name text
- * @attr {string} tagline - Smaller text below brand name
- * @attr {string} logo - Logo image URL (replaces brand text)
- * @attr {number} breakpoint - Pixel width below which hamburger activates (default: 768)
+ * @attr {string} label - Visible text label
+ * @attr {string} label-position - top | right | bottom | left
+ * @attr {string} animation - x | x-rotate-r | x-rotate-l | chevron-left | chevron-right | minus
+ * @attr {string} size - xs | sm | md | lg | xl
+ * @attr {boolean} open - Toggle state (reflected)
+ * @attr {boolean} disabled - Disables the button
+ * @attr {boolean} bordered - Adds a rounded border
+ * @attr {string} float - top-left | top-right | mid-top | mid-right | mid-bottom | mid-left | center | bottom-left | bottom-right
  *
- * @slot - Menu items as <a data-icon="..."> and utility items as <a data-utility data-icon="...">
+ * @event {CustomEvent} toggle - Fires when toggled, detail: { open: boolean }
  *
- * @cssprop {color} --dvfy-primary-bg - Header bar background
- * @cssprop {color} --dvfy-primary-text - Header bar text color
- * @cssprop {color} --dvfy-surface-raised - Mobile menu background
+ * @cssprop {color} --dvfy-hamburger-color - Top and bottom bar + border color (default: var(--dvfy-primary-bg))
+ * @cssprop {color} --dvfy-hamburger-accent - Middle bar color (default: var(--dvfy-accent-bg))
+ * @cssprop {color} --dvfy-hamburger-bg - Button background (default: transparent)
+ *
+ * @example
+ * <dvfy-hamburger animation="x" size="md" bordered></dvfy-hamburger>
  */
 class DvfyHamburger extends HTMLElement {
   static #styled = false;
-  static #styleBreakpoint = 0;
 
-  /** @type {'closed'|'expanded'|'icons'} */
-  #state = 'closed';
-  /** @type {HTMLElement} */
-  #bar = null;
+  static get observedAttributes() { return ['label', 'label-position', 'animation', 'size', 'open', 'disabled', 'bordered', 'float']; }
+
   /** @type {HTMLButtonElement} */
-  #trigger = null;
-  /** @type {HTMLElement} */
-  #overlay = null;
-  /** @type {HTMLElement} */
-  #menu = null;
-  /** @type {HTMLElement[]} */
-  #menuItems = [];
-  /** @type {Function} */
-  #boundKeydown = null;
-
-  static get observedAttributes() { return ['brand', 'tagline', 'logo', 'breakpoint']; }
+  #btn = null;
+  #clickHandler = null;
+  #keyHandler = null;
 
   connectedCallback() {
-    const bp = parseInt(this.getAttribute('breakpoint') || '768', 10);
-    if (!DvfyHamburger.#styled || DvfyHamburger.#styleBreakpoint !== bp) {
-      const old = document.getElementById('dvfy-hb-style');
-      if (old) old.remove();
+    if (!DvfyHamburger.#styled) {
       const s = document.createElement('style');
       s.id = 'dvfy-hb-style';
-      s.textContent = HAMBURGER_STYLES_FN(bp);
+      s.textContent = HAMBURGER_STYLES;
       document.head.appendChild(s);
       DvfyHamburger.#styled = true;
-      DvfyHamburger.#styleBreakpoint = bp;
     }
     this.#build();
+
+    this.#clickHandler = () => this.#toggle();
+    this.#keyHandler = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        this.#toggle();
+      }
+    };
+
+    this.#btn.addEventListener('click', this.#clickHandler);
+    this.#btn.addEventListener('keydown', this.#keyHandler);
   }
 
   disconnectedCallback() {
-    if (this.#overlay && this.#overlay.parentNode) {
-      this.#overlay.parentNode.removeChild(this.#overlay);
-    }
-    if (this.#boundKeydown) {
-      document.removeEventListener('keydown', this.#boundKeydown);
+    if (this.#btn) {
+      this.#btn.removeEventListener('click', this.#clickHandler);
+      this.#btn.removeEventListener('keydown', this.#keyHandler);
     }
   }
 
   attributeChangedCallback(name) {
-    if (!this.isConnected) return;
-    if (name === 'brand') {
-      const el = this.querySelector('.dvfy-hb__brand');
-      if (el) el.textContent = this.getAttribute('brand') || '';
-    } else if (name === 'tagline') {
-      const el = this.querySelector('.dvfy-hb__tagline');
-      if (el) el.textContent = this.getAttribute('tagline') || '';
-    } else if (name === 'logo') {
-      const el = this.querySelector('.dvfy-hb__logo');
-      if (el) el.src = this.getAttribute('logo') || '';
+    if (!this.#btn) return;
+    if (name === 'open') {
+      this.#btn.setAttribute('aria-expanded', String(this.open));
+    } else if (name === 'disabled') {
+      this.#btn.setAttribute('aria-disabled', String(this.hasAttribute('disabled')));
+    } else if (name === 'label') {
+      const labelText = this.getAttribute('label');
+      let lbl = this.querySelector('.dvfy-hb__label');
+      if (labelText) {
+        if (!lbl) {
+          lbl = document.createElement('span');
+          lbl.className = 'dvfy-hb__label';
+          this.insertBefore(lbl, this.#btn);
+        }
+        lbl.textContent = labelText;
+      } else if (lbl) {
+        lbl.remove();
+      }
+      this.#btn.setAttribute('aria-label', labelText || 'Toggle menu');
     }
   }
+
+  get open() { return this.hasAttribute('open'); }
+  set open(v) { v ? this.setAttribute('open', '') : this.removeAttribute('open'); }
 
   #build() {
-    // Capture children before modifying DOM
-    const allChildren = Array.from(this.children);
-    const menuLinks = [];
-    const utilityItems = [];
-
-    for (const child of allChildren) {
-      if (child.hasAttribute && child.hasAttribute('data-utility')) {
-        utilityItems.push(child);
-      } else if (child.tagName === 'A' && child.hasAttribute('data-icon')) {
-        menuLinks.push(child);
-      }
+    const labelText = this.getAttribute('label');
+    if (labelText) {
+      const lbl = document.createElement('span');
+      lbl.className = 'dvfy-hb__label';
+      lbl.textContent = labelText;
+      this.appendChild(lbl);
     }
 
-    // Clear the component
-    while (this.firstChild) this.removeChild(this.firstChild);
-
-    // ── Header bar ──
-    this.#bar = document.createElement('div');
-    this.#bar.className = 'dvfy-hb__bar';
-
-    // Brand group
-    const brandGroup = document.createElement('div');
-    brandGroup.className = 'dvfy-hb__brand-group';
-
-    const logoUrl = this.getAttribute('logo');
-    if (logoUrl) {
-      const logoImg = document.createElement('img');
-      logoImg.className = 'dvfy-hb__logo';
-      logoImg.src = logoUrl;
-      logoImg.alt = this.getAttribute('brand') || 'Logo';
-      brandGroup.appendChild(logoImg);
+    this.#btn = document.createElement('button');
+    this.#btn.className = 'dvfy-hb__btn';
+    this.#btn.setAttribute('type', 'button');
+    this.#btn.setAttribute('aria-label', labelText || 'Toggle menu');
+    this.#btn.setAttribute('aria-expanded', String(this.open));
+    if (this.hasAttribute('disabled')) {
+      this.#btn.setAttribute('aria-disabled', 'true');
     }
 
-    const brandText = this.getAttribute('brand');
-    const taglineText = this.getAttribute('tagline');
-    if (brandText || taglineText) {
-      const textGroup = document.createElement('div');
-      textGroup.className = 'dvfy-hb__brand-text';
+    const top = document.createElement('span');
+    top.className = 'dvfy-hb__bar dvfy-hb__bar--top';
+    const mid = document.createElement('span');
+    mid.className = 'dvfy-hb__bar dvfy-hb__bar--mid';
+    const bot = document.createElement('span');
+    bot.className = 'dvfy-hb__bar dvfy-hb__bar--bot';
 
-      if (brandText) {
-        const brandEl = document.createElement('span');
-        brandEl.className = 'dvfy-hb__brand';
-        brandEl.textContent = brandText;
-        textGroup.appendChild(brandEl);
-      }
-
-      if (taglineText) {
-        const tagEl = document.createElement('span');
-        tagEl.className = 'dvfy-hb__tagline';
-        tagEl.textContent = taglineText;
-        textGroup.appendChild(tagEl);
-      }
-
-      brandGroup.appendChild(textGroup);
-    }
-
-    this.#bar.appendChild(brandGroup);
-
-    // Utility zone (center)
-    if (utilityItems.length > 0) {
-      const utilityZone = document.createElement('div');
-      utilityZone.className = 'dvfy-hb__utility';
-
-      for (const item of utilityItems) {
-        const utilEl = document.createElement('a');
-        utilEl.className = 'dvfy-hb__utility-item';
-        utilEl.href = item.getAttribute('href') || '#';
-        // Copy data attributes
-        for (const attr of item.attributes) {
-          if (attr.name.startsWith('data-') && attr.name !== 'data-utility' && attr.name !== 'data-icon') {
-            utilEl.setAttribute(attr.name, attr.value);
-          }
-        }
-        utilEl.textContent = item.getAttribute('data-icon') || '';
-        utilEl.setAttribute('aria-label', item.textContent.trim() || item.getAttribute('data-icon') || '');
-        utilityZone.appendChild(utilEl);
-      }
-
-      this.#bar.appendChild(utilityZone);
-    }
-
-    // Trigger button (3 animated lines)
-    this.#trigger = document.createElement('button');
-    this.#trigger.className = 'dvfy-hb__trigger';
-    this.#trigger.setAttribute('aria-label', 'Open menu');
-    this.#trigger.setAttribute('aria-expanded', 'false');
-
-    const lineTop = document.createElement('span');
-    lineTop.className = 'dvfy-hb__line dvfy-hb__line--top';
-    const lineMid = document.createElement('span');
-    lineMid.className = 'dvfy-hb__line dvfy-hb__line--mid';
-    const lineBot = document.createElement('span');
-    lineBot.className = 'dvfy-hb__line dvfy-hb__line--bot';
-    this.#trigger.appendChild(lineTop);
-    this.#trigger.appendChild(lineMid);
-    this.#trigger.appendChild(lineBot);
-
-    this.#trigger.addEventListener('click', () => this.#cycle());
-    this.#bar.appendChild(this.#trigger);
-
-    // Set initial state
-    this.setAttribute('data-state', 'closed');
-
-    this.appendChild(this.#bar);
-
-    // ── Menu panel (inside component, positioned absolutely) ──
-    this.#menu = document.createElement('nav');
-    this.#menu.className = 'dvfy-hb__menu';
-    this.#menu.setAttribute('role', 'navigation');
-    this.#menuItems = [];
-
-    for (let i = 0; i < menuLinks.length; i++) {
-      const link = menuLinks[i];
-
-      if (i > 0) {
-        const sep = document.createElement('div');
-        sep.className = 'dvfy-hb__separator';
-        this.#menu.appendChild(sep);
-      }
-
-      const item = document.createElement('a');
-      item.className = 'dvfy-hb__item';
-      item.href = link.getAttribute('href') || '#';
-
-      // Copy data attributes
-      for (const attr of link.attributes) {
-        if (attr.name.startsWith('data-') && attr.name !== 'data-icon') {
-          item.setAttribute(attr.name, attr.value);
-        }
-      }
-
-      const iconSpan = document.createElement('span');
-      iconSpan.className = 'dvfy-hb__icon';
-      iconSpan.textContent = link.getAttribute('data-icon') || '';
-      item.appendChild(iconSpan);
-
-      const labelSpan = document.createElement('span');
-      labelSpan.className = 'dvfy-hb__label';
-      labelSpan.textContent = link.textContent.trim();
-      item.appendChild(labelSpan);
-
-      item.addEventListener('click', () => this.#close());
-      this.#menu.appendChild(item);
-      this.#menuItems.push(item);
-    }
-
-    this.appendChild(this.#menu);
-
-    // ── Overlay (appended to body for full-screen coverage) ──
-    this.#overlay = document.createElement('div');
-    this.#overlay.className = 'dvfy-hb__overlay';
-    this.#overlay.addEventListener('click', () => this.#close());
-    document.body.appendChild(this.#overlay);
-
-    // Keyboard: Escape closes
-    this.#boundKeydown = (e) => {
-      if (e.key === 'Escape' && this.#state !== 'closed') {
-        this.#close();
-      }
-    };
-    document.addEventListener('keydown', this.#boundKeydown);
+    this.#btn.append(top, mid, bot);
+    this.appendChild(this.#btn);
   }
 
-  #cycle() {
-    if (this.#state === 'closed') {
-      this.#setState('expanded');
-    } else if (this.#state === 'expanded') {
-      this.#setState('icons');
-    } else {
-      this.#setState('closed');
-    }
-  }
-
-  #close() {
-    this.#setState('closed');
-  }
-
-  #setState(state) {
-    this.#state = state;
-
-    // Animate trigger lines via data-state on component
-    this.setAttribute('data-state', state);
-
-    // Aria
-    const labels = { closed: 'Open menu', expanded: 'Collapse menu', icons: 'Close menu' };
-    this.#trigger.setAttribute('aria-label', labels[state]);
-    this.#trigger.setAttribute('aria-expanded', String(state !== 'closed'));
-
-    // Overlay
-    if (state === 'closed') {
-      this.#overlay.classList.remove('dvfy-hb__overlay--active');
-    } else {
-      this.#overlay.classList.add('dvfy-hb__overlay--active');
-    }
-
-    // Menu: just set data-state. CSS handles all positioning via translateX.
-    this.#menu.setAttribute('data-state', state);
+  #toggle() {
+    if (this.hasAttribute('disabled')) return;
+    this.open = !this.open;
+    this.dispatchEvent(new CustomEvent('toggle', {
+      bubbles: true,
+      detail: { open: this.open }
+    }));
   }
 }
 

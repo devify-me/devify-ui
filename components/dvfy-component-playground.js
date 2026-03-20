@@ -43,6 +43,7 @@ dvfy-component-playground .sc__body {
 
 /* Preview area */
 dvfy-component-playground .sc__preview-area {
+  position: relative;
   min-height: 120px;
   padding: var(--dvfy-space-6);
   background: var(--dvfy-surface-sunken);
@@ -327,7 +328,7 @@ class DvfyComponentPlayground extends HTMLElement {
   #selectComponent(tag) {
     this.#currentTag = tag;
     this.#attrValues = {};
-    this.#contentValue = DEFAULT_CONTENT[tag.name] || 'Sample content';
+    this.#contentValue = tag.name in DEFAULT_CONTENT ? DEFAULT_CONTENT[tag.name] : 'Sample content';
 
     // Init all attributes to unset — only user-changed values appear in output
     if (tag.attributes) {
