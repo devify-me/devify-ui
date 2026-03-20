@@ -41,10 +41,10 @@ dvfy-slider .dvfy-slider__value {
   font-size: var(--dvfy-text-sm);
   font-weight: var(--dvfy-weight-medium);
   color: var(--dvfy-text-secondary);
-  min-width: 2.5em;
   text-align: right;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* ── Track wrapper ─────────────────────────────── */
@@ -382,11 +382,18 @@ class DvfySlider extends HTMLElement {
       trackWrap.appendChild(stepsContainer);
     }
 
-    // Value display element
+    // Value display element — sized to widest possible content
     let valueSpan = null;
     if (showValue) {
       valueSpan = document.createElement('span');
       valueSpan.className = 'dvfy-slider__value';
+      // Determine widest string to lock width
+      const fmt = (v) => String(parseFloat(v.toFixed(10)));
+      const widest = isRange
+        ? `${fmt(min)} \u2013 ${fmt(max)}`
+        : fmt(min).length >= fmt(max).length ? fmt(min) : fmt(max);
+      const chars = widest.length;
+      valueSpan.style.minWidth = `${chars}ch`;
     }
 
     if (isRange) {
