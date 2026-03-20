@@ -19,6 +19,7 @@ dvfy-slider {
   flex-direction: column;
   gap: var(--dvfy-space-1-5);
   font-family: var(--dvfy-font-sans);
+  width: 100%;
   --_track-h: 0.625rem;
   --_thumb-d: 1.375rem;
   --_track-radius: var(--dvfy-radius-sm);
