@@ -29,6 +29,18 @@ dvfy-drawer[position="left"][collapsed] {
   border-right: none;
 }
 
+/* ── Position: top ── */
+dvfy-drawer[position="top"] {
+  width: 100% !important;
+  border-bottom: var(--dvfy-border-1, 1px) solid var(--dvfy-drawer-border, var(--dvfy-border-muted));
+  border-left: none;
+  border-right: none;
+}
+dvfy-drawer[position="top"][collapsed] {
+  max-height: 0 !important;
+  border-bottom: none;
+}
+
 /* ── Position: bottom ── */
 dvfy-drawer[position="bottom"] {
   width: 100% !important;
@@ -122,6 +134,15 @@ dvfy-drawer[position="bottom"][collapsed] {
   border-radius: 0 var(--dvfy-radius-md, 0.375rem) var(--dvfy-radius-md, 0.375rem) 0;
 }
 
+/* Reopen position: top */
+.dvfy-drawer__reopen[data-position="top"] {
+  top: 0;
+  right: var(--dvfy-space-2, 0.5rem);
+  writing-mode: horizontal-tb;
+  border-top: none;
+  border-radius: 0 0 var(--dvfy-radius-md, 0.375rem) var(--dvfy-radius-md, 0.375rem);
+}
+
 /* Reopen position: bottom */
 .dvfy-drawer__reopen[data-position="bottom"] {
   bottom: 0;
@@ -150,7 +171,7 @@ dvfy-drawer[position="bottom"][collapsed] {
  * @element dvfy-drawer
  *
  * @attr {boolean} collapsed - Collapsed state (reflected)
- * @attr {string} position - Edge position: left | right | bottom (default: "right")
+ * @attr {string} position - Edge position: top | right | bottom | left (default: "right")
  * @attr {string} width - CSS width value (default: "clamp(200px, 40%, 320px)")
  * @attr {string} label - Header title and reopen tab text (default: "Panel")
  * @attr {boolean} fixed - Disable collapse toggle and reopen tab (always open)
@@ -226,7 +247,7 @@ class DvfyDrawer extends HTMLElement {
 
   #applyWidth() {
     const pos = this.getAttribute('position') || 'right';
-    if (pos === 'bottom') {
+    if (pos === 'top' || pos === 'bottom') {
       this.style.removeProperty('width');
       const w = this.getAttribute('width');
       if (w) this.style.maxHeight = w;
