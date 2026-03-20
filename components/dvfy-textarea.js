@@ -123,6 +123,7 @@ dvfy-textarea[label-position="right"] .dvfy-textarea__footer { width: 100%; orde
  */
 class DvfyTextarea extends HTMLElement {
   static #styled = false;
+  #id = null;
 
   connectedCallback() {
     if (!DvfyTextarea.#styled) {
@@ -131,84 +132,156 @@ class DvfyTextarea extends HTMLElement {
       document.head.appendChild(s);
       DvfyTextarea.#styled = true;
     }
-    this.#render();
+    this.#id = this.getAttribute('name') || `dvfy-ta-${Math.random().toString(36).slice(2, 8)}`;
+    this.#build();
   }
 
   static get observedAttributes() {
     return ['label', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'rows', 'maxlength', 'label-position'];
   }
 
-  attributeChangedCallback() {
-    if (this.isConnected) this.#render();
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (!this.isConnected) return;
+    const ta = this.querySelector('.dvfy-textarea__field');
+    if (!ta) return;
+
+    // maxlength changes footer structure — rebuild with focus preservation
+    if (name === 'maxlength') {
+      this.#rebuildPreservingFocus();
+      return;
+    }
+
+    switch (name) {
+      case 'label':
+      case 'required':
+        this.#patchLabel();
+        if (name === 'required') ta.required = this.hasAttribute('required');
+        break;
+      case 'name':
+        ta.name = newValue || '';
+        break;
+      case 'value':
+        if (document.activeElement !== ta) {
+          ta.value = newValue || '';
+          this.#autoResize(ta);
+        }
+        break;
+      case 'placeholder':
+        ta.placeholder = newValue || '';
+        break;
+      case 'disabled':
+        ta.disabled = this.hasAttribute('disabled');
+        break;
+      case 'rows':
+        ta.rows = parseInt(newValue || '3', 10);
+        this.#autoResize(ta);
+        break;
+      case 'error':
+      case 'help':
+        this.#patchFooter(ta);
+        break;
+      case 'label-position':
+        break; // CSS-only
+    }
   }
 
-  #render() {
-    const label = this.getAttribute('label');
-    const name = this.getAttribute('name') || '';
-    const value = this.getAttribute('value') || '';
-    const placeholder = this.getAttribute('placeholder') || '';
-    const error = this.getAttribute('error');
-    const help = this.getAttribute('help');
-    const required = this.hasAttribute('required');
-    const disabled = this.hasAttribute('disabled');
-    const rows = parseInt(this.getAttribute('rows') || '3', 10);
-    const maxlength = this.getAttribute('maxlength');
-    const id = name || `dvfy-ta-${Math.random().toString(36).slice(2, 8)}`;
-
+  #build() {
     this.textContent = '';
+    const id = this.#id;
+    const maxlength = this.getAttribute('maxlength');
 
     // Label
-    if (label) {
-      const lbl = document.createElement('label');
-      lbl.className = 'dvfy-textarea__label';
-      lbl.setAttribute('for', id);
-      lbl.textContent = label;
-      if (required) {
-        const star = document.createElement('span');
-        star.className = 'dvfy-textarea__required';
-        star.textContent = '*';
-        lbl.appendChild(star);
-      }
-      this.appendChild(lbl);
-    }
+    this.#appendLabel();
 
     // Textarea
     const ta = document.createElement('textarea');
     ta.className = 'dvfy-textarea__field';
     ta.id = id;
-    ta.name = name;
-    ta.value = value;
-    ta.placeholder = placeholder;
-    ta.rows = rows;
-    if (required) ta.required = true;
-    if (disabled) ta.disabled = true;
+    ta.name = this.getAttribute('name') || '';
+    ta.value = this.getAttribute('value') || '';
+    ta.placeholder = this.getAttribute('placeholder') || '';
+    ta.rows = parseInt(this.getAttribute('rows') || '3', 10);
+    if (this.hasAttribute('required')) ta.required = true;
+    if (this.hasAttribute('disabled')) ta.disabled = true;
     if (maxlength) ta.maxLength = parseInt(maxlength, 10);
-    if (error) {
-      ta.setAttribute('aria-invalid', 'true');
-      ta.setAttribute('aria-describedby', `${id}-error`);
-    } else if (help) {
-      ta.setAttribute('aria-describedby', `${id}-help`);
-    }
-
+    this.#setAriaOnTextarea(ta);
     ta.addEventListener('input', () => this.#autoResize(ta));
-
     this.appendChild(ta);
 
-    // Footer (error/help + count)
+    // Footer
+    this.#buildFooter(ta, maxlength);
+
+    requestAnimationFrame(() => this.#autoResize(ta));
+  }
+
+  #appendLabel() {
+    const label = this.getAttribute('label');
+    if (!label) return;
+    const lbl = document.createElement('label');
+    lbl.className = 'dvfy-textarea__label';
+    lbl.setAttribute('for', this.#id);
+    lbl.textContent = label;
+    if (this.hasAttribute('required')) {
+      const star = document.createElement('span');
+      star.className = 'dvfy-textarea__required';
+      star.textContent = '*';
+      lbl.appendChild(star);
+    }
+    this.insertBefore(lbl, this.firstChild);
+  }
+
+  #patchLabel() {
+    const label = this.getAttribute('label');
+    let lbl = this.querySelector('.dvfy-textarea__label');
+    if (label) {
+      if (!lbl) {
+        this.#appendLabel();
+        return;
+      }
+      lbl.textContent = label;
+      if (this.hasAttribute('required')) {
+        const star = document.createElement('span');
+        star.className = 'dvfy-textarea__required';
+        star.textContent = '*';
+        lbl.appendChild(star);
+      }
+    } else if (lbl) {
+      lbl.remove();
+    }
+  }
+
+  #setAriaOnTextarea(ta) {
+    const error = this.getAttribute('error');
+    const help = this.getAttribute('help');
+    ta.removeAttribute('aria-invalid');
+    ta.removeAttribute('aria-describedby');
+    if (error) {
+      ta.setAttribute('aria-invalid', 'true');
+      ta.setAttribute('aria-describedby', `${this.#id}-error`);
+    } else if (help) {
+      ta.setAttribute('aria-describedby', `${this.#id}-help`);
+    }
+  }
+
+  #buildFooter(ta, maxlength) {
+    const error = this.getAttribute('error');
+    const help = this.getAttribute('help');
+    if (!error && !help && !maxlength) return;
+
     const footer = document.createElement('div');
     footer.className = 'dvfy-textarea__footer';
 
     if (error) {
       const err = document.createElement('span');
       err.className = 'dvfy-textarea__error-msg';
-      err.id = `${id}-error`;
+      err.id = `${this.#id}-error`;
       err.setAttribute('role', 'alert');
       err.textContent = error;
       footer.appendChild(err);
     } else if (help) {
       const hlp = document.createElement('span');
       hlp.className = 'dvfy-textarea__help';
-      hlp.id = `${id}-help`;
+      hlp.id = `${this.#id}-help`;
       hlp.textContent = help;
       footer.appendChild(hlp);
     }
@@ -216,9 +289,10 @@ class DvfyTextarea extends HTMLElement {
     if (maxlength) {
       const count = document.createElement('span');
       count.className = 'dvfy-textarea__count';
-      count.textContent = `${value.length}/${maxlength}`;
+      const val = ta.value;
+      count.textContent = `${val.length}/${maxlength}`;
+      count.dataset.over = val.length > parseInt(maxlength, 10) ? 'true' : 'false';
       footer.appendChild(count);
-
       ta.addEventListener('input', () => {
         const len = ta.value.length;
         count.textContent = `${len}/${maxlength}`;
@@ -226,10 +300,56 @@ class DvfyTextarea extends HTMLElement {
       });
     }
 
-    if (footer.children.length > 0) this.appendChild(footer);
+    this.appendChild(footer);
+  }
 
-    // Initial auto-resize
-    requestAnimationFrame(() => this.#autoResize(ta));
+  #patchFooter(ta) {
+    this.#setAriaOnTextarea(ta);
+    const footer = this.querySelector('.dvfy-textarea__footer');
+    const maxlength = this.getAttribute('maxlength');
+    const error = this.getAttribute('error');
+    const help = this.getAttribute('help');
+
+    // Update error/help text in existing footer
+    if (footer) {
+      footer.querySelector('.dvfy-textarea__error-msg')?.remove();
+      footer.querySelector('.dvfy-textarea__help')?.remove();
+      if (error) {
+        const err = document.createElement('span');
+        err.className = 'dvfy-textarea__error-msg';
+        err.id = `${this.#id}-error`;
+        err.setAttribute('role', 'alert');
+        err.textContent = error;
+        footer.insertBefore(err, footer.firstChild);
+      } else if (help) {
+        const hlp = document.createElement('span');
+        hlp.className = 'dvfy-textarea__help';
+        hlp.id = `${this.#id}-help`;
+        hlp.textContent = help;
+        footer.insertBefore(hlp, footer.firstChild);
+      }
+      // Remove empty footer
+      if (!footer.children.length) footer.remove();
+    } else if (error || help || maxlength) {
+      this.#buildFooter(ta, maxlength);
+    }
+  }
+
+  #rebuildPreservingFocus() {
+    const ta = this.querySelector('.dvfy-textarea__field');
+    const hasFocus = ta && document.activeElement === ta;
+    const selStart = ta?.selectionStart;
+    const selEnd = ta?.selectionEnd;
+    const curValue = ta?.value;
+    this.#build();
+    if (hasFocus) {
+      const newTa = this.querySelector('.dvfy-textarea__field');
+      if (newTa) {
+        newTa.value = curValue;
+        newTa.focus();
+        try { newTa.setSelectionRange(selStart, selEnd); } catch {}
+      }
+    }
   }
 
   #autoResize(ta) {
