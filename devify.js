@@ -41,8 +41,8 @@ import './components/dvfy-select.js';
 import './components/dvfy-theme-switcher.js';
 import './components/dvfy-auth.js';
 import './components/dvfy-hamburger.js';
+import './components/dvfy-drawer.js';
 import './components/dvfy-section.js';
-import './components/dvfy-header.js';
 import './components/dvfy-component-playground.js';
 import './components/dvfy-accordion.js';
 

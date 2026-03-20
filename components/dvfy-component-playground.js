@@ -29,22 +29,39 @@ dvfy-component-playground .sc__picker {
   margin-bottom: var(--dvfy-space-4);
 }
 
-/* Main layout — side by side on wide containers */
+/* Main layout — preview fills space, drawer on right */
 dvfy-component-playground .sc__body {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--dvfy-space-4);
-}
-@container (min-width: 640px) {
-  dvfy-component-playground .sc__body {
-    grid-template-columns: 3fr 2fr;
-  }
+  display: flex;
+  gap: 0;
+  position: relative;
+  height: calc(100vh - 10rem);
+  min-height: 400px;
 }
 
-/* Preview area */
+/* Preview column — takes all remaining space */
+dvfy-component-playground .sc__preview-col {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Stretch tabs to fill preview column */
+dvfy-component-playground .sc__preview-col dvfy-tabs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+dvfy-component-playground .sc__preview-col dvfy-tab[active] {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Preview area — fills available height */
 dvfy-component-playground .sc__preview-area {
   position: relative;
-  min-height: 120px;
+  flex: 1;
   padding: var(--dvfy-space-6);
   background: var(--dvfy-surface-sunken);
   border: var(--dvfy-border-1) dashed var(--dvfy-border-default);
@@ -81,6 +98,88 @@ dvfy-component-playground .sc__code {
   border: var(--dvfy-border-1) solid var(--dvfy-border-muted);
 }
 
+/* ── Right drawer ── */
+dvfy-component-playground .sc__drawer {
+  width: clamp(200px, 40%, 320px);
+  flex-shrink: 0;
+  border-left: var(--dvfy-border-1) solid var(--dvfy-border-muted);
+  background: var(--dvfy-surface-raised);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: width var(--dvfy-duration-normal, 200ms) var(--dvfy-ease-out, ease-out);
+}
+dvfy-component-playground .sc__drawer[data-collapsed] {
+  width: 0;
+  border-left: none;
+}
+
+/* Drawer header with toggle */
+dvfy-component-playground .sc__drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--dvfy-space-3) var(--dvfy-space-4);
+  border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-muted);
+  flex-shrink: 0;
+}
+/* Toggle button inside drawer header — collapses the drawer */
+dvfy-component-playground .sc__drawer-toggle {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--dvfy-border-1) solid var(--dvfy-border-muted);
+  border-radius: var(--dvfy-radius-md);
+  background: var(--dvfy-surface-raised);
+  color: var(--dvfy-text-secondary);
+  cursor: pointer;
+  font-size: var(--dvfy-text-xs);
+  line-height: 1;
+  flex-shrink: 0;
+  transition: background var(--dvfy-duration-fast, 100ms);
+}
+dvfy-component-playground .sc__drawer-toggle:hover {
+  background: var(--dvfy-surface-sunken);
+}
+
+/* Re-open tab — visible only when drawer is collapsed */
+dvfy-component-playground .sc__drawer-reopen {
+  position: absolute;
+  top: var(--dvfy-space-2);
+  right: 0;
+  z-index: 2;
+  writing-mode: vertical-rl;
+  padding: var(--dvfy-space-2) var(--dvfy-space-1);
+  border: var(--dvfy-border-1) solid var(--dvfy-border-muted);
+  border-right: none;
+  border-radius: var(--dvfy-radius-md) 0 0 var(--dvfy-radius-md);
+  background: var(--dvfy-surface-raised);
+  color: var(--dvfy-text-secondary);
+  cursor: pointer;
+  font-size: var(--dvfy-text-xs);
+  font-weight: var(--dvfy-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--dvfy-tracking-wider);
+  line-height: 1;
+  transition: background var(--dvfy-duration-fast, 100ms);
+  display: none;
+}
+dvfy-component-playground .sc__drawer-reopen[data-visible] {
+  display: block;
+}
+dvfy-component-playground .sc__drawer-reopen:hover {
+  background: var(--dvfy-surface-sunken);
+}
+
+/* Scrollable controls area */
+dvfy-component-playground .sc__drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--dvfy-space-4);
+}
+
 /* Controls panel */
 dvfy-component-playground .sc__controls {
   display: flex;
@@ -93,7 +192,25 @@ dvfy-component-playground .sc__controls-title {
   text-transform: uppercase;
   letter-spacing: var(--dvfy-tracking-wider);
   color: var(--dvfy-text-muted);
-  margin: 0 0 var(--dvfy-space-1) 0;
+  margin: 0;
+}
+
+/* Narrow containers: stack vertically, drawer becomes bottom panel */
+@container (max-width: 360px) {
+  dvfy-component-playground .sc__body {
+    flex-direction: column;
+    height: auto;
+  }
+  dvfy-component-playground .sc__drawer {
+    width: 100% !important;
+    border-left: none;
+    border-top: var(--dvfy-border-1) solid var(--dvfy-border-muted);
+    max-height: 50vh;
+  }
+  dvfy-component-playground .sc__drawer[data-collapsed] {
+    max-height: 0;
+    border-top: none;
+  }
 }
 
 /* API tables */
@@ -192,10 +309,10 @@ const DEFAULT_CONTENT = {
   'dvfy-table': '<table><thead><tr><th data-sort>Name</th><th data-sort>Role</th></tr></thead><tbody><tr><td>Alice</td><td>Engineer</td></tr><tr><td>Bob</td><td>Designer</td></tr></tbody></table>',
   'dvfy-empty': '',
   'dvfy-auth': '',
-  'dvfy-nav': '<a href="#">Home</a><a href="#">About</a><a href="#">Contact</a>',
+  'dvfy-nav': '<a href="#home">Home</a><a href="#about">About</a><a href="#contact">Contact</a><dvfy-button variant="default" size="sm">Sign In</dvfy-button>',
   'dvfy-sidebar': '',
-  'dvfy-header': '',
   'dvfy-hamburger': '',
+  'dvfy-drawer': '<p>Drawer body content. This panel scrolls independently and can be collapsed.</p><p style="margin-top:0.5rem;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Try the collapse button in the header.</p>',
   'dvfy-section': '<p>Section content here.</p>',
   'dvfy-theme-switcher': '<option value="devify-cyan">Cyan</option><option value="devify-pink">Pink</option>',
   'dvfy-accordion': '<dvfy-section label="Section One" open><p>First section content.</p></dvfy-section><dvfy-section label="Section Two" collapsed><p>Second section content.</p></dvfy-section><dvfy-section label="Section Three" collapsed><p>Third section content.</p></dvfy-section>',
@@ -345,8 +462,9 @@ class DvfyComponentPlayground extends HTMLElement {
     if (!body) return;
     body.textContent = '';
 
-    // ── Left: tabs (Preview / Code / API) ──
+    // ── Left: tabs (Preview / Code / API) — fills remaining space ──
     const left = document.createElement('div');
+    left.className = 'sc__preview-col';
 
     const tabs = document.createElement('dvfy-tabs');
     const previewTab = document.createElement('dvfy-tab');
@@ -393,20 +511,52 @@ class DvfyComponentPlayground extends HTMLElement {
     left.appendChild(tabs);
     body.appendChild(left);
 
-    // ── Right: controls ──
-    const right = document.createElement('dvfy-card');
+    // ── Right: collapsible drawer with scrollable controls ──
+    const drawer = document.createElement('div');
+    drawer.className = 'sc__drawer';
+    drawer.setAttribute('data-sc-drawer', '');
 
+    // Re-open tab (visible when collapsed)
+    const reopen = document.createElement('button');
+    reopen.className = 'sc__drawer-reopen';
+    reopen.textContent = 'Controls';
+    reopen.setAttribute('aria-label', 'Open controls panel');
+    reopen.addEventListener('click', () => {
+      drawer.removeAttribute('data-collapsed');
+      reopen.removeAttribute('data-visible');
+    });
+    body.appendChild(reopen);
+
+    // Drawer header with title + collapse button
+    const drawerHeader = document.createElement('div');
+    drawerHeader.className = 'sc__drawer-header';
     const title = document.createElement('p');
     title.className = 'sc__controls-title';
     title.textContent = 'Controls';
-    right.appendChild(title);
+    drawerHeader.appendChild(title);
 
+    const toggle = document.createElement('button');
+    toggle.className = 'sc__drawer-toggle';
+    toggle.setAttribute('aria-label', 'Collapse controls panel');
+    toggle.setAttribute('title', 'Collapse controls');
+    toggle.textContent = '\u00D7'; // ×
+    toggle.addEventListener('click', () => {
+      drawer.setAttribute('data-collapsed', '');
+      reopen.setAttribute('data-visible', '');
+    });
+    drawerHeader.appendChild(toggle);
+    drawer.appendChild(drawerHeader);
+
+    // Scrollable body
+    const drawerBody = document.createElement('div');
+    drawerBody.className = 'sc__drawer-body';
     const controlsWrap = document.createElement('div');
     controlsWrap.className = 'sc__controls';
     controlsWrap.setAttribute('data-sc-controls', '');
-    right.appendChild(controlsWrap);
+    drawerBody.appendChild(controlsWrap);
+    drawer.appendChild(drawerBody);
 
-    body.appendChild(right);
+    body.appendChild(drawer);
 
     // Populate
     this.#buildControls();
@@ -540,6 +690,7 @@ class DvfyComponentPlayground extends HTMLElement {
     const area = this.querySelector('[data-sc-preview]');
     if (!area || !this.#currentTag) return;
     area.textContent = '';
+    area.removeAttribute('style'); // reset any per-component overrides
 
     const el = document.createElement(this.#currentTag.name);
 
@@ -559,7 +710,73 @@ class DvfyComponentPlayground extends HTMLElement {
       el.innerHTML = this.#contentValue;  // eslint-disable-line no-unsanitized/property
     }
 
+    // Layout components need a container context to demonstrate properly
+    if (this.#currentTag.name === 'dvfy-drawer') {
+      this.#renderDrawerPreview(area, el);
+      return;
+    }
+
     area.appendChild(el);
+  }
+
+  /**
+   * Render dvfy-drawer inside a flex layout with toggle + sample content.
+   * Uses DOM methods only — all content is hardcoded trusted strings.
+   */
+  #renderDrawerPreview(area, drawer) {
+    // Override preview area to be a flex row filling the space
+    area.style.display = 'flex';
+    area.style.gap = '0';
+    area.style.padding = '0';
+    area.style.position = 'relative';
+    area.style.alignItems = 'stretch';
+    area.style.justifyContent = 'stretch';
+
+    // Main content area
+    const main = document.createElement('div');
+    main.style.flex = '1';
+    main.style.padding = 'var(--dvfy-space-4)';
+    main.style.display = 'flex';
+    main.style.flexDirection = 'column';
+    main.style.gap = 'var(--dvfy-space-3)';
+    main.style.minWidth = '0';
+    main.style.justifyContent = 'center';
+    main.style.alignItems = 'center';
+
+    const toggle = document.createElement('dvfy-button');
+    toggle.setAttribute('variant', 'outline');
+    toggle.setAttribute('size', 'sm');
+    toggle.textContent = drawer.hasAttribute('collapsed') ? 'Open Drawer' : 'Close Drawer';
+    toggle.addEventListener('click', () => {
+      drawer.collapsed = !drawer.collapsed;
+      toggle.textContent = drawer.collapsed ? 'Open Drawer' : 'Close Drawer';
+    });
+    main.appendChild(toggle);
+
+    const hint = document.createElement('p');
+    hint.style.fontSize = 'var(--dvfy-text-sm)';
+    hint.style.color = 'var(--dvfy-text-muted)';
+    hint.style.textAlign = 'center';
+    hint.textContent = 'Main content area';
+    main.appendChild(hint);
+
+    // Keep button label in sync with drawer events
+    drawer.addEventListener('toggle', (e) => {
+      toggle.textContent = e.detail.collapsed ? 'Open Drawer' : 'Close Drawer';
+    });
+
+    const pos = drawer.getAttribute('position') || 'right';
+    if (pos === 'left') {
+      area.appendChild(drawer);
+      area.appendChild(main);
+    } else if (pos === 'bottom') {
+      area.style.flexDirection = 'column';
+      area.appendChild(main);
+      area.appendChild(drawer);
+    } else {
+      area.appendChild(main);
+      area.appendChild(drawer);
+    }
   }
 
   #updateCode() {

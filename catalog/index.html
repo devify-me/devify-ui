@@ -20,12 +20,12 @@
     }
     .catalog-layout {
       display: flex;
-      height: calc(100vh - var(--dvfy-header-height, 3.5rem));
+      height: calc(100vh - var(--dvfy-nav-height, 3.5rem));
     }
     #catalog-sidebar {
       position: sticky;
-      top: var(--dvfy-header-height, 3.5rem);
-      height: calc(100vh - var(--dvfy-header-height, 3.5rem));
+      top: var(--dvfy-nav-height, 3.5rem);
+      height: calc(100vh - var(--dvfy-nav-height, 3.5rem));
       overflow-y: auto;
       flex-shrink: 0;
       display: flex;
@@ -35,17 +35,16 @@
       flex: 1;
       overflow-y: auto;
       padding: var(--dvfy-space-6);
-      max-width: 72rem;
     }
   </style>
 </head>
 <body>
-  <dvfy-header brand="@devify/ui" logo="devify-hz.png" sticky scroll-shrink>
-    <dvfy-theme-switcher data-action default-theme="devify-cyan">
+  <dvfy-nav brand="@devify/ui" logo="devify-hz.png" sticky scroll-shrink>
+    <dvfy-theme-switcher default-theme="devify-cyan">
       <option value="devify-cyan">Cyan</option>
       <option value="devify-pink">Pink</option>
     </dvfy-theme-switcher>
-  </dvfy-header>
+  </dvfy-nav>
 
   <div class="catalog-layout">
     <div id="catalog-sidebar"></div>
