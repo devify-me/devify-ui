@@ -52,6 +52,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-checkbox':  { tier: 1, domain: 'forms',      deps: [] },
   'dvfy-radio':     { tier: 1, domain: 'forms',      deps: [] },
   'dvfy-switch':    { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-slider':    { tier: 1, domain: 'forms',      deps: [] },
   'dvfy-badge':     { tier: 1, domain: 'display',    deps: [] },
   'dvfy-tag':       { tier: 1, domain: 'display',    deps: [] },
   'dvfy-avatar':    { tier: 1, domain: 'display',    deps: [] },

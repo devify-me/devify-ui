@@ -177,7 +177,7 @@
         },
         {
           "name": "size",
-          "description": "Size: sm | md | lg (default: \"md\")",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
           "type": "string"
         },
         {
@@ -244,7 +244,7 @@
         },
         {
           "name": "size",
-          "description": "Size: sm | md (default: \"md\")",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
           "type": "string"
         },
         {
@@ -318,8 +318,13 @@
         },
         {
           "name": "size",
-          "description": "Size: sm | md | lg (default: \"md\")",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
           "type": "string"
+        },
+        {
+          "name": "icon",
+          "description": "Icon-only mode with square aspect ratio",
+          "type": "boolean"
         },
         {
           "name": "type",
@@ -390,7 +395,7 @@
       ],
       "cssProperties": [
         {
-          "name": "--dvfy-surface-primary",
+          "name": "--dvfy-surface-raised",
           "description": "Card background",
           "type": "color"
         },
@@ -409,7 +414,7 @@
     {
       "name": "dvfy-checkbox",
       "path": "./components/dvfy-checkbox.js",
-      "description": "Checkbox input with label and indeterminate state support.",
+      "description": "Checkbox input with label, tri-state cycling, and size variants.\n\nWhen the `indeterminate` attribute is set at initialization, clicking\ncycles: indeterminate → checked → unchecked → indeterminate → ...\nWithout `indeterminate`, standard binary toggle applies.",
       "attributes": [
         {
           "name": "checked",
@@ -418,7 +423,7 @@
         },
         {
           "name": "indeterminate",
-          "description": "Show indeterminate (dash) state",
+          "description": "Show indeterminate (dash) state; enables tri-state cycling",
           "type": "boolean"
         },
         {
@@ -440,6 +445,16 @@
           "name": "label",
           "description": "Label text",
           "type": "string"
+        },
+        {
+          "name": "size",
+          "description": "Visual size: xs | sm | md | lg | xl (default: \"md\")",
+          "type": "string"
+        },
+        {
+          "name": "label-position",
+          "description": "Label placement: top | right | bottom | left (default: \"right\")",
+          "type": "string"
         }
       ],
       "properties": [
@@ -452,14 +467,13 @@
         {
           "name": "indeterminate",
           "attribute": "indeterminate",
-          "description": "Show indeterminate (dash) state",
+          "description": "Show indeterminate (dash) state; enables tri-state cycling",
           "type": "boolean"
         }
       ],
       "events": [
         {
-          "name": "change",
-          "description": "Checkbox state changed"
+          "name": "change"
         }
       ],
       "cssProperties": [
@@ -694,7 +708,7 @@
         },
         {
           "name": "size",
-          "description": "Size: sm | md | lg (default: \"md\")",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
           "type": "string"
         },
         {
@@ -746,6 +760,11 @@
           "name": "clearable",
           "description": "Show clear icon when input has a value",
           "type": "boolean"
+        },
+        {
+          "name": "label-position",
+          "description": "Label placement: top | right | bottom | left (default: \"top\")",
+          "type": "string"
         }
       ],
       "properties": [
@@ -791,7 +810,7 @@
         },
         {
           "name": "size",
-          "description": "Size: sm | md | lg (default: \"md\")",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
           "type": "string"
         },
         {
@@ -820,7 +839,7 @@
       "attributes": [
         {
           "name": "size",
-          "description": "Dialog size: sm | md | lg (default: \"md\")",
+          "description": "Dialog size: xs | sm | md | lg | xl (default: \"md\")",
           "type": "string"
         },
         {
@@ -888,7 +907,7 @@
       ],
       "cssProperties": [
         {
-          "name": "--dvfy-surface-primary",
+          "name": "--dvfy-surface-raised",
           "description": "Nav background",
           "type": "color"
         },
@@ -956,12 +975,12 @@
         },
         {
           "name": "variant",
-          "description": "Display style: bar | circle (default: \"bar\")",
+          "description": "Display style: bar | oval | circle (default: \"bar\")",
           "type": "string"
         },
         {
           "name": "size",
-          "description": "Size: sm | md | lg (default: \"md\")",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
           "type": "string"
         },
         {
@@ -1019,6 +1038,11 @@
           "type": "string"
         },
         {
+          "name": "size",
+          "description": "Visual size: xs | sm | md | lg | xl (default: \"md\")",
+          "type": "string"
+        },
+        {
           "name": "disabled",
           "description": "Disable interaction",
           "type": "boolean"
@@ -1026,6 +1050,11 @@
         {
           "name": "label",
           "description": "Label text",
+          "type": "string"
+        },
+        {
+          "name": "label-position",
+          "description": "Label placement: top | right | bottom | left (default: \"right\")",
           "type": "string"
         }
       ],
@@ -1117,6 +1146,11 @@
           "type": "boolean"
         },
         {
+          "name": "size",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
+          "type": "string"
+        },
+        {
           "name": "error",
           "description": "Error message (enables error styling)",
           "type": "string"
@@ -1145,6 +1179,11 @@
           "name": "required",
           "description": "Mark field as required",
           "type": "boolean"
+        },
+        {
+          "name": "label-position",
+          "description": "Label placement: top | right | bottom | left (default: \"top\")",
+          "type": "string"
         }
       ],
       "properties": [
@@ -1167,7 +1206,7 @@
       ],
       "cssProperties": [
         {
-          "name": "--dvfy-surface-primary",
+          "name": "--dvfy-surface-raised",
           "description": "Dropdown background",
           "type": "color"
         },
@@ -1247,6 +1286,131 @@
       ]
     },
     {
+      "name": "dvfy-slider",
+      "path": "./components/dvfy-slider.js",
+      "description": "Knob-primitive slider with grooved track, optional fill bar, and range mode.",
+      "attributes": [
+        {
+          "name": "value",
+          "description": "Current value (or lower bound in range mode)",
+          "type": "number"
+        },
+        {
+          "name": "label",
+          "description": "Label text",
+          "type": "string"
+        },
+        {
+          "name": "label-position",
+          "description": "Label placement: top | right | bottom | left (default: \"top\")",
+          "type": "string"
+        },
+        {
+          "name": "min",
+          "description": "Minimum value (default: 0)",
+          "type": "number"
+        },
+        {
+          "name": "max",
+          "description": "Maximum value (default: 100)",
+          "type": "number"
+        },
+        {
+          "name": "step",
+          "description": "Step increment (default: 1)",
+          "type": "number"
+        },
+        {
+          "name": "value-end",
+          "description": "Upper bound value (only in range mode)",
+          "type": "number"
+        },
+        {
+          "name": "name",
+          "description": "Form field name",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "description": "Disable interaction",
+          "type": "boolean"
+        },
+        {
+          "name": "size",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
+          "type": "string"
+        },
+        {
+          "name": "show-value",
+          "description": "Show current value next to slider",
+          "type": "boolean"
+        },
+        {
+          "name": "variant",
+          "description": "Track shape: default | oval (default: \"default\")",
+          "type": "string"
+        },
+        {
+          "name": "fill",
+          "description": "Show colored progress bar between knobs (or from min to value in single mode)",
+          "type": "boolean"
+        },
+        {
+          "name": "range",
+          "description": "Enable dual-thumb range mode",
+          "type": "boolean"
+        },
+        {
+          "name": "steps",
+          "description": "Number of divisions for tick marks (e.g. 5 = 6 ticks)",
+          "type": "number"
+        }
+      ],
+      "properties": [
+        {
+          "name": "valueEnd"
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "description": "Current value (or lower bound in range mode)",
+          "type": "number"
+        }
+      ],
+      "events": [
+        {
+          "name": "input",
+          "description": "Fires on drag. detail: { value } or { value, valueEnd } in range mode"
+        },
+        {
+          "name": "change",
+          "description": "Fires on release. detail: { value } or { value, valueEnd } in range mode"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Fill bar color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-surface-overlay",
+          "description": "Track groove background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-neutral-100",
+          "description": "Metallic knob highlight",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-neutral-400",
+          "description": "Metallic knob shadow",
+          "type": "color"
+        }
+      ]
+    },
+    {
       "name": "dvfy-switch",
       "path": "./components/dvfy-switch.js",
       "description": "Toggle switch with label and description text.",
@@ -1267,6 +1431,11 @@
           "type": "string"
         },
         {
+          "name": "size",
+          "description": "Visual size: xs | sm | md | lg | xl (default: \"md\")",
+          "type": "string"
+        },
+        {
           "name": "disabled",
           "description": "Disable interaction",
           "type": "boolean"
@@ -1279,6 +1448,26 @@
         {
           "name": "description",
           "description": "Optional description text below label",
+          "type": "string"
+        },
+        {
+          "name": "label-position",
+          "description": "Label placement: top | right | bottom | left (default: \"right\")",
+          "type": "string"
+        },
+        {
+          "name": "round",
+          "description": "Use fully rounded track and thumb (pill shape)",
+          "type": "boolean"
+        },
+        {
+          "name": "icon-on",
+          "description": "Icon/emoji shown in thumb when checked",
+          "type": "string"
+        },
+        {
+          "name": "icon-off",
+          "description": "Icon/emoji shown in thumb when unchecked",
           "type": "string"
         }
       ],
@@ -1462,7 +1651,7 @@
         },
         {
           "name": "size",
-          "description": "Size: sm | md (default: \"md\")",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
           "type": "string"
         },
         {
@@ -1503,6 +1692,11 @@
         {
           "name": "value",
           "description": "Initial value",
+          "type": "string"
+        },
+        {
+          "name": "size",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
           "type": "string"
         },
         {
@@ -1549,6 +1743,11 @@
           "name": "maxlength",
           "description": "Maximum character count (shows counter)",
           "type": "number"
+        },
+        {
+          "name": "label-position",
+          "description": "Label placement: top | right | bottom | left (default: \"top\")",
+          "type": "string"
         }
       ],
       "properties": [

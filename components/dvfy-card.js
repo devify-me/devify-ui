@@ -15,7 +15,7 @@ const STYLES = `
 dvfy-card {
   display: block;
   font-family: var(--dvfy-font-sans);
-  background: var(--dvfy-surface-primary);
+  background: var(--dvfy-surface-raised);
   border: var(--dvfy-border-1) solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-lg);
   color: var(--dvfy-text-primary);
@@ -68,7 +68,7 @@ dvfy-card[interactive]:focus-visible {
  *
  * @slot - Card content
  *
- * @cssprop {color} --dvfy-surface-primary - Card background
+ * @cssprop {color} --dvfy-surface-raised - Card background
  * @cssprop {color} --dvfy-border-default - Card border color
  * @cssprop {color} --dvfy-shadow-md - Elevated shadow
  */

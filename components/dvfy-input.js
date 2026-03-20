@@ -51,9 +51,19 @@ dvfy-input .dvfy-input__field:focus {
   border-color: var(--dvfy-input-border-focus);
   box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-ring-color) 25%, transparent);
 }
+/* Size: xs */
+dvfy-input[size="xs"] .dvfy-input__field { padding: var(--dvfy-space-1) var(--dvfy-space-2); font-size: var(--dvfy-text-xs); border-radius: var(--dvfy-radius-sm); }
+dvfy-input[size="xs"] .dvfy-input__label { font-size: var(--dvfy-text-xs); }
+/* Size: sm */
 dvfy-input[size="sm"] .dvfy-input__field { padding: var(--dvfy-space-1-5) var(--dvfy-space-2-5); font-size: var(--dvfy-text-sm); border-radius: var(--dvfy-radius-md); }
+dvfy-input[size="sm"] .dvfy-input__label { font-size: var(--dvfy-text-xs); }
+/* Size: md (default) */
 dvfy-input:not([size]) .dvfy-input__field, dvfy-input[size="md"] .dvfy-input__field { padding: var(--dvfy-space-2) var(--dvfy-space-3); font-size: var(--dvfy-text-sm); border-radius: var(--dvfy-radius-lg); }
+/* Size: lg */
 dvfy-input[size="lg"] .dvfy-input__field { padding: var(--dvfy-space-2-5) var(--dvfy-space-3-5); font-size: var(--dvfy-text-base); border-radius: var(--dvfy-radius-lg); }
+/* Size: xl */
+dvfy-input[size="xl"] .dvfy-input__field { padding: var(--dvfy-space-3) var(--dvfy-space-4); font-size: var(--dvfy-text-lg); border-radius: var(--dvfy-radius-xl); }
+dvfy-input[size="xl"] .dvfy-input__label { font-size: var(--dvfy-text-base); }
 dvfy-input .dvfy-input__field--has-toggle { padding-right: 3.5rem; }
 dvfy-input[error] .dvfy-input__field { border-color: var(--dvfy-input-error); }
 dvfy-input[error] .dvfy-input__field:focus {
@@ -93,6 +103,25 @@ dvfy-input .dvfy-input__clear:focus-visible {
 dvfy-input .dvfy-input__clear { display: none; }
 dvfy-input .dvfy-input__clear--visible { display: block; }
 dvfy-input[clearable] .dvfy-input__field { padding-right: 2.5rem; }
+
+/* Label position: bottom */
+dvfy-input[label-position="bottom"] .dvfy-input__label { order: 1; }
+dvfy-input[label-position="bottom"] .dvfy-input__help,
+dvfy-input[label-position="bottom"] .dvfy-input__error-msg { order: 2; }
+
+/* Label position: left */
+dvfy-input[label-position="left"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
+dvfy-input[label-position="left"] .dvfy-input__label { flex-shrink: 0; width: var(--dvfy-label-width, auto); }
+dvfy-input[label-position="left"] .dvfy-input__wrapper { flex: 1; min-width: 0; }
+dvfy-input[label-position="left"] .dvfy-input__help,
+dvfy-input[label-position="left"] .dvfy-input__error-msg { width: 100%; }
+
+/* Label position: right */
+dvfy-input[label-position="right"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
+dvfy-input[label-position="right"] .dvfy-input__label { order: 1; flex-shrink: 0; width: var(--dvfy-label-width, auto); }
+dvfy-input[label-position="right"] .dvfy-input__wrapper { flex: 1; min-width: 0; }
+dvfy-input[label-position="right"] .dvfy-input__help,
+dvfy-input[label-position="right"] .dvfy-input__error-msg { width: 100%; order: 2; }
 `;
 
 /**
@@ -109,9 +138,10 @@ dvfy-input[clearable] .dvfy-input__field { padding-right: 2.5rem; }
  * @attr {string} help - Help text shown below input
  * @attr {boolean} required - Mark field as required
  * @attr {boolean} disabled - Disable input
- * @attr {string} size - Size: sm | md | lg (default: "md")
+ * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {boolean} no-preview - Disable password visibility toggle for password inputs
  * @attr {boolean} clearable - Show clear icon when input has a value
+ * @attr {string} label-position - Label placement: top | right | bottom | left (default: "top")
  *
  * @cssprop {color} --dvfy-input-bg - Input background
  * @cssprop {color} --dvfy-input-border - Input border color
@@ -133,7 +163,7 @@ class DvfyInput extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'no-preview', 'clearable'];
+    return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'no-preview', 'clearable', 'label-position'];
   }
 
   attributeChangedCallback() {

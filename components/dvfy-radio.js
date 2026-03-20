@@ -69,6 +69,42 @@ dvfy-radio .dvfy-radio__label {
   line-height: var(--dvfy-leading-tight);
 }
 dvfy-radio[disabled] .dvfy-radio__label { color: var(--dvfy-disabled-text); }
+
+/* Size: xs — 0.75rem input */
+dvfy-radio[size="xs"] { gap: var(--dvfy-space-1-5); }
+dvfy-radio[size="xs"] .dvfy-radio__input { width: 0.75rem; height: 0.75rem; border-width: var(--dvfy-border-1); }
+dvfy-radio[size="xs"] .dvfy-radio__input:checked::after { top: 2px; left: 2px; width: 4px; height: 4px; }
+dvfy-radio[size="xs"] .dvfy-radio__label { font-size: var(--dvfy-text-xs); }
+
+/* Size: sm — 0.875rem input */
+dvfy-radio[size="sm"] { gap: var(--dvfy-space-1-5); }
+dvfy-radio[size="sm"] .dvfy-radio__input { width: 0.875rem; height: 0.875rem; }
+dvfy-radio[size="sm"] .dvfy-radio__input:checked::after { top: 2.5px; left: 2.5px; width: 5px; height: 5px; }
+dvfy-radio[size="sm"] .dvfy-radio__label { font-size: var(--dvfy-text-xs); }
+
+/* Size: md — 1rem input (default, no overrides needed) */
+
+/* Size: lg — 1.25rem input */
+dvfy-radio[size="lg"] { gap: var(--dvfy-space-2-5); }
+dvfy-radio[size="lg"] .dvfy-radio__input { width: 1.25rem; height: 1.25rem; }
+dvfy-radio[size="lg"] .dvfy-radio__input:checked::after { top: 4px; left: 4px; width: 8px; height: 8px; }
+dvfy-radio[size="lg"] .dvfy-radio__label { font-size: var(--dvfy-text-base); }
+
+/* Size: xl — 1.5rem input */
+dvfy-radio[size="xl"] { gap: var(--dvfy-space-3); }
+dvfy-radio[size="xl"] .dvfy-radio__input { width: 1.5rem; height: 1.5rem; }
+dvfy-radio[size="xl"] .dvfy-radio__input:checked::after { top: 5px; left: 5px; width: 10px; height: 10px; }
+dvfy-radio[size="xl"] .dvfy-radio__label { font-size: var(--dvfy-text-base); }
+
+/* Label position: left */
+dvfy-radio[label-position="left"] .dvfy-radio__label { order: -1; }
+
+/* Label position: top */
+dvfy-radio[label-position="top"] { flex-direction: column; align-items: center; }
+dvfy-radio[label-position="top"] .dvfy-radio__label { order: -1; }
+
+/* Label position: bottom */
+dvfy-radio[label-position="bottom"] { flex-direction: column; align-items: center; }
 `;
 
 /**
@@ -81,6 +117,8 @@ dvfy-radio[disabled] .dvfy-radio__label { color: var(--dvfy-disabled-text); }
  * @attr {string} name - Form field name (groups radios with same name)
  * @attr {string} value - Form field value
  * @attr {string} label - Label text
+ * @attr {string} size - Visual size: xs | sm | md | lg | xl (default: "md")
+ * @attr {string} label-position - Label placement: top | right | bottom | left (default: "right")
  *
  * @fires change - Selection changed
  *
@@ -100,7 +138,7 @@ class DvfyRadio extends HTMLElement {
     this.#build();
   }
 
-  static get observedAttributes() { return ['checked', 'disabled', 'label']; }
+  static get observedAttributes() { return ['checked', 'disabled', 'label', 'label-position']; }
 
   attributeChangedCallback() {
     if (this.isConnected) this.#build();

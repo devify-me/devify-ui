@@ -39,10 +39,12 @@ dvfy-modal .dvfy-modal__dialog {
   max-height: 85vh;
   width: 100%;
 }
+dvfy-modal[size="xs"] .dvfy-modal__dialog { max-width: 20rem; }
 dvfy-modal[size="sm"] .dvfy-modal__dialog { max-width: 24rem; }
 dvfy-modal:not([size]) .dvfy-modal__dialog,
 dvfy-modal[size="md"] .dvfy-modal__dialog { max-width: 32rem; }
 dvfy-modal[size="lg"] .dvfy-modal__dialog { max-width: 48rem; }
+dvfy-modal[size="xl"] .dvfy-modal__dialog { max-width: 64rem; }
 dvfy-modal .dvfy-modal__header {
   display: flex;
   align-items: center;
@@ -88,7 +90,7 @@ dvfy-modal .dvfy-modal__body {
  *
  * @attr {boolean} open - Show/hide the modal
  * @attr {string} title - Header title text
- * @attr {string} size - Dialog size: sm | md | lg (default: "md")
+ * @attr {string} size - Dialog size: xs | sm | md | lg | xl (default: "md")
  * @attr {boolean} required - Prevent dismissal via backdrop click or Escape key
  *
  * @fires close - Modal closed

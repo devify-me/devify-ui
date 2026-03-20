@@ -24,7 +24,9 @@
 
 const STYLES = `
 dvfy-select {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dvfy-space-1-5);
   font-family: var(--dvfy-font-sans);
   position: relative;
 }
@@ -34,7 +36,6 @@ dvfy-select .dvfy-select__label {
   font-size: var(--dvfy-text-sm);
   font-weight: var(--dvfy-weight-medium);
   color: var(--dvfy-text-primary);
-  margin-bottom: var(--dvfy-space-1-5);
 }
 
 dvfy-select .dvfy-select__label .dvfy-select__req {
@@ -50,7 +51,7 @@ dvfy-select .dvfy-select__trigger {
   padding: var(--dvfy-space-2) var(--dvfy-space-3);
   font-size: var(--dvfy-text-sm);
   font-family: inherit;
-  background: var(--dvfy-surface-primary);
+  background: var(--dvfy-surface-raised);
   border: var(--dvfy-border-1) solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-lg);
   cursor: pointer;
@@ -84,7 +85,7 @@ dvfy-select .dvfy-select__dropdown {
   right: 0;
   z-index: var(--dvfy-z-dropdown, 100);
   margin-top: var(--dvfy-space-1);
-  background: var(--dvfy-surface-primary);
+  background: var(--dvfy-surface-raised);
   border: var(--dvfy-border-1) solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-lg);
   box-shadow: var(--dvfy-shadow-lg);
@@ -142,12 +143,10 @@ dvfy-select[error] .dvfy-select__trigger { border-color: var(--dvfy-danger-borde
 dvfy-select .dvfy-select__error {
   font-size: var(--dvfy-text-xs);
   color: var(--dvfy-danger-text);
-  margin-top: var(--dvfy-space-1);
 }
 dvfy-select .dvfy-select__help {
   font-size: var(--dvfy-text-xs);
   color: var(--dvfy-text-muted);
-  margin-top: var(--dvfy-space-1);
 }
 
 /* Disabled */
@@ -170,7 +169,7 @@ dvfy-select .dvfy-select__native {
     padding: var(--dvfy-space-2) var(--dvfy-space-3);
     font-size: var(--dvfy-text-sm);
     font-family: inherit;
-    background: var(--dvfy-surface-primary);
+    background: var(--dvfy-surface-raised);
     border: var(--dvfy-border-1) solid var(--dvfy-border-default);
     border-radius: var(--dvfy-radius-lg);
     color: var(--dvfy-text-primary);
@@ -182,6 +181,44 @@ dvfy-select .dvfy-select__native {
     color: var(--dvfy-disabled-text);
   }
 }
+
+/* Size: xs */
+dvfy-select[size="xs"] .dvfy-select__trigger { padding: var(--dvfy-space-1) var(--dvfy-space-2); font-size: var(--dvfy-text-xs); border-radius: var(--dvfy-radius-sm); }
+dvfy-select[size="xs"] .dvfy-select__label { font-size: var(--dvfy-text-xs); }
+dvfy-select[size="xs"] .dvfy-select__native { padding: var(--dvfy-space-1) var(--dvfy-space-2); font-size: var(--dvfy-text-xs); border-radius: var(--dvfy-radius-sm); }
+/* Size: sm */
+dvfy-select[size="sm"] .dvfy-select__trigger { padding: var(--dvfy-space-1-5) var(--dvfy-space-2-5); font-size: var(--dvfy-text-sm); border-radius: var(--dvfy-radius-md); }
+dvfy-select[size="sm"] .dvfy-select__label { font-size: var(--dvfy-text-xs); }
+dvfy-select[size="sm"] .dvfy-select__native { padding: var(--dvfy-space-1-5) var(--dvfy-space-2-5); font-size: var(--dvfy-text-sm); border-radius: var(--dvfy-radius-md); }
+/* Size: md (default) */
+/* Size: lg */
+dvfy-select[size="lg"] .dvfy-select__trigger { padding: var(--dvfy-space-2-5) var(--dvfy-space-3-5); font-size: var(--dvfy-text-base); }
+dvfy-select[size="lg"] .dvfy-select__native { padding: var(--dvfy-space-2-5) var(--dvfy-space-3-5); font-size: var(--dvfy-text-base); }
+/* Size: xl */
+dvfy-select[size="xl"] .dvfy-select__trigger { padding: var(--dvfy-space-3) var(--dvfy-space-4); font-size: var(--dvfy-text-lg); border-radius: var(--dvfy-radius-xl); }
+dvfy-select[size="xl"] .dvfy-select__label { font-size: var(--dvfy-text-base); }
+dvfy-select[size="xl"] .dvfy-select__native { padding: var(--dvfy-space-3) var(--dvfy-space-4); font-size: var(--dvfy-text-lg); border-radius: var(--dvfy-radius-xl); }
+
+/* Label position: bottom */
+dvfy-select[label-position="bottom"] .dvfy-select__label { order: 1; }
+dvfy-select[label-position="bottom"] .dvfy-select__error,
+dvfy-select[label-position="bottom"] .dvfy-select__help { order: 2; }
+
+/* Label position: left */
+dvfy-select[label-position="left"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
+dvfy-select[label-position="left"] .dvfy-select__label { flex-shrink: 0; width: var(--dvfy-label-width, auto); }
+dvfy-select[label-position="left"] .dvfy-select__custom,
+dvfy-select[label-position="left"] .dvfy-select__native { flex: 1; min-width: 0; }
+dvfy-select[label-position="left"] .dvfy-select__error,
+dvfy-select[label-position="left"] .dvfy-select__help { width: 100%; }
+
+/* Label position: right */
+dvfy-select[label-position="right"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
+dvfy-select[label-position="right"] .dvfy-select__label { order: 1; flex-shrink: 0; width: var(--dvfy-label-width, auto); }
+dvfy-select[label-position="right"] .dvfy-select__custom,
+dvfy-select[label-position="right"] .dvfy-select__native { flex: 1; min-width: 0; }
+dvfy-select[label-position="right"] .dvfy-select__error,
+dvfy-select[label-position="right"] .dvfy-select__help { width: 100%; order: 2; }
 `;
 
 /**
@@ -197,12 +234,14 @@ dvfy-select .dvfy-select__native {
  * @attr {boolean} required - Mark field as required
  * @attr {boolean} disabled - Disable interaction
  * @attr {boolean} searchable - Enable filter input in dropdown
+ * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
+ * @attr {string} label-position - Label placement: top | right | bottom | left (default: "top")
  *
  * @fires change - Selection changed, detail: { value }
  *
  * @slot - <option> elements defining available choices
  *
- * @cssprop {color} --dvfy-surface-primary - Dropdown background
+ * @cssprop {color} --dvfy-surface-raised - Dropdown background
  * @cssprop {color} --dvfy-hover-bg - Option hover background
  * @cssprop {color} --dvfy-active-bg - Selected option background
  */
@@ -247,7 +286,7 @@ class DvfySelect extends HTMLElement {
     document.removeEventListener('click', this._onDocClick);
   }
 
-  static get observedAttributes() { return ['error', 'help', 'disabled', 'label', 'placeholder', 'required']; }
+  static get observedAttributes() { return ['error', 'help', 'disabled', 'label', 'placeholder', 'required', 'label-position']; }
 
   attributeChangedCallback() {
     if (this.isConnected) {

@@ -20,7 +20,7 @@ dvfy-nav {
   justify-content: space-between;
   padding: 0 var(--dvfy-space-5);
   height: 3.5rem;
-  background: var(--dvfy-surface-primary);
+  background: var(--dvfy-surface-raised);
   border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-default);
   font-family: var(--dvfy-font-sans);
   z-index: var(--dvfy-z-sticky);
@@ -81,7 +81,7 @@ dvfy-nav .dvfy-nav__toggle:focus-visible {
     right: 0;
     flex-direction: column;
     align-items: stretch;
-    background: var(--dvfy-surface-primary);
+    background: var(--dvfy-surface-raised);
     border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-default);
     padding: var(--dvfy-space-2) var(--dvfy-space-4);
     gap: var(--dvfy-space-1);
@@ -106,7 +106,7 @@ dvfy-nav .dvfy-nav__toggle:focus-visible {
  *
  * @slot - Navigation links and action elements
  *
- * @cssprop {color} --dvfy-surface-primary - Nav background
+ * @cssprop {color} --dvfy-surface-raised - Nav background
  * @cssprop {color} --dvfy-border-default - Bottom border color
  * @cssprop {color} --dvfy-text-primary - Brand text color
  */

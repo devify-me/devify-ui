@@ -3,7 +3,7 @@
  *
  * Attributes:
  *   value:   0-100
- *   variant: bar | circle (default: "bar")
+ *   variant: bar | oval | circle (default: "bar")
  *   size:    sm | md | lg (default: "md")
  *   status:  default | success | warning | danger
  *   label:   boolean — show percentage text
@@ -24,21 +24,28 @@ dvfy-progress {
 /* Bar track */
 dvfy-progress .dvfy-progress__track {
   flex: 1;
-  background: var(--dvfy-surface-secondary);
-  border-radius: var(--dvfy-radius-round);
+  background: var(--dvfy-surface-muted);
+  border-radius: var(--dvfy-radius-sm);
   overflow: hidden;
 }
 dvfy-progress:not([variant]) .dvfy-progress__track,
-dvfy-progress[variant="bar"] .dvfy-progress__track { display: block; width: 100%; }
+dvfy-progress[variant="bar"] .dvfy-progress__track,
+dvfy-progress[variant="oval"] .dvfy-progress__track { display: block; width: 100%; }
 dvfy-progress[variant="circle"] .dvfy-progress__track { display: none; }
 
+/* Oval variant — pill-shaped track */
+dvfy-progress[variant="oval"] .dvfy-progress__track { border-radius: var(--dvfy-radius-round); }
+
+dvfy-progress[size="xs"] .dvfy-progress__track { height: 0.25rem; }
 dvfy-progress[size="sm"] .dvfy-progress__track { height: 0.375rem; }
 dvfy-progress:not([size]) .dvfy-progress__track,
 dvfy-progress[size="md"] .dvfy-progress__track { height: 0.5rem; }
 dvfy-progress[size="lg"] .dvfy-progress__track { height: 0.75rem; }
+dvfy-progress[size="xl"] .dvfy-progress__track { height: 1rem; }
 
 dvfy-progress:not([variant]),
-dvfy-progress[variant="bar"] { width: 100%; }
+dvfy-progress[variant="bar"],
+dvfy-progress[variant="oval"] { width: 100%; }
 
 dvfy-progress .dvfy-progress__fill {
   height: 100%;
@@ -65,7 +72,7 @@ dvfy-progress[variant="circle"] .dvfy-progress__circle { display: block; }
 dvfy-progress[variant="circle"] { width: auto; }
 
 dvfy-progress .dvfy-progress__ring-bg {
-  stroke: var(--dvfy-surface-secondary);
+  stroke: var(--dvfy-surface-muted);
   fill: none;
 }
 dvfy-progress .dvfy-progress__ring-fg {
@@ -91,7 +98,7 @@ dvfy-progress .dvfy-progress__circle-label {
 }
 `;
 
-const SIZES = { sm: { dim: 48, stroke: 4, font: 10 }, md: { dim: 64, stroke: 5, font: 13 }, lg: { dim: 96, stroke: 6, font: 18 } };
+const SIZES = { xs: { dim: 32, stroke: 3, font: 8 }, sm: { dim: 48, stroke: 4, font: 10 }, md: { dim: 64, stroke: 5, font: 13 }, lg: { dim: 96, stroke: 6, font: 18 }, xl: { dim: 128, stroke: 8, font: 22 } };
 
 /**
  * Progress indicator with bar and circle variants.
@@ -99,8 +106,8 @@ const SIZES = { sm: { dim: 48, stroke: 4, font: 10 }, md: { dim: 64, stroke: 5, 
  * @element dvfy-progress
  *
  * @attr {number} value - Progress value from 0 to 100
- * @attr {string} variant - Display style: bar | circle (default: "bar")
- * @attr {string} size - Size: sm | md | lg (default: "md")
+ * @attr {string} variant - Display style: bar | oval | circle (default: "bar")
+ * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {string} status - Color status: default | success | warning | danger
  * @attr {boolean} label - Show percentage text
  *

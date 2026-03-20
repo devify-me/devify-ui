@@ -17,10 +17,23 @@ dvfy-button {
   user-select: none;
 }
 
-/* Sizes */
+/* Size: xs */
+dvfy-button[size="xs"] { padding: var(--dvfy-space-1) var(--dvfy-space-2); font-size: var(--dvfy-text-xs); border-radius: var(--dvfy-radius-sm); }
+/* Size: sm */
 dvfy-button[size="sm"] { padding: var(--dvfy-space-1-5) var(--dvfy-space-3); font-size: var(--dvfy-text-sm); border-radius: var(--dvfy-radius-md); }
+/* Size: md (default) */
 dvfy-button:not([size]), dvfy-button[size="md"] { padding: var(--dvfy-space-2) var(--dvfy-space-4); font-size: var(--dvfy-text-sm); border-radius: var(--dvfy-radius-lg); }
+/* Size: lg */
 dvfy-button[size="lg"] { padding: var(--dvfy-space-2-5) var(--dvfy-space-5); font-size: var(--dvfy-text-base); border-radius: var(--dvfy-radius-lg); }
+/* Size: xl */
+dvfy-button[size="xl"] { padding: var(--dvfy-space-3) var(--dvfy-space-6); font-size: var(--dvfy-text-lg); border-radius: var(--dvfy-radius-xl); }
+
+/* Icon-only — square aspect ratio */
+dvfy-button[icon] { aspect-ratio: 1; padding: var(--dvfy-space-2); }
+dvfy-button[icon][size="xs"] { padding: var(--dvfy-space-1); }
+dvfy-button[icon][size="sm"] { padding: var(--dvfy-space-1-5); }
+dvfy-button[icon][size="lg"] { padding: var(--dvfy-space-2-5); }
+dvfy-button[icon][size="xl"] { padding: var(--dvfy-space-3); }
 
 /* Default variant — high specificity to resist overrides */
 dvfy-button:not([variant]), dvfy-button[variant="default"] {
@@ -107,7 +120,8 @@ dvfy-button[loading]::after {
  * @element dvfy-button
  *
  * @attr {string} variant - Button style: default | subtle | outline | ghost | danger (default: "default")
- * @attr {string} size - Size: sm | md | lg (default: "md")
+ * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
+ * @attr {boolean} icon - Icon-only mode with square aspect ratio
  * @attr {boolean} disabled - Disable button and prevent interaction
  * @attr {boolean} loading - Show loading state with spinner indicator
  * @attr {string} type - HTML button type: button | submit | reset (default: "button")

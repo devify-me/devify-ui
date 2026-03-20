@@ -68,6 +68,35 @@ dvfy-textarea .dvfy-textarea__count {
   margin-left: auto;
 }
 dvfy-textarea .dvfy-textarea__count[data-over="true"] { color: var(--dvfy-danger-text); }
+
+/* Size: xs */
+dvfy-textarea[size="xs"] .dvfy-textarea__field { padding: var(--dvfy-space-1) var(--dvfy-space-2); font-size: var(--dvfy-text-xs); border-radius: var(--dvfy-radius-sm); }
+dvfy-textarea[size="xs"] .dvfy-textarea__label { font-size: var(--dvfy-text-xs); }
+/* Size: sm */
+dvfy-textarea[size="sm"] .dvfy-textarea__field { padding: var(--dvfy-space-1-5) var(--dvfy-space-2-5); font-size: var(--dvfy-text-sm); border-radius: var(--dvfy-radius-md); }
+dvfy-textarea[size="sm"] .dvfy-textarea__label { font-size: var(--dvfy-text-xs); }
+/* Size: md (default) */
+/* Size: lg */
+dvfy-textarea[size="lg"] .dvfy-textarea__field { padding: var(--dvfy-space-2-5) var(--dvfy-space-3-5); font-size: var(--dvfy-text-base); }
+/* Size: xl */
+dvfy-textarea[size="xl"] .dvfy-textarea__field { padding: var(--dvfy-space-3) var(--dvfy-space-4); font-size: var(--dvfy-text-lg); border-radius: var(--dvfy-radius-xl); }
+dvfy-textarea[size="xl"] .dvfy-textarea__label { font-size: var(--dvfy-text-base); }
+
+/* Label position: bottom */
+dvfy-textarea[label-position="bottom"] .dvfy-textarea__label { order: 1; }
+dvfy-textarea[label-position="bottom"] .dvfy-textarea__footer { order: 2; }
+
+/* Label position: left */
+dvfy-textarea[label-position="left"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
+dvfy-textarea[label-position="left"] .dvfy-textarea__label { flex-shrink: 0; width: var(--dvfy-label-width, auto); }
+dvfy-textarea[label-position="left"] .dvfy-textarea__field { flex: 1; min-width: 0; }
+dvfy-textarea[label-position="left"] .dvfy-textarea__footer { width: 100%; }
+
+/* Label position: right */
+dvfy-textarea[label-position="right"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
+dvfy-textarea[label-position="right"] .dvfy-textarea__label { order: 1; flex-shrink: 0; width: var(--dvfy-label-width, auto); }
+dvfy-textarea[label-position="right"] .dvfy-textarea__field { flex: 1; min-width: 0; }
+dvfy-textarea[label-position="right"] .dvfy-textarea__footer { width: 100%; order: 2; }
 `;
 
 /**
@@ -85,6 +114,8 @@ dvfy-textarea .dvfy-textarea__count[data-over="true"] { color: var(--dvfy-danger
  * @attr {boolean} disabled - Disable input
  * @attr {number} rows - Initial row count (default: 3)
  * @attr {number} maxlength - Maximum character count (shows counter)
+ * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
+ * @attr {string} label-position - Label placement: top | right | bottom | left (default: "top")
  *
  * @cssprop {color} --dvfy-input-bg - Textarea background
  * @cssprop {color} --dvfy-input-border - Textarea border color
@@ -104,7 +135,7 @@ class DvfyTextarea extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ['label', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'rows', 'maxlength'];
+    return ['label', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'rows', 'maxlength', 'label-position'];
   }
 
   attributeChangedCallback() {

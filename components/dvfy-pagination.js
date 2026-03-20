@@ -30,7 +30,7 @@ dvfy-pagination .dvfy-pagination__btn {
   padding: 0 var(--dvfy-space-1-5);
   border: var(--dvfy-border-1) solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-md);
-  background: var(--dvfy-surface-primary);
+  background: var(--dvfy-surface-raised);
   color: var(--dvfy-text-primary);
   cursor: pointer;
   font-family: inherit;

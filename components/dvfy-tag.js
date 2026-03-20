@@ -25,16 +25,35 @@ dvfy-tag {
   vertical-align: middle;
 }
 
-/* Sizes */
+/* Size: xs */
+dvfy-tag[size="xs"] {
+  padding: 0 var(--dvfy-space-1-5);
+  font-size: var(--dvfy-text-xs);
+  border-radius: var(--dvfy-radius-sm);
+}
+/* Size: sm */
+dvfy-tag[size="sm"] {
+  padding: var(--dvfy-space-0-5) var(--dvfy-space-2);
+  font-size: var(--dvfy-text-xs);
+  border-radius: var(--dvfy-radius-md);
+}
+/* Size: md (default) */
 dvfy-tag:not([size]), dvfy-tag[size="md"] {
   padding: var(--dvfy-space-1) var(--dvfy-space-2-5);
   font-size: var(--dvfy-text-sm);
   border-radius: var(--dvfy-radius-md);
 }
-dvfy-tag[size="sm"] {
-  padding: var(--dvfy-space-0-5) var(--dvfy-space-2);
-  font-size: var(--dvfy-text-xs);
-  border-radius: var(--dvfy-radius-md);
+/* Size: lg */
+dvfy-tag[size="lg"] {
+  padding: var(--dvfy-space-1) var(--dvfy-space-3);
+  font-size: var(--dvfy-text-sm);
+  border-radius: var(--dvfy-radius-lg);
+}
+/* Size: xl */
+dvfy-tag[size="xl"] {
+  padding: var(--dvfy-space-1-5) var(--dvfy-space-3-5);
+  font-size: var(--dvfy-text-base);
+  border-radius: var(--dvfy-radius-lg);
 }
 
 /* Neutral */
@@ -111,7 +130,7 @@ dvfy-tag .dvfy-tag__remove:focus-visible {
  * @attr {string} variant - Tag style: default | outline (default: "default")
  * @attr {string} status - Status color: neutral | success | warning | danger | info (default: "neutral")
  * @attr {boolean} removable - Show remove button and dispatch remove event
- * @attr {string} size - Size: sm | md (default: "md")
+ * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  *
  * @fires remove - Remove button clicked
  *
