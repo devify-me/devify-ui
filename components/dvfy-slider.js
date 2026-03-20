@@ -224,7 +224,7 @@ dvfy-slider .dvfy-slider__steps {
 }
 dvfy-slider .dvfy-slider__tick {
   width: 2px;
-  height: calc(var(--_track-h) + 0.5rem);
+  height: var(--_track-h);
   border-radius: 1px;
   background: var(--dvfy-text-muted, var(--dvfy-border-default));
   opacity: 0.4;
