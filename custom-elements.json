@@ -512,12 +512,7 @@
           "type": "boolean"
         },
         {
-          "name": "label-position",
-          "description": "Label placement: top | right | bottom | left",
-          "type": "string"
-        },
-        {
-          "name": "label",
+          "name": "header",
           "description": "Header title and reopen tab text (default: \"Panel\")",
           "type": "string"
         },
@@ -528,7 +523,7 @@
         },
         {
           "name": "width",
-          "description": "CSS width value (default: \"clamp(200px, 40%, 320px)\")",
+          "description": "CSS size value for the drawer dimension (default: \"clamp(200px, 40%, 320px)\")",
           "type": "string"
         },
         {
