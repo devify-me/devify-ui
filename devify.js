@@ -36,6 +36,7 @@ import './components/dvfy-tree-view.js';
 
 // Wave 3: Functional + Interactive
 import './components/dvfy-card.js';
+import './components/dvfy-gradient-card.js';
 import './components/dvfy-table.js';
 import './components/dvfy-toast.js';
 import './components/dvfy-empty.js';
