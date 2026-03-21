@@ -22,14 +22,16 @@
       display: flex;
       height: calc(100vh - var(--dvfy-nav-height, 3.5rem));
     }
+    #catalog-drawer {
+      height: 100%;
+    }
+    #catalog-drawer .dvfy-drawer__body {
+      padding: 0;
+    }
     #catalog-sidebar {
-      position: sticky;
-      top: var(--dvfy-nav-height, 3.5rem);
-      height: calc(100vh - var(--dvfy-nav-height, 3.5rem));
-      overflow-y: auto;
-      flex-shrink: 0;
       display: flex;
       flex-direction: column;
+      height: 100%;
     }
     .catalog-main {
       flex: 1;
@@ -47,7 +49,7 @@
   </dvfy-nav>
 
   <div class="catalog-layout">
-    <div id="catalog-sidebar"></div>
+    <dvfy-drawer id="catalog-drawer" position="left" header="Navigation" width="17rem"></dvfy-drawer>
     <main id="main-content" class="catalog-main"></main>
   </div>
 

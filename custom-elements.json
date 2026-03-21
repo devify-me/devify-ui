@@ -1166,6 +1166,62 @@
       ]
     },
     {
+      "name": "dvfy-scroll-reveal",
+      "path": "./components/dvfy-scroll-reveal.js",
+      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
+      "attributes": [
+        {
+          "name": "animation",
+          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
+          "type": "string"
+        },
+        {
+          "name": "threshold",
+          "description": "Viewport percentage where animation triggers (default: \"20%\")",
+          "type": "string"
+        },
+        {
+          "name": "duration",
+          "description": "Animation speed: fastest | fast | normal | slow | slowest",
+          "type": "string"
+        },
+        {
+          "name": "delay",
+          "description": "CSS delay value for staggering (e.g. \"200ms\")",
+          "type": "string"
+        },
+        {
+          "name": "once",
+          "description": "Only animate once, don't reverse on scroll back",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "reveal",
+          "description": "Element visibility changed, detail: { visible }"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Content to reveal on scroll"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-reveal-duration",
+          "description": "Override animation duration",
+          "type": "time"
+        },
+        {
+          "name": "--dvfy-reveal-easing",
+          "description": "Override animation easing curve",
+          "type": "string"
+        }
+      ]
+    },
+    {
       "name": "dvfy-section",
       "path": "./components/dvfy-section.js",
       "description": "Collapsible section with summary header and toggle animation.",
@@ -1982,6 +2038,78 @@
           "name": "--dvfy-neutral-200",
           "description": "Tooltip background (dark mode)",
           "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-tree-view",
+      "path": "./components/dvfy-tree-view.js",
+      "description": "Interactive tree view for hierarchical navigation (VS Code file explorer style).",
+      "events": [
+        {
+          "name": "select"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-hover-bg",
+          "description": "Row hover background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-active-bg",
+          "description": "Selected row background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-tree-node",
+      "path": "./components/dvfy-tree-view.js",
+      "description": "A node within a tree view. Can be a branch (has children) or leaf (has href).",
+      "attributes": [
+        {
+          "name": "href",
+          "description": "Link target (makes it a leaf)",
+          "type": "string"
+        },
+        {
+          "name": "label",
+          "description": "Display text",
+          "type": "string"
+        },
+        {
+          "name": "expanded",
+          "description": "Branch open state",
+          "type": "boolean"
+        },
+        {
+          "name": "selected",
+          "description": "Currently active node",
+          "type": "boolean"
+        },
+        {
+          "name": "icon",
+          "description": "Optional leading text/emoji",
+          "type": "string"
+        }
+      ],
+      "properties": [
+        {
+          "name": "isBranch",
+          "description": "Whether this node has child nodes (is a branch)",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "toggle"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Child dvfy-tree-node elements for branch nodes"
         }
       ]
     },
