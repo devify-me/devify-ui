@@ -1933,6 +1933,51 @@
       ]
     },
     {
+      "name": "dvfy-text-vortex",
+      "path": "./components/dvfy-text-vortex.js",
+      "description": "Spiral scroll text vortex. Characters spiral inward on scroll using CSS\nsibling-index()/sibling-count() and scroll-driven animations.",
+      "attributes": [
+        {
+          "name": "depth",
+          "description": "Number of spiral turns (default: 3)",
+          "type": "number"
+        },
+        {
+          "name": "font-size",
+          "description": "Character font size CSS value (default: \"2rem\")",
+          "type": "string"
+        },
+        {
+          "name": "color",
+          "description": "Text color CSS value (default: var(--dvfy-text-primary))",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Text content to spiral (only text content is used)"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-vortex-depth",
+          "description": "Override spiral depth",
+          "type": "number"
+        },
+        {
+          "name": "--dvfy-vortex-font-size",
+          "description": "Override character font size",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-vortex-color",
+          "description": "Override text color",
+          "type": "color"
+        }
+      ]
+    },
+    {
       "name": "dvfy-textarea",
       "path": "./components/dvfy-textarea.js",
       "description": "Multiline text input with auto-resize, character count, and error/help text.",
