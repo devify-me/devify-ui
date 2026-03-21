@@ -63,8 +63,9 @@ export const COMPONENT_REGISTRY = {
   'dvfy-drawer':    { tier: 1, domain: 'layout',     deps: [] },
   'dvfy-section':   { tier: 1, domain: 'layout',     deps: [] },
   'dvfy-tooltip':       { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-scroll-reveal': { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-tree-node':     { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-scroll-reveal':   { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-page-transition': { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-tree-node':       { tier: 1, domain: 'navigation', deps: [] },
 
   // Tier 2 — Composites
   'dvfy-select':         { tier: 2, domain: 'forms',      deps: [] },
@@ -82,6 +83,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-theme-switcher': { tier: 2, domain: 'utility',    deps: [] },
 
   // Tier 3 — Organisms
+  'dvfy-carousel':  { tier: 3, domain: 'layout',     deps: [] },
   'dvfy-accordion': { tier: 3, domain: 'layout',     deps: ['dvfy-section'] },
   'dvfy-sidebar':   { tier: 3, domain: 'navigation', deps: [] },
   'dvfy-auth':      { tier: 3, domain: 'utility',    deps: ['dvfy-input', 'dvfy-button'] },

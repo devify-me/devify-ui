@@ -412,6 +412,22 @@
       ]
     },
     {
+      "name": "dvfy-carousel",
+      "path": "./components/dvfy-carousel.js",
+      "description": "Carousel container. Wraps dvfy-slide elements in a horizontally scrollable\nsnap container. Navigation buttons and pagination dots are rendered entirely\nby CSS pseudo-elements on Chrome 135+; older browsers see a plain swipeable\nscroll area."
+    },
+    {
+      "name": "dvfy-slide",
+      "path": "./components/dvfy-carousel.js",
+      "description": "Individual slide within a dvfy-carousel container.",
+      "slots": [
+        {
+          "name": "",
+          "description": "Slide content (images, cards, text, etc.)"
+        }
+      ]
+    },
+    {
       "name": "dvfy-checkbox",
       "path": "./components/dvfy-checkbox.js",
       "description": "Checkbox input with label, tri-state cycling, and size variants.\n\nWhen the `indeterminate` attribute is set at initialization, clicking\ncycles: indeterminate → checked → unchecked → indeterminate → ...\nWithout `indeterminate`, standard binary toggle applies.",
@@ -1000,6 +1016,33 @@
           "name": "--dvfy-nav-height",
           "description": "Bar height (default: 3.5rem)",
           "type": "length"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-page-transition",
+      "path": "./components/dvfy-page-transition.js",
+      "description": "View Transitions API wrapper for MPA and SPA transitions.",
+      "attributes": [
+        {
+          "name": "animation"
+        },
+        {
+          "name": "duration"
+        },
+        {
+          "name": "mpa"
+        },
+        {
+          "name": "name"
+        }
+      ],
+      "events": [
+        {
+          "name": "transition-start"
+        },
+        {
+          "name": "transition-finish"
         }
       ]
     },
