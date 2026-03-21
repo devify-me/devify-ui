@@ -48,7 +48,7 @@ export function buildSidebar(containerEl) {
     t.appendChild(createNode('Overview', '#overview'));
 
     // Tokens
-    const tokensNode = createNode('Tokens');
+    const tokensNode = createNode(`Tokens (${Object.keys(TOKEN_GROUPS).length})`);
     tokensNode.setAttribute('expanded', '');
     for (const key of Object.keys(TOKEN_GROUPS)) {
       tokensNode.appendChild(createNode(TOKEN_GROUPS[key].label, `#tokens/${key}`));
@@ -56,7 +56,8 @@ export function buildSidebar(containerEl) {
     t.appendChild(tokensNode);
 
     // Components
-    const componentsNode = createNode('Components');
+    const totalComponents = Object.keys(COMPONENT_REGISTRY).filter(t => COMPONENT_REGISTRY[t].tier <= 3).length;
+    const componentsNode = createNode(`Components (${totalComponents})`);
     componentsNode.setAttribute('expanded', '');
 
     if (view === 'tier') {
@@ -72,7 +73,7 @@ export function buildSidebar(containerEl) {
       }
     } else {
       for (const [category, tags] of Object.entries(COMPONENT_CATEGORIES)) {
-        const catNode = createNode(category);
+        const catNode = createNode(`${category} (${tags.length})`);
         catNode.setAttribute('expanded', '');
         for (const tag of tags) {
           catNode.appendChild(createNode(tag.replace('dvfy-', ''), `#components/${tag}`));
@@ -83,7 +84,7 @@ export function buildSidebar(containerEl) {
     t.appendChild(componentsNode);
 
     // HTMX Patterns
-    const patternsNode = createNode('HTMX Patterns');
+    const patternsNode = createNode(`HTMX Patterns (${Object.keys(HTMX_PATTERNS).length})`);
     for (const tag of Object.keys(HTMX_PATTERNS)) {
       patternsNode.appendChild(createNode(tag.replace('dvfy-', ''), `#patterns/${tag}`));
     }
