@@ -64,6 +64,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-section':   { tier: 1, domain: 'layout',     deps: [] },
   'dvfy-tooltip':       { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-scroll-reveal': { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-tree-node':     { tier: 1, domain: 'navigation', deps: [] },
 
   // Tier 2 — Composites
   'dvfy-select':         { tier: 2, domain: 'forms',      deps: [] },

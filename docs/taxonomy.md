@@ -20,7 +20,7 @@ Q4: None of the above (pure tokens + native HTML only)?
 
 | Tier | Name       | Max dvfy-* deps | Allowed dep tiers | Count |
 |------|------------|-----------------|-------------------|-------|
-| 1    | Primitive  | 0               | None              | 18    |
+| 1    | Primitive  | 0               | None              | 19    |
 | 2    | Composite  | 2               | Tier 1 only       | 13    |
 | 3    | Organism   | Unlimited       | Tier 1 + Tier 2   | 3     |
 | 4    | Pattern    | Unlimited       | Any               | 5     |
@@ -49,7 +49,7 @@ Q4: None of the above (pure tokens + native HTML only)?
 
 ## Classification Reference
 
-### Tier 1 — Primitives (18)
+### Tier 1 — Primitives (19)
 
 | Component          | Domain     |
 |-------------------|------------|
@@ -67,6 +67,7 @@ Q4: None of the above (pure tokens + native HTML only)?
 | dvfy-alert        | Feedback   |
 | dvfy-loader       | Feedback   |
 | dvfy-hamburger    | Navigation |
+| dvfy-tree-node    | Navigation |
 | dvfy-drawer       | Layout     |
 | dvfy-section      | Layout     |
 | dvfy-tooltip      | Utility    |
