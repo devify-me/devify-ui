@@ -788,6 +788,10 @@
       ]
     },
     {
+      "name": "dvfy-hovercard",
+      "path": "./components/dvfy-hovercard.js"
+    },
+    {
       "name": "dvfy-input",
       "path": "./components/dvfy-input.js",
       "description": "Text input with label, error/help text, and password visibility toggle.",
@@ -1249,6 +1253,61 @@
       ]
     },
     {
+      "name": "dvfy-scramble-hover",
+      "path": "./components/dvfy-scramble-hover.js",
+      "description": "Evervault-style character scramble on hover. Characters cycle through random\nglyphs and resolve sequentially to reveal the original text.",
+      "attributes": [
+        {
+          "name": "speed",
+          "description": "Scramble iterations per second (default: 30)",
+          "type": "number"
+        },
+        {
+          "name": "duration",
+          "description": "Total resolve time in ms (default: 800)",
+          "type": "number"
+        },
+        {
+          "name": "charset",
+          "description": "Custom scramble character set",
+          "type": "string"
+        },
+        {
+          "name": "trigger",
+          "description": "hover | auto | visible (default: hover)",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "scramble-start",
+          "description": "Scramble animation begins"
+        },
+        {
+          "name": "scramble-end",
+          "description": "Scramble animation completes, all characters resolved"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Text content to scramble"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-scramble-color",
+          "description": "Color of unresolved scrambling characters",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-scramble-resolve-color",
+          "description": "Color of resolved characters",
+          "type": "color"
+        }
+      ]
+    },
+    {
       "name": "dvfy-scroll-progress",
       "path": "./components/dvfy-scroll-progress.js",
       "description": "CSS scroll-driven reading progress bar.",
@@ -1654,6 +1713,51 @@
         {
           "name": "--dvfy-neutral-400",
           "description": "Metallic knob shadow",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-spotlight-card",
+      "path": "./components/dvfy-spotlight-card.js",
+      "description": "Premium card with a dual-layer radial gradient spotlight that follows the\nmouse cursor — a glowing border rim and an inner surface highlight.",
+      "attributes": [
+        {
+          "name": "elevated",
+          "description": "Add shadow elevation",
+          "type": "boolean"
+        },
+        {
+          "name": "padded",
+          "description": "Enable padding",
+          "type": "boolean"
+        },
+        {
+          "name": "interactive",
+          "description": "Enable cursor pointer and active scale",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Card content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-spotlight-card-size",
+          "description": "Spotlight radius (default: 600px)",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-spotlight-card-color",
+          "description": "Inner surface glow color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-spotlight-card-border-color",
+          "description": "Border glow color",
           "type": "color"
         }
       ]
