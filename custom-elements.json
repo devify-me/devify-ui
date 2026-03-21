@@ -671,6 +671,46 @@
       ]
     },
     {
+      "name": "dvfy-gradient-card",
+      "path": "./components/dvfy-gradient-card.js",
+      "description": "Card with a radial gradient 'light source' that follows the cursor on hover.",
+      "attributes": [
+        {
+          "name": "elevated",
+          "description": "Add shadow elevation",
+          "type": "boolean"
+        },
+        {
+          "name": "padded",
+          "description": "Enable padding",
+          "type": "boolean"
+        },
+        {
+          "name": "interactive",
+          "description": "Enable hover effect and cursor pointer",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Card content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-gradient-card-color",
+          "description": "Gradient highlight color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-gradient-card-size",
+          "description": "Gradient radius (default: 250px)",
+          "type": "length"
+        }
+      ]
+    },
+    {
       "name": "dvfy-hamburger",
       "path": "./components/dvfy-hamburger.js",
       "description": "Animated hamburger icon button — a Tier 1 primitive for menu toggles.\n\nSix animation variants transform three bars into different shapes on toggle.\nComposable into nav, header, and sidebar components.",
@@ -1205,6 +1245,35 @@
           "name": "--dvfy-input-border",
           "description": "Unselected border color",
           "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-scroll-progress",
+      "path": "./components/dvfy-scroll-progress.js",
+      "description": "CSS scroll-driven reading progress bar.",
+      "attributes": [
+        {
+          "name": "position",
+          "description": "Bar position: top | bottom (default: \"top\")",
+          "type": "string"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-scroll-progress-color",
+          "description": "Bar fill color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-scroll-progress-height",
+          "description": "Bar height (default: 3px)",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-scroll-progress-z",
+          "description": "z-index (default: 1000)",
+          "type": "integer"
         }
       ]
     },
