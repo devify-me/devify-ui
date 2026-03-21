@@ -6,15 +6,26 @@
 import { buildSidebar, updateSidebarActive } from './sidebar.js';
 import { initRouter, onRouteChange } from './router.js';
 
-const sidebarContainer = document.getElementById('catalog-sidebar');
+const drawer = document.getElementById('catalog-drawer');
 const mainContent = document.getElementById('main-content');
 
+// Create sidebar container inside the drawer body
+const sidebarContainer = document.createElement('div');
+sidebarContainer.id = 'catalog-sidebar';
+const drawerBody = drawer.querySelector('.dvfy-drawer__body');
+if (drawerBody) {
+  drawerBody.appendChild(sidebarContainer);
+} else {
+  drawer.appendChild(sidebarContainer);
+}
+
 // Build sidebar
-const sidebar = buildSidebar(sidebarContainer);
+buildSidebar(sidebarContainer);
 
 // Wire sidebar active state to route changes
 onRouteChange((hash) => {
-  updateSidebarActive(sidebar, hash);
+  const tree = sidebarContainer.querySelector('dvfy-tree-view');
+  updateSidebarActive(tree, hash);
 });
 
 // Initialize router (renders initial view)
@@ -22,7 +33,6 @@ initRouter(mainContent);
 
 // Re-render active view on theme change
 const observer = new MutationObserver(() => {
-  // Theme changed — re-trigger current route to update computed values
   const hash = location.hash || '#overview';
   window.dispatchEvent(new HashChangeEvent('hashchange'));
 });

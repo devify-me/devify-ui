@@ -19,6 +19,7 @@ import './components/dvfy-textarea.js';
 import './components/dvfy-avatar.js';
 import './components/dvfy-alert.js';
 import './components/dvfy-loader.js';
+import './components/dvfy-scroll-reveal.js';
 
 // Wave 2: Navigation + Wayfinding
 import './components/dvfy-dropdown.js';
@@ -30,6 +31,7 @@ import './components/dvfy-pagination.js';
 import './components/dvfy-progress.js';
 import './components/dvfy-nav.js';
 import './components/dvfy-sidebar.js';
+import './components/dvfy-tree-view.js';
 
 // Wave 3: Functional + Interactive
 import './components/dvfy-card.js';

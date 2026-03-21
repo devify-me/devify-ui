@@ -62,7 +62,8 @@ export const COMPONENT_REGISTRY = {
   'dvfy-hamburger': { tier: 1, domain: 'navigation', deps: [] },
   'dvfy-drawer':    { tier: 1, domain: 'layout',     deps: [] },
   'dvfy-section':   { tier: 1, domain: 'layout',     deps: [] },
-  'dvfy-tooltip':   { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-tooltip':       { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-scroll-reveal': { tier: 1, domain: 'utility',    deps: [] },
 
   // Tier 2 — Composites
   'dvfy-select':         { tier: 2, domain: 'forms',      deps: [] },
@@ -76,6 +77,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-tabs':           { tier: 2, domain: 'navigation', deps: [] },
   'dvfy-dropdown':       { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
   'dvfy-nav':            { tier: 2, domain: 'navigation', deps: ['dvfy-hamburger', 'dvfy-drawer'] },
+  'dvfy-tree-view':      { tier: 2, domain: 'navigation', deps: [] },
   'dvfy-theme-switcher': { tier: 2, domain: 'utility',    deps: [] },
 
   // Tier 3 — Organisms
