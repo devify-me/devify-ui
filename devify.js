@@ -20,6 +20,7 @@ import './components/dvfy-avatar.js';
 import './components/dvfy-alert.js';
 import './components/dvfy-loader.js';
 import './components/dvfy-scroll-reveal.js';
+import './components/dvfy-scroll-progress.js';
 import './components/dvfy-page-transition.js';
 
 // Wave 2: Navigation + Wayfinding

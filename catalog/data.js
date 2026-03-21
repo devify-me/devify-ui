@@ -63,7 +63,8 @@ export const COMPONENT_REGISTRY = {
   'dvfy-drawer':    { tier: 1, domain: 'layout',     deps: [] },
   'dvfy-section':   { tier: 1, domain: 'layout',     deps: [] },
   'dvfy-tooltip':       { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-scroll-reveal':   { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-scroll-reveal':    { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-scroll-progress':  { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-page-transition': { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-tree-node':       { tier: 1, domain: 'navigation', deps: [] },
 
