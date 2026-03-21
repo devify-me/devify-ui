@@ -20,6 +20,7 @@ import './components/dvfy-avatar.js';
 import './components/dvfy-alert.js';
 import './components/dvfy-loader.js';
 import './components/dvfy-scroll-reveal.js';
+import './components/dvfy-page-transition.js';
 
 // Wave 2: Navigation + Wayfinding
 import './components/dvfy-dropdown.js';
@@ -47,6 +48,7 @@ import './components/dvfy-drawer.js';
 import './components/dvfy-section.js';
 import './components/dvfy-component-playground.js';
 import './components/dvfy-accordion.js';
+import './components/dvfy-carousel.js';
 
 // HTMX Integration Patterns
 import './patterns/dvfy-htmx-form.js';
