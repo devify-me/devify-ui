@@ -1337,62 +1337,6 @@
       ]
     },
     {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
-        }
-      ]
-    },
-    {
       "name": "dvfy-section",
       "path": "./components/dvfy-section.js",
       "description": "Collapsible section with summary header and toggle animation.",
@@ -2371,6 +2315,46 @@
         {
           "name": "",
           "description": "Child dvfy-tree-node elements for branch nodes"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-wavy-underline",
+      "path": "./components/dvfy-wavy-underline.js",
+      "description": "Animated wavy underline for links, headings, or any inline element.",
+      "attributes": [
+        {
+          "name": "trigger",
+          "description": "Animation trigger: always | hover (default: \"always\")",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Text or inline content to underline"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-wave-color",
+          "description": "Wave color (default: currentColor)",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-wave-height",
+          "description": "Wave height / amplitude (default: 3px)",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-wave-speed",
+          "description": "Scroll animation duration (default: 1s)",
+          "type": "time"
+        },
+        {
+          "name": "--dvfy-wave-gap",
+          "description": "Gap between text baseline and wave (default: 3px)",
+          "type": "length"
         }
       ]
     },
