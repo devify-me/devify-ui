@@ -989,6 +989,61 @@
       ]
     },
     {
+      "name": "dvfy-marquee-scroll",
+      "path": "./components/dvfy-marquee-scroll.js",
+      "description": "Velocity-driven scroll-accelerated marquee. Content loops continuously;\nscrolling the page temporarily accelerates the marquee, with smooth lerp\ndeceleration back to base speed.",
+      "attributes": [
+        {
+          "name": "speed",
+          "description": "Base scroll speed in px/frame (default: 1)",
+          "type": "number"
+        },
+        {
+          "name": "direction",
+          "description": "Scroll direction: left | right (default: \"left\")",
+          "type": "string"
+        },
+        {
+          "name": "multiplier",
+          "description": "Scroll velocity to speed multiplier (default: 3)",
+          "type": "number"
+        },
+        {
+          "name": "gap",
+          "description": "CSS gap between looped content copies (default: \"4rem\")",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Content to be looped in the marquee"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-marquee-bg",
+          "description": "Background and edge-fade color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-marquee-gap",
+          "description": "Gap between content copies (default: 4rem)",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-marquee-padding",
+          "description": "Block padding (default: 1rem)",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-marquee-fade",
+          "description": "Edge fade overlay width (default: 4rem)",
+          "type": "length"
+        }
+      ]
+    },
+    {
       "name": "dvfy-modal",
       "path": "./components/dvfy-modal.js",
       "description": "Modal dialog with backdrop, focus trap, and keyboard support.",
