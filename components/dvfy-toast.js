@@ -156,7 +156,8 @@ class DvfyToast extends HTMLElement {
     msg.textContent = message;
     this.appendChild(msg);
 
-    this.setAttribute('role', 'alert');
+    // Use role="alert" (assertive) for errors/warnings; role="status" (polite) for info/success
+    this.setAttribute('role', (status === 'danger' || status === 'warning') ? 'alert' : 'status');
     this.addEventListener('click', () => this.dismiss());
 
     // Animate in

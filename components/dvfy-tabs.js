@@ -96,20 +96,31 @@ class DvfyTabs extends HTMLElement {
   }
 
   #build() {
+    const instanceId = `dvfy-tabs-${Math.random().toString(36).slice(2, 8)}`;
+
     this.#list = document.createElement('div');
     this.#list.className = 'dvfy-tabs__list';
     this.#list.setAttribute('role', 'tablist');
 
     this.#tabs.forEach((tab, i) => {
+      const tabId = `${instanceId}-tab-${i}`;
+      const panelId = `${instanceId}-panel-${i}`;
+
       const btn = document.createElement('button');
       btn.className = 'dvfy-tabs__trigger';
       btn.setAttribute('role', 'tab');
+      btn.id = tabId;
+      btn.setAttribute('aria-controls', panelId);
       btn.setAttribute('tabindex', i === this.#activeIndex ? '0' : '-1');
       btn.textContent = tab.getAttribute('label') || `Tab ${i + 1}`;
       btn.addEventListener('click', () => {
         this.setAttribute('active', String(i));
       });
       this.#list.appendChild(btn);
+
+      // Link panel back to its tab button
+      tab.id = panelId;
+      tab.setAttribute('aria-labelledby', tabId);
     });
 
     this.insertBefore(this.#list, this.firstChild);

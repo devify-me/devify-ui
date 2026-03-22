@@ -141,11 +141,13 @@ class DvfyTreeView extends HTMLElement {
 
     this.addEventListener('keydown', this.#onKeydown);
     this.addEventListener('click', this.#onClick);
+    this.addEventListener('focus', this.#onFocus);
   }
 
   disconnectedCallback() {
     this.removeEventListener('keydown', this.#onKeydown);
     this.removeEventListener('click', this.#onClick);
+    this.removeEventListener('focus', this.#onFocus);
   }
 
   /** Get all visible tree-node elements in DOM order */
@@ -176,6 +178,17 @@ class DvfyTreeView extends HTMLElement {
       if (row) row.setAttribute('data-focused', '');
     }
   }
+
+  // When tree receives focus with no focused node, focus the selected or first visible node
+  #onFocus = () => {
+    if (!this.#focusedNode) {
+      const visible = this.#getVisibleNodes();
+      if (visible.length) {
+        const selected = visible.find(n => n.hasAttribute('selected')) || visible[0];
+        this.#setFocus(selected);
+      }
+    }
+  };
 
   #onClick = (e) => {
     const row = e.target.closest('.dvfy-tree__row');
@@ -368,6 +381,10 @@ class DvfyTreeNode extends HTMLElement {
       if (container) {
         container.toggleAttribute('data-collapsed', !this.hasAttribute('expanded'));
       }
+      // Keep aria-expanded in sync
+      if (this.isBranch) {
+        this.setAttribute('aria-expanded', String(this.hasAttribute('expanded')));
+      }
       return;
     }
     if (name === 'label') {
@@ -389,13 +406,15 @@ class DvfyTreeNode extends HTMLElement {
     } else {
       this.setAttribute('expanded', '');
     }
+    const expanded = this.hasAttribute('expanded');
     const container = this.querySelector(':scope > .dvfy-tree__children');
     if (container) {
-      container.toggleAttribute('data-collapsed', !this.hasAttribute('expanded'));
+      container.toggleAttribute('data-collapsed', !expanded);
     }
+    this.setAttribute('aria-expanded', String(expanded));
     this.dispatchEvent(new CustomEvent('toggle', {
       bubbles: true,
-      detail: { expanded: this.hasAttribute('expanded') },
+      detail: { expanded },
     }));
   }
 
@@ -425,6 +444,10 @@ class DvfyTreeNode extends HTMLElement {
       : [];
 
     this.setAttribute('role', 'treeitem');
+    this.setAttribute('aria-level', String(depth + 1));
+    if (hasBranch) {
+      this.setAttribute('aria-expanded', String(this.hasAttribute('expanded')));
+    }
 
     // ── Row ──
     const row = document.createElement('div');

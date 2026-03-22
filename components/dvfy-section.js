@@ -113,6 +113,11 @@ class DvfySection extends HTMLElement {
     } else if (name === 'icon') {
       const el = this.querySelector('.dvfy-section__icon');
       if (el) el.textContent = this.getAttribute('icon') || '';
+    } else if (name === 'open' || name === 'collapsed') {
+      // Keep aria-expanded in sync when open attribute is changed externally
+      if (this.#summary) {
+        this.#summary.setAttribute('aria-expanded', String(this.hasAttribute('open')));
+      }
     }
   }
 

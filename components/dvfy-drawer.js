@@ -198,11 +198,14 @@ class DvfyDrawer extends HTMLElement {
       DvfyDrawer.#styled = true;
     }
 
+    this.setAttribute('role', 'region');
     this.#applyWidth();
     this.#build();
+    this.addEventListener('keydown', this.#onKeydown);
   }
 
   disconnectedCallback() {
+    this.removeEventListener('keydown', this.#onKeydown);
     // Clean up sibling reopen tab
     if (this.#reopen && this.#reopen.parentNode) {
       this.#reopen.remove();
@@ -221,6 +224,12 @@ class DvfyDrawer extends HTMLElement {
       if (this.#reopen) {
         this.#reopen.toggleAttribute('data-visible', collapsed);
       }
+      // Sync aria-hidden on the drawer body when collapsed
+      const body = this.querySelector('.dvfy-drawer__body');
+      if (body) body.setAttribute('aria-hidden', String(collapsed));
+      // Sync aria-expanded on the collapse toggle button
+      const toggle = this.querySelector('.dvfy-drawer__toggle');
+      if (toggle) toggle.setAttribute('aria-expanded', String(!collapsed));
       this.dispatchEvent(new CustomEvent('toggle', {
         bubbles: true,
         detail: { collapsed },
@@ -268,6 +277,11 @@ class DvfyDrawer extends HTMLElement {
     const collapsible = !this.hasAttribute('fixed');
     const headerText = this.getAttribute('header') || 'Panel';
     const position = this.getAttribute('position') || 'right';
+    const collapsed = this.hasAttribute('collapsed');
+    const bodyId = `dvfy-drawer-body-${Math.random().toString(36).slice(2, 8)}`;
+
+    // Set accessible name on the region
+    this.setAttribute('aria-label', headerText);
 
     // ── Header ──
     if (showHeader) {
@@ -282,7 +296,9 @@ class DvfyDrawer extends HTMLElement {
       if (collapsible) {
         const toggle = document.createElement('button');
         toggle.className = 'dvfy-drawer__toggle';
-        toggle.setAttribute('aria-label', 'Collapse panel');
+        toggle.setAttribute('aria-label', `Collapse ${headerText.toLowerCase()} panel`);
+        toggle.setAttribute('aria-expanded', String(!collapsed));
+        toggle.setAttribute('aria-controls', bodyId);
         toggle.setAttribute('title', 'Collapse');
         toggle.textContent = '\u00D7'; // ×
         toggle.addEventListener('click', () => this.#collapse());
@@ -295,6 +311,8 @@ class DvfyDrawer extends HTMLElement {
     // ── Scrollable body ──
     const body = document.createElement('div');
     body.className = 'dvfy-drawer__body';
+    body.id = bodyId;
+    body.setAttribute('aria-hidden', String(collapsed));
     for (const child of children) {
       body.appendChild(child);
     }
@@ -328,6 +346,16 @@ class DvfyDrawer extends HTMLElement {
       this.parentElement.insertBefore(this.#reopen, this);
     }
   }
+
+  #onKeydown = (e) => {
+    // Escape collapses the drawer (if not fixed)
+    if (e.key === 'Escape' && !this.hasAttribute('fixed') && !this.hasAttribute('collapsed')) {
+      e.stopPropagation();
+      this.#collapse();
+      // Move focus to the reopen tab so users can get back in
+      this.#reopen?.focus();
+    }
+  };
 
   #collapse() {
     this.setAttribute('collapsed', '');

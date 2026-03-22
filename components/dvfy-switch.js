@@ -169,6 +169,9 @@ class DvfySwitch extends HTMLElement {
     this.setAttribute('role', 'switch');
     this.setAttribute('aria-checked', this.hasAttribute('checked') ? 'true' : 'false');
     if (!this.hasAttribute('disabled')) this.setAttribute('tabindex', '0');
+    // Provide accessible name from label attribute for screen readers
+    const labelText = this.getAttribute('label');
+    if (labelText) this.setAttribute('aria-label', labelText);
 
     this.#build();
     this.addEventListener('click', this.#toggle);
@@ -188,6 +191,11 @@ class DvfySwitch extends HTMLElement {
     }
     if (name === 'disabled') {
       this.setAttribute('tabindex', this.hasAttribute('disabled') ? '-1' : '0');
+    }
+    if (name === 'label') {
+      const labelText = this.getAttribute('label');
+      if (labelText) this.setAttribute('aria-label', labelText);
+      else this.removeAttribute('aria-label');
     }
     if (this.isConnected && (name === 'label' || name === 'description' || name === 'label-position' || name === 'icon-on' || name === 'icon-off')) this.#build();
   }

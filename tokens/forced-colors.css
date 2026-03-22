@@ -1,0 +1,111 @@
+/*
+ * @devify/ui — Forced Colors (High Contrast) Support
+ *
+ * Ensures dvfy components remain accessible in Windows High Contrast Mode
+ * and other forced-colors environments (WCAG 2.1 AA, SC 1.4.11).
+ *
+ * System color keywords used here map to the user's chosen contrast palette.
+ * See: https://www.w3.org/TR/css-color-4/#css-system-colors
+ */
+
+@media (forced-colors: active) {
+  /* ── Focus rings: use Highlight system color so they are always visible ── */
+  :root {
+    --dvfy-ring-color: Highlight;
+  }
+
+  /* ── Buttons: honour system ButtonText / ButtonFace ── */
+  dvfy-button,
+  button,
+  [role="button"] {
+    forced-color-adjust: none;
+    background: ButtonFace;
+    color: ButtonText;
+    border: 1px solid ButtonBorder;
+  }
+
+  dvfy-button:focus-visible,
+  button:focus-visible,
+  [role="button"]:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  /* ── Inputs ── */
+  input,
+  select,
+  textarea {
+    forced-color-adjust: none;
+    background: Field;
+    color: FieldText;
+    border: 1px solid ButtonBorder;
+  }
+
+  /* ── Links ── */
+  a { color: LinkText; }
+  a:visited { color: VisitedText; }
+
+  /* ── Selected / active states ── */
+  dvfy-tree-node[selected] > .dvfy-tree__row,
+  dvfy-tabs .dvfy-tabs__trigger[aria-selected="true"] {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+
+  /* ── Switch track: always use ButtonBorder so it is visible ── */
+  dvfy-switch .dvfy-switch__track {
+    forced-color-adjust: none;
+    border: 2px solid ButtonBorder;
+    background: ButtonFace;
+  }
+  dvfy-switch[checked] .dvfy-switch__track {
+    background: Highlight;
+    border-color: Highlight;
+  }
+  dvfy-switch .dvfy-switch__thumb {
+    background: ButtonText;
+  }
+  dvfy-switch[checked] .dvfy-switch__thumb {
+    background: HighlightText;
+  }
+
+  /* ── Toast / alert: honour system canvas colours ── */
+  dvfy-toast {
+    forced-color-adjust: none;
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid ButtonBorder;
+  }
+
+  /* ── Tooltip ── */
+  dvfy-tooltip .dvfy-tooltip__tip {
+    forced-color-adjust: none;
+    background: Canvas;
+    color: CanvasText;
+    border: 1px solid ButtonBorder;
+  }
+
+  /* ── Progress / scroll-progress bars ── */
+  dvfy-progress .dvfy-progress__bar,
+  dvfy-scroll-progress {
+    forced-color-adjust: none;
+    background: Highlight;
+  }
+
+  /* ── Drawer / sidebar panels ── */
+  dvfy-drawer,
+  dvfy-sidebar {
+    border-color: ButtonBorder;
+  }
+
+  /* ── Modal overlay ── */
+  dvfy-modal .dvfy-modal__overlay {
+    forced-color-adjust: none;
+    background: Canvas;
+    opacity: 1;
+  }
+  dvfy-modal .dvfy-modal__box {
+    border: 1px solid ButtonBorder;
+  }
+}

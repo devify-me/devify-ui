@@ -27,3 +27,6 @@
 /* Tier 2b: Brand themes (project-specific overrides) */
 @import url('./tokens/themes/devify-cyan.css');
 @import url('./tokens/themes/devify-pink.css');
+
+/* Accessibility: forced-colors (Windows High Contrast) overrides */
+@import url('./tokens/forced-colors.css');
