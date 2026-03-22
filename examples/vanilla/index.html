@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@devify/ui — Vanilla HTML Example</title>
+
+  <!-- 1. Load design tokens (CSS custom properties) -->
+  <link rel="stylesheet" href="../../devify.css">
+
+  <!-- Optional: start with dark theme -->
+  <!-- <link rel="stylesheet" href="../../tokens/themes/dark.css"> -->
+
+  <style>
+    body {
+      font-family: var(--dvfy-font-sans);
+      background: var(--dvfy-surface-bg);
+      color: var(--dvfy-text-primary);
+      padding: var(--dvfy-space-8);
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    section {
+      margin-bottom: var(--dvfy-space-10);
+    }
+    h2 {
+      font-size: var(--dvfy-text-lg);
+      font-weight: var(--dvfy-weight-semibold);
+      margin-bottom: var(--dvfy-space-4);
+      border-bottom: 1px solid var(--dvfy-border-subtle);
+      padding-bottom: var(--dvfy-space-2);
+    }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--dvfy-space-3);
+      align-items: center;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Theme switcher — live token swap, no JS required beyond component -->
+  <dvfy-theme-switcher style="position:fixed;top:1rem;right:1rem"></dvfy-theme-switcher>
+
+  <h1>@devify/ui — Vanilla HTML</h1>
+  <p>All components work directly from HTML with zero framework overhead.</p>
+
+  <!-- ── Buttons ─────────────────────────────────────────────── -->
+  <section>
+    <h2>Buttons</h2>
+    <div class="row">
+      <dvfy-button>Default</dvfy-button>
+      <dvfy-button variant="subtle">Subtle</dvfy-button>
+      <dvfy-button variant="outline">Outline</dvfy-button>
+      <dvfy-button variant="ghost">Ghost</dvfy-button>
+      <dvfy-button variant="danger">Danger</dvfy-button>
+      <dvfy-button disabled>Disabled</dvfy-button>
+      <dvfy-button loading>Loading</dvfy-button>
+    </div>
+  </section>
+
+  <!-- ── Badges ─────────────────────────────────────────────── -->
+  <section>
+    <h2>Badges</h2>
+    <div class="row">
+      <dvfy-badge>Default</dvfy-badge>
+      <dvfy-badge variant="success">Success</dvfy-badge>
+      <dvfy-badge variant="warning">Warning</dvfy-badge>
+      <dvfy-badge variant="danger">Danger</dvfy-badge>
+      <dvfy-badge variant="info">Info</dvfy-badge>
+    </div>
+  </section>
+
+  <!-- ── Alert ──────────────────────────────────────────────── -->
+  <section>
+    <h2>Alert</h2>
+    <dvfy-alert variant="info" title="Info">
+      This is an informational alert using only HTML attributes.
+    </dvfy-alert>
+    <dvfy-alert variant="success" title="Success" dismissible style="margin-top: var(--dvfy-space-3)">
+      Click the × to dismiss this alert.
+    </dvfy-alert>
+  </section>
+
+  <!-- ── Input + Select ─────────────────────────────────────── -->
+  <section>
+    <h2>Form Inputs</h2>
+    <dvfy-input label="Full Name" placeholder="Jane Smith" required></dvfy-input>
+    <dvfy-input label="Email" type="email" placeholder="jane@example.com" style="margin-top: var(--dvfy-space-3)"></dvfy-input>
+    <dvfy-select label="Role" style="margin-top: var(--dvfy-space-3)">
+      <option value="">Select a role…</option>
+      <option value="admin">Admin</option>
+      <option value="editor">Editor</option>
+      <option value="viewer">Viewer</option>
+    </dvfy-select>
+    <dvfy-textarea label="Notes" placeholder="Optional notes…" style="margin-top: var(--dvfy-space-3)"></dvfy-textarea>
+  </section>
+
+  <!-- ── Switch / Checkbox / Radio ─────────────────────────── -->
+  <section>
+    <h2>Toggles</h2>
+    <div class="row">
+      <dvfy-switch label="Notifications" checked></dvfy-switch>
+      <dvfy-switch label="Dark Mode"></dvfy-switch>
+    </div>
+    <div class="row" style="margin-top: var(--dvfy-space-3)">
+      <dvfy-checkbox label="Accept terms" checked></dvfy-checkbox>
+      <dvfy-checkbox label="Subscribe to newsletter"></dvfy-checkbox>
+    </div>
+    <div class="row" style="margin-top: var(--dvfy-space-3)">
+      <dvfy-radio name="plan" value="free" label="Free" checked></dvfy-radio>
+      <dvfy-radio name="plan" value="pro" label="Pro"></dvfy-radio>
+      <dvfy-radio name="plan" value="enterprise" label="Enterprise"></dvfy-radio>
+    </div>
+  </section>
+
+  <!-- ── Modal ─────────────────────────────────────────────── -->
+  <section>
+    <h2>Modal</h2>
+    <dvfy-button onclick="document.getElementById('demo-modal').setAttribute('open', '')">
+      Open Modal
+    </dvfy-button>
+    <dvfy-modal id="demo-modal" title="Example Modal">
+      <p>Modal content goes here. Close with Escape or the × button.</p>
+      <dvfy-button
+        variant="subtle"
+        onclick="document.getElementById('demo-modal').removeAttribute('open')"
+      >Close</dvfy-button>
+    </dvfy-modal>
+  </section>
+
+  <!-- ── Tabs ──────────────────────────────────────────────── -->
+  <section>
+    <h2>Tabs</h2>
+    <dvfy-tabs>
+      <dvfy-tab label="Overview" active>
+        <p>Overview tab content.</p>
+      </dvfy-tab>
+      <dvfy-tab label="Details">
+        <p>Details tab content.</p>
+      </dvfy-tab>
+      <dvfy-tab label="Settings">
+        <p>Settings tab content.</p>
+      </dvfy-tab>
+    </dvfy-tabs>
+  </section>
+
+  <!-- ── Accordion ─────────────────────────────────────────── -->
+  <section>
+    <h2>Accordion</h2>
+    <dvfy-accordion>
+      <dvfy-accordion-item label="What is @devify/ui?" open>
+        A zero-build Web Component library designed for server-rendered apps and HTMX.
+      </dvfy-accordion-item>
+      <dvfy-accordion-item label="Do I need a framework?">
+        No. Every component is a standard custom element — works in plain HTML.
+      </dvfy-accordion-item>
+      <dvfy-accordion-item label="Can I use it with React/Vue/Svelte?">
+        Yes. See the <code>examples/</code> directory for per-framework guides.
+      </dvfy-accordion-item>
+    </dvfy-accordion>
+  </section>
+
+  <!-- ── Toast (programmatic) ───────────────────────────────── -->
+  <section>
+    <h2>Toast</h2>
+    <div class="row">
+      <dvfy-button onclick="showToast('success')">Success Toast</dvfy-button>
+      <dvfy-button variant="outline" onclick="showToast('error')">Error Toast</dvfy-button>
+      <dvfy-button variant="ghost" onclick="showToast('info')">Info Toast</dvfy-button>
+    </div>
+    <!-- Toast host — toasts render here -->
+    <dvfy-toast id="toast-host"></dvfy-toast>
+  </section>
+
+  <!-- ── Card ──────────────────────────────────────────────── -->
+  <section>
+    <h2>Cards</h2>
+    <div class="row">
+      <dvfy-card style="width:200px">
+        <strong>Standard Card</strong>
+        <p style="font-size: var(--dvfy-text-sm); margin-top: var(--dvfy-space-2)">
+          Basic card with default styling.
+        </p>
+      </dvfy-card>
+      <dvfy-gradient-card style="width:200px">
+        <strong>Gradient Card</strong>
+        <p style="font-size: var(--dvfy-text-sm); margin-top: var(--dvfy-space-2)">
+          Card with animated gradient border.
+        </p>
+      </dvfy-gradient-card>
+    </div>
+  </section>
+
+  <!-- ── Loader ─────────────────────────────────────────────── -->
+  <section>
+    <h2>Loaders</h2>
+    <div class="row">
+      <dvfy-loader></dvfy-loader>
+      <dvfy-loader variant="dots"></dvfy-loader>
+      <dvfy-loader variant="pulse"></dvfy-loader>
+    </div>
+  </section>
+
+  <!-- 2. Load components (self-registering custom elements) -->
+  <script type="module" src="../../devify.js"></script>
+
+  <script>
+    function showToast(variant) {
+      const messages = {
+        success: { message: 'Operation completed!', variant: 'success' },
+        error:   { message: 'Something went wrong.', variant: 'danger' },
+        info:    { message: 'Here is some information.', variant: 'info' },
+      };
+      const toast = document.getElementById('toast-host');
+      const { message, variant: v } = messages[variant];
+      // dvfy-toast dispatches programmatically via a custom event
+      toast.dispatchEvent(new CustomEvent('show', { detail: { message, variant: v } }));
+    }
+  </script>
+
+</body>
+</html>
