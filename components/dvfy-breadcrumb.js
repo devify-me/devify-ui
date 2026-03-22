@@ -48,6 +48,13 @@ dvfy-breadcrumb > :last-child {
  *
  * @cssprop {color} --dvfy-text-link - Link text color
  * @cssprop {color} --dvfy-text-muted - Separator color
+ *
+ * @example
+ * <dvfy-breadcrumb>
+ *   <a href="/">Home</a>
+ *   <a href="/products">Products</a>
+ *   <span>Widget Pro</span>
+ * </dvfy-breadcrumb>
  */
 class DvfyBreadcrumb extends HTMLElement {
   static #styled = false;
@@ -59,6 +66,7 @@ class DvfyBreadcrumb extends HTMLElement {
       document.head.appendChild(s);
       DvfyBreadcrumb.#styled = true;
     }
+    this.setAttribute('role', 'navigation');
     this.setAttribute('aria-label', 'Breadcrumb');
     this.#insertSeparators();
   }

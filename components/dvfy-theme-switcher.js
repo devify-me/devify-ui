@@ -82,7 +82,7 @@ dvfy-theme-switcher .dvfy-ts__thumb {
   width: 1.1rem;
   height: 1.1rem;
   border-radius: var(--dvfy-radius-round);
-  background: var(--dvfy-neutral-0);
+  background: var(--dvfy-surface-raised);
   box-shadow: var(--dvfy-shadow-xs);
   transition: transform var(--dvfy-duration-fast) var(--dvfy-ease-out);
   display: flex;
@@ -94,11 +94,11 @@ dvfy-theme-switcher .dvfy-ts__thumb {
 }
 dvfy-theme-switcher[data-mode="dark"] .dvfy-ts__thumb {
   transform: translateX(1rem);
-  background: var(--dvfy-neutral-800);
+  background: var(--dvfy-surface-overlay);
 }
 dvfy-theme-switcher[data-mode="dark"] .dvfy-ts__toggle {
-  background: var(--dvfy-indigo-950);
-  border-color: var(--dvfy-neutral-600);
+  background: var(--dvfy-surface-sunken);
+  border-color: var(--dvfy-border-strong);
 }
 `;
 
@@ -113,8 +113,15 @@ dvfy-theme-switcher[data-mode="dark"] .dvfy-ts__toggle {
  * @slot - <option value="theme-name">Label</option> elements defining available themes
  *
  * @cssprop {color} --dvfy-surface-muted - Toggle track background (light mode)
- * @cssprop {color} --dvfy-neutral-0 - Toggle thumb color (light mode)
- * @cssprop {color} --dvfy-indigo-950 - Toggle track background (dark mode)
+ * @cssprop {color} --dvfy-surface-raised - Toggle thumb color (light mode)
+ * @cssprop {color} --dvfy-surface-sunken - Toggle track background (dark mode)
+ * @cssprop {color} --dvfy-surface-overlay - Toggle thumb color (dark mode)
+ *
+ * @example
+ * <dvfy-theme-switcher default-theme="devify-cyan" default-mode="light">
+ *   <option value="devify-cyan">Cyan</option>
+ *   <option value="devify-pink">Pink</option>
+ * </dvfy-theme-switcher>
  */
 class DvfyThemeSwitcher extends HTMLElement {
   static #styled = false;

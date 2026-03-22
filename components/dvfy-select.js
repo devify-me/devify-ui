@@ -244,6 +244,13 @@ dvfy-select[label-position="right"] .dvfy-select__help { width: 100%; order: 2; 
  * @cssprop {color} --dvfy-surface-raised - Dropdown background
  * @cssprop {color} --dvfy-hover-bg - Option hover background
  * @cssprop {color} --dvfy-active-bg - Selected option background
+ *
+ * @example
+ * <dvfy-select label="Country" name="country" searchable placeholder="Choose a country...">
+ *   <option value="us">United States</option>
+ *   <option value="ca">Canada</option>
+ *   <option value="gb">United Kingdom</option>
+ * </dvfy-select>
  */
 class DvfySelect extends HTMLElement {
   static #styled = false;
@@ -286,7 +293,7 @@ class DvfySelect extends HTMLElement {
     document.removeEventListener('click', this._onDocClick);
   }
 
-  static get observedAttributes() { return ['error', 'help', 'disabled', 'label', 'placeholder', 'required', 'label-position']; }
+  static get observedAttributes() { return ['error', 'help', 'disabled', 'label', 'placeholder', 'required', 'label-position', 'size']; }
 
   attributeChangedCallback() {
     if (this.isConnected) {
@@ -413,6 +420,7 @@ class DvfySelect extends HTMLElement {
       const item = document.createElement('div');
       item.className = 'dvfy-select__option';
       item.setAttribute('role', 'option');
+      item.setAttribute('aria-selected', String(opt.value === this.#value));
       item.setAttribute('data-value', opt.value);
       item.setAttribute('data-index', String(i));
       item.textContent = opt.label;
@@ -498,10 +506,12 @@ class DvfySelect extends HTMLElement {
       triggerText.classList.remove('dvfy-select__trigger--placeholder');
     }
 
-    // Update selected class
+    // Update selected class and aria-selected
     const items = this.querySelectorAll('.dvfy-select__option');
     for (const item of items) {
-      item.classList.toggle('dvfy-select--selected', item.getAttribute('data-value') === value);
+      const isSelected = item.getAttribute('data-value') === value;
+      item.classList.toggle('dvfy-select--selected', isSelected);
+      item.setAttribute('aria-selected', String(isSelected));
     }
 
     this.dispatchEvent(new CustomEvent('change', { detail: { value }, bubbles: true }));

@@ -23,7 +23,7 @@ dvfy-modal[open] {
 dvfy-modal .dvfy-modal__backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: var(--dvfy-backdrop-bg, rgba(0, 0, 0, 0.75));
   z-index: var(--dvfy-z-modal);
   display: flex;
   align-items: center;
@@ -99,6 +99,12 @@ dvfy-modal .dvfy-modal__body {
  *
  * @cssprop {color} --dvfy-surface-raised - Dialog background
  * @cssprop {color} --dvfy-shadow-xl - Dialog shadow
+ * @cssprop {color} --dvfy-backdrop-bg - Backdrop overlay color (default: rgba(0,0,0,0.75))
+ *
+ * @example
+ * <dvfy-modal title="Confirm action" size="sm">
+ *   <p>Are you sure you want to continue?</p>
+ * </dvfy-modal>
  */
 class DvfyModal extends HTMLElement {
   static #styled = false;
@@ -114,6 +120,10 @@ class DvfyModal extends HTMLElement {
       DvfyModal.#styled = true;
     }
     if (this.hasAttribute('open')) this.#build();
+  }
+
+  disconnectedCallback() {
+    document.removeEventListener('keydown', this.#onKey);
   }
 
   static get observedAttributes() { return ['open', 'title', 'required']; }
@@ -150,9 +160,12 @@ class DvfyModal extends HTMLElement {
     // Header
     const header = document.createElement('div');
     header.className = 'dvfy-modal__header';
+    const titleId = `dvfy-modal-title-${Math.random().toString(36).slice(2, 8)}`;
     const title = document.createElement('h2');
     title.className = 'dvfy-modal__title';
+    title.id = titleId;
     title.textContent = this.getAttribute('title') || '';
+    this.#dialog.setAttribute('aria-labelledby', titleId);
     const closeBtn = document.createElement('button');
     closeBtn.className = 'dvfy-modal__close';
     closeBtn.setAttribute('aria-label', 'Close');

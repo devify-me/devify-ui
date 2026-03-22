@@ -113,6 +113,12 @@ function getContainer(position) {
  * @cssprop {color} --dvfy-success-bg-subtle - Success toast background
  * @cssprop {color} --dvfy-warning-bg-subtle - Warning toast background
  * @cssprop {color} --dvfy-danger-bg-subtle - Danger toast background
+ *
+ * @example
+ * <!-- Trigger programmatically -->
+ * <script>DvfyToast.show({ message: 'Changes saved!', status: 'success' })</script>
+ * <!-- Or declare in HTML (auto-shows on connect) -->
+ * <dvfy-toast status="info" duration="5000">Your session will expire soon.</dvfy-toast>
  */
 class DvfyToast extends HTMLElement {
   static #styled = false;

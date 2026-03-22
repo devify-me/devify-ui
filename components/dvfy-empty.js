@@ -66,6 +66,11 @@ dvfy-empty .dvfy-empty__actions {
  *
  * @cssprop {color} --dvfy-text-muted - Description and icon color
  * @cssprop {color} --dvfy-text-secondary - Title color
+ *
+ * @example
+ * <dvfy-empty title="No results found" description="Try adjusting your search or filters." icon="🔍">
+ *   <dvfy-button variant="outline">Clear filters</dvfy-button>
+ * </dvfy-empty>
  */
 class DvfyEmpty extends HTMLElement {
   static #styled = false;

@@ -87,6 +87,13 @@ dvfy-dropdown .dvfy-dropdown__item + .dvfy-dropdown__item {
  * @cssprop {color} --dvfy-surface-overlay - Menu background
  * @cssprop {color} --dvfy-shadow-lg - Menu shadow
  * @cssprop {color} --dvfy-selected-bg - Selected item background
+ *
+ * @example
+ * <dvfy-dropdown>
+ *   <dvfy-button variant="outline">Actions</dvfy-button>
+ *   <a href="/edit" class="dvfy-dropdown__item">Edit</a>
+ *   <a href="/delete" class="dvfy-dropdown__item">Delete</a>
+ * </dvfy-dropdown>
  */
 class DvfyDropdown extends HTMLElement {
   static #styled = false;
@@ -108,6 +115,7 @@ class DvfyDropdown extends HTMLElement {
 
   disconnectedCallback() {
     document.removeEventListener('click', this.#onOutside);
+    this.removeEventListener('keydown', this.#onKey);
   }
 
   static get observedAttributes() { return ['open']; }
@@ -125,6 +133,8 @@ class DvfyDropdown extends HTMLElement {
     if (!firstEl) return;
 
     this.#trigger = firstEl;
+    this.#trigger.setAttribute('aria-haspopup', 'menu');
+    this.#trigger.setAttribute('aria-expanded', 'false');
     this.#trigger.addEventListener('click', this.#toggle);
 
     this.#menu = document.createElement('div');
@@ -150,18 +160,24 @@ class DvfyDropdown extends HTMLElement {
     e.stopPropagation();
     if (this.hasAttribute('open')) {
       this.removeAttribute('open');
+      this.#trigger?.setAttribute('aria-expanded', 'false');
     } else {
       // Close all other open dropdowns first
       document.querySelectorAll('dvfy-dropdown[open]').forEach(d => {
-        if (d !== this) d.removeAttribute('open');
+        if (d !== this) {
+          d.removeAttribute('open');
+          d.querySelector(':first-child')?.setAttribute('aria-expanded', 'false');
+        }
       });
       this.setAttribute('open', '');
+      this.#trigger?.setAttribute('aria-expanded', 'true');
     }
   };
 
   #close() {
     this.removeAttribute('open');
     this.#activeIndex = -1;
+    this.#trigger?.setAttribute('aria-expanded', 'false');
     this.#trigger?.focus();
   }
 

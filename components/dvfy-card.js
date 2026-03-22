@@ -60,14 +60,20 @@ dvfy-card[interactive]:focus-visible {
  * @element dvfy-card
  *
  * @attr {boolean} elevated - Add shadow elevation
- * @attr {boolean} interactive - Enable hover effect and cursor pointer
- * @attr {boolean} padded - Enable padding (default: true)
+ * @attr {boolean} interactive - Enable hover effect, cursor pointer, and keyboard activation
+ * @attr {boolean} padded - Enable padding
  *
  * @slot - Card content
  *
  * @cssprop {color} --dvfy-surface-raised - Card background
  * @cssprop {color} --dvfy-border-default - Card border color
  * @cssprop {color} --dvfy-shadow-md - Elevated shadow
+ *
+ * @example
+ * <dvfy-card elevated padded>
+ *   <h3 style="margin-bottom:0.5rem">Card Title</h3>
+ *   <p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Card content goes here.</p>
+ * </dvfy-card>
  */
 class DvfyCard extends HTMLElement {
   static #styled = false;
@@ -83,7 +89,18 @@ class DvfyCard extends HTMLElement {
     if (this.hasAttribute('interactive')) {
       if (!this.getAttribute('tabindex')) this.setAttribute('tabindex', '0');
       if (!this.getAttribute('role')) this.setAttribute('role', 'button');
+      this._onKeydown = (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          this.click();
+        }
+      };
+      this.addEventListener('keydown', this._onKeydown);
     }
+  }
+
+  disconnectedCallback() {
+    if (this._onKeydown) this.removeEventListener('keydown', this._onKeydown);
   }
 
   static get observedAttributes() { return ['interactive']; }
@@ -94,9 +111,22 @@ class DvfyCard extends HTMLElement {
       if (this.hasAttribute('interactive')) {
         this.setAttribute('tabindex', '0');
         this.setAttribute('role', 'button');
+        if (!this._onKeydown) {
+          this._onKeydown = (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              this.click();
+            }
+          };
+          this.addEventListener('keydown', this._onKeydown);
+        }
       } else {
         this.removeAttribute('tabindex');
         this.removeAttribute('role');
+        if (this._onKeydown) {
+          this.removeEventListener('keydown', this._onKeydown);
+          this._onKeydown = null;
+        }
       }
     }
   }

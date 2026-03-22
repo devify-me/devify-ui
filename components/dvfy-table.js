@@ -53,7 +53,7 @@ dvfy-table[responsive] .dvfy-table__wrapper {
   padding: var(--dvfy-space-2) var(--dvfy-space-3);
   color: var(--dvfy-text-primary);
   background: var(--dvfy-surface-raised);
-  border: 1px solid var(--dvfy-border-default);
+  border: var(--dvfy-border-1) solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-lg);
   outline: none;
   box-sizing: border-box;
@@ -76,7 +76,7 @@ dvfy-table th,
 dvfy-table td {
   padding: var(--dvfy-space-3) var(--dvfy-space-4);
   text-align: left;
-  border-bottom: 1px solid var(--dvfy-border-default);
+  border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-default);
 }
 
 dvfy-table[compact] th,
@@ -173,7 +173,7 @@ dvfy-table th[data-sort] .dvfy-table__sort {
   min-width: 12rem;
   max-width: 18rem;
   background: var(--dvfy-surface-raised);
-  border: 1px solid var(--dvfy-border-default);
+  border: var(--dvfy-border-1) solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-lg);
   box-shadow: var(--dvfy-shadow-lg);
   z-index: var(--dvfy-z-dropdown, 1000);
@@ -192,7 +192,7 @@ dvfy-table th[data-sort] .dvfy-table__sort {
   padding: var(--dvfy-space-1-5) var(--dvfy-space-2);
   color: var(--dvfy-text-primary);
   background: var(--dvfy-surface-page);
-  border: 1px solid var(--dvfy-border-muted);
+  border: var(--dvfy-border-1) solid var(--dvfy-border-muted);
   border-radius: var(--dvfy-radius-md);
   outline: none;
   box-sizing: border-box;
@@ -207,7 +207,7 @@ dvfy-table th[data-sort] .dvfy-table__sort {
   display: flex;
   gap: var(--dvfy-space-2);
   padding: var(--dvfy-space-1) 0;
-  border-bottom: 1px solid var(--dvfy-border-muted);
+  border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-muted);
 }
 .dvfy-table__filter-actions-top button {
   background: none;
@@ -315,6 +315,17 @@ dvfy-table[hoverable] tbody tr:hover {
  * @cssprop {color} --dvfy-hover-bg - Row hover background
  * @cssprop {color} --dvfy-primary-bg - Active filter icon and sort indicator color
  * @cssprop {color} --dvfy-selected-bg - Selected row background
+ *
+ * @example
+ * <dvfy-table striped hoverable responsive selectable searchable>
+ *   <table>
+ *     <thead><tr><th data-sort>Name</th><th data-sort>Role</th></tr></thead>
+ *     <tbody>
+ *       <tr><td>Alice</td><td>Engineer</td></tr>
+ *       <tr><td>Bob</td><td>Designer</td></tr>
+ *     </tbody>
+ *   </table>
+ * </dvfy-table>
  */
 class DvfyTable extends HTMLElement {
   static #styled = false;

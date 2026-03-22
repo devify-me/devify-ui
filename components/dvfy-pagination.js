@@ -77,6 +77,9 @@ dvfy-pagination .dvfy-pagination__ellipsis {
  *
  * @cssprop {color} --dvfy-primary-bg - Active page button background
  * @cssprop {color} --dvfy-primary-text - Active page button text
+ *
+ * @example
+ * <dvfy-pagination total="10" current="3" max-visible="5"></dvfy-pagination>
  */
 class DvfyPagination extends HTMLElement {
   static #styled = false;

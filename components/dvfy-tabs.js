@@ -66,6 +66,12 @@ dvfy-tab[active] { display: block; }
  * @cssprop {color} --dvfy-primary-bg - Active tab underline color
  * @cssprop {color} --dvfy-text-muted - Inactive tab text color
  * @cssprop {color} --dvfy-border-default - Tab list border color
+ *
+ * @example
+ * <dvfy-tabs active="0">
+ *   <dvfy-tab label="Overview"><p style="padding:1rem">Overview content</p></dvfy-tab>
+ *   <dvfy-tab label="Settings"><p style="padding:1rem">Settings content</p></dvfy-tab>
+ * </dvfy-tabs>
  */
 class DvfyTabs extends HTMLElement {
   static #styled = false;
@@ -101,9 +107,16 @@ class DvfyTabs extends HTMLElement {
     this.#list.setAttribute('role', 'tablist');
 
     this.#tabs.forEach((tab, i) => {
+      const panelId = `dvfy-tab-panel-${i}-${Math.random().toString(36).slice(2, 8)}`;
+      const triggerId = `dvfy-tab-trigger-${i}-${Math.random().toString(36).slice(2, 8)}`;
+      tab.id = panelId;
+      tab.setAttribute('aria-labelledby', triggerId);
+
       const btn = document.createElement('button');
       btn.className = 'dvfy-tabs__trigger';
+      btn.id = triggerId;
       btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-controls', panelId);
       btn.setAttribute('tabindex', i === this.#activeIndex ? '0' : '-1');
       btn.textContent = tab.getAttribute('label') || `Tab ${i + 1}`;
       btn.addEventListener('click', () => {
