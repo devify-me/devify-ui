@@ -16,6 +16,8 @@ dvfy-textarea {
   flex-direction: column;
   gap: var(--dvfy-space-1-5);
   font-family: var(--dvfy-font-sans);
+  container-type: inline-size;
+  container-name: dvfy-textarea;
 }
 dvfy-textarea .dvfy-textarea__label {
   font-size: var(--dvfy-text-sm);

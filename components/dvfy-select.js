@@ -13,7 +13,7 @@
  *
  * Children are <option> elements (read on connect).
  * Dispatches 'change' event on selection.
- * Falls back to native select on mobile (< 768px).
+ * Falls back to native select when component width < 768px (container query).
  *
  * Usage:
  *   <dvfy-select label="Country" name="country" searchable>
@@ -29,6 +29,8 @@ dvfy-select {
   gap: var(--dvfy-space-1-5);
   font-family: var(--dvfy-font-sans);
   position: relative;
+  container-type: inline-size;
+  container-name: dvfy-select;
 }
 
 dvfy-select .dvfy-select__label {
@@ -157,11 +159,11 @@ dvfy-select[disabled] .dvfy-select__trigger {
   pointer-events: none;
 }
 
-/* Native fallback (hidden by default, shown on mobile) */
+/* Native fallback (hidden by default, shown on narrow containers) */
 dvfy-select .dvfy-select__native {
   display: none;
 }
-@media (max-width: 767px) {
+@container dvfy-select (max-width: 767px) {
   dvfy-select .dvfy-select__custom { display: none !important; }
   dvfy-select .dvfy-select__native {
     display: block;
