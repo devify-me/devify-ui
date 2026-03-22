@@ -646,56 +646,51 @@
     {
       "name": "dvfy-drawer",
       "path": "./components/dvfy-drawer.js",
-      "description": "Collapsible drawer panel for side or bottom content.\n\nA reusable panel that slides in from a configurable edge. Supports\ncollapse/expand with an animated transition and a vertical reopen tab\nthat appears when collapsed. Scrollable body for long content while\nthe parent layout stays fixed.",
+      "description": "Slide-over panel that overlays content from a viewport edge.\n\nOpens as a fixed overlay from left, right, or bottom. Supports an optional\nbackdrop, focus trap, keyboard dismiss, and responsive full-width on mobile.",
       "attributes": [
         {
-          "name": "collapsed",
-          "description": "Collapsed state (reflected)",
+          "name": "open",
+          "description": "Show/hide the drawer",
           "type": "boolean"
-        },
-        {
-          "name": "header",
-          "description": "Header title and reopen tab text (default: \"Panel\")",
-          "type": "string"
         },
         {
           "name": "position",
-          "description": "Edge position: top | right | bottom | left (default: \"right\")",
+          "description": "Edge to slide from: left | right | bottom (default: \"right\")",
           "type": "string"
         },
         {
-          "name": "width",
-          "description": "CSS size value for the drawer dimension (default: \"clamp(200px, 40%, 320px)\")",
+          "name": "title",
+          "description": "Header title text",
           "type": "string"
         },
         {
-          "name": "fixed",
-          "description": "Disable collapse toggle and reopen tab (always open)",
-          "type": "boolean"
-        },
-        {
-          "name": "no-header",
-          "description": "Hide the header bar (for embedding inside other components)",
+          "name": "overlay",
+          "description": "Show a dimming backdrop behind the panel",
           "type": "boolean"
         }
       ],
       "properties": [
         {
-          "name": "collapsed",
-          "attribute": "collapsed",
-          "description": "Collapsed state (reflected)",
+          "name": "open",
+          "attribute": "open",
+          "description": "Show/hide the drawer",
           "type": "boolean"
         }
       ],
       "events": [
         {
-          "name": "toggle"
+          "name": "open",
+          "description": "Drawer opened"
+        },
+        {
+          "name": "close",
+          "description": "Drawer closed"
         }
       ],
       "slots": [
         {
           "name": "",
-          "description": "Default slot for drawer body content"
+          "description": "Drawer body content"
         }
       ],
       "cssProperties": [
@@ -711,7 +706,12 @@
         },
         {
           "name": "--dvfy-drawer-width",
-          "description": "Override panel width via CSS",
+          "description": "Panel width for left/right positions (default: 24rem)",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-drawer-height",
+          "description": "Panel height for bottom position (default: 50vh)",
           "type": "length"
         }
       ]

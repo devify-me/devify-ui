@@ -1,56 +1,85 @@
 const DRAWER_STYLES = `
 dvfy-drawer {
+  display: contents;
+}
+
+/* ── Backdrop ── */
+.dvfy-drawer__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: var(--dvfy-z-modal, 300);
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  transition: opacity var(--dvfy-duration-normal, 200ms) var(--dvfy-ease-out, ease-out);
+  pointer-events: none;
+}
+dvfy-drawer[open] .dvfy-drawer__backdrop {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Panel ── */
+.dvfy-drawer__panel {
+  position: fixed;
+  z-index: calc(var(--dvfy-z-modal, 300) + 1);
+  background: var(--dvfy-drawer-bg, var(--dvfy-surface-raised));
   display: flex;
   flex-direction: column;
-  flex-shrink: 0;
+  transition: transform var(--dvfy-duration-normal, 250ms) var(--dvfy-ease-out, ease-out);
+  box-shadow: var(--dvfy-shadow-xl);
   overflow: hidden;
-  background: var(--dvfy-drawer-bg, var(--dvfy-surface-raised));
-  transition: width var(--dvfy-duration-normal, 200ms) var(--dvfy-ease-out, ease-out),
-              max-height var(--dvfy-duration-normal, 200ms) var(--dvfy-ease-out, ease-out);
 }
 
 /* ── Position: right (default) ── */
-dvfy-drawer:not([position]),
-dvfy-drawer[position="right"] {
+.dvfy-drawer__panel[data-position="right"] {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--dvfy-drawer-width, 24rem);
+  max-width: 100vw;
+  transform: translateX(100%);
   border-left: var(--dvfy-border-1, 1px) solid var(--dvfy-drawer-border, var(--dvfy-border-muted));
 }
-dvfy-drawer:not([position])[collapsed],
-dvfy-drawer[position="right"][collapsed] {
-  width: 0 !important;
-  border-left: none;
+dvfy-drawer[open] .dvfy-drawer__panel[data-position="right"] {
+  transform: translateX(0);
 }
 
 /* ── Position: left ── */
-dvfy-drawer[position="left"] {
+.dvfy-drawer__panel[data-position="left"] {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--dvfy-drawer-width, 24rem);
+  max-width: 100vw;
+  transform: translateX(-100%);
   border-right: var(--dvfy-border-1, 1px) solid var(--dvfy-drawer-border, var(--dvfy-border-muted));
 }
-dvfy-drawer[position="left"][collapsed] {
-  width: 0 !important;
-  border-right: none;
-}
-
-/* ── Position: top ── */
-dvfy-drawer[position="top"] {
-  width: 100% !important;
-  border-bottom: var(--dvfy-border-1, 1px) solid var(--dvfy-drawer-border, var(--dvfy-border-muted));
-  border-left: none;
-  border-right: none;
-}
-dvfy-drawer[position="top"][collapsed] {
-  max-height: 0 !important;
-  border-bottom: none;
+dvfy-drawer[open] .dvfy-drawer__panel[data-position="left"] {
+  transform: translateX(0);
 }
 
 /* ── Position: bottom ── */
-dvfy-drawer[position="bottom"] {
-  width: 100% !important;
+.dvfy-drawer__panel[data-position="bottom"] {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--dvfy-drawer-height, 50vh);
+  max-height: 90vh;
+  transform: translateY(100%);
   border-top: var(--dvfy-border-1, 1px) solid var(--dvfy-drawer-border, var(--dvfy-border-muted));
-  border-left: none;
-  border-right: none;
+  border-radius: var(--dvfy-radius-xl, 0.75rem) var(--dvfy-radius-xl, 0.75rem) 0 0;
 }
-dvfy-drawer[position="bottom"][collapsed] {
-  max-height: 0 !important;
-  border-top: none;
+dvfy-drawer[open] .dvfy-drawer__panel[data-position="bottom"] {
+  transform: translateY(0);
+}
+
+/* ── Responsive: full width on small screens ── */
+@media (max-width: 30rem) {
+  .dvfy-drawer__panel[data-position="left"],
+  .dvfy-drawer__panel[data-position="right"] {
+    width: 100vw;
+    max-width: 100vw;
+  }
 }
 
 /* ── Header ── */
@@ -58,137 +87,81 @@ dvfy-drawer[position="bottom"][collapsed] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--dvfy-space-3, 0.75rem) var(--dvfy-space-4, 1rem);
+  padding: var(--dvfy-space-4, 1rem) var(--dvfy-space-5, 1.25rem);
   border-bottom: var(--dvfy-border-1, 1px) solid var(--dvfy-drawer-border, var(--dvfy-border-muted));
   flex-shrink: 0;
+  gap: var(--dvfy-space-3, 0.75rem);
 }
 .dvfy-drawer__title {
-  font-size: var(--dvfy-text-xs, 0.75rem);
+  font-size: var(--dvfy-text-base, 1rem);
   font-weight: var(--dvfy-weight-semibold, 600);
-  text-transform: uppercase;
-  letter-spacing: var(--dvfy-tracking-wider, 0.05em);
-  color: var(--dvfy-text-muted, #888);
+  color: var(--dvfy-text-primary);
   margin: 0;
+  flex: 1;
+  min-width: 0;
 }
 
-/* ── Collapse toggle ── */
-.dvfy-drawer__toggle {
-  width: 28px;
-  height: 28px;
+/* ── Close button ── */
+.dvfy-drawer__close {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: var(--dvfy-border-1, 1px) solid var(--dvfy-drawer-border, var(--dvfy-border-muted));
+  width: 2rem;
+  height: 2rem;
+  background: none;
+  border: none;
   border-radius: var(--dvfy-radius-md, 0.375rem);
-  background: var(--dvfy-drawer-bg, var(--dvfy-surface-raised));
-  color: var(--dvfy-text-secondary, #666);
   cursor: pointer;
-  font-size: var(--dvfy-text-xs, 0.75rem);
-  line-height: 1;
+  color: var(--dvfy-text-muted);
+  font-size: var(--dvfy-text-lg, 1.125rem);
   flex-shrink: 0;
   transition: background var(--dvfy-duration-fast, 100ms);
 }
-.dvfy-drawer__toggle:hover {
-  background: var(--dvfy-surface-sunken, #f0f0f0);
+.dvfy-drawer__close:hover {
+  background: var(--dvfy-hover-bg);
+  color: var(--dvfy-text-primary);
 }
-
-/* ── Reopen tab (sibling of drawer, visible when collapsed) ── */
-.dvfy-drawer__reopen {
-  display: none;
-  position: absolute;
-  z-index: 2;
-  padding: var(--dvfy-space-2, 0.5rem) var(--dvfy-space-1, 0.25rem);
-  border: var(--dvfy-border-1, 1px) solid var(--dvfy-drawer-border, var(--dvfy-border-muted));
-  background: var(--dvfy-drawer-bg, var(--dvfy-surface-raised));
-  color: var(--dvfy-text-secondary, #666);
-  cursor: pointer;
-  font-size: var(--dvfy-text-xs, 0.75rem);
-  font-weight: var(--dvfy-weight-semibold, 600);
-  text-transform: uppercase;
-  letter-spacing: var(--dvfy-tracking-wider, 0.05em);
-  line-height: 1;
-  transition: background var(--dvfy-duration-fast, 100ms);
-}
-.dvfy-drawer__reopen[data-visible] {
-  display: block;
-}
-.dvfy-drawer__reopen:hover {
-  background: var(--dvfy-surface-sunken, #f0f0f0);
-}
-
-/* Reopen position: right (default) */
-.dvfy-drawer__reopen[data-position="right"] {
-  top: var(--dvfy-space-2, 0.5rem);
-  right: 0;
-  writing-mode: vertical-rl;
-  border-right: none;
-  border-radius: var(--dvfy-radius-md, 0.375rem) 0 0 var(--dvfy-radius-md, 0.375rem);
-}
-
-/* Reopen position: left */
-.dvfy-drawer__reopen[data-position="left"] {
-  top: var(--dvfy-space-2, 0.5rem);
-  left: 0;
-  writing-mode: vertical-rl;
-  border-left: none;
-  border-radius: 0 var(--dvfy-radius-md, 0.375rem) var(--dvfy-radius-md, 0.375rem) 0;
-}
-
-/* Reopen position: top */
-.dvfy-drawer__reopen[data-position="top"] {
-  top: 0;
-  right: var(--dvfy-space-2, 0.5rem);
-  writing-mode: horizontal-tb;
-  border-top: none;
-  border-radius: 0 0 var(--dvfy-radius-md, 0.375rem) var(--dvfy-radius-md, 0.375rem);
-}
-
-/* Reopen position: bottom */
-.dvfy-drawer__reopen[data-position="bottom"] {
-  bottom: 0;
-  right: var(--dvfy-space-2, 0.5rem);
-  writing-mode: horizontal-tb;
-  border-bottom: none;
-  border-radius: var(--dvfy-radius-md, 0.375rem) var(--dvfy-radius-md, 0.375rem) 0 0;
+.dvfy-drawer__close:focus-visible {
+  outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);
+  outline-offset: var(--dvfy-ring-offset);
 }
 
 /* ── Scrollable body ── */
 .dvfy-drawer__body {
   flex: 1;
   overflow-y: auto;
-  padding: var(--dvfy-space-4, 1rem);
+  padding: var(--dvfy-space-5, 1.25rem);
 }
 `;
 
 /**
- * Collapsible drawer panel for side or bottom content.
+ * Slide-over panel that overlays content from a viewport edge.
  *
- * A reusable panel that slides in from a configurable edge. Supports
- * collapse/expand with an animated transition and a vertical reopen tab
- * that appears when collapsed. Scrollable body for long content while
- * the parent layout stays fixed.
+ * Opens as a fixed overlay from left, right, or bottom. Supports an optional
+ * backdrop, focus trap, keyboard dismiss, and responsive full-width on mobile.
  *
  * @element dvfy-drawer
  *
- * @attr {boolean} collapsed - Collapsed state (reflected)
- * @attr {string} position - Edge position: top | right | bottom | left (default: "right")
- * @attr {string} width - CSS size value for the drawer dimension (default: "clamp(200px, 40%, 320px)")
- * @attr {string} header - Header title and reopen tab text (default: "Panel")
- * @attr {boolean} fixed - Disable collapse toggle and reopen tab (always open)
- * @attr {boolean} no-header - Hide the header bar (for embedding inside other components)
+ * @attr {boolean} open - Show/hide the drawer
+ * @attr {string} position - Edge to slide from: left | right | bottom (default: "right")
+ * @attr {string} title - Header title text
+ * @attr {boolean} overlay - Show a dimming backdrop behind the panel
  *
- * @event {CustomEvent} toggle - Fires on collapse/expand, detail: { collapsed }
+ * @fires open - Drawer opened
+ * @fires close - Drawer closed
  *
- * @slot - Default slot for drawer body content
+ * @slot - Drawer body content
  *
  * @cssprop {color} --dvfy-drawer-bg - Panel background (default: var(--dvfy-surface-raised))
  * @cssprop {color} --dvfy-drawer-border - Border color (default: var(--dvfy-border-muted))
- * @cssprop {length} --dvfy-drawer-width - Override panel width via CSS
+ * @cssprop {length} --dvfy-drawer-width - Panel width for left/right positions (default: 24rem)
+ * @cssprop {length} --dvfy-drawer-height - Panel height for bottom position (default: 50vh)
  */
 class DvfyDrawer extends HTMLElement {
   static #styled = false;
-
-  #reopen = null;
+  #panel = null;
+  #backdrop = null;
+  #prevFocus = null;
 
   connectedCallback() {
     if (!DvfyDrawer.#styled) {
@@ -197,148 +170,146 @@ class DvfyDrawer extends HTMLElement {
       document.head.appendChild(s);
       DvfyDrawer.#styled = true;
     }
-
-    this.#applyWidth();
     this.#build();
+    if (this.hasAttribute('open')) this.#openPanel();
   }
 
   disconnectedCallback() {
-    // Clean up sibling reopen tab
-    if (this.#reopen && this.#reopen.parentNode) {
-      this.#reopen.remove();
-    }
+    document.removeEventListener('keydown', this.#onKey);
   }
 
   static get observedAttributes() {
-    return ['collapsed', 'header', 'position', 'width', 'fixed', 'no-header'];
+    return ['open', 'position', 'title', 'overlay'];
   }
 
   attributeChangedCallback(name, oldVal, newVal) {
     if (!this.isConnected) return;
-
-    if (name === 'collapsed') {
-      const collapsed = this.hasAttribute('collapsed');
-      if (this.#reopen) {
-        this.#reopen.toggleAttribute('data-visible', collapsed);
-      }
-      this.dispatchEvent(new CustomEvent('toggle', {
-        bubbles: true,
-        detail: { collapsed },
-      }));
-      return;
-    }
-
-    if (name === 'width') {
-      this.#applyWidth();
-      return;
-    }
-
-    if (name === 'position') {
-      this.#applyWidth();
-      if (this.#reopen) {
-        this.#reopen.setAttribute('data-position', newVal || 'right');
-      }
-    }
-
-    // For other attribute changes, rebuild
-    this.#build();
-  }
-
-  #applyWidth() {
-    const pos = this.getAttribute('position') || 'right';
-    if (pos === 'top' || pos === 'bottom') {
-      this.style.removeProperty('width');
-      // Explicit max-height required for CSS transition to animate
-      this.style.maxHeight = this.getAttribute('width') || 'var(--dvfy-drawer-width, 50vh)';
+    if (name === 'open') {
+      this.hasAttribute('open') ? this.#openPanel() : this.#closePanel();
     } else {
-      this.style.removeProperty('max-height');
-      this.style.width = this.getAttribute('width') || 'var(--dvfy-drawer-width, clamp(200px, 40%, 320px))';
+      this.#rebuild();
     }
   }
 
-  #build() {
-    // Preserve slotted content
-    const children = [...this.childNodes].filter(
-      n => !n.classList?.contains('dvfy-drawer__header') &&
-           !n.classList?.contains('dvfy-drawer__body')
+  #rebuild() {
+    const wasOpen = this.hasAttribute('open');
+    // Collect user body content
+    const body = this.#panel?.querySelector('.dvfy-drawer__body');
+    const children = body ? [...body.childNodes] : [];
+
+    this.#backdrop?.remove();
+    this.#panel?.remove();
+    this.#backdrop = null;
+    this.#panel = null;
+
+    this.#build(children);
+    if (wasOpen) this.#openPanel();
+  }
+
+  #build(existingChildren = null) {
+    // Collect slotted children if not passed in
+    const children = existingChildren ?? [...this.childNodes].filter(
+      n => !n.classList?.contains('dvfy-drawer__backdrop') &&
+           !n.classList?.contains('dvfy-drawer__panel')
     );
 
-    this.textContent = '';
-    const showHeader = !this.hasAttribute('no-header');
-    const collapsible = !this.hasAttribute('fixed');
-    const headerText = this.getAttribute('header') || 'Panel';
+    if (!existingChildren) this.textContent = '';
+
     const position = this.getAttribute('position') || 'right';
+    const titleText = this.getAttribute('title') || '';
+    const hasOverlay = this.hasAttribute('overlay');
 
-    // ── Header ──
-    if (showHeader) {
-      const header = document.createElement('div');
-      header.className = 'dvfy-drawer__header';
+    // ── Backdrop ──
+    this.#backdrop = document.createElement('div');
+    this.#backdrop.className = 'dvfy-drawer__backdrop';
+    if (!hasOverlay) this.#backdrop.style.display = 'none';
+    this.#backdrop.setAttribute('aria-hidden', 'true');
+    this.#backdrop.addEventListener('click', () => this.removeAttribute('open'));
+    this.appendChild(this.#backdrop);
 
-      const title = document.createElement('p');
-      title.className = 'dvfy-drawer__title';
-      title.textContent = headerText;
-      header.appendChild(title);
+    // ── Panel ──
+    this.#panel = document.createElement('div');
+    this.#panel.className = 'dvfy-drawer__panel';
+    this.#panel.setAttribute('data-position', position);
+    this.#panel.setAttribute('role', 'dialog');
+    this.#panel.setAttribute('aria-modal', 'true');
+    if (titleText) this.#panel.setAttribute('aria-labelledby', 'dvfy-drawer-title');
+    this.#panel.inert = true;
 
-      if (collapsible) {
-        const toggle = document.createElement('button');
-        toggle.className = 'dvfy-drawer__toggle';
-        toggle.setAttribute('aria-label', 'Collapse panel');
-        toggle.setAttribute('title', 'Collapse');
-        toggle.textContent = '\u00D7'; // ×
-        toggle.addEventListener('click', () => this.#collapse());
-        header.appendChild(toggle);
-      }
+    // Header
+    const header = document.createElement('div');
+    header.className = 'dvfy-drawer__header';
 
-      this.appendChild(header);
-    }
+    const title = document.createElement('h2');
+    title.className = 'dvfy-drawer__title';
+    title.id = 'dvfy-drawer-title';
+    title.textContent = titleText;
 
-    // ── Scrollable body ──
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'dvfy-drawer__close';
+    closeBtn.setAttribute('aria-label', 'Close drawer');
+    closeBtn.textContent = '\u00d7';
+    closeBtn.addEventListener('click', () => this.removeAttribute('open'));
+
+    header.appendChild(title);
+    header.appendChild(closeBtn);
+
+    // Body
     const body = document.createElement('div');
     body.className = 'dvfy-drawer__body';
-    for (const child of children) {
-      body.appendChild(child);
-    }
-    this.appendChild(body);
+    for (const child of children) body.appendChild(child);
 
-    // ── Reopen tab (placed as sibling in parent so it's visible when drawer collapses) ──
-    if (this.#reopen && this.#reopen.parentNode) {
-      this.#reopen.remove();
-    }
-    this.#reopen = null;
+    this.#panel.appendChild(header);
+    this.#panel.appendChild(body);
+    this.appendChild(this.#panel);
+  }
 
-    if (collapsible && this.parentElement) {
-      // Ensure parent has relative positioning for absolute reopen tab
-      const parentPos = getComputedStyle(this.parentElement).position;
-      if (parentPos === 'static') {
-        this.parentElement.style.position = 'relative';
+  #openPanel() {
+    this.#prevFocus = document.activeElement;
+    this.#panel.inert = false;
+    document.addEventListener('keydown', this.#onKey);
+    // Focus first focusable element after transition starts
+    requestAnimationFrame(() => {
+      const focusable = this.#panel?.querySelector(
+        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+      );
+      focusable?.focus();
+    });
+    this.dispatchEvent(new CustomEvent('open', { bubbles: true }));
+  }
+
+  #closePanel() {
+    this.#panel.inert = true;
+    document.removeEventListener('keydown', this.#onKey);
+    this.#prevFocus?.focus();
+    this.dispatchEvent(new CustomEvent('close', { bubbles: true }));
+  }
+
+  #onKey = (e) => {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      this.removeAttribute('open');
+      return;
+    }
+    if (e.key === 'Tab' && this.#panel) {
+      const focusable = [...this.#panel.querySelectorAll(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )];
+      if (!focusable.length) { e.preventDefault(); return; }
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
       }
-
-      this.#reopen = document.createElement('button');
-      this.#reopen.className = 'dvfy-drawer__reopen';
-      this.#reopen.setAttribute('data-position', position);
-      this.#reopen.textContent = headerText;
-      this.#reopen.setAttribute('aria-label', `Open ${headerText.toLowerCase()}`);
-      this.#reopen.addEventListener('click', () => this.#expand());
-
-      if (this.hasAttribute('collapsed')) {
-        this.#reopen.setAttribute('data-visible', '');
-      }
-
-      // Insert as sibling, right before the drawer
-      this.parentElement.insertBefore(this.#reopen, this);
     }
-  }
+  };
 
-  #collapse() {
-    this.setAttribute('collapsed', '');
-  }
-
-  #expand() {
-    this.removeAttribute('collapsed');
-  }
-
-  get collapsed() { return this.hasAttribute('collapsed'); }
-  set collapsed(v) { v ? this.setAttribute('collapsed', '') : this.removeAttribute('collapsed'); }
+  get open() { return this.hasAttribute('open'); }
+  set open(v) { v ? this.setAttribute('open', '') : this.removeAttribute('open'); }
 }
 
 customElements.define('dvfy-drawer', DvfyDrawer);
