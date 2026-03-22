@@ -32,6 +32,8 @@ dvfy-table {
   display: block;
   font-family: var(--dvfy-font-sans);
   color: var(--dvfy-text-primary);
+  container-type: inline-size;
+  container-name: dvfy-table;
 }
 
 .dvfy-table__wrapper {
