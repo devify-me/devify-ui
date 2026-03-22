@@ -18,6 +18,8 @@ dvfy-input {
   flex-direction: column;
   gap: var(--dvfy-space-1-5);
   font-family: var(--dvfy-font-sans);
+  container-type: inline-size;
+  container-name: dvfy-input;
 }
 dvfy-input .dvfy-input__label {
   font-size: var(--dvfy-text-sm);
