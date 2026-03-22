@@ -313,7 +313,7 @@
       "attributes": [
         {
           "name": "variant",
-          "description": "Button style: default | subtle | outline | ghost | danger (default: \"default\")",
+          "description": "Button style: default | subtle | outline | ghost | danger | gradient (default: \"default\")",
           "type": "string"
         },
         {
@@ -340,6 +340,16 @@
           "name": "loading",
           "description": "Show loading state with spinner indicator",
           "type": "boolean"
+        },
+        {
+          "name": "from",
+          "description": "Gradient start color for variant=\"gradient\" (default: \"#7c3aed\")",
+          "type": "string"
+        },
+        {
+          "name": "to",
+          "description": "Gradient end color for variant=\"gradient\" (default: \"#2563eb\")",
+          "type": "string"
         }
       ],
       "slots": [
@@ -1333,62 +1343,6 @@
           "name": "--dvfy-scroll-progress-z",
           "description": "z-index (default: 1000)",
           "type": "integer"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
         }
       ]
     },
