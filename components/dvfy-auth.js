@@ -506,6 +506,7 @@ class DvfyAuth extends HTMLElement {
   }
 
   #handleSubmit(e, form) {
+    e.preventDefault();
     const data = Object.fromEntries(new FormData(form));
     this.dispatchEvent(new CustomEvent('auth-submit', {
       detail: data,

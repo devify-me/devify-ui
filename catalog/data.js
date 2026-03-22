@@ -92,7 +92,8 @@ export const COMPONENT_REGISTRY = {
   'dvfy-carousel':  { tier: 3, domain: 'layout',     deps: [] },
   'dvfy-accordion': { tier: 3, domain: 'layout',     deps: ['dvfy-section'] },
   'dvfy-sidebar':   { tier: 3, domain: 'navigation', deps: [] },
-  'dvfy-auth':      { tier: 3, domain: 'utility',    deps: ['dvfy-input', 'dvfy-button'] },
+  'dvfy-auth':      { tier: 3, domain: 'utility',    deps: ['dvfy-modal'] },
+  'dvfy-header':    { tier: 3, domain: 'navigation', deps: ['dvfy-hamburger', 'dvfy-avatar', 'dvfy-theme-switcher'] },
 
   // Tier 4 — HTMX Patterns
   'dvfy-htmx-form':       { tier: 4, domain: 'htmx', deps: [] },
