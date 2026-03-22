@@ -1,0 +1,25 @@
+name: WCAG Contrast Check
+
+on:
+  push:
+    paths:
+      - 'tokens/**'
+      - 'scripts/check-contrast.js'
+  pull_request:
+    paths:
+      - 'tokens/**'
+      - 'scripts/check-contrast.js'
+
+jobs:
+  contrast:
+    name: WCAG AA contrast validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check contrast ratios
+        run: node scripts/check-contrast.js --ci
