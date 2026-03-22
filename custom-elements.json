@@ -579,6 +579,71 @@
       ]
     },
     {
+      "name": "dvfy-date-picker",
+      "path": "./components/dvfy-date-picker.js",
+      "attributes": [
+        {
+          "name": "value",
+          "type": "string"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "value-end"
+        },
+        {
+          "name": "min"
+        },
+        {
+          "name": "max"
+        },
+        {
+          "name": "type"
+        },
+        {
+          "name": "range"
+        },
+        {
+          "name": "required"
+        },
+        {
+          "name": "disabled"
+        },
+        {
+          "name": "placeholder"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "error"
+        },
+        {
+          "name": "help"
+        },
+        {
+          "name": "label-position"
+        }
+      ],
+      "properties": [
+        {
+          "name": "valueEnd",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "change"
+        }
+      ]
+    },
+    {
       "name": "dvfy-drawer",
       "path": "./components/dvfy-drawer.js",
       "description": "Collapsible drawer panel for side or bottom content.\n\nA reusable panel that slides in from a configurable edge. Supports\ncollapse/expand with an animated transition and a vertical reopen tab\nthat appears when collapsed. Scrollable body for long content while\nthe parent layout stays fixed.",

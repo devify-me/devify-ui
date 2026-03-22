@@ -287,6 +287,7 @@ const SKIP_TAGS = new Set([
 const DEFAULT_CONTENT = {
   'dvfy-button': 'Click me',
   'dvfy-input': '',
+  'dvfy-date-picker': '',
   'dvfy-textarea': '',
   'dvfy-select': '<option value="a">Option A</option><option value="b">Option B</option><option value="c">Option C</option>',
   'dvfy-file-upload': '',
