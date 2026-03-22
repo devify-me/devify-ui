@@ -299,6 +299,7 @@ const DEFAULT_CONTENT = {
   'dvfy-alert': 'This is an alert message.',
   'dvfy-loader': '',
   'dvfy-card': '<h3 style="margin-bottom:0.5rem">Card Title</h3><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Card content goes here.</p>',
+  'dvfy-flip-card': '<div slot="front" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:0.5rem;padding:1.5rem"><h3 style="margin:0;font-size:var(--dvfy-text-lg)">Front Face</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm);text-align:center">Hover to flip</p></div><div slot="back" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:0.5rem;padding:1.5rem"><h3 style="margin:0;font-size:var(--dvfy-text-lg);color:#fff">Back Face</h3><p style="margin:0;color:rgba(255,255,255,0.75);font-size:var(--dvfy-text-sm);text-align:center">The other side</p></div>',
   'dvfy-progress': '',
   'dvfy-tabs': '<dvfy-tab label="Tab 1"><p style="padding:1rem">First tab content</p></dvfy-tab><dvfy-tab label="Tab 2"><p style="padding:1rem">Second tab content</p></dvfy-tab>',
   'dvfy-dropdown': '<dvfy-button variant="outline">Actions</dvfy-button><div class="dvfy-dropdown__item">Edit</div><div class="dvfy-dropdown__item">Delete</div>',
