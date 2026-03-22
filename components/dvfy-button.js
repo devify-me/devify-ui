@@ -1,6 +1,22 @@
 /* <dvfy-button> — Button component */
 
 const STYLES = `
+@property --dvfy-btn-grad-from {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #7c3aed;
+}
+@property --dvfy-btn-grad-to {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #2563eb;
+}
+@property --dvfy-btn-grad-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 135deg;
+}
+
 dvfy-button {
   display: inline-flex;
   align-items: center;
@@ -75,6 +91,24 @@ dvfy-button[variant="ghost"] {
 }
 dvfy-button[variant="ghost"]:hover:not([disabled]):not([loading]) { background: var(--dvfy-hover-bg); color: var(--dvfy-text-primary); }
 
+/* Gradient */
+dvfy-button[variant="gradient"] {
+  background: linear-gradient(var(--dvfy-btn-grad-angle), var(--dvfy-btn-grad-from), var(--dvfy-btn-grad-to));
+  color: var(--dvfy-neutral-0);
+  border-color: transparent;
+  transition:
+    --dvfy-btn-grad-from var(--dvfy-duration-base) var(--dvfy-ease-out),
+    --dvfy-btn-grad-to var(--dvfy-duration-base) var(--dvfy-ease-out),
+    --dvfy-btn-grad-angle var(--dvfy-duration-base) var(--dvfy-ease-out);
+}
+dvfy-button[variant="gradient"]:hover:not([disabled]):not([loading]) {
+  animation: dvfy-gradient-spin 3s linear infinite;
+}
+@keyframes dvfy-gradient-spin {
+  from { --dvfy-btn-grad-angle: 135deg; }
+  to   { --dvfy-btn-grad-angle: 495deg; }
+}
+
 /* Danger */
 dvfy-button[variant="danger"] {
   background: var(--dvfy-danger-bg);
@@ -119,12 +153,14 @@ dvfy-button[loading]::after {
  *
  * @element dvfy-button
  *
- * @attr {string} variant - Button style: default | subtle | outline | ghost | danger (default: "default")
+ * @attr {string} variant - Button style: default | subtle | outline | ghost | danger | gradient (default: "default")
  * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {boolean} icon - Icon-only mode with square aspect ratio
  * @attr {boolean} disabled - Disable button and prevent interaction
  * @attr {boolean} loading - Show loading state with spinner indicator
  * @attr {string} type - HTML button type: button | submit | reset (default: "button")
+ * @attr {string} from - Gradient start color for variant="gradient" (default: "#7c3aed")
+ * @attr {string} to - Gradient end color for variant="gradient" (default: "#2563eb")
  *
  * @cssprop {color} --dvfy-primary-bg - Primary background color
  * @cssprop {color} --dvfy-primary-text - Primary text color
@@ -144,6 +180,9 @@ class DvfyButton extends HTMLElement {
       document.head.appendChild(s);
       DvfyButton.#styled = true;
     }
+
+    if (this.hasAttribute('from')) this.style.setProperty('--dvfy-btn-grad-from', this.getAttribute('from'));
+    if (this.hasAttribute('to')) this.style.setProperty('--dvfy-btn-grad-to', this.getAttribute('to'));
 
     if (!this.getAttribute('role')) this.setAttribute('role', 'button');
     if (!this.getAttribute('tabindex') && !this.hasAttribute('disabled')) {
@@ -165,9 +204,9 @@ class DvfyButton extends HTMLElement {
     }
   };
 
-  static get observedAttributes() { return ['disabled', 'loading']; }
+  static get observedAttributes() { return ['disabled', 'loading', 'from', 'to']; }
 
-  attributeChangedCallback(name) {
+  attributeChangedCallback(name, _old, value) {
     if (name === 'disabled') {
       const disabled = this.hasAttribute('disabled');
       this.setAttribute('tabindex', disabled ? '-1' : '0');
@@ -175,6 +214,12 @@ class DvfyButton extends HTMLElement {
     }
     if (name === 'loading') {
       this.setAttribute('aria-busy', String(this.hasAttribute('loading')));
+    }
+    if (name === 'from') {
+      this.style.setProperty('--dvfy-btn-grad-from', value ?? '');
+    }
+    if (name === 'to') {
+      this.style.setProperty('--dvfy-btn-grad-to', value ?? '');
     }
   }
 

@@ -313,7 +313,7 @@
       "attributes": [
         {
           "name": "variant",
-          "description": "Button style: default | subtle | outline | ghost | danger (default: \"default\")",
+          "description": "Button style: default | subtle | outline | ghost | danger | gradient (default: \"default\")",
           "type": "string"
         },
         {
@@ -340,6 +340,16 @@
           "name": "loading",
           "description": "Show loading state with spinner indicator",
           "type": "boolean"
+        },
+        {
+          "name": "from",
+          "description": "Gradient start color for variant=\"gradient\" (default: \"#7c3aed\")",
+          "type": "string"
+        },
+        {
+          "name": "to",
+          "description": "Gradient end color for variant=\"gradient\" (default: \"#2563eb\")",
+          "type": "string"
         }
       ],
       "slots": [
@@ -786,6 +796,10 @@
           "type": "color"
         }
       ]
+    },
+    {
+      "name": "dvfy-hovercard",
+      "path": "./components/dvfy-hovercard.js"
     },
     {
       "name": "dvfy-input",
@@ -1249,6 +1263,61 @@
       ]
     },
     {
+      "name": "dvfy-scramble-hover",
+      "path": "./components/dvfy-scramble-hover.js",
+      "description": "Evervault-style character scramble on hover. Characters cycle through random\nglyphs and resolve sequentially to reveal the original text.",
+      "attributes": [
+        {
+          "name": "speed",
+          "description": "Scramble iterations per second (default: 30)",
+          "type": "number"
+        },
+        {
+          "name": "duration",
+          "description": "Total resolve time in ms (default: 800)",
+          "type": "number"
+        },
+        {
+          "name": "charset",
+          "description": "Custom scramble character set",
+          "type": "string"
+        },
+        {
+          "name": "trigger",
+          "description": "hover | auto | visible (default: hover)",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "scramble-start",
+          "description": "Scramble animation begins"
+        },
+        {
+          "name": "scramble-end",
+          "description": "Scramble animation completes, all characters resolved"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Text content to scramble"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-scramble-color",
+          "description": "Color of unresolved scrambling characters",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-scramble-resolve-color",
+          "description": "Color of resolved characters",
+          "type": "color"
+        }
+      ]
+    },
+    {
       "name": "dvfy-scroll-progress",
       "path": "./components/dvfy-scroll-progress.js",
       "description": "CSS scroll-driven reading progress bar.",
@@ -1274,62 +1343,6 @@
           "name": "--dvfy-scroll-progress-z",
           "description": "z-index (default: 1000)",
           "type": "integer"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
         }
       ]
     },
@@ -1654,6 +1667,51 @@
         {
           "name": "--dvfy-neutral-400",
           "description": "Metallic knob shadow",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-spotlight-card",
+      "path": "./components/dvfy-spotlight-card.js",
+      "description": "Premium card with a dual-layer radial gradient spotlight that follows the\nmouse cursor — a glowing border rim and an inner surface highlight.",
+      "attributes": [
+        {
+          "name": "elevated",
+          "description": "Add shadow elevation",
+          "type": "boolean"
+        },
+        {
+          "name": "padded",
+          "description": "Enable padding",
+          "type": "boolean"
+        },
+        {
+          "name": "interactive",
+          "description": "Enable cursor pointer and active scale",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Card content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-spotlight-card-size",
+          "description": "Spotlight radius (default: 600px)",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-spotlight-card-color",
+          "description": "Inner surface glow color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-spotlight-card-border-color",
+          "description": "Border glow color",
           "type": "color"
         }
       ]
