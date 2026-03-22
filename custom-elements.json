@@ -506,6 +506,71 @@
       ]
     },
     {
+      "name": "dvfy-clip-reveal",
+      "path": "./components/dvfy-clip-reveal.js",
+      "description": "Organic clip-path reveal animation using CSS `shape()`.",
+      "attributes": [
+        {
+          "name": "once",
+          "description": "Play only once even for hover/manual triggers (default: true for visible/auto)",
+          "type": "boolean"
+        },
+        {
+          "name": "preset",
+          "description": "Shape preset: blob | wave | diagonal | circle-expand (default: blob)",
+          "type": "string"
+        },
+        {
+          "name": "trigger",
+          "description": "When to play: visible | auto | manual (default: visible)",
+          "type": "string"
+        },
+        {
+          "name": "duration",
+          "description": "Animation duration in ms (default: 800)",
+          "type": "number"
+        },
+        {
+          "name": "easing",
+          "description": "CSS easing function (default: cubic-bezier(0.4, 0, 0.2, 1))",
+          "type": "string"
+        },
+        {
+          "name": "animate",
+          "description": "Set to trigger animation (manual trigger)",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "clip-reveal-start",
+          "description": "Fires when animation begins"
+        },
+        {
+          "name": "clip-reveal-end",
+          "description": "Fires when animation completes"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Content to reveal"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-clip-duration",
+          "description": "Animation duration override",
+          "type": "time"
+        },
+        {
+          "name": "--dvfy-clip-easing",
+          "description": "Animation easing override",
+          "type": "string"
+        }
+      ]
+    },
+    {
       "name": "dvfy-component-playground",
       "path": "./components/dvfy-component-playground.js",
       "attributes": [
@@ -1333,62 +1398,6 @@
           "name": "--dvfy-scroll-progress-z",
           "description": "z-index (default: 1000)",
           "type": "integer"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
         }
       ]
     },
