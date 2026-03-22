@@ -88,6 +88,8 @@ export const COMPONENT_REGISTRY = {
   'dvfy-tree-view':      { tier: 2, domain: 'navigation', deps: [] },
   'dvfy-theme-switcher': { tier: 2, domain: 'utility',    deps: [] },
 
+  'dvfy-command-palette': { tier: 2, domain: 'navigation', deps: [] },
+
   // Tier 3 — Organisms
   'dvfy-carousel':  { tier: 3, domain: 'layout',     deps: [] },
   'dvfy-accordion': { tier: 3, domain: 'layout',     deps: ['dvfy-section'] },
