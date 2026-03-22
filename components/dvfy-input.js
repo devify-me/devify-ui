@@ -266,7 +266,7 @@ class DvfyInput extends HTMLElement {
 
   #patchLabel() {
     const label = this.getAttribute('label');
-    let lbl = this.querySelector('.dvfy-input__label');
+    const lbl = this.querySelector('.dvfy-input__label');
     if (label) {
       if (!lbl) {
         this.#appendLabel();

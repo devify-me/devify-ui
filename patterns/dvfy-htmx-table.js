@@ -529,13 +529,9 @@ class DvfyHtmxTable extends HTMLElement {
 
     if (this.#totalPages <= 1) return;
 
-    const pageSize = parseInt(this.getAttribute('page-size') || '20', 10);
-
     // Info text
     const info = document.createElement('span');
     info.className = 'dvfy-htmx-table__pagination-info';
-    const start = (this.#currentPage - 1) * pageSize + 1;
-    const end = Math.min(this.#currentPage * pageSize, this.#totalPages * pageSize);
     info.textContent = 'Page ' + this.#currentPage + ' of ' + this.#totalPages;
     this.#paginationEl.appendChild(info);
 
