@@ -732,6 +732,75 @@
       ]
     },
     {
+      "name": "dvfy-file-upload",
+      "path": "./components/dvfy-file-upload.js",
+      "description": "Drag-and-drop file upload zone with validation and file list preview.",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "Accessible label for the drop zone",
+          "type": "string"
+        },
+        {
+          "name": "accept",
+          "description": "Accepted MIME types or extensions (e.g. \"image/*,.pdf\")",
+          "type": "string"
+        },
+        {
+          "name": "multiple",
+          "description": "Allow selecting multiple files",
+          "type": "boolean"
+        },
+        {
+          "name": "max-size",
+          "description": "Maximum file size in MB (e.g. \"5\" for 5 MB)",
+          "type": "number"
+        },
+        {
+          "name": "state",
+          "description": "Visual state: idle | dragover | uploading | success | error (default: \"idle\")",
+          "type": "string"
+        },
+        {
+          "name": "progress",
+          "description": "Upload progress 0–100 (shown when state=\"uploading\")",
+          "type": "number"
+        },
+        {
+          "name": "disabled",
+          "description": "Disable the drop zone",
+          "type": "boolean"
+        }
+      ],
+      "properties": [
+        {
+          "name": "files",
+          "description": "Returns a copy of the currently selected files",
+          "type": "File[]"
+        }
+      ],
+      "events": [
+        {
+          "name": "dvfy-files-selected"
+        },
+        {
+          "name": "dvfy-file-removed"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-fu-zone-border",
+          "description": "Drop zone border color override",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-fu-zone-bg",
+          "description": "Drop zone background override",
+          "type": "color"
+        }
+      ]
+    },
+    {
       "name": "dvfy-gradient-card",
       "path": "./components/dvfy-gradient-card.js",
       "description": "Card with a radial gradient 'light source' that follows the cursor on hover.",
