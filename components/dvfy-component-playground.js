@@ -304,6 +304,7 @@ const DEFAULT_CONTENT = {
   'dvfy-dropdown': '<dvfy-button variant="outline">Actions</dvfy-button><div class="dvfy-dropdown__item">Edit</div><div class="dvfy-dropdown__item">Delete</div>',
   'dvfy-tooltip': '<dvfy-button variant="outline" size="sm">Hover me</dvfy-button>',
   'dvfy-hovercard': '<button interestfor="hc-demo" style="padding:0.5rem 1rem;cursor:pointer">Hover me</button><dvfy-hovercard id="hc-demo"><strong>Hovercard</strong><p>Zero-JS via interestfor + popover="hint".</p></dvfy-hovercard>',
+  'dvfy-popover': '<dvfy-button variant="outline">Click me</dvfy-button><div><strong style="display:block;margin-bottom:0.5rem">Popover</strong><p style="margin:0;color:var(--dvfy-text-secondary)">Interactive content — buttons, links, and forms all work.</p></div>',
   'dvfy-modal': '<p>Modal content goes here.</p>',
   'dvfy-breadcrumb': '<a href="#">Home</a><a href="#">Products</a><span>Current</span>',
   'dvfy-pagination': '',
