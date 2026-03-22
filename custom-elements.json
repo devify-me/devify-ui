@@ -367,46 +367,6 @@
       ]
     },
     {
-      "name": "dvfy-card-glow",
-      "path": "./components/dvfy-card-glow.js",
-      "description": "Card with a mouse-tracked radial gradient glow that bleeds through the border.",
-      "attributes": [
-        {
-          "name": "elevated",
-          "description": "Add shadow elevation",
-          "type": "boolean"
-        },
-        {
-          "name": "padded",
-          "description": "Enable padding",
-          "type": "boolean"
-        },
-        {
-          "name": "interactive",
-          "description": "Enable cursor pointer and active scale",
-          "type": "boolean"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Card content"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--glow-color",
-          "description": "Glow color (default: rgba(124, 58, 237, 0.2))",
-          "type": "color"
-        },
-        {
-          "name": "--glow-size",
-          "description": "Gradient radius (default: 60%)",
-          "type": "length|percentage"
-        }
-      ]
-    },
-    {
       "name": "dvfy-card",
       "path": "./components/dvfy-card.js",
       "description": "Content card with elevation and interactive variants.",
@@ -454,15 +414,7 @@
     {
       "name": "dvfy-carousel",
       "path": "./components/dvfy-carousel.js",
-      "description": "Carousel container. Wraps dvfy-slide elements in a horizontally scrollable\nsnap container. Navigation buttons and pagination dots are rendered entirely\nby CSS pseudo-elements on Chrome 135+; older browsers see a plain swipeable\nscroll area.",
-      "attributes": [
-        {
-          "name": "gap"
-        },
-        {
-          "name": "autoplay"
-        }
-      ]
+      "description": "Carousel container. Wraps dvfy-slide elements in a horizontally scrollable\nsnap container. Navigation buttons and pagination dots are rendered entirely\nby CSS pseudo-elements on Chrome 135+; older browsers see a plain swipeable\nscroll area."
     },
     {
       "name": "dvfy-slide",
@@ -1751,6 +1703,28 @@
           "name": "--dvfy-spotlight-card-border-color",
           "description": "Border glow color",
           "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-stagger-enter",
+      "path": "./components/dvfy-stagger-enter.js",
+      "description": "Staggered DOM-enter animation container. Children animate in on mount\nusing",
+      "attributes": [
+        {
+          "name": "direction"
+        },
+        {
+          "name": "delay"
+        },
+        {
+          "name": "duration"
+        },
+        {
+          "name": "easing"
+        },
+        {
+          "name": "distance"
         }
       ]
     },

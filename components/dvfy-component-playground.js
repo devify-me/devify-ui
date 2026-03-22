@@ -1,3 +1,22 @@
+/**
+ * <dvfy-component-playground> — Interactive component playground
+ *
+ * Loads the WCA custom-elements.json manifest, renders a component picker,
+ * auto-generates controls from attribute metadata, and provides live Preview,
+ * Code, and API tabs.
+ *
+ * @element dvfy-component-playground
+ *
+ * @attr {string} component - Tag name to showcase (shows picker if omitted)
+ * @attr {string} src - Path to custom-elements.json (default: "../custom-elements.json")
+ *
+ * @slot - Not used
+ *
+ * @cssprop {color} --dvfy-surface-raised - Card/panel background
+ * @cssprop {color} --dvfy-border-muted - Panel borders
+ * @cssprop {color} --dvfy-primary-bg - Active tab accent
+ */
+
 const PLAYGROUND_STYLES = `
 dvfy-component-playground {
   display: block;
@@ -25,7 +44,6 @@ dvfy-component-playground .sc__preview-col {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  position: relative;
 }
 
 /* Stretch tabs to fill preview column */
@@ -40,7 +58,7 @@ dvfy-component-playground .sc__preview-col dvfy-tab[active] {
   flex-direction: column;
 }
 
-/* Preview area — fills available height, default layout: center */
+/* Preview area — fills available height */
 dvfy-component-playground .sc__preview-area {
   position: relative;
   flex: 1;
@@ -53,80 +71,6 @@ dvfy-component-playground .sc__preview-area {
   justify-content: center;
   flex-wrap: wrap;
   gap: var(--dvfy-space-3);
-}
-
-/* Layout: stretch — full-width, vertically centered (inputs, navs, progress) */
-dvfy-component-playground .sc__preview-area[data-layout="stretch"] {
-  justify-content: stretch;
-  flex-wrap: nowrap;
-}
-dvfy-component-playground .sc__preview-area[data-layout="stretch"] > * {
-  width: 100%;
-}
-
-/* Layout: fill — component fills entire preview (cards, tables, accordion) */
-dvfy-component-playground .sc__preview-area[data-layout="fill"] {
-  padding: 0;
-  align-items: stretch;
-  justify-content: stretch;
-  flex-wrap: nowrap;
-  overflow: hidden;
-}
-dvfy-component-playground .sc__preview-area[data-layout="fill"] > * {
-  flex: 1;
-  min-width: 0;
-}
-
-/* Layout: edge — attached to container edges with sibling content (drawer, sidebar) */
-dvfy-component-playground .sc__preview-area[data-layout="edge"] {
-  padding: 0;
-  gap: 0;
-  align-items: stretch;
-  justify-content: stretch;
-  flex-wrap: nowrap;
-  overflow: hidden;
-}
-
-/* Layout: overlay — centered trigger, component positions itself (modal, toast, tooltip) */
-dvfy-component-playground .sc__preview-area[data-layout="overlay"] {
-  align-items: center;
-  justify-content: center;
-}
-
-/* Layout: top-bar — pinned to top with simulated page content below */
-dvfy-component-playground .sc__preview-area[data-layout="top-bar"] {
-  padding: 0;
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-  flex-wrap: nowrap;
-  overflow: hidden;
-}
-
-/* Layout: inline-group — horizontal flex at natural size, not stretched */
-dvfy-component-playground .sc__preview-area[data-layout="inline-group"] {
-  align-items: center;
-  justify-content: center;
-  flex-wrap: nowrap;
-}
-dvfy-component-playground .sc__preview-area[data-layout="inline-group"] > * {
-  flex: none;
-}
-
-/* Layout mode label — aligned with the tab bar, top-right of preview column */
-dvfy-component-playground .sc__layout-label {
-  position: absolute;
-  top: var(--dvfy-space-2);
-  right: var(--dvfy-space-2);
-  font-family: var(--dvfy-font-mono);
-  font-size: var(--dvfy-text-xs);
-  color: var(--dvfy-text-muted);
-  padding: var(--dvfy-space-1) var(--dvfy-space-2);
-  border: var(--dvfy-border-1) solid var(--dvfy-border-muted);
-  border-radius: var(--dvfy-radius-md);
-  background: var(--dvfy-surface-raised);
-  white-space: nowrap;
-  pointer-events: none;
 }
 
 /* Code block wrapper */
@@ -328,11 +272,6 @@ const SKIP_TAGS = new Set([
   'dvfy-component-playground',
 ]);
 
-/** Attributes to hide from playground controls (init-only, not interactive). */
-const SKIP_ATTRS = {
-  'dvfy-theme-switcher': new Set(['default-theme']),
-};
-
 /*
  * ── Default innerHTML per component ──
  *
@@ -360,8 +299,6 @@ const DEFAULT_CONTENT = {
   'dvfy-alert': 'This is an alert message.',
   'dvfy-loader': '',
   'dvfy-card': '<h3 style="margin-bottom:0.5rem">Card Title</h3><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Card content goes here.</p>',
-  'dvfy-compare-slider': '<img slot="before" src="../catalog/assets/compare-before.png" alt="Before"/><img slot="after" src="../catalog/assets/compare-after.png" alt="After"/>',
-  'dvfy-carousel': '',
   'dvfy-progress': '',
   'dvfy-tabs': '<dvfy-tab label="Tab 1"><p style="padding:1rem">First tab content</p></dvfy-tab><dvfy-tab label="Tab 2"><p style="padding:1rem">Second tab content</p></dvfy-tab>',
   'dvfy-dropdown': '<dvfy-button variant="outline">Actions</dvfy-button><div class="dvfy-dropdown__item">Edit</div><div class="dvfy-dropdown__item">Delete</div>',
@@ -371,33 +308,21 @@ const DEFAULT_CONTENT = {
   'dvfy-breadcrumb': '<a href="#">Home</a><a href="#">Products</a><span>Current</span>',
   'dvfy-pagination': '',
   'dvfy-table': '<table><thead><tr><th data-sort>Name</th><th data-sort>Role</th></tr></thead><tbody><tr><td>Alice</td><td>Engineer</td></tr><tr><td>Bob</td><td>Designer</td></tr></tbody></table>',
-  'dvfy-empty': '<dvfy-button variant="outline" size="sm">Clear filters</dvfy-button>',
+  'dvfy-empty': '',
   'dvfy-auth': '',
-  'dvfy-nav': '',
-  'dvfy-nav-menu': '<dvfy-nav href="#home">Home</dvfy-nav><dvfy-nav href="#about">About</dvfy-nav><dvfy-nav href="#contact">Contact</dvfy-nav>',
-  'dvfy-nav-bar': '<dvfy-nav-menu><dvfy-nav href="#home">Home</dvfy-nav><dvfy-nav href="#about">About</dvfy-nav><dvfy-nav href="#contact">Contact</dvfy-nav></dvfy-nav-menu><dvfy-button variant="default" size="sm">Sign In</dvfy-button>',
+  'dvfy-nav': '<a href="#home">Home</a><a href="#about">About</a><a href="#contact">Contact</a><dvfy-button variant="default" size="sm">Sign In</dvfy-button>',
   'dvfy-sidebar': '',
   'dvfy-hamburger': '',
   'dvfy-drawer': '<p>Drawer body content. This panel scrolls independently and can be collapsed.</p><p style="margin-top:0.5rem;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Try the collapse button in the header.</p>',
   'dvfy-section': '<p>Section content here.</p>',
-  'dvfy-theme-switcher': '<option value="devify-cyan">Devify Cyan</option><option value="devify-pink">Devify Pink</option>',
+  'dvfy-theme-switcher': '<option value="devify-cyan">Cyan</option><option value="devify-pink">Pink</option>',
   'dvfy-accordion': '<dvfy-section label="Section One" open><p>First section content.</p></dvfy-section><dvfy-section label="Section Two" collapsed><p>Second section content.</p></dvfy-section><dvfy-section label="Section Three" collapsed><p>Third section content.</p></dvfy-section>',
-};
-
-/**
- * Default attribute values per component.
- * Applied when a component is selected in the playground.
- */
-const DEFAULT_ATTRS = {
-  'dvfy-carousel': {
-    images: JSON.stringify([
-      { src: '../catalog/assets/Grob.png', alt: 'Grob' },
-      { src: '../catalog/assets/Grobette.png', alt: 'Grobette' },
-      { src: '../catalog/assets/Grobby.png', alt: 'Grobby' },
-      { src: '../catalog/assets/Grobma.png', alt: 'Grobma' },
-      { src: '../catalog/assets/Grobpa.png', alt: 'Grobpa' },
-    ]),
-  },
+  'dvfy-carousel': '<dvfy-slide style="background:var(--dvfy-primary-bg);color:#fff;border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-8);display:flex;align-items:center;justify-content:center;min-height:160px;font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-semibold)">Slide 1</dvfy-slide><dvfy-slide style="background:var(--dvfy-surface-raised);border:1px solid var(--dvfy-border-default);border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-8);display:flex;align-items:center;justify-content:center;min-height:160px;font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-semibold)">Slide 2</dvfy-slide><dvfy-slide style="background:var(--dvfy-surface-raised);border:1px solid var(--dvfy-border-default);border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-8);display:flex;align-items:center;justify-content:center;min-height:160px;font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-semibold)">Slide 3</dvfy-slide>',
+  'dvfy-page-transition': '<dvfy-page-transition animation="fade"><dvfy-card padded><h3 style="margin:0 0 0.5rem">Fade Transition</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">MPA: add mpa attr to activate cross-page transitions.</p></dvfy-card></dvfy-page-transition>',
+  'dvfy-scroll-reveal': '<div style="height:150px;overflow-y:auto;border:1px solid var(--dvfy-border-default);border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-4)"><div style="height:200px;display:flex;align-items:end;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Scroll down</div><dvfy-scroll-reveal animation="fade-up"><dvfy-card padded><h3 style="margin:0 0 0.5rem">Revealed Card</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">This card fades up as you scroll into view.</p></dvfy-card></dvfy-scroll-reveal><div style="height:200px"></div></div>',
+  'dvfy-scroll-progress': '<dvfy-scroll-progress></dvfy-scroll-progress><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm);margin:0">Scroll the page to see the progress bar fill at the top of the viewport. Requires a scrollable page and browser support for <code>animation-timeline: scroll()</code>.</p>',
+  'dvfy-stagger-enter': '<dvfy-stagger-enter direction="up" delay="0.08" duration="0.4" style="display:flex;flex-direction:column;gap:var(--dvfy-space-3)"><dvfy-card padded><strong>Item one</strong><p style="margin:0.25rem 0 0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Fades and slides up on entry.</p></dvfy-card><dvfy-card padded><strong>Item two</strong><p style="margin:0.25rem 0 0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Staggered by sibling-index().</p></dvfy-card><dvfy-card padded><strong>Item three</strong><p style="margin:0.25rem 0 0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">No JavaScript timers needed.</p></dvfy-card></dvfy-stagger-enter>',
+  'dvfy-tree-view': '<dvfy-tree-view><dvfy-tree-node label="Documents" icon="\uD83D\uDCC1" expanded><dvfy-tree-node label="README.md" icon="\uD83D\uDCC4" href="#readme"></dvfy-tree-node><dvfy-tree-node label="Images" icon="\uD83D\uDCC1"><dvfy-tree-node label="logo.png" icon="\uD83D\uDDBC\uFE0F" href="#logo"></dvfy-tree-node><dvfy-tree-node label="banner.jpg" icon="\uD83D\uDDBC\uFE0F" href="#banner"></dvfy-tree-node></dvfy-tree-node></dvfy-tree-node><dvfy-tree-node label="Settings" icon="\u2699\uFE0F" href="#settings"></dvfy-tree-node></dvfy-tree-view>',
 };
 
 /* ── Utilities ── */
@@ -430,25 +355,6 @@ function esc(s) {
   return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
-/**
- * <dvfy-component-playground> — Interactive component playground
- *
- * Loads the WCA custom-elements.json manifest, renders a component picker,
- * auto-generates controls from attribute metadata, and provides live Preview,
- * Code, and API tabs.
- *
- * @element dvfy-component-playground
- *
- * @attr {string} component - Tag name to showcase (shows picker if omitted)
- * @attr {string} src - Path to custom-elements.json (default: "../custom-elements.json")
- * @attr {string} layout - Preview layout mode: center | stretch | fill | edge | overlay (default: "center")
- *
- * @slot - Not used
- *
- * @cssprop {color} --dvfy-surface-raised - Card/panel background
- * @cssprop {color} --dvfy-border-muted - Panel borders
- * @cssprop {color} --dvfy-primary-bg - Active tab accent
- */
 class DvfyComponentPlayground extends HTMLElement {
   static #styled = false;
 
@@ -456,9 +362,7 @@ class DvfyComponentPlayground extends HTMLElement {
   #tags = [];
   #currentTag = null;
   #attrValues = {};       // { attrName: currentValue }
-  #cssValues = {};        // { '--dvfy-prop-name': currentValue }
   #contentValue = '';      // current innerHTML for preview
-  #loadId = 0;            // Invalidates stale fetches
 
   connectedCallback() {
     if (!DvfyComponentPlayground.#styled) {
@@ -470,11 +374,11 @@ class DvfyComponentPlayground extends HTMLElement {
     this.#loadManifest();
   }
 
-  static get observedAttributes() { return ['component', 'src', 'layout']; }
+  static get observedAttributes() { return ['component', 'src']; }
 
   attributeChangedCallback(name) {
     if (!this.isConnected || !this.#manifest) return;
-    if (name === 'component' || name === 'layout') {
+    if (name === 'component') {
       const tagName = this.getAttribute('component');
       const tag = this.#tags.find(t => t.name === tagName);
       if (tag) this.#selectComponent(tag);
@@ -483,18 +387,15 @@ class DvfyComponentPlayground extends HTMLElement {
   }
 
   async #loadManifest() {
-    const id = ++this.#loadId;
     const src = this.getAttribute('src') || '../custom-elements.json';
     try {
       const res = await fetch(src);
-      if (id !== this.#loadId || !this.isConnected) return; // stale
       this.#manifest = await res.json();
       this.#tags = (this.#manifest.tags || [])
         .filter(t => !SKIP_TAGS.has(t.name))
         .sort((a, b) => a.name.localeCompare(b.name));
       this.#build();
     } catch (e) {
-      if (id !== this.#loadId || !this.isConnected) return;
       this.textContent = '';
       const err = document.createElement('dvfy-alert');
       err.setAttribute('status', 'danger');
@@ -551,16 +452,12 @@ class DvfyComponentPlayground extends HTMLElement {
   #selectComponent(tag) {
     this.#currentTag = tag;
     this.#attrValues = {};
-    this.#cssValues = {};
     this.#contentValue = tag.name in DEFAULT_CONTENT ? DEFAULT_CONTENT[tag.name] : 'Sample content';
 
     // Init all attributes — booleans respect (default: true) from description
-    const defaults = DEFAULT_ATTRS[tag.name] || {};
     if (tag.attributes) {
       for (const attr of tag.attributes) {
-        if (attr.name in defaults) {
-          this.#attrValues[attr.name] = defaults[attr.name];
-        } else if (attr.type === 'boolean') {
+        if (attr.type === 'boolean') {
           this.#attrValues[attr.name] = parseDefault(attr.description) === 'true';
         } else {
           this.#attrValues[attr.name] = '';
@@ -619,13 +516,6 @@ class DvfyComponentPlayground extends HTMLElement {
     tabs.appendChild(apiTab);
 
     left.appendChild(tabs);
-
-    // Layout mode label — sits at the end of the tab bar
-    const layoutLabel = document.createElement('span');
-    layoutLabel.className = 'sc__layout-label';
-    layoutLabel.textContent = this.getAttribute('layout') || 'center';
-    left.appendChild(layoutLabel);
-
     body.appendChild(left);
 
     // ── Right: collapsible drawer with scrollable controls ──
@@ -687,9 +577,7 @@ class DvfyComponentPlayground extends HTMLElement {
     if (!wrap || !this.#currentTag) return;
     wrap.textContent = '';
 
-    const skipSet = SKIP_ATTRS[this.#currentTag.name];
-    const attrs = (this.#currentTag.attributes || [])
-      .filter(a => !skipSet?.has(a.name));
+    const attrs = this.#currentTag.attributes || [];
 
     for (const attr of attrs) {
       const enumVals = parseEnumValues(attr.description);
@@ -765,47 +653,6 @@ class DvfyComponentPlayground extends HTMLElement {
       }
     }
 
-    // Compare-slider: two image URL inputs instead of raw content textarea
-    if (this.#currentTag.name === 'dvfy-compare-slider') {
-      const imgSep = document.createElement('hr');
-      imgSep.style.cssText = 'border:none;border-top:var(--dvfy-border-1) solid var(--dvfy-border-muted);margin:var(--dvfy-space-2) 0';
-      wrap.appendChild(imgSep);
-
-      const imgLabel = document.createElement('p');
-      imgLabel.style.cssText = 'font-size:var(--dvfy-text-xs);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-text-muted);text-transform:uppercase;letter-spacing:var(--dvfy-tracking-wider);margin:var(--dvfy-space-2) 0 var(--dvfy-space-1)';
-      imgLabel.textContent = 'Images';
-      wrap.appendChild(imgLabel);
-
-      const defaultBefore = '../catalog/assets/compare-before.png';
-      const defaultAfter = '../catalog/assets/compare-after.png';
-      let beforeUrl = defaultBefore;
-      let afterUrl = defaultAfter;
-
-      const rebuildContent = () => {
-        this.#contentValue = `<img slot="before" src="${beforeUrl}" alt="Before"/><img slot="after" src="${afterUrl}" alt="After"/>`;
-        this.#updatePreview();
-        this.#updateCode();
-      };
-
-      const beforeInput = document.createElement('dvfy-input');
-      beforeInput.setAttribute('label', 'Before image URL');
-      beforeInput.setAttribute('placeholder', defaultBefore);
-      beforeInput.addEventListener('input', (e) => {
-        beforeUrl = (e.target?.value ?? beforeInput.querySelector('input')?.value) || defaultBefore;
-        rebuildContent();
-      });
-      wrap.appendChild(beforeInput);
-
-      const afterInput = document.createElement('dvfy-input');
-      afterInput.setAttribute('label', 'After image URL');
-      afterInput.setAttribute('placeholder', defaultAfter);
-      afterInput.addEventListener('input', (e) => {
-        afterUrl = (e.target?.value ?? afterInput.querySelector('input')?.value) || defaultAfter;
-        rebuildContent();
-      });
-      wrap.appendChild(afterInput);
-
-    } else {
     // Content control (innerHTML) — only if component uses content
     const content = DEFAULT_CONTENT[this.#currentTag.name];
     if (content !== undefined && content !== '') {
@@ -830,47 +677,6 @@ class DvfyComponentPlayground extends HTMLElement {
       });
       wrap.appendChild(ta);
     }
-    } // end compare-slider vs content textarea
-
-    // CSS custom property controls — color pickers for @cssprop entries
-    const cssProps = (this.#currentTag.cssProperties || [])
-      .filter(p => p.type === 'color');
-    if (cssProps.length) {
-      const cssSep = document.createElement('hr');
-      cssSep.style.cssText = 'border:none;border-top:var(--dvfy-border-1) solid var(--dvfy-border-muted);margin:var(--dvfy-space-2) 0';
-      wrap.appendChild(cssSep);
-
-      const cssLabel = document.createElement('p');
-      cssLabel.style.cssText = 'font-size:var(--dvfy-text-xs);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-text-muted);text-transform:uppercase;letter-spacing:var(--dvfy-tracking-wider);margin:var(--dvfy-space-2) 0 var(--dvfy-space-1)';
-      cssLabel.textContent = 'CSS Properties';
-      wrap.appendChild(cssLabel);
-
-      for (const prop of cssProps) {
-        const row = document.createElement('div');
-        row.style.cssText = 'display:flex;align-items:center;gap:var(--dvfy-space-2);margin-bottom:var(--dvfy-space-1-5)';
-
-        const color = document.createElement('input');
-        color.type = 'color';
-        color.style.cssText = 'width:28px;height:28px;padding:0;border:var(--dvfy-border-1) solid var(--dvfy-border-muted);border-radius:var(--dvfy-radius-sm);cursor:pointer;background:none;flex-shrink:0';
-        // Read the current computed value to set initial color
-        const defaultDesc = prop.description || '';
-        color.title = defaultDesc;
-
-        const label = document.createElement('span');
-        label.style.cssText = 'font-size:var(--dvfy-text-xs);color:var(--dvfy-text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
-        label.textContent = prop.name.replace('--dvfy-', '');
-        label.title = prop.name;
-
-        color.addEventListener('input', () => {
-          this.#cssValues[prop.name] = color.value;
-          this.#updatePreview();
-        });
-
-        row.appendChild(color);
-        row.appendChild(label);
-        wrap.appendChild(row);
-      }
-    }
   }
 
   /**
@@ -893,10 +699,6 @@ class DvfyComponentPlayground extends HTMLElement {
     area.textContent = '';
     area.removeAttribute('style'); // reset any per-component overrides
 
-    // Apply layout hint from attribute (set by catalog router from COMPONENT_REGISTRY)
-    const layout = this.getAttribute('layout') || 'center';
-    area.setAttribute('data-layout', layout);
-
     const el = document.createElement(this.#currentTag.name);
 
     // Apply attribute values
@@ -911,24 +713,13 @@ class DvfyComponentPlayground extends HTMLElement {
     }
 
     // Set content — sourced from trusted DEFAULT_CONTENT or local developer input only
-    // SECURITY: innerHTML source is hardcoded DEFAULT_CONTENT or local developer textarea only
     if (this.#contentValue) {
-      el.innerHTML = this.#contentValue;    }
-
-    // Apply CSS custom property overrides from color picker controls
-    for (const [name, value] of Object.entries(this.#cssValues)) {
-      if (value) el.style.setProperty(name, value);
+      el.innerHTML = this.#contentValue;  // eslint-disable-line no-unsanitized/property
     }
 
-    // Edge-attached components need a container context to demonstrate properly
-    if (layout === 'edge') {
-      this.#renderEdgePreview(area, el);
-      return;
-    }
-
-    // Top-bar components pin to top with simulated page content below
-    if (layout === 'top-bar') {
-      this.#renderTopBarPreview(area, el);
+    // Layout components need a container context to demonstrate properly
+    if (this.#currentTag.name === 'dvfy-drawer') {
+      this.#renderDrawerPreview(area, el);
       return;
     }
 
@@ -936,14 +727,19 @@ class DvfyComponentPlayground extends HTMLElement {
   }
 
   /**
-   * Render edge-attached components (drawer, sidebar) inside a flex layout
-   * with toggle + sample content area.
+   * Render dvfy-drawer inside a flex layout with toggle + sample content.
    * Uses DOM methods only — all content is hardcoded trusted strings.
    */
-  #renderEdgePreview(area, el) {
-    const tagName = this.#currentTag.name;
+  #renderDrawerPreview(area, drawer) {
+    // Override preview area to be a flex row filling the space
+    area.style.display = 'flex';
+    area.style.gap = '0';
+    area.style.padding = '0';
+    area.style.position = 'relative';
+    area.style.alignItems = 'stretch';
+    area.style.justifyContent = 'stretch';
 
-    // Main content area — fills remaining space next to the edge component
+    // Main content area
     const main = document.createElement('div');
     main.style.flex = '1';
     main.style.padding = 'var(--dvfy-space-4)';
@@ -954,23 +750,15 @@ class DvfyComponentPlayground extends HTMLElement {
     main.style.justifyContent = 'center';
     main.style.alignItems = 'center';
 
-    // Toggle button for collapsible edge components
-    if (typeof el.collapsed !== 'undefined' || el.hasAttribute('collapsed')) {
-      const label = tagName.replace('dvfy-', '').replace('-', ' ');
-      const toggle = document.createElement('dvfy-button');
-      toggle.setAttribute('variant', 'outline');
-      toggle.setAttribute('size', 'sm');
-      toggle.textContent = el.hasAttribute('collapsed') ? `Open ${label}` : `Close ${label}`;
-      toggle.addEventListener('click', () => {
-        el.collapsed = !el.collapsed;
-        toggle.textContent = el.collapsed ? `Open ${label}` : `Close ${label}`;
-      });
-      main.appendChild(toggle);
-
-      el.addEventListener('toggle', (e) => {
-        toggle.textContent = e.detail?.collapsed ? `Open ${label}` : `Close ${label}`;
-      });
-    }
+    const toggle = document.createElement('dvfy-button');
+    toggle.setAttribute('variant', 'outline');
+    toggle.setAttribute('size', 'sm');
+    toggle.textContent = drawer.hasAttribute('collapsed') ? 'Open Drawer' : 'Close Drawer';
+    toggle.addEventListener('click', () => {
+      drawer.collapsed = !drawer.collapsed;
+      toggle.textContent = drawer.collapsed ? 'Open Drawer' : 'Close Drawer';
+    });
+    main.appendChild(toggle);
 
     const hint = document.createElement('p');
     hint.style.fontSize = 'var(--dvfy-text-sm)';
@@ -979,65 +767,27 @@ class DvfyComponentPlayground extends HTMLElement {
     hint.textContent = 'Main content area';
     main.appendChild(hint);
 
-    // Position: drawer supports left/right/top/bottom, sidebar is typically left/right
-    const pos = el.getAttribute('position') || 'right';
+    // Keep button label in sync with drawer events
+    drawer.addEventListener('toggle', (e) => {
+      toggle.textContent = e.detail.collapsed ? 'Open Drawer' : 'Close Drawer';
+    });
+
+    const pos = drawer.getAttribute('position') || 'right';
     if (pos === 'left') {
-      area.appendChild(el);
+      area.appendChild(drawer);
       area.appendChild(main);
     } else if (pos === 'top') {
       area.style.flexDirection = 'column';
-      area.appendChild(el);
+      area.appendChild(drawer);
       area.appendChild(main);
     } else if (pos === 'bottom') {
       area.style.flexDirection = 'column';
       area.appendChild(main);
-      area.appendChild(el);
+      area.appendChild(drawer);
     } else {
       area.appendChild(main);
-      area.appendChild(el);
+      area.appendChild(drawer);
     }
-  }
-
-  /**
-   * Render top-bar components (nav-bar) pinned to top of preview
-   * with simulated page content below. Uses DOM methods only.
-   */
-  #renderTopBarPreview(area, el) {
-    // Component pinned to top
-    area.appendChild(el);
-
-    // Simulated page content below
-    const page = document.createElement('div');
-    page.style.cssText = 'flex:1;padding:var(--dvfy-space-6);display:flex;flex-direction:column;gap:var(--dvfy-space-4);overflow-y:auto';
-
-    const heading = document.createElement('h3');
-    heading.style.cssText = 'font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-bold);color:var(--dvfy-text-primary);margin:0';
-    heading.textContent = 'Page Content';
-    page.appendChild(heading);
-
-    const para = document.createElement('p');
-    para.style.cssText = 'font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-sm);color:var(--dvfy-text-muted);line-height:var(--dvfy-leading-relaxed);margin:0;max-width:40rem';
-    para.textContent = 'This simulated content shows how the navigation bar appears at the top of a page. Resize the preview area or change the breakpoint attribute to see responsive behavior.';
-    page.appendChild(para);
-
-    const cards = document.createElement('div');
-    cards.style.cssText = 'display:flex;gap:var(--dvfy-space-3);flex-wrap:wrap';
-    for (let i = 0; i < 3; i++) {
-      const card = document.createElement('div');
-      card.style.cssText = 'flex:1;min-width:8rem;padding:var(--dvfy-space-4);background:var(--dvfy-surface-raised);border:var(--dvfy-border-1) solid var(--dvfy-border-muted);border-radius:var(--dvfy-radius-lg)';
-      const title = document.createElement('p');
-      title.style.cssText = 'font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-sm);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-text-primary);margin:0 0 var(--dvfy-space-1)';
-      title.textContent = ['Dashboard', 'Analytics', 'Settings'][i];
-      const desc = document.createElement('p');
-      desc.style.cssText = 'font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-xs);color:var(--dvfy-text-muted);margin:0';
-      desc.textContent = 'Sample card content';
-      card.appendChild(title);
-      card.appendChild(desc);
-      cards.appendChild(card);
-    }
-    page.appendChild(cards);
-
-    area.appendChild(page);
   }
 
   #updateCode() {
@@ -1052,13 +802,6 @@ class DvfyComponentPlayground extends HTMLElement {
       } else if (value && value !== '') {
         html += ` ${name}="${esc(value)}"`;
       }
-    }
-
-    // Include CSS custom property overrides as inline style
-    const cssEntries = Object.entries(this.#cssValues).filter(([, v]) => v);
-    if (cssEntries.length) {
-      const styleStr = cssEntries.map(([k, v]) => `${k}: ${v}`).join('; ');
-      html += ` style="${esc(styleStr)}"`;
     }
 
     html += '>';
@@ -1171,7 +914,8 @@ class DvfyComponentPlayground extends HTMLElement {
       for (const col of cols) {
         const td = document.createElement('td');
         // Content from WCA manifest, escaped via esc() in col.get()
-        td.innerHTML = col.get(item);        row.appendChild(td);
+        td.innerHTML = col.get(item);  // eslint-disable-line no-unsanitized/property
+        row.appendChild(td);
       }
       tbody.appendChild(row);
     }
