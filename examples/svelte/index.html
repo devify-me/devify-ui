@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@devify/ui — Svelte Integration Example</title>
+
+  <!--
+    Svelte has the best native custom element support of any major framework:
+    - Attributes bind directly to DOM attributes (no special config needed)
+    - on:eventname listens for CustomEvents naturally
+    - Boolean attributes work correctly with the bind: pattern
+
+    For a production Svelte/SvelteKit app see App.svelte in this directory.
+
+    To run with Vite + SvelteKit:
+      npx sv create my-app
+      npm install
+      npm install @devify/ui
+      npm run dev
+  -->
+  <link rel="stylesheet" href="../../devify.css">
+
+  <style>
+    body {
+      font-family: var(--dvfy-font-sans);
+      background: var(--dvfy-surface-bg);
+      color: var(--dvfy-text-primary);
+      padding: var(--dvfy-space-8);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    code { font-family: var(--dvfy-font-mono); font-size: var(--dvfy-text-sm);
+           background: var(--dvfy-surface-raised); padding: 2px 6px;
+           border-radius: var(--dvfy-radius-sm); }
+    .note { font-size: var(--dvfy-text-sm); color: var(--dvfy-text-secondary); margin-bottom: var(--dvfy-space-4); }
+    #demo { display: flex; flex-direction: column; gap: var(--dvfy-space-4); }
+    #badges { display: flex; gap: var(--dvfy-space-2); }
+  </style>
+</head>
+<body>
+
+  <dvfy-theme-switcher style="position:fixed;top:1rem;right:1rem"></dvfy-theme-switcher>
+
+  <h1>@devify/ui + Svelte</h1>
+
+  <dvfy-alert id="info-alert" variant="info" title="Integration note" style="margin-bottom:var(--dvfy-space-6)">
+    Svelte has the best native custom element support. No configuration required —
+    see <code>App.svelte</code> for the full SFC example.
+  </dvfy-alert>
+
+  <div id="demo">
+    <dvfy-switch id="notif-switch" label="Enable notifications" checked></dvfy-switch>
+    <dvfy-input id="name-input" label="Your name" placeholder="Jane Smith" required></dvfy-input>
+    <dvfy-select id="role-select" label="Role">
+      <option value="">Select a role…</option>
+      <option value="admin">Admin</option>
+      <option value="editor">Editor</option>
+      <option value="viewer">Viewer</option>
+    </dvfy-select>
+    <dvfy-button id="save-btn">Save</dvfy-button>
+    <p id="output" class="note"></p>
+  </div>
+
+  <div id="badges" style="margin-top: var(--dvfy-space-6)">
+    <dvfy-badge>Default</dvfy-badge>
+    <dvfy-badge variant="success">Success</dvfy-badge>
+    <dvfy-badge variant="warning">Warning</dvfy-badge>
+    <dvfy-badge variant="danger">Danger</dvfy-badge>
+  </div>
+
+  <dvfy-tabs style="margin-top: var(--dvfy-space-8)">
+    <dvfy-tab label="Overview" active>
+      <p>This tab shows that dvfy-tabs works without any Svelte-specific code.</p>
+    </dvfy-tab>
+    <dvfy-tab label="Gotchas">
+      <ul style="font-size: var(--dvfy-text-sm); padding-left: var(--dvfy-space-4)">
+        <li>Boolean attrs: use empty string or bind:checked with a dedicated store</li>
+        <li>Custom events: on:eventname works natively in Svelte templates</li>
+        <li>SvelteKit SSR: use browser check or onMount for component interactions</li>
+      </ul>
+    </dvfy-tab>
+  </dvfy-tabs>
+
+  <!-- Load components -->
+  <script type="module" src="../../devify.js"></script>
+
+  <script type="module">
+    // This script shows the same event-handling patterns that Svelte uses
+    // under the hood (addEventListener). In actual Svelte SFCs these map to
+    // on:change={handler} and {#if condition}attr=""{/if} syntax.
+
+    let notifications = true;
+    let name = '';
+    let role = '';
+
+    const switchEl = document.getElementById('notif-switch');
+    const inputEl  = document.getElementById('name-input');
+    const selectEl = document.getElementById('role-select');
+    const saveBtn  = document.getElementById('save-btn');
+    const output   = document.getElementById('output');
+
+    // Svelte: on:change={e => notifications = e.detail?.checked}
+    switchEl.addEventListener('change', (e) => {
+      notifications = e.detail?.checked ?? switchEl.hasAttribute('checked');
+      output.textContent = 'Notifications: ' + (notifications ? 'ON' : 'OFF');
+    });
+
+    // Svelte: bind:value={name}  (via on:input under the hood)
+    inputEl.addEventListener('input', (e) => {
+      name = e.target?.value ?? e.detail?.value ?? '';
+    });
+
+    // Svelte: on:change={e => role = e.detail?.value}
+    selectEl.addEventListener('change', (e) => {
+      role = e.target?.value ?? e.detail?.value ?? '';
+    });
+
+    // Svelte: on:click={handleSave}  +  loading={saving}  disabled={saving}
+    saveBtn.addEventListener('click', () => {
+      saveBtn.setAttribute('loading', '');
+      saveBtn.setAttribute('disabled', '');
+      setTimeout(() => {
+        saveBtn.removeAttribute('loading');
+        saveBtn.removeAttribute('disabled');
+        output.textContent = 'Saved! Name: "' + name + '", Role: "' + role + '"';
+      }, 1000);
+    });
+  </script>
+
+</body>
+</html>

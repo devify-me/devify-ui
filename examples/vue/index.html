@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@devify/ui — Vue 3 Integration Example</title>
+
+  <!--
+    This example uses Vue 3 via CDN (petite-vue or the full build).
+    For a production Vite + Vue app, see App.vue in this directory.
+
+    Key configuration for Vue 3 + Web Components:
+      app.config.compilerOptions.isCustomElement = tag => tag.startsWith('dvfy-')
+
+    This tells Vue NOT to resolve dvfy-* tags as Vue components and to pass
+    all attributes directly to the DOM — avoiding "unknown component" warnings.
+  -->
+  <link rel="stylesheet" href="../../devify.css">
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+  <style>
+    body {
+      font-family: var(--dvfy-font-sans);
+      background: var(--dvfy-surface-bg);
+      color: var(--dvfy-text-primary);
+      padding: var(--dvfy-space-8);
+      max-width: 640px;
+      margin: 0 auto;
+    }
+    .row { display: flex; gap: var(--dvfy-space-3); align-items: center; flex-wrap: wrap; }
+    code { font-family: var(--dvfy-font-mono); font-size: var(--dvfy-text-sm);
+           background: var(--dvfy-surface-raised); padding: 2px 6px;
+           border-radius: var(--dvfy-radius-sm); }
+    .note { font-size: var(--dvfy-text-sm); color: var(--dvfy-text-secondary); margin-bottom: var(--dvfy-space-4); }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <dvfy-theme-switcher style="position:fixed;top:1rem;right:1rem"></dvfy-theme-switcher>
+
+    <h1>@devify/ui + Vue 3</h1>
+
+    <!-- ── Alert ─────────────────────────────────────────────── -->
+    <dvfy-alert variant="info" title="Integration note" style="margin-bottom: var(--dvfy-space-6)">
+      Set <code>app.config.compilerOptions.isCustomElement = tag =&gt; tag.startsWith('dvfy-')</code>
+      to suppress "unknown component" warnings. See source for details.
+    </dvfy-alert>
+
+    <!-- ── Switch with v-bind / @change ─────────────────────── -->
+    <section style="margin-bottom: var(--dvfy-space-8)">
+      <h2>Two-way switch binding</h2>
+      <p class="note">
+        Vue passes attributes directly to the DOM element.
+        Boolean attributes should be bound as empty strings.
+        CustomEvents bubble normally, so <code>@change</code> works.
+      </p>
+
+      <!--
+        :checked     → v-bind:checked — Vue passes the attr to the DOM node.
+                       Use an empty string "" for "present" or remove the attr.
+        @change      → listens for the "change" CustomEvent on the element.
+                       Vue 3 supports custom event names natively.
+      -->
+      <dvfy-switch
+        label="Enable notifications"
+        :checked="notifications ? '' : undefined"
+        @change="notifications = $event.detail?.checked ?? !notifications"
+      ></dvfy-switch>
+      <p class="note" style="margin-top: var(--dvfy-space-2)">
+        Notifications: {{ notifications ? 'ON' : 'OFF' }}
+      </p>
+    </section>
+
+    <!-- ── Controlled input ──────────────────────────────────── -->
+    <section style="margin-bottom: var(--dvfy-space-8)">
+      <h2>Controlled input</h2>
+      <p class="note">
+        <code>v-model</code> doesn't work on custom elements out of the box.
+        Use <code>:value</code> + <code>@input</code> for two-way binding.
+        Vue 3.4+ adds <code>v-model:value</code> support for custom elements.
+      </p>
+
+      <dvfy-input
+        label="Your name"
+        :value="name"
+        @input="name = $event.target?.value ?? $event.detail?.value ?? ''"
+        placeholder="Jane Smith"
+        required
+      ></dvfy-input>
+      <p class="note" style="margin-top: var(--dvfy-space-2)">
+        Value: "{{ name }}"
+      </p>
+    </section>
+
+    <!-- ── Select ────────────────────────────────────────────── -->
+    <section style="margin-bottom: var(--dvfy-space-8)">
+      <h2>Select</h2>
+      <dvfy-select
+        label="Role"
+        @change="role = $event.target?.value ?? $event.detail?.value"
+      >
+        <option value="">Select a role…</option>
+        <option value="admin">Admin</option>
+        <option value="editor">Editor</option>
+        <option value="viewer">Viewer</option>
+      </dvfy-select>
+      <p class="note" style="margin-top: var(--dvfy-space-2)">
+        Selected: {{ role || '(none)' }}
+      </p>
+    </section>
+
+    <!-- ── Button with loading ───────────────────────────────── -->
+    <section style="margin-bottom: var(--dvfy-space-8)">
+      <h2>Button with reactive state</h2>
+      <p class="note">
+        Boolean attrs (<code>disabled</code>, <code>loading</code>) need
+        <code>:disabled="saving ? '' : undefined"</code> — binding to an empty string
+        sets the attribute; <code>undefined</code> removes it.
+      </p>
+
+      <dvfy-button
+        :disabled="saving ? '' : undefined"
+        :loading="saving ? '' : undefined"
+        @click="handleSave"
+      >
+        {{ saving ? 'Saving…' : 'Save' }}
+      </dvfy-button>
+    </section>
+
+    <!-- ── Tabs with reactive active tab ────────────────────── -->
+    <section style="margin-bottom: var(--dvfy-space-8)">
+      <h2>Tabs</h2>
+      <p class="note">Active tab: {{ activeTab }}</p>
+
+      <dvfy-tabs @tab-change="activeTab = $event.detail?.label">
+        <dvfy-tab label="Overview" :active="activeTab === 'Overview' ? '' : undefined">
+          <p>Overview content — controlled by Vue reactive state.</p>
+        </dvfy-tab>
+        <dvfy-tab label="Details" :active="activeTab === 'Details' ? '' : undefined">
+          <p>Details content.</p>
+        </dvfy-tab>
+        <dvfy-tab label="Settings" :active="activeTab === 'Settings' ? '' : undefined">
+          <p>Settings content.</p>
+        </dvfy-tab>
+      </dvfy-tabs>
+    </section>
+
+    <!-- ── Display components (no special handling) ──────────── -->
+    <section style="margin-bottom: var(--dvfy-space-8)">
+      <h2>Display components</h2>
+      <div class="row">
+        <dvfy-badge>Default</dvfy-badge>
+        <dvfy-badge variant="success">Success</dvfy-badge>
+        <dvfy-badge variant="warning">Warning</dvfy-badge>
+        <dvfy-badge variant="danger">Danger</dvfy-badge>
+      </div>
+      <dvfy-alert
+        variant="success"
+        title="Works great!"
+        style="margin-top: var(--dvfy-space-4)"
+        dismissible
+      >
+        Display-only components need no Vue-specific handling.
+      </dvfy-alert>
+    </section>
+  </div>
+
+  <!-- Load web components BEFORE Vue mounts, so elements are defined -->
+  <script type="module" src="../../devify.js"></script>
+
+  <script>
+    const { createApp, ref } = Vue;
+
+    const app = createApp({
+      setup() {
+        const notifications = ref(true);
+        const name          = ref('');
+        const role          = ref('');
+        const saving        = ref(false);
+        const activeTab     = ref('Overview');
+
+        function handleSave() {
+          saving.value = true;
+          setTimeout(() => { saving.value = false; }, 1500);
+        }
+
+        return { notifications, name, role, saving, activeTab, handleSave };
+      }
+    });
+
+    // ── CRITICAL: tell Vue that dvfy-* tags are native custom elements ──────────
+    //
+    // Without this, Vue resolves them as Vue components and warns about missing
+    // registrations. This is the single most important configuration step.
+    app.config.compilerOptions.isCustomElement = (tag) => tag.startsWith('dvfy-');
+
+    app.mount('#app');
+  </script>
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@devify/ui — HTMX Integration Example</title>
+
+  <!-- 1. Design tokens -->
+  <link rel="stylesheet" href="../../devify.css">
+
+  <!-- 2. HTMX — loaded from CDN; pin to a specific version in production -->
+  <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js" defer></script>
+
+  <!-- 3. @devify/ui components (self-registering ES modules) -->
+  <script type="module" src="../../devify.js"></script>
+
+  <style>
+    body {
+      font-family: var(--dvfy-font-sans);
+      background: var(--dvfy-surface-bg);
+      color: var(--dvfy-text-primary);
+      padding: var(--dvfy-space-8);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    section {
+      margin-bottom: var(--dvfy-space-12);
+    }
+    h2 {
+      font-size: var(--dvfy-text-lg);
+      font-weight: var(--dvfy-weight-semibold);
+      margin-bottom: var(--dvfy-space-4);
+      border-bottom: 1px solid var(--dvfy-border-subtle);
+      padding-bottom: var(--dvfy-space-2);
+    }
+    code {
+      font-family: var(--dvfy-font-mono);
+      font-size: var(--dvfy-text-sm);
+      background: var(--dvfy-surface-raised);
+      padding: 2px 6px;
+      border-radius: var(--dvfy-radius-sm);
+    }
+    .note {
+      font-size: var(--dvfy-text-sm);
+      color: var(--dvfy-text-secondary);
+      margin-bottom: var(--dvfy-space-4);
+    }
+  </style>
+</head>
+<body>
+
+  <dvfy-theme-switcher style="position:fixed;top:1rem;right:1rem"></dvfy-theme-switcher>
+
+  <h1>@devify/ui — HTMX Integration</h1>
+  <p class="note">
+    All five HTMX patterns work by adding <code>hx-*</code> attributes to or around dvfy-* components.
+    The components are Light DOM — HTMX can swap them freely without Shadow DOM boundaries.
+    Point the <code>action</code> / <code>src</code> URLs to your own server endpoints.
+  </p>
+
+  <!-- ── Pattern 1: dvfy-htmx-form ─────────────────────────── -->
+  <section>
+    <h2>Pattern 1 — dvfy-htmx-form</h2>
+    <p class="note">
+      Manages AJAX form submission, loading state, success/error feedback, optional confirmation,
+      and CSRF token injection automatically.
+    </p>
+
+    <!--
+      action   → POST /tasks
+      target   → replace #task-list innerHTML with server response
+      swap     → how the response is inserted (beforeend appends rows)
+      success-message → shown in a dvfy-toast on 2xx
+      reset-on-success → clears inputs after success
+    -->
+    <dvfy-htmx-form
+      action="/tasks"
+      method="post"
+      target="#task-list"
+      swap="beforeend"
+      success-message="Task created!"
+      reset-on-success
+    >
+      <dvfy-input label="Task title" name="title" required placeholder="Write unit tests…"></dvfy-input>
+      <dvfy-select label="Priority" name="priority" style="margin-top: var(--dvfy-space-3)">
+        <option value="low">Low</option>
+        <option value="medium" selected>Medium</option>
+        <option value="high">High</option>
+      </dvfy-select>
+      <dvfy-button type="submit" style="margin-top: var(--dvfy-space-4)">Create Task</dvfy-button>
+    </dvfy-htmx-form>
+
+    <!-- The server responds with an <li> partial that gets appended here -->
+    <ul id="task-list" style="margin-top: var(--dvfy-space-4); padding-left: var(--dvfy-space-4)">
+      <li>Example task (pre-rendered by server)</li>
+    </ul>
+  </section>
+
+  <!-- ── Pattern 2: dvfy-confirm ───────────────────────────── -->
+  <section>
+    <h2>Pattern 2 — dvfy-confirm</h2>
+    <p class="note">
+      Wraps any trigger element. Intercepts the click, shows a confirmation modal,
+      and — on confirm — fires the <code>action</code> URL via HTMX (or dispatches
+      a <code>confirmed</code> event for custom handling).
+    </p>
+
+    <!--
+      action   → DELETE /tasks/42
+      variant  → "danger" styles the confirm button red
+      target   → element to remove/update after confirm
+    -->
+    <dvfy-confirm
+      title="Delete Task"
+      message="This will permanently delete 'Write unit tests'. This cannot be undone."
+      confirm-text="Delete"
+      cancel-text="Keep it"
+      variant="danger"
+      action="/tasks/42"
+      method="delete"
+    >
+      <dvfy-button variant="danger" size="sm">Delete Task</dvfy-button>
+    </dvfy-confirm>
+
+    <!-- Custom JS handler via the confirmed event -->
+    <dvfy-confirm
+      id="custom-confirm"
+      title="Archive Task"
+      message="Archive this task? You can restore it later."
+      confirm-text="Archive"
+    >
+      <dvfy-button variant="outline" size="sm" style="margin-left: var(--dvfy-space-3)">
+        Archive (custom event)
+      </dvfy-button>
+    </dvfy-confirm>
+
+    <script>
+      document.getElementById('custom-confirm').addEventListener('confirmed', () => {
+        console.log('confirmed event fired — send your own HTMX request here');
+      });
+    </script>
+  </section>
+
+  <!-- ── Pattern 3: dvfy-live-search ──────────────────────── -->
+  <section>
+    <h2>Pattern 3 — dvfy-live-search</h2>
+    <p class="note">
+      Debounced search input that calls the server as the user types and injects
+      the HTML partial response into <code>target</code>.
+    </p>
+
+    <!--
+      src        → GET /tasks/search?q={input}
+      target     → CSS selector for results container
+      debounce   → ms to wait after last keystroke (default 300)
+      min-chars  → don't search until N chars entered (default 2)
+    -->
+    <dvfy-live-search
+      src="/tasks/search"
+      param="q"
+      target="#search-results"
+      debounce="300"
+      min-chars="2"
+      placeholder="Search tasks…"
+    ></dvfy-live-search>
+
+    <!-- Server returns an HTML partial rendered into this container -->
+    <div id="search-results" style="margin-top: var(--dvfy-space-4)">
+      <p style="color: var(--dvfy-text-secondary); font-size: var(--dvfy-text-sm)">
+        Type to search…
+      </p>
+    </div>
+  </section>
+
+  <!-- ── Pattern 4: dvfy-htmx-table ───────────────────────── -->
+  <section>
+    <h2>Pattern 4 — dvfy-htmx-table</h2>
+    <p class="note">
+      Server-side sortable, filterable, paginated table. Click a sortable column header
+      to request <code>/tasks/data?sort=title&amp;order=asc</code>. The server returns
+      a <code>&lt;tbody&gt;</code> partial.
+    </p>
+
+    <!--
+      src        → base URL, params appended automatically
+      searchable → adds a search input above the table
+      page-size  → rows per page
+    -->
+    <dvfy-htmx-table src="/tasks/data" searchable page-size="10">
+      <table>
+        <thead>
+          <tr>
+            <th data-sort="title">Title</th>
+            <th data-sort="priority">Priority</th>
+            <th data-sort="created_at">Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Server will replace this tbody on sort/filter/page -->
+          <tr>
+            <td>Write unit tests</td>
+            <td><dvfy-badge variant="warning">Medium</dvfy-badge></td>
+            <td>2026-03-22</td>
+            <td>
+              <dvfy-button size="xs" variant="ghost">Edit</dvfy-button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </dvfy-htmx-table>
+  </section>
+
+  <!-- ── Pattern 5: dvfy-infinite-scroll ──────────────────── -->
+  <section>
+    <h2>Pattern 5 — dvfy-infinite-scroll</h2>
+    <p class="note">
+      Appends the next page of server-rendered HTML as the user scrolls toward the bottom.
+      Triggers at <code>threshold</code> pixels from the bottom of the scroll container.
+    </p>
+
+    <!--
+      src          → base URL, ?page=N appended automatically
+      page-param   → name of the page query parameter
+      start-page   → first page already rendered inside (default 1)
+      threshold    → pixels from bottom to trigger (default 200)
+      no-more-text → shown when server returns empty response
+    -->
+    <dvfy-infinite-scroll
+      src="/tasks/feed"
+      page-param="page"
+      start-page="1"
+      threshold="200"
+      no-more-text="All tasks loaded"
+      style="max-height: 300px; overflow-y: auto; border: 1px solid var(--dvfy-border-subtle); border-radius: var(--dvfy-radius-lg); padding: var(--dvfy-space-4)"
+    >
+      <!-- Initial page — rendered by the server template -->
+      <dvfy-card style="margin-bottom: var(--dvfy-space-2)">
+        <strong>Task 1</strong> — Write unit tests
+      </dvfy-card>
+      <dvfy-card style="margin-bottom: var(--dvfy-space-2)">
+        <strong>Task 2</strong> — Review PR #42
+      </dvfy-card>
+      <dvfy-card style="margin-bottom: var(--dvfy-space-2)">
+        <strong>Task 3</strong> — Deploy to staging
+      </dvfy-card>
+    </dvfy-infinite-scroll>
+  </section>
+
+  <!-- ── hx-* attrs directly on dvfy-* elements ───────────── -->
+  <section>
+    <h2>Direct hx-* attributes on components</h2>
+    <p class="note">
+      Because components use Light DOM, HTMX can observe and process any element.
+      You can place <code>hx-*</code> attributes directly on <code>dvfy-*</code> elements.
+    </p>
+
+    <!--
+      hx-get     → call /tasks/status on click
+      hx-target  → inject response into #status-output
+      hx-swap    → replace innerHTML of target
+      hx-trigger → native click event (or any custom event name)
+    -->
+    <dvfy-button
+      hx-get="/tasks/status"
+      hx-target="#status-output"
+      hx-swap="innerHTML"
+      hx-indicator="#status-loader"
+    >
+      Fetch Status (hx-get on dvfy-button)
+    </dvfy-button>
+    <dvfy-loader id="status-loader" class="htmx-indicator" style="display:none; margin-left: var(--dvfy-space-3)"></dvfy-loader>
+
+    <div id="status-output" style="margin-top: var(--dvfy-space-3); font-size: var(--dvfy-text-sm); color: var(--dvfy-text-secondary)">
+      Response will appear here.
+    </div>
+
+    <!--
+      hx-trigger with custom component events:
+      dvfy-switch fires a "change" CustomEvent — use hx-trigger="change"
+    -->
+    <dvfy-switch
+      label="Enable feature flag"
+      hx-post="/features/toggle"
+      hx-vals='{"feature": "dark-mode"}'
+      hx-trigger="change"
+      hx-swap="none"
+      style="margin-top: var(--dvfy-space-4)"
+    ></dvfy-switch>
+
+    <p class="note" style="margin-top: var(--dvfy-space-2)">
+      Note: HTMX listens for native DOM events. dvfy-* components dispatch standard
+      <code>CustomEvent</code>s that bubble, so <code>hx-trigger</code> works out of the box.
+    </p>
+  </section>
+
+  <!-- ── CSRF integration ───────────────────────────────────── -->
+  <section>
+    <h2>CSRF Token Integration</h2>
+    <p class="note">
+      dvfy-htmx-form auto-reads the CSRF token from a <code>&lt;meta name="csrf-token"&gt;</code>
+      tag and injects it as a hidden form field. HTMX itself can also read it via
+      <code>hx-headers</code> or <code>htmx.config.defaultHeaders</code>.
+    </p>
+
+    <!-- Server renders this tag with the session token -->
+    <meta name="csrf-token" content="SERVER_GENERATED_TOKEN_HERE">
+
+    <pre style="font-size: var(--dvfy-text-xs); background: var(--dvfy-surface-raised); padding: var(--dvfy-space-4); border-radius: var(--dvfy-radius-lg); overflow-x: auto">&lt;!-- Option A: dvfy-htmx-form reads it automatically --&gt;
+&lt;meta name="csrf-token" content="{{ .CSRFToken }}"&gt;
+&lt;dvfy-htmx-form action="/submit"&gt;...&lt;/dvfy-htmx-form&gt;
+
+&lt;!-- Option B: set globally for all HTMX requests --&gt;
+&lt;script&gt;
+  document.addEventListener('htmx:configRequest', (e) => {
+    e.detail.headers['X-CSRF-Token'] =
+      document.querySelector('meta[name="csrf-token"]')?.content;
+  });
+&lt;/script&gt;</pre>
+  </section>
+
+</body>
+</html>

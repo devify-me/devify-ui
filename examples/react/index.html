@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@devify/ui — React Integration Example</title>
+
+  <!--
+    This example uses React via CDN with Babel for in-browser JSX transpilation.
+    For a production app, use a build tool (Vite, Create React App, Next.js) and
+    import @devify/ui as an npm package.
+
+    See App.jsx for the component source.
+  -->
+  <link rel="stylesheet" href="../../devify.css">
+
+  <!-- React 18 + Babel from CDN (dev-only — use bundled builds in production) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    body {
+      font-family: var(--dvfy-font-sans);
+      background: var(--dvfy-surface-bg);
+      color: var(--dvfy-text-primary);
+      margin: 0;
+      padding: var(--dvfy-space-8);
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- @devify/ui web components register themselves as custom elements -->
+  <script type="module" src="../../devify.js"></script>
+
+  <!--
+    Inline the app for this standalone example.
+    In a real project this would be a separate .jsx file built with Vite/CRA/Next.
+  -->
+  <script type="text/babel" data-type="module">
+    const { useState, useEffect, useRef, useCallback } = React;
+
+    // ─── Wrapper: listen for CustomEvents via ref ──────────────────────────────
+    //
+    // GOTCHA 1: React's synthetic event system does NOT capture CustomEvents
+    // that bubble through the DOM. You must use addEventListener() with a ref.
+    //
+    // GOTCHA 2: Boolean attributes in custom elements must be empty strings (""),
+    // not the boolean true. React passes `true` as the string "true" which
+    // doesn't match the attribute-presence check. Use ref + setAttribute instead,
+    // OR pass an empty string: disabled={isDisabled ? "" : undefined}
+    //
+    // GOTCHA 3: React 18 forwards unknown attributes to the DOM as-is, so most
+    // dvfy-* attributes work directly. The main exception is boolean attrs (above).
+
+    function DvfySwitch({ label, checked, onChange }) {
+      const ref = useRef(null);
+
+      // Attach a DOM listener for the "change" CustomEvent
+      useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        const handler = (e) => onChange?.(e.detail?.checked ?? el.hasAttribute('checked'));
+        el.addEventListener('change', handler);
+        return () => el.removeEventListener('change', handler);
+      }, [onChange]);
+
+      // Sync the checked attribute imperatively (boolean attr pattern)
+      useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        if (checked) {
+          el.setAttribute('checked', '');
+        } else {
+          el.removeAttribute('checked');
+        }
+      }, [checked]);
+
+      return <dvfy-switch ref={ref} label={label}></dvfy-switch>;
+    }
+
+    function DvfyInput({ label, value, onInput, ...props }) {
+      const ref = useRef(null);
+
+      useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        const handler = (e) => onInput?.(e.target?.value ?? e.detail?.value ?? '');
+        el.addEventListener('input', handler);
+        return () => el.removeEventListener('input', handler);
+      }, [onInput]);
+
+      // Keep the internal input value in sync
+      useEffect(() => {
+        const el = ref.current;
+        if (el && value !== undefined) {
+          const inner = el.querySelector('input');
+          if (inner && inner.value !== value) inner.value = value;
+        }
+      }, [value]);
+
+      return <dvfy-input ref={ref} label={label} {...props}></dvfy-input>;
+    }
+
+    function DvfyButton({ children, onClick, variant, size, disabled, loading }) {
+      const ref = useRef(null);
+
+      useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        const handler = (e) => onClick?.(e);
+        el.addEventListener('click', handler);
+        return () => el.removeEventListener('click', handler);
+      }, [onClick]);
+
+      // Sync boolean attrs imperatively
+      useEffect(() => {
+        const el = ref.current;
+        if (!el) return;
+        disabled ? el.setAttribute('disabled', '') : el.removeAttribute('disabled');
+        loading  ? el.setAttribute('loading', '')  : el.removeAttribute('loading');
+      }, [disabled, loading]);
+
+      return (
+        <dvfy-button
+          ref={ref}
+          variant={variant}
+          size={size}
+        >
+          {children}
+        </dvfy-button>
+      );
+    }
+
+    // ─── App ───────────────────────────────────────────────────────────────────
+    function App() {
+      const [darkMode, setDarkMode]   = useState(false);
+      const [name, setName]           = useState('');
+      const [submitting, setSubmit]   = useState(false);
+      const [submitted, setSubmitted] = useState(false);
+
+      const handleSubmit = useCallback(() => {
+        if (!name.trim()) return;
+        setSubmit(true);
+        setTimeout(() => {
+          setSubmit(false);
+          setSubmitted(true);
+        }, 1200);
+      }, [name]);
+
+      return (
+        <div style={{ maxWidth: 640, margin: '0 auto' }}>
+          <dvfy-theme-switcher style={{ position: 'fixed', top: '1rem', right: '1rem' }}></dvfy-theme-switcher>
+
+          <h1 style={{ marginBottom: 'var(--dvfy-space-8)' }}>
+            @devify/ui + React 18
+          </h1>
+
+          {/* Alert — static attributes work directly */}
+          <dvfy-alert variant="info" title="Note">
+            Custom events require <code>useRef</code> + <code>addEventListener</code>.
+            See the source for the wrapper pattern.
+          </dvfy-alert>
+
+          {/* Switch with two-way binding via wrapper */}
+          <div style={{ marginTop: 'var(--dvfy-space-6)' }}>
+            <DvfySwitch
+              label="Dark mode"
+              checked={darkMode}
+              onChange={(v) => setDarkMode(v)}
+            />
+          </div>
+
+          {/* Form */}
+          <div style={{ marginTop: 'var(--dvfy-space-6)', display: 'flex', flexDirection: 'column', gap: 'var(--dvfy-space-4)' }}>
+            <DvfyInput
+              label="Your name"
+              value={name}
+              placeholder="Jane Smith"
+              onInput={(v) => setName(v)}
+              required=""
+            />
+
+            <DvfyButton
+              variant="default"
+              loading={submitting}
+              disabled={!name.trim() || submitting}
+              onClick={handleSubmit}
+            >
+              Submit
+            </DvfyButton>
+          </div>
+
+          {submitted && (
+            <dvfy-alert
+              variant="success"
+              title="Submitted!"
+              style={{ marginTop: 'var(--dvfy-space-4)' }}
+              dismissible=""
+            >
+              Hello, {name}!
+            </dvfy-alert>
+          )}
+
+          {/* Badges — pure display, no events needed */}
+          <div style={{ marginTop: 'var(--dvfy-space-8)', display: 'flex', gap: 'var(--dvfy-space-2)' }}>
+            <dvfy-badge>Default</dvfy-badge>
+            <dvfy-badge variant="success">Success</dvfy-badge>
+            <dvfy-badge variant="warning">Warning</dvfy-badge>
+            <dvfy-badge variant="danger">Danger</dvfy-badge>
+          </div>
+
+          {/* Tabs — no React wrapper needed for basic usage */}
+          <dvfy-tabs style={{ marginTop: 'var(--dvfy-space-8)' }}>
+            <dvfy-tab label="Overview" active="">
+              <p>dvfy-tabs works without any React wrapper — tab switching is handled by the component itself.</p>
+            </dvfy-tab>
+            <dvfy-tab label="Details">
+              <p>If you need to react to tab changes, listen for the <code>tab-change</code> CustomEvent via a ref.</p>
+            </dvfy-tab>
+          </dvfy-tabs>
+
+          {/* Loader */}
+          {submitting && (
+            <div style={{ marginTop: 'var(--dvfy-space-4)' }}>
+              <dvfy-loader></dvfy-loader>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
