@@ -76,6 +76,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-card':           { tier: 2, domain: 'display',    deps: [] },
   'dvfy-gradient-card':  { tier: 2, domain: 'display',    deps: [] },
   'dvfy-spotlight-card': { tier: 2, domain: 'display',    deps: [] },
+  'dvfy-card-glow':      { tier: 2, domain: 'display',    deps: [] },
   'dvfy-empty':          { tier: 2, domain: 'display',    deps: ['dvfy-button'] },
   'dvfy-table':          { tier: 2, domain: 'display',    deps: ['dvfy-checkbox'] },
   'dvfy-modal':          { tier: 2, domain: 'feedback',   deps: ['dvfy-button'] },

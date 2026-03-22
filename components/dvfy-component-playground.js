@@ -299,6 +299,7 @@ const DEFAULT_CONTENT = {
   'dvfy-alert': 'This is an alert message.',
   'dvfy-loader': '',
   'dvfy-card': '<h3 style="margin-bottom:0.5rem">Card Title</h3><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Card content goes here.</p>',
+  'dvfy-card-glow': '<h3 style="margin-bottom:0.5rem">Glow Card</h3><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Hover to see the gradient glow follow your cursor.</p>',
   'dvfy-progress': '',
   'dvfy-tabs': '<dvfy-tab label="Tab 1"><p style="padding:1rem">First tab content</p></dvfy-tab><dvfy-tab label="Tab 2"><p style="padding:1rem">Second tab content</p></dvfy-tab>',
   'dvfy-dropdown': '<dvfy-button variant="outline">Actions</dvfy-button><div class="dvfy-dropdown__item">Edit</div><div class="dvfy-dropdown__item">Delete</div>',
