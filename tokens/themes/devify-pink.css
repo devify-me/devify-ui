@@ -18,8 +18,8 @@
   --dvfy-text-muted:        var(--dvfy-neutral-400);
   --dvfy-text-disabled:     var(--dvfy-neutral-400);
   --dvfy-text-inverse:      var(--dvfy-neutral-0);
-  --dvfy-text-link:         var(--dvfy-brand-600);
-  --dvfy-text-link-hover:   var(--dvfy-brand-700);
+  --dvfy-text-link:         var(--dvfy-brand-700);
+  --dvfy-text-link-hover:   var(--dvfy-brand-800);
 
   --dvfy-border-default:    var(--dvfy-neutral-200);
   --dvfy-border-strong:     var(--dvfy-neutral-300);
@@ -30,7 +30,7 @@
   --dvfy-primary-bg-hover:  var(--dvfy-brand-600);
   --dvfy-primary-bg-active: var(--dvfy-brand-700);
   --dvfy-primary-bg-subtle: var(--dvfy-brand-50);
-  --dvfy-primary-text:      var(--dvfy-neutral-0);
+  --dvfy-primary-text:      var(--dvfy-neutral-950);
   --dvfy-primary-border:    var(--dvfy-brand-500);
 
   --dvfy-accent-bg:         var(--dvfy-cyan-500);
@@ -70,7 +70,7 @@
   --dvfy-primary-bg-hover:  var(--dvfy-brand-400);
   --dvfy-primary-bg-active: var(--dvfy-brand-300);
   --dvfy-primary-bg-subtle: var(--dvfy-brand-950);
-  --dvfy-primary-text:      var(--dvfy-neutral-0);
+  --dvfy-primary-text:      var(--dvfy-neutral-950);
   --dvfy-primary-border:    var(--dvfy-brand-500);
 
   --dvfy-accent-bg:         var(--dvfy-cyan-500);

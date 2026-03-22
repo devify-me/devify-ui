@@ -30,7 +30,7 @@
   --dvfy-primary-bg-hover:  var(--dvfy-cyan-700);
   --dvfy-primary-bg-active: var(--dvfy-cyan-800);
   --dvfy-primary-bg-subtle: var(--dvfy-cyan-50);
-  --dvfy-primary-text:      var(--dvfy-neutral-0);
+  --dvfy-primary-text:      var(--dvfy-neutral-950);
   --dvfy-primary-border:    var(--dvfy-cyan-600);
 
   --dvfy-accent-bg:         var(--dvfy-brand-500);
