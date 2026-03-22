@@ -43,5 +43,6 @@
   "scripts": {
     "analyze": "wca analyze components/ patterns/ --format json --outFile custom-elements.json",
     "serve": "python3 -m http.server 8090"
-  }
+  },
+  "customElements": "custom-elements.json"
 }
