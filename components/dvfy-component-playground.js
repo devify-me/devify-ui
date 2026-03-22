@@ -313,7 +313,7 @@ const DEFAULT_CONTENT = {
   'dvfy-nav': '<a href="#home">Home</a><a href="#about">About</a><a href="#contact">Contact</a><dvfy-button variant="default" size="sm">Sign In</dvfy-button>',
   'dvfy-sidebar': '',
   'dvfy-hamburger': '',
-  'dvfy-drawer': '<p>Drawer body content. This panel scrolls independently and can be collapsed.</p><p style="margin-top:0.5rem;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Try the collapse button in the header.</p>',
+  'dvfy-drawer': '<p>Drawer content goes here. This panel slides in from the edge and can scroll independently.</p><p style="margin-top:0.5rem;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Press Escape or click the × button to close.</p>',
   'dvfy-section': '<p>Section content here.</p>',
   'dvfy-theme-switcher': '<option value="devify-cyan">Cyan</option><option value="devify-pink">Pink</option>',
   'dvfy-accordion': '<dvfy-section label="Section One" open><p>First section content.</p></dvfy-section><dvfy-section label="Section Two" collapsed><p>Second section content.</p></dvfy-section><dvfy-section label="Section Three" collapsed><p>Third section content.</p></dvfy-section>',
@@ -726,67 +726,25 @@ class DvfyComponentPlayground extends HTMLElement {
   }
 
   /**
-   * Render dvfy-drawer inside a flex layout with toggle + sample content.
+   * Render dvfy-drawer with a trigger button to open/close it.
    * Uses DOM methods only — all content is hardcoded trusted strings.
    */
   #renderDrawerPreview(area, drawer) {
-    // Override preview area to be a flex row filling the space
-    area.style.display = 'flex';
-    area.style.gap = '0';
-    area.style.padding = '0';
-    area.style.position = 'relative';
-    area.style.alignItems = 'stretch';
-    area.style.justifyContent = 'stretch';
+    // Ensure overlay is set for the preview
+    drawer.setAttribute('overlay', '');
 
-    // Main content area
-    const main = document.createElement('div');
-    main.style.flex = '1';
-    main.style.padding = 'var(--dvfy-space-4)';
-    main.style.display = 'flex';
-    main.style.flexDirection = 'column';
-    main.style.gap = 'var(--dvfy-space-3)';
-    main.style.minWidth = '0';
-    main.style.justifyContent = 'center';
-    main.style.alignItems = 'center';
-
-    const toggle = document.createElement('dvfy-button');
-    toggle.setAttribute('variant', 'outline');
-    toggle.setAttribute('size', 'sm');
-    toggle.textContent = drawer.hasAttribute('collapsed') ? 'Open Drawer' : 'Close Drawer';
-    toggle.addEventListener('click', () => {
-      drawer.collapsed = !drawer.collapsed;
-      toggle.textContent = drawer.collapsed ? 'Open Drawer' : 'Close Drawer';
-    });
-    main.appendChild(toggle);
-
-    const hint = document.createElement('p');
-    hint.style.fontSize = 'var(--dvfy-text-sm)';
-    hint.style.color = 'var(--dvfy-text-muted)';
-    hint.style.textAlign = 'center';
-    hint.textContent = 'Main content area';
-    main.appendChild(hint);
+    const trigger = document.createElement('dvfy-button');
+    trigger.setAttribute('variant', 'outline');
+    trigger.setAttribute('size', 'sm');
+    trigger.textContent = 'Open Drawer';
+    trigger.addEventListener('click', () => drawer.setAttribute('open', ''));
 
     // Keep button label in sync with drawer events
-    drawer.addEventListener('toggle', (e) => {
-      toggle.textContent = e.detail.collapsed ? 'Open Drawer' : 'Close Drawer';
-    });
+    drawer.addEventListener('close', () => { trigger.textContent = 'Open Drawer'; });
+    drawer.addEventListener('open', () => { trigger.textContent = 'Drawer Open'; });
 
-    const pos = drawer.getAttribute('position') || 'right';
-    if (pos === 'left') {
-      area.appendChild(drawer);
-      area.appendChild(main);
-    } else if (pos === 'top') {
-      area.style.flexDirection = 'column';
-      area.appendChild(drawer);
-      area.appendChild(main);
-    } else if (pos === 'bottom') {
-      area.style.flexDirection = 'column';
-      area.appendChild(main);
-      area.appendChild(drawer);
-    } else {
-      area.appendChild(main);
-      area.appendChild(drawer);
-    }
+    area.appendChild(trigger);
+    area.appendChild(drawer);
   }
 
   #updateCode() {
