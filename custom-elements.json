@@ -369,7 +369,7 @@
     {
       "name": "dvfy-card",
       "path": "./components/dvfy-card.js",
-      "description": "Content card with elevation and interactive variants.",
+      "description": "Content card with elevation, interactive, and spotlight variants.",
       "attributes": [
         {
           "name": "elevated",
@@ -384,6 +384,11 @@
         {
           "name": "interactive",
           "description": "Enable hover effect and cursor pointer",
+          "type": "boolean"
+        },
+        {
+          "name": "spotlight",
+          "description": "Enable cursor-tracking radial gradient spotlight overlay",
           "type": "boolean"
         }
       ],
@@ -407,6 +412,21 @@
         {
           "name": "--dvfy-shadow-md",
           "description": "Elevated shadow",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-card-spotlight-size",
+          "description": "Spotlight radius (default: 400px)",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-card-spotlight-color",
+          "description": "Inner surface glow color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-card-spotlight-border-color",
+          "description": "Border glow color",
           "type": "color"
         }
       ]
@@ -1333,62 +1353,6 @@
           "name": "--dvfy-scroll-progress-z",
           "description": "z-index (default: 1000)",
           "type": "integer"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
         }
       ]
     },
