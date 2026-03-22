@@ -22,6 +22,7 @@ import './components/dvfy-loader.js';
 import './components/dvfy-scroll-reveal.js';
 import './components/dvfy-scroll-progress.js';
 import './components/dvfy-page-transition.js';
+import './components/dvfy-transition-root.js';
 import './components/dvfy-text-vortex.js';
 import './components/dvfy-scramble-hover.js';
 import './components/dvfy-marquee-scroll.js';

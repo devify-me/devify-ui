@@ -2363,6 +2363,30 @@
       ]
     },
     {
+      "name": "dvfy-transition-root",
+      "path": "./components/dvfy-transition-root.js",
+      "description": "View Transitions API wrapper with HTMX integration and named element morphing.",
+      "attributes": [
+        {
+          "name": "duration"
+        },
+        {
+          "name": "easing"
+        },
+        {
+          "name": "mpa"
+        }
+      ],
+      "events": [
+        {
+          "name": "transition-start"
+        },
+        {
+          "name": "transition-finish"
+        }
+      ]
+    },
+    {
       "name": "dvfy-tree-view",
       "path": "./components/dvfy-tree-view.js",
       "description": "Interactive tree view for hierarchical navigation (VS Code file explorer style).",
