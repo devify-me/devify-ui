@@ -11,7 +11,7 @@
  * @element dvfy-page-transition
  *
  * @attr {boolean} mpa - Enable cross-page (MPA) transitions via CSS @view-transition
- * @attr {string} animation - Preset: fade | slide-left | slide-right | slide-up | slide-down | scale (default: "fade")
+ * @attr {string} animation - Preset: fade | slide-left | slide-right | slide-up | slide-down | scale | wipe (default: "fade")
  * @attr {string} duration - Speed: fastest | fast | normal | slow | slowest (default: "normal")
  * @attr {string} name - view-transition-name for named element morphing between states
  *
@@ -88,6 +88,10 @@ dvfy-page-transition[name] > * {
 @keyframes dvfy-pt-scale-in  { from { transform: scale(0.92); opacity: 0; } to { transform: none; opacity: 1; } }
 @keyframes dvfy-pt-scale-out { from { transform: none; opacity: 1; } to { transform: scale(1.08); opacity: 0; } }
 
+/* wipe: clip-path horizontal reveal — no movement, just uncover */
+@keyframes dvfy-pt-wipe-in  { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes dvfy-pt-wipe-out { from { clip-path: inset(0 0 0 0); } to { clip-path: inset(0 0 0 100%); } }
+
 /* ── Reduced motion: collapse all VTA durations ── */
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(*),
@@ -104,6 +108,7 @@ const ANIMATION_PRESETS = {
   'slide-up':    { in: 'dvfy-pt-slide-up-in',    out: 'dvfy-pt-slide-up-out' },
   'slide-down':  { in: 'dvfy-pt-slide-down-in',  out: 'dvfy-pt-slide-down-out' },
   'scale':       { in: 'dvfy-pt-scale-in',        out: 'dvfy-pt-scale-out' },
+  'wipe':        { in: 'dvfy-pt-wipe-in',         out: 'dvfy-pt-wipe-out' },
 };
 
 /** Build CSS rules for ::view-transition-old/new(root) with the selected preset */
