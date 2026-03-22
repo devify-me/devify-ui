@@ -39,6 +39,7 @@ import './components/dvfy-sidebar.js';
 import './components/dvfy-tree-view.js';
 
 // Wave 3: Functional + Interactive
+import './components/dvfy-description-list.js';
 import './components/dvfy-card.js';
 import './components/dvfy-gradient-card.js';
 import './components/dvfy-spotlight-card.js';

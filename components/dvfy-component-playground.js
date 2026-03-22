@@ -298,6 +298,7 @@ const DEFAULT_CONTENT = {
   'dvfy-avatar': '',
   'dvfy-alert': 'This is an alert message.',
   'dvfy-loader': '',
+  'dvfy-description-list': '<dl><dt>Name</dt><dd>Alice Chen</dd><dt>Role</dt><dd>Senior Engineer</dd><dt>Team</dt><dd>Platform</dd><dt>Status</dt><dd>Active</dd></dl>',
   'dvfy-card': '<h3 style="margin-bottom:0.5rem">Card Title</h3><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Card content goes here.</p>',
   'dvfy-progress': '',
   'dvfy-tabs': '<dvfy-tab label="Tab 1"><p style="padding:1rem">First tab content</p></dvfy-tab><dvfy-tab label="Tab 2"><p style="padding:1rem">Second tab content</p></dvfy-tab>',
