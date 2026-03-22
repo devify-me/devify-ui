@@ -1,0 +1,46 @@
+{
+  "name": "@devify/ui — Design System Explorer",
+  "short_name": "Devify UI",
+  "description": "HTML Web Component library catalog with design tokens, HTMX patterns, and PWA support.",
+  "start_url": "/catalog/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0e1118",
+  "theme_color": "#0ba5b5",
+  "lang": "en",
+  "categories": ["developer", "design", "utilities"],
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Design Tokens",
+      "url": "/catalog/#tokens/colors",
+      "description": "Browse design tokens"
+    },
+    {
+      "name": "Components",
+      "url": "/catalog/#components/dvfy-button",
+      "description": "Browse UI components"
+    }
+  ]
+}
