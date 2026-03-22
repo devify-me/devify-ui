@@ -21,6 +21,7 @@
   "files": [
     "devify.css",
     "devify.js",
+    "page-transition.css",
     "components/",
     "patterns/",
     "tokens/"
@@ -31,6 +32,7 @@
     },
     "./devify.css": "./devify.css",
     "./devify.js": "./devify.js",
+    "./page-transition.css": "./page-transition.css",
     "./components/*": "./components/*",
     "./patterns/*": "./patterns/*",
     "./tokens/*": "./tokens/*"

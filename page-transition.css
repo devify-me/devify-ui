@@ -1,0 +1,117 @@
+/*
+ * @devify/ui — Page Transition Styles
+ *
+ * Zero-JS cross-document (MPA) page transitions via the View Transition API.
+ * Include once per page — typically in <head>.
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="@devify/ui/page-transition.css">
+ *
+ * Variant (set on <html> element):
+ *   <html data-transition="fade">        <!-- default -->
+ *   <html data-transition="slide-left">
+ *   <html data-transition="slide-right">
+ *   <html data-transition="slide-up">
+ *   <html data-transition="slide-down">
+ *   <html data-transition="scale">
+ *
+ * Override speed:
+ *   --dvfy-pt-duration: 400ms;
+ *   --dvfy-pt-easing:   ease-in-out;
+ *
+ * Browser support: Chrome 126+, Firefox 128+, Safari 18+.
+ * Degrades gracefully — older browsers ignore @view-transition entirely.
+ */
+
+/* ── Enable cross-document (MPA) transitions ── */
+@view-transition {
+  navigation: auto;
+}
+
+/* ── Duration / easing tokens ── */
+:root {
+  --dvfy-pt-duration: var(--dvfy-duration-normal, 250ms);
+  --dvfy-pt-easing:   var(--dvfy-ease-in-out, cubic-bezier(0.4, 0, 0.2, 1));
+}
+
+/* ── Keyframes ── */
+
+/* fade */
+@keyframes dvfy-pt-fade-in  { from { opacity: 0; } to { opacity: 1; } }
+@keyframes dvfy-pt-fade-out { from { opacity: 1; } to { opacity: 0; } }
+
+/* slide-left: new enters from right, old exits to left */
+@keyframes dvfy-pt-slide-left-in  { from { transform: translateX(100%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes dvfy-pt-slide-left-out { from { transform: none; opacity: 1; } to { transform: translateX(-100%); opacity: 0; } }
+
+/* slide-right: new enters from left, old exits to right */
+@keyframes dvfy-pt-slide-right-in  { from { transform: translateX(-100%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes dvfy-pt-slide-right-out { from { transform: none; opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+/* slide-up: new enters from bottom, old exits to top */
+@keyframes dvfy-pt-slide-up-in  { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes dvfy-pt-slide-up-out { from { transform: none; opacity: 1; } to { transform: translateY(-100%); opacity: 0; } }
+
+/* slide-down: new enters from top, old exits to bottom */
+@keyframes dvfy-pt-slide-down-in  { from { transform: translateY(-100%); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes dvfy-pt-slide-down-out { from { transform: none; opacity: 1; } to { transform: translateY(100%); opacity: 0; } }
+
+/* scale: new zooms in, old zooms out */
+@keyframes dvfy-pt-scale-in  { from { transform: scale(0.92); opacity: 0; } to { transform: none; opacity: 1; } }
+@keyframes dvfy-pt-scale-out { from { transform: none; opacity: 1; } to { transform: scale(1.08); opacity: 0; } }
+
+/* ── Default: fade ── */
+::view-transition-old(root) {
+  animation: var(--dvfy-pt-duration) var(--dvfy-pt-easing) both dvfy-pt-fade-out;
+}
+::view-transition-new(root) {
+  animation: var(--dvfy-pt-duration) var(--dvfy-pt-easing) both dvfy-pt-fade-in;
+}
+
+/* ── Variant: slide-left ── */
+:root[data-transition="slide-left"] ::view-transition-old(root) {
+  animation-name: dvfy-pt-slide-left-out;
+}
+:root[data-transition="slide-left"] ::view-transition-new(root) {
+  animation-name: dvfy-pt-slide-left-in;
+}
+
+/* ── Variant: slide-right ── */
+:root[data-transition="slide-right"] ::view-transition-old(root) {
+  animation-name: dvfy-pt-slide-right-out;
+}
+:root[data-transition="slide-right"] ::view-transition-new(root) {
+  animation-name: dvfy-pt-slide-right-in;
+}
+
+/* ── Variant: slide-up ── */
+:root[data-transition="slide-up"] ::view-transition-old(root) {
+  animation-name: dvfy-pt-slide-up-out;
+}
+:root[data-transition="slide-up"] ::view-transition-new(root) {
+  animation-name: dvfy-pt-slide-up-in;
+}
+
+/* ── Variant: slide-down ── */
+:root[data-transition="slide-down"] ::view-transition-old(root) {
+  animation-name: dvfy-pt-slide-down-out;
+}
+:root[data-transition="slide-down"] ::view-transition-new(root) {
+  animation-name: dvfy-pt-slide-down-in;
+}
+
+/* ── Variant: scale ── */
+:root[data-transition="scale"] ::view-transition-old(root) {
+  animation-name: dvfy-pt-scale-out;
+}
+:root[data-transition="scale"] ::view-transition-new(root) {
+  animation-name: dvfy-pt-scale-in;
+}
+
+/* ── Reduced motion: instant transitions ── */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0ms !important;
+  }
+}
