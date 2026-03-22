@@ -88,10 +88,10 @@
   --dvfy-shadow-color:      220 10% 4%;
 
   /* ─── Status text on solid backgrounds ─── */
-  --dvfy-on-success:        var(--dvfy-neutral-0);
+  --dvfy-on-success:        var(--dvfy-neutral-950);
   --dvfy-on-warning:        var(--dvfy-neutral-950);
   --dvfy-on-danger:         var(--dvfy-neutral-0);
-  --dvfy-on-info:           var(--dvfy-neutral-0);
+  --dvfy-on-info:           var(--dvfy-neutral-950);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -147,9 +147,9 @@
     --dvfy-input-placeholder: var(--dvfy-neutral-500);
     --dvfy-input-error:       var(--dvfy-red-400);
     --dvfy-shadow-color:      220 10% 4%;
-    --dvfy-on-success:        var(--dvfy-neutral-0);
+    --dvfy-on-success:        var(--dvfy-neutral-950);
     --dvfy-on-warning:        var(--dvfy-neutral-950);
     --dvfy-on-danger:         var(--dvfy-neutral-0);
-    --dvfy-on-info:           var(--dvfy-neutral-0);
+    --dvfy-on-info:           var(--dvfy-neutral-950);
   }
 }

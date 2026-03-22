@@ -36,7 +36,7 @@
   --dvfy-primary-bg-hover:  var(--dvfy-cyan-700);
   --dvfy-primary-bg-active: var(--dvfy-cyan-800);
   --dvfy-primary-bg-subtle: var(--dvfy-cyan-50);
-  --dvfy-primary-text:      var(--dvfy-neutral-0);
+  --dvfy-primary-text:      var(--dvfy-neutral-950);
   --dvfy-primary-border:    var(--dvfy-cyan-600);
 
   /* ─── Accent (Devify hot pink) ─── */
@@ -92,8 +92,8 @@
   --dvfy-shadow-color:      220 3% 15%;
 
   /* ─── Status text on solid backgrounds (white for readability) ─── */
-  --dvfy-on-success:        var(--dvfy-neutral-0);
+  --dvfy-on-success:        var(--dvfy-neutral-950);
   --dvfy-on-warning:        var(--dvfy-neutral-950);
   --dvfy-on-danger:         var(--dvfy-neutral-0);
-  --dvfy-on-info:           var(--dvfy-neutral-0);
+  --dvfy-on-info:           var(--dvfy-neutral-950);
 }
