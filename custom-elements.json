@@ -1337,62 +1337,6 @@
       ]
     },
     {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
-        }
-      ]
-    },
-    {
       "name": "dvfy-section",
       "path": "./components/dvfy-section.js",
       "description": "Collapsible section with summary header and toggle animation.",
@@ -2033,6 +1977,24 @@
           "name": "--dvfy-info-bg-subtle",
           "description": "Info tag background",
           "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-text-reveal",
+      "path": "./components/dvfy-text-reveal.js",
+      "attributes": [
+        {
+          "name": "split"
+        },
+        {
+          "name": "animation"
+        },
+        {
+          "name": "stagger"
+        },
+        {
+          "name": "once"
         }
       ]
     },
