@@ -60,7 +60,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-alert':     { tier: 1, domain: 'feedback',   deps: [] },
   'dvfy-loader':    { tier: 1, domain: 'feedback',   deps: [] },
   'dvfy-hamburger': { tier: 1, domain: 'navigation', deps: [] },
-  'dvfy-drawer':    { tier: 1, domain: 'layout',     deps: [] },
+  'dvfy-drawer':    { tier: 1, domain: 'overlay',    deps: [] },
   'dvfy-section':   { tier: 1, domain: 'layout',     deps: [] },
   'dvfy-tooltip':       { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-hovercard':     { tier: 1, domain: 'utility',    deps: [] },
@@ -90,7 +90,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-pagination':     { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
   'dvfy-tabs':           { tier: 2, domain: 'navigation', deps: [] },
   'dvfy-dropdown':       { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
-  'dvfy-nav':            { tier: 2, domain: 'navigation', deps: ['dvfy-hamburger', 'dvfy-drawer'] },
+  'dvfy-nav':            { tier: 2, domain: 'navigation', deps: ['dvfy-hamburger'] },
   'dvfy-tree-view':      { tier: 2, domain: 'navigation', deps: [] },
   'dvfy-theme-switcher': { tier: 2, domain: 'utility',    deps: [] },
 
