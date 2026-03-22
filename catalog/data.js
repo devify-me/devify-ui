@@ -66,6 +66,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-hovercard':     { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-scroll-reveal':    { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-scroll-progress':  { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-sticky-header':    { tier: 1, domain: 'layout',     deps: [] },
   'dvfy-page-transition': { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-text-vortex':      { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-scramble-hover':   { tier: 1, domain: 'utility',    deps: [] },
