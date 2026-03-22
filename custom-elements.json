@@ -309,7 +309,7 @@
     {
       "name": "dvfy-button",
       "path": "./components/dvfy-button.js",
-      "description": "Button component with multiple variants and sizes.",
+      "description": "Button component with multiple variants, sizes, and loading/success morph states.",
       "attributes": [
         {
           "name": "variant",
@@ -327,6 +327,11 @@
           "type": "boolean"
         },
         {
+          "name": "success-duration",
+          "description": "Milliseconds before success auto-resets to idle (default: \"2000\")",
+          "type": "string"
+        },
+        {
           "name": "type",
           "description": "HTML button type: button | submit | reset (default: \"button\")",
           "type": "string"
@@ -338,8 +343,19 @@
         },
         {
           "name": "loading",
-          "description": "Show loading state with spinner indicator",
+          "description": "Show loading state — morphs to spinner circle",
           "type": "boolean"
+        },
+        {
+          "name": "success",
+          "description": "Show success state — morphs to green checkmark circle, auto-resets",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "dvfy-success-reset",
+          "description": "Fires when success state auto-resets to idle"
         }
       ],
       "slots": [
@@ -362,6 +378,16 @@
         {
           "name": "--dvfy-danger-bg",
           "description": "Danger variant background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-success-bg",
+          "description": "Success state background color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-on-success",
+          "description": "Success state text/icon color",
           "type": "color"
         }
       ]
@@ -1333,62 +1359,6 @@
           "name": "--dvfy-scroll-progress-z",
           "description": "z-index (default: 1000)",
           "type": "integer"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
         }
       ]
     },

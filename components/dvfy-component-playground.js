@@ -285,7 +285,7 @@ const SKIP_TAGS = new Set([
  *   3. The catalog is not publicly accessible.
  */
 const DEFAULT_CONTENT = {
-  'dvfy-button': 'Click me',
+  'dvfy-button': '<dvfy-button id="demo-btn" onclick="const b=this;b.setAttribute(\'loading\',\'\');setTimeout(()=>{b.removeAttribute(\'loading\');b.setAttribute(\'success\',\'\');},1800)">Submit</dvfy-button>',
   'dvfy-input': '',
   'dvfy-textarea': '',
   'dvfy-select': '<option value="a">Option A</option><option value="b">Option B</option><option value="c">Option C</option>',
