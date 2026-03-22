@@ -518,6 +518,71 @@
       ]
     },
     {
+      "name": "dvfy-date-picker",
+      "path": "./components/dvfy-date-picker.js",
+      "attributes": [
+        {
+          "name": "value",
+          "type": "string"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "value-end"
+        },
+        {
+          "name": "min"
+        },
+        {
+          "name": "max"
+        },
+        {
+          "name": "type"
+        },
+        {
+          "name": "range"
+        },
+        {
+          "name": "required"
+        },
+        {
+          "name": "disabled"
+        },
+        {
+          "name": "placeholder"
+        },
+        {
+          "name": "name"
+        },
+        {
+          "name": "error"
+        },
+        {
+          "name": "help"
+        },
+        {
+          "name": "label-position"
+        }
+      ],
+      "properties": [
+        {
+          "name": "valueEnd",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "attribute": "value",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "change"
+        }
+      ]
+    },
+    {
       "name": "dvfy-drawer",
       "path": "./components/dvfy-drawer.js",
       "description": "Collapsible drawer panel for side or bottom content.\n\nA reusable panel that slides in from a configurable edge. Supports\ncollapse/expand with an animated transition and a vertical reopen tab\nthat appears when collapsed. Scrollable body for long content while\nthe parent layout stays fixed.",
@@ -1333,62 +1398,6 @@
           "name": "--dvfy-scroll-progress-z",
           "description": "z-index (default: 1000)",
           "type": "integer"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
         }
       ]
     },

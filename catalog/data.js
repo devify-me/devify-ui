@@ -71,6 +71,8 @@ export const COMPONENT_REGISTRY = {
   'dvfy-scramble-hover':   { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-tree-node':       { tier: 1, domain: 'navigation', deps: [] },
 
+  'dvfy-date-picker':   { tier: 1, domain: 'forms',      deps: [] },
+
   // Tier 2 — Composites
   'dvfy-select':         { tier: 2, domain: 'forms',      deps: [] },
   'dvfy-card':           { tier: 2, domain: 'display',    deps: [] },

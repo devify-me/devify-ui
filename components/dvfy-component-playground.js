@@ -287,6 +287,7 @@ const SKIP_TAGS = new Set([
 const DEFAULT_CONTENT = {
   'dvfy-button': 'Click me',
   'dvfy-input': '',
+  'dvfy-date-picker': '',
   'dvfy-textarea': '',
   'dvfy-select': '<option value="a">Option A</option><option value="b">Option B</option><option value="c">Option C</option>',
   'dvfy-checkbox': '<dvfy-checkbox label="Accept terms" name="terms"></dvfy-checkbox>\n<dvfy-checkbox label="Select all" indeterminate></dvfy-checkbox>\n<dvfy-checkbox label="Small option" size="sm"></dvfy-checkbox>\n<dvfy-checkbox label="Large option" size="lg" checked></dvfy-checkbox>\n<dvfy-checkbox label="Disabled" disabled checked></dvfy-checkbox>',

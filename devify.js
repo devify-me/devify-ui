@@ -10,6 +10,7 @@
 // Wave 1: Foundation (form + data display)
 import './components/dvfy-button.js';
 import './components/dvfy-input.js';
+import './components/dvfy-date-picker.js';
 import './components/dvfy-badge.js';
 import './components/dvfy-switch.js';
 import './components/dvfy-slider.js';
