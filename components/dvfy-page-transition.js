@@ -1,9 +1,10 @@
 /**
  * <dvfy-page-transition> — View Transitions API wrapper
  *
- * Seamless cross-page and in-page transitions via View Transitions API.
- * MPA mode requires zero JS — just include the component once per page.
- * SPA mode wraps DOM mutations via startTransition().
+ * Seamless cross-page (MPA) and in-page (SPA) transitions via the native View
+ * Transitions API. MPA mode is zero-JS — just add the element once per page.
+ * SPA mode wraps DOM mutations via startTransition(). HTMX integration is
+ * automatic when the `htmx` attribute is present.
  *
  * Browser support: Chrome 111+, Edge 111+, Firefox 128+, Safari 18+.
  * Gracefully degrades to instant transitions in older browsers.
@@ -11,6 +12,7 @@
  * @element dvfy-page-transition
  *
  * @attr {boolean} mpa - Enable cross-page (MPA) transitions via CSS @view-transition
+ * @attr {boolean} htmx - Auto-enable HTMX globalViewTransitions when htmx is detected
  * @attr {string} animation - Preset: fade | slide-left | slide-right | slide-up | slide-down | scale (default: "fade")
  * @attr {string} duration - Speed: fastest | fast | normal | slow | slowest (default: "normal")
  * @attr {string} name - view-transition-name for named element morphing between states
@@ -26,6 +28,9 @@
  * @example
  * <!-- MPA cross-page transitions (add once per page, typically near </body>) -->
  * <dvfy-page-transition mpa animation="slide-left"></dvfy-page-transition>
+ *
+ * <!-- MPA + HTMX: also wraps hx-boost and non-boost HTMX swaps automatically -->
+ * <dvfy-page-transition mpa htmx animation="fade"></dvfy-page-transition>
  *
  * <!-- Named element morphing — same name on both pages morphs between them -->
  * <dvfy-page-transition name="hero-image">
@@ -135,7 +140,7 @@ class DvfyPageTransition extends HTMLElement {
   #mpaStyle = null;
 
   static get observedAttributes() {
-    return ['animation', 'duration', 'mpa', 'name'];
+    return ['animation', 'duration', 'mpa', 'htmx', 'name'];
   }
 
   connectedCallback() {
@@ -156,6 +161,7 @@ class DvfyPageTransition extends HTMLElement {
   #apply() {
     this.#applyName();
     this.#applyMPA();
+    this.#applyHtmx();
     this.#applyAnimation();
   }
 
@@ -185,6 +191,17 @@ class DvfyPageTransition extends HTMLElement {
       this.#mpaStyle.remove();
       this.#mpaStyle = null;
     }
+  }
+
+  /**
+   * Enable HTMX globalViewTransitions when the `htmx` attribute is present.
+   * HTMX 1.9+ natively wraps each swap in document.startViewTransition() when
+   * htmx.config.globalViewTransitions is true — no custom event handling needed.
+   */
+  #applyHtmx() {
+    if (!this.hasAttribute('htmx')) return;
+    if (typeof window.htmx === 'undefined') return;
+    window.htmx.config.globalViewTransitions = true;
   }
 
   /** Inject ::view-transition-old/new animation overrides for the selected preset */
