@@ -27,6 +27,9 @@
  *
  * @slot - Hovercard content (can be rich HTML)
  *
+ * Accessibility: sets role="tooltip" on itself and aria-describedby on each
+ * [interestfor] trigger so screen readers announce the hovercard content.
+ *
  * @cssprop {color} --dvfy-surface-raised - Hovercard background
  * @cssprop {color} --dvfy-border-default - Hovercard border color
  * @cssprop {shadow} --dvfy-shadow-lg - Hovercard shadow
@@ -150,11 +153,18 @@ class DvfyHovercard extends HTMLElement {
       DvfyHovercard.#styled = true;
     }
 
+    // ARIA: hovercard acts as a tooltip
+    if (!this.hasAttribute('role')) {
+      this.setAttribute('role', 'tooltip');
+    }
+
     if (SUPPORTS_INTEREST) {
       // Native path: set popover="hint" and let the browser handle hover
       if (!this.hasAttribute('popover')) {
         this.setAttribute('popover', 'hint');
       }
+      // Wire aria-describedby on triggers (deferred so DOM is ready)
+      setTimeout(() => this.#setAriaOnTriggers(), 0);
     } else {
       // Fallback path: JS-driven show/hide
       this.setAttribute('data-hc-fallback', '');
@@ -175,12 +185,22 @@ class DvfyHovercard extends HTMLElement {
     this.#triggers = [];
   }
 
+  #setAriaOnTriggers() {
+    const id = this.id;
+    if (!id) return;
+    document.querySelectorAll(`[interestfor="${CSS.escape(id)}"]`).forEach(el => {
+      el.setAttribute('aria-describedby', id);
+    });
+  }
+
   #connectFallback() {
     const id = this.id;
     if (!id) return;
 
     const triggers = document.querySelectorAll(`[interestfor="${CSS.escape(id)}"]`);
     triggers.forEach(el => {
+      // Accessibility: link trigger to hovercard
+      el.setAttribute('aria-describedby', id);
       const show = () => this.#show(el);
       const hide = () => this.#hide();
       el.addEventListener('mouseenter', show);
