@@ -367,6 +367,46 @@
       ]
     },
     {
+      "name": "dvfy-card-glow",
+      "path": "./components/dvfy-card-glow.js",
+      "description": "Card with a mouse-tracked radial gradient glow that bleeds through the border.",
+      "attributes": [
+        {
+          "name": "elevated",
+          "description": "Add shadow elevation",
+          "type": "boolean"
+        },
+        {
+          "name": "padded",
+          "description": "Enable padding",
+          "type": "boolean"
+        },
+        {
+          "name": "interactive",
+          "description": "Enable cursor pointer and active scale",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Card content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--glow-color",
+          "description": "Glow color (default: rgba(124, 58, 237, 0.2))",
+          "type": "color"
+        },
+        {
+          "name": "--glow-size",
+          "description": "Gradient radius (default: 60%)",
+          "type": "length|percentage"
+        }
+      ]
+    },
+    {
       "name": "dvfy-card",
       "path": "./components/dvfy-card.js",
       "description": "Content card with elevation and interactive variants.",
@@ -414,7 +454,15 @@
     {
       "name": "dvfy-carousel",
       "path": "./components/dvfy-carousel.js",
-      "description": "Carousel container. Wraps dvfy-slide elements in a horizontally scrollable\nsnap container. Navigation buttons and pagination dots are rendered entirely\nby CSS pseudo-elements on Chrome 135+; older browsers see a plain swipeable\nscroll area."
+      "description": "Carousel container. Wraps dvfy-slide elements in a horizontally scrollable\nsnap container. Navigation buttons and pagination dots are rendered entirely\nby CSS pseudo-elements on Chrome 135+; older browsers see a plain swipeable\nscroll area.",
+      "attributes": [
+        {
+          "name": "gap"
+        },
+        {
+          "name": "autoplay"
+        }
+      ]
     },
     {
       "name": "dvfy-slide",
@@ -1333,62 +1381,6 @@
           "name": "--dvfy-scroll-progress-z",
           "description": "z-index (default: 1000)",
           "type": "integer"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
         }
       ]
     },

@@ -12,6 +12,13 @@
  *     <dvfy-slide>Slide 3</dvfy-slide>
  *   </dvfy-carousel>
  *
+ * Autoplay (5 s default, or specify ms):
+ *   <dvfy-carousel autoplay>...</dvfy-carousel>
+ *   <dvfy-carousel autoplay="3000">...</dvfy-carousel>
+ *
+ * Custom gap:
+ *   <dvfy-carousel gap="2rem">...</dvfy-carousel>
+ *
  * Partial-slide peek (shows edge of next slide):
  *   <dvfy-carousel peek>
  *     ...slides
@@ -25,6 +32,8 @@
  * @element dvfy-carousel
  *
  * @attr {boolean} peek - Show ~12% of adjacent slides to hint scrollability
+ * @attr {boolean|number} autoplay - Auto-advance slides. Value is the interval in ms (default: 5000). Pauses on hover, focus, or user interaction. Disabled when prefers-reduced-motion is active.
+ * @attr {string} gap - Gap between slides (e.g. "1rem", "16px"). Maps to --dvfy-carousel-gap.
  * @attr {string} aria-label - Accessible label for the carousel region (default: "Carousel")
  *
  * @slot - <dvfy-slide> elements
@@ -40,9 +49,9 @@
  * </dvfy-carousel>
  *
  * @example
- * <dvfy-carousel peek>
- *   <dvfy-slide><img src="photo1.jpg" alt="Photo 1" style="width:100%;border-radius:var(--dvfy-radius-lg)"></dvfy-slide>
- *   <dvfy-slide><img src="photo2.jpg" alt="Photo 2" style="width:100%;border-radius:var(--dvfy-radius-lg)"></dvfy-slide>
+ * <dvfy-carousel autoplay gap="1rem">
+ *   <dvfy-slide><dvfy-card padded><h3>Auto 1</h3></dvfy-card></dvfy-slide>
+ *   <dvfy-slide><dvfy-card padded><h3>Auto 2</h3></dvfy-card></dvfy-slide>
  * </dvfy-carousel>
  */
 
@@ -147,6 +156,10 @@ dvfy-slide::scroll-marker:target-current {
  */
 class DvfyCarousel extends HTMLElement {
   static #styled = false;
+  static get observedAttributes() { return ['gap', 'autoplay']; }
+
+  #autoplayTimer = null;
+  #userPaused = false;
 
   connectedCallback() {
     if (!DvfyCarousel.#styled) {
@@ -159,13 +172,78 @@ class DvfyCarousel extends HTMLElement {
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Carousel');
     }
-    // Keyboard: left/right arrows scroll the carousel
     this.setAttribute('tabindex', '0');
     this.addEventListener('keydown', this.#onKey);
+
+    this.#applyGap();
+    this.#startAutoplay();
+
+    // Pause autoplay on hover / focus-within
+    this.addEventListener('mouseenter', this.#pauseAutoplay);
+    this.addEventListener('mouseleave', this.#resumeAutoplay);
+    this.addEventListener('focusin', this.#pauseAutoplay);
+    this.addEventListener('focusout', this.#resumeAutoplay);
+    // Pause when user manually scrolls
+    this.addEventListener('pointerdown', this.#onUserInteract);
   }
 
   disconnectedCallback() {
     this.removeEventListener('keydown', this.#onKey);
+    this.removeEventListener('mouseenter', this.#pauseAutoplay);
+    this.removeEventListener('mouseleave', this.#resumeAutoplay);
+    this.removeEventListener('focusin', this.#pauseAutoplay);
+    this.removeEventListener('focusout', this.#resumeAutoplay);
+    this.removeEventListener('pointerdown', this.#onUserInteract);
+    this.#stopAutoplay();
+  }
+
+  attributeChangedCallback(name) {
+    if (name === 'gap') this.#applyGap();
+    if (name === 'autoplay') {
+      this.#stopAutoplay();
+      this.#startAutoplay();
+    }
+  }
+
+  #applyGap() {
+    const gap = this.getAttribute('gap');
+    if (gap) {
+      this.style.setProperty('--dvfy-carousel-gap', gap);
+    } else {
+      this.style.removeProperty('--dvfy-carousel-gap');
+    }
+  }
+
+  #startAutoplay() {
+    if (!this.hasAttribute('autoplay')) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const raw = this.getAttribute('autoplay');
+    const delay = raw && /^\d+$/.test(raw) ? Number(raw) : 5000;
+
+    this.#autoplayTimer = setInterval(() => {
+      if (this.#userPaused) return;
+      this.#advance();
+    }, delay);
+  }
+
+  #stopAutoplay() {
+    clearInterval(this.#autoplayTimer);
+    this.#autoplayTimer = null;
+  }
+
+  #pauseAutoplay = () => { this.#userPaused = true; };
+  #resumeAutoplay = () => { this.#userPaused = false; };
+  #onUserInteract = () => { this.#userPaused = true; };
+
+  #advance() {
+    const slides = Array.from(this.querySelectorAll(':scope > dvfy-slide'));
+    if (slides.length < 2) return;
+
+    const slideWidth = this.offsetWidth;
+    const currentIdx = Math.round(this.scrollLeft / slideWidth);
+    const nextIdx = (currentIdx + 1) % slides.length;
+    this.scrollTo({ left: nextIdx * slideWidth, behavior: 'smooth' });
   }
 
   #onKey = (e) => {
