@@ -30,7 +30,7 @@ dvfy-switch .dvfy-switch__track {
   flex-shrink: 0;
   width: 2.25rem;
   height: 1.25rem;
-  background: var(--dvfy-neutral-300);
+  background: var(--dvfy-switch-track-off, var(--dvfy-border-strong));
   border-radius: var(--dvfy-radius-md);
   transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
 }
@@ -44,7 +44,7 @@ dvfy-switch .dvfy-switch__thumb {
   left: 0.125rem;
   width: 1rem;
   height: 1rem;
-  background: var(--dvfy-neutral-0);
+  background: var(--dvfy-switch-thumb, var(--dvfy-primary-text));
   border-radius: var(--dvfy-radius-sm);
   box-shadow: var(--dvfy-shadow-xs);
   transition: transform var(--dvfy-duration-fast) var(--dvfy-ease-out);
@@ -152,8 +152,11 @@ dvfy-switch[label-position="bottom"] { flex-direction: column; align-items: cent
  * @fires change - Toggle state changed
  *
  * @cssprop {color} --dvfy-primary-bg - Track color when checked
- * @cssprop {color} --dvfy-neutral-300 - Track color when unchecked
- * @cssprop {color} --dvfy-neutral-0 - Thumb color
+ * @cssprop {color} --dvfy-switch-track-off - Track color when unchecked (default: var(--dvfy-border-strong))
+ * @cssprop {color} --dvfy-switch-thumb - Thumb color (default: var(--dvfy-primary-text))
+ *
+ * @example
+ * <dvfy-switch label="Notifications" description="Receive email alerts" name="notify"></dvfy-switch>
  */
 class DvfySwitch extends HTMLElement {
   static #styled = false;

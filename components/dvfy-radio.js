@@ -120,10 +120,13 @@ dvfy-radio[label-position="bottom"] { flex-direction: column; align-items: cente
  * @attr {string} size - Visual size: xs | sm | md | lg | xl (default: "md")
  * @attr {string} label-position - Label placement: top | right | bottom | left (default: "right")
  *
- * @fires change - Selection changed
+ * @fires {CustomEvent} change - Selection changed
  *
  * @cssprop {color} --dvfy-primary-bg - Selected radio dot and border color
  * @cssprop {color} --dvfy-input-border - Unselected border color
+ *
+ * @example
+ * <dvfy-radio name="plan" value="free" label="Free plan" checked></dvfy-radio>
  */
 class DvfyRadio extends HTMLElement {
   static #styled = false;

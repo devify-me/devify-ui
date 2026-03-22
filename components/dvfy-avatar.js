@@ -54,8 +54,8 @@ dvfy-avatar .dvfy-avatar__initials {
   justify-content: center;
   font-family: var(--dvfy-font-sans);
   font-weight: var(--dvfy-weight-semibold);
-  color: var(--dvfy-neutral-0);
-  background: var(--dvfy-neutral-400);
+  color: var(--dvfy-avatar-text, var(--dvfy-primary-text));
+  background: var(--dvfy-avatar-bg, var(--dvfy-text-muted));
 }
 
 /* Size: xs */
@@ -116,8 +116,8 @@ dvfy-avatar-group .dvfy-avatar-group__overflow {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: var(--dvfy-radius-round);
-  background: var(--dvfy-neutral-400);
-  color: var(--dvfy-neutral-0);
+  background: var(--dvfy-avatar-bg, var(--dvfy-text-muted));
+  color: var(--dvfy-avatar-text, var(--dvfy-primary-text));
   font-family: var(--dvfy-font-sans);
   font-size: var(--dvfy-text-xs);
   font-weight: var(--dvfy-weight-semibold);
@@ -140,12 +140,22 @@ dvfy-avatar-group .dvfy-avatar-group__overflow {
  *
  * @fires avatar-click - Interactive avatar clicked, detail: { name, src }
  *
- * @cssprop {color} --dvfy-neutral-400 - Initials background color
+ * @cssprop {color} --dvfy-avatar-bg - Initials fallback background (default: var(--dvfy-text-muted))
+ * @cssprop {color} --dvfy-avatar-text - Initials fallback text color (default: var(--dvfy-primary-text))
  * @cssprop {color} --dvfy-success-text - Online status dot color
  * @cssprop {color} --dvfy-danger-text - Busy status dot color
+ *
+ * @example
+ * <dvfy-avatar name="Jorge Garcia" status="online"></dvfy-avatar>
  */
 class DvfyAvatar extends HTMLElement {
   static #styled = false;
+
+  static get observedAttributes() { return ['src', 'name', 'size', 'status', 'interactive']; }
+
+  attributeChangedCallback() {
+    if (this.isConnected) this.#build();
+  }
 
   connectedCallback() {
     if (!DvfyAvatar.#styled) {
@@ -155,12 +165,10 @@ class DvfyAvatar extends HTMLElement {
       DvfyAvatar.#styled = true;
     }
     this.#build();
-  }
-
-  static get observedAttributes() { return ['src', 'name', 'size', 'status', 'interactive']; }
-
-  attributeChangedCallback() {
-    if (this.isConnected) this.#build();
+    if (this.hasAttribute('interactive')) {
+      this.addEventListener('click', this.#handleClick);
+      this.addEventListener('keydown', this.#handleKey);
+    }
   }
 
   #build() {
@@ -192,15 +200,13 @@ class DvfyAvatar extends HTMLElement {
       this.appendChild(dot);
     }
 
-    // Interactive: keyboard + click support
+    // Interactive ARIA attributes (listeners managed by connectedCallback/disconnectedCallback)
     if (interactive) {
       if (!this.getAttribute('role')) this.setAttribute('role', 'button');
       if (!this.getAttribute('tabindex')) this.setAttribute('tabindex', '0');
       if (!this.getAttribute('aria-label')) {
         this.setAttribute('aria-label', name || 'User avatar');
       }
-      this.addEventListener('click', this.#handleClick);
-      this.addEventListener('keydown', this.#handleKey);
     }
   }
 

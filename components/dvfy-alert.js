@@ -105,10 +105,15 @@ const STATUS_ICONS = {
  * @attr {string} title - Alert title text
  * @attr {boolean} dismissible - Show close button to dismiss the alert
  *
+ * @fires {CustomEvent} dismiss - Alert dismissed via close button
+ *
  * @cssprop {color} --dvfy-info-bg-subtle - Info status background
  * @cssprop {color} --dvfy-success-bg-subtle - Success status background
  * @cssprop {color} --dvfy-warning-bg-subtle - Warning status background
  * @cssprop {color} --dvfy-danger-bg-subtle - Danger status background
+ *
+ * @example
+ * <dvfy-alert status="success" title="Saved">Your changes have been saved.</dvfy-alert>
  */
 class DvfyAlert extends HTMLElement {
   static #styled = false;
@@ -172,7 +177,10 @@ class DvfyAlert extends HTMLElement {
       btn.className = 'dvfy-alert__close';
       btn.setAttribute('aria-label', 'Dismiss');
       btn.textContent = '\u00D7'; // multiplication sign (x)
-      btn.addEventListener('click', () => this.remove());
+      btn.addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('dismiss', { bubbles: true }));
+        this.remove();
+      });
       this.appendChild(btn);
     }
   }

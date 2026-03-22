@@ -146,6 +146,9 @@ dvfy-input[label-position="right"] .dvfy-input__error-msg { width: 100%; order: 
  * @cssprop {color} --dvfy-input-bg - Input background
  * @cssprop {color} --dvfy-input-border - Input border color
  * @cssprop {color} --dvfy-input-error - Error border and message color
+ *
+ * @example
+ * <dvfy-input label="Email" type="email" name="email" placeholder="you@example.com" required></dvfy-input>
  */
 class DvfyInput extends HTMLElement {
   static #styled = false;

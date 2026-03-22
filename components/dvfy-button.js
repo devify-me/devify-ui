@@ -126,13 +126,14 @@ dvfy-button[loading]::after {
  * @attr {boolean} loading - Show loading state with spinner indicator
  * @attr {string} type - HTML button type: button | submit | reset (default: "button")
  *
- * @cssprop {color} --dvfy-primary-bg - Primary background color
- * @cssprop {color} --dvfy-primary-text - Primary text color
  * @slot - Button label content
  *
  * @cssprop {color} --dvfy-primary-bg - Primary background color
  * @cssprop {color} --dvfy-primary-text - Primary text color
  * @cssprop {color} --dvfy-danger-bg - Danger variant background
+ *
+ * @example
+ * <dvfy-button variant="default">Save</dvfy-button>
  */
 class DvfyButton extends HTMLElement {
   static #styled = false;

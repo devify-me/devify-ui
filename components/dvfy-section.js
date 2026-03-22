@@ -85,8 +85,15 @@ dvfy-section[open] .dvfy-section__body {
  *
  * @slot - Section body content
  *
+ * @fires {CustomEvent} toggle - Section expanded/collapsed, detail: { open: boolean }
+ *
  * @cssprop {color} --dvfy-surface-muted - Summary header background
  * @cssprop {color} --dvfy-border-muted - Section border color
+ *
+ * @example
+ * <dvfy-section label="Details" open>
+ *   <p>Section content here.</p>
+ * </dvfy-section>
  */
 class DvfySection extends HTMLElement {
   static #styled = false;
@@ -113,6 +120,10 @@ class DvfySection extends HTMLElement {
     } else if (name === 'icon') {
       const el = this.querySelector('.dvfy-section__icon');
       if (el) el.textContent = this.getAttribute('icon') || '';
+    } else if (name === 'open') {
+      if (this.#summary) {
+        this.#summary.setAttribute('aria-expanded', String(this.hasAttribute('open')));
+      }
     }
   }
 
@@ -180,7 +191,9 @@ class DvfySection extends HTMLElement {
     } else {
       this.setAttribute('open', '');
     }
-    this.#summary.setAttribute('aria-expanded', String(this.hasAttribute('open')));
+    const isOpen = this.hasAttribute('open');
+    this.#summary.setAttribute('aria-expanded', String(isOpen));
+    this.dispatchEvent(new CustomEvent('toggle', { bubbles: true, detail: { open: isOpen } }));
   }
 }
 

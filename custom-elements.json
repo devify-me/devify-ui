@@ -52,6 +52,12 @@
           "type": "boolean"
         }
       ],
+      "events": [
+        {
+          "name": "dismiss",
+          "description": "Alert dismissed via close button"
+        }
+      ],
       "cssProperties": [
         {
           "name": "--dvfy-info-bg-subtle",
@@ -199,8 +205,13 @@
       ],
       "cssProperties": [
         {
-          "name": "--dvfy-neutral-400",
-          "description": "Initials background color",
+          "name": "--dvfy-avatar-bg",
+          "description": "Initials fallback background (default: var(--dvfy-text-muted))",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-avatar-text",
+          "description": "Initials fallback text color (default: var(--dvfy-primary-text))",
           "type": "color"
         },
         {
@@ -1337,62 +1348,6 @@
       ]
     },
     {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
-        }
-      ]
-    },
-    {
       "name": "dvfy-section",
       "path": "./components/dvfy-section.js",
       "description": "Collapsible section with summary header and toggle animation.",
@@ -1416,6 +1371,11 @@
           "name": "collapsed",
           "description": "Start in collapsed state",
           "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "toggle"
         }
       ],
       "slots": [
@@ -1844,13 +1804,13 @@
           "type": "color"
         },
         {
-          "name": "--dvfy-neutral-300",
-          "description": "Track color when unchecked",
+          "name": "--dvfy-switch-track-off",
+          "description": "Track color when unchecked (default: var(--dvfy-border-strong))",
           "type": "color"
         },
         {
-          "name": "--dvfy-neutral-0",
-          "description": "Thumb color",
+          "name": "--dvfy-switch-thumb",
+          "description": "Thumb color (default: var(--dvfy-primary-text))",
           "type": "color"
         }
       ]

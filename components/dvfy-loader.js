@@ -99,6 +99,9 @@ dvfy-loader[size="xl"] .dvfy-loader__dot { width: 1rem; height: 1rem; }
  *
  * @cssprop {color} --dvfy-primary-bg - Spinner accent color and dot color
  * @cssprop {color} --dvfy-border-default - Spinner track color
+ *
+ * @example
+ * <dvfy-loader size="md"></dvfy-loader>
  */
 class DvfyLoader extends HTMLElement {
   static #styled = false;

@@ -115,6 +115,9 @@ const SIZES = { xs: { dim: 32, stroke: 3, font: 8 }, sm: { dim: 48, stroke: 4, f
  * @cssprop {color} --dvfy-success-bg - Success progress fill color
  * @cssprop {color} --dvfy-warning-bg - Warning progress fill color
  * @cssprop {color} --dvfy-danger-bg - Danger progress fill color
+ *
+ * @example
+ * <dvfy-progress value="65" label></dvfy-progress>
  */
 class DvfyProgress extends HTMLElement {
   static #styled = false;
@@ -127,6 +130,7 @@ class DvfyProgress extends HTMLElement {
       DvfyProgress.#styled = true;
     }
     this.setAttribute('role', 'progressbar');
+    if (!this.hasAttribute('aria-label')) this.setAttribute('aria-label', 'Progress');
     this.#render();
   }
 

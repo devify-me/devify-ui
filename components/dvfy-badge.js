@@ -124,6 +124,9 @@ dvfy-badge[variant="outline"] { background: transparent; }
  * @cssprop {color} --dvfy-warning-bg-subtle - Warning status background
  * @cssprop {color} --dvfy-danger-bg-subtle - Danger status background
  * @cssprop {color} --dvfy-info-bg-subtle - Info status background
+ *
+ * @example
+ * <dvfy-badge status="success" dot>Active</dvfy-badge>
  */
 class DvfyBadge extends HTMLElement {
   static #styled = false;

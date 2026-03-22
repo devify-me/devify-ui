@@ -132,11 +132,14 @@ dvfy-tag .dvfy-tag__remove:focus-visible {
  * @attr {boolean} removable - Show remove button and dispatch remove event
  * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  *
- * @fires remove - Remove button clicked
+ * @fires {CustomEvent} remove - Remove button clicked
  *
  * @cssprop {color} --dvfy-success-bg-subtle - Success tag background
  * @cssprop {color} --dvfy-danger-bg-subtle - Danger tag background
  * @cssprop {color} --dvfy-info-bg-subtle - Info tag background
+ *
+ * @example
+ * <dvfy-tag status="success" removable>v1.2.3</dvfy-tag>
  */
 class DvfyTag extends HTMLElement {
   static #styled = false;

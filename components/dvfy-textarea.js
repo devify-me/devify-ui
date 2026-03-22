@@ -120,6 +120,9 @@ dvfy-textarea[label-position="right"] .dvfy-textarea__footer { width: 100%; orde
  * @cssprop {color} --dvfy-input-bg - Textarea background
  * @cssprop {color} --dvfy-input-border - Textarea border color
  * @cssprop {color} --dvfy-input-error - Error border and message color
+ *
+ * @example
+ * <dvfy-textarea label="Bio" name="bio" placeholder="Tell us about yourself" maxlength="500"></dvfy-textarea>
  */
 class DvfyTextarea extends HTMLElement {
   static #styled = false;
