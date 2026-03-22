@@ -19,7 +19,6 @@ import './components/dvfy-textarea.js';
 import './components/dvfy-avatar.js';
 import './components/dvfy-alert.js';
 import './components/dvfy-loader.js';
-import './components/dvfy-scroll-reveal.js';
 import './components/dvfy-scroll-progress.js';
 import './components/dvfy-page-transition.js';
 import './components/dvfy-text-vortex.js';
