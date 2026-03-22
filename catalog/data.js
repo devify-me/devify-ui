@@ -73,6 +73,7 @@ export const COMPONENT_REGISTRY = {
 
   // Tier 2 — Composites
   'dvfy-select':         { tier: 2, domain: 'forms',      deps: [] },
+  'dvfy-file-upload':    { tier: 2, domain: 'forms',      deps: [] },
   'dvfy-card':           { tier: 2, domain: 'display',    deps: [] },
   'dvfy-gradient-card':  { tier: 2, domain: 'display',    deps: [] },
   'dvfy-spotlight-card': { tier: 2, domain: 'display',    deps: [] },
