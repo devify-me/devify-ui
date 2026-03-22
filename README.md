@@ -59,6 +59,32 @@ import '@devify/ui/components/dvfy-input.js';
 <script type="module" src="devify.js"></script>
 ```
 
+### Via CDN (no install, no build)
+
+Minified bundles are published to npm and served via [unpkg](https://unpkg.com) and [jsDelivr](https://www.jsdelivr.com):
+
+```html
+<!-- Tokens + themes (23 kB, 3.4 kB gzip) -->
+<link rel="stylesheet" href="https://unpkg.com/@devify/ui/dist/devify.min.css">
+
+<!-- All components — IIFE, works without type="module" (304 kB, 58 kB gzip) -->
+<script src="https://unpkg.com/@devify/ui/dist/devify.min.js"></script>
+```
+
+Or via jsDelivr:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@devify/ui/dist/devify.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@devify/ui/dist/devify.min.js"></script>
+```
+
+**Pin to a specific version** to avoid breaking changes:
+
+```html
+<link rel="stylesheet" href="https://unpkg.com/@devify/ui@0.1.0/dist/devify.min.css">
+<script src="https://unpkg.com/@devify/ui@0.1.0/dist/devify.min.js"></script>
+```
+
 ### Use components
 
 ```html

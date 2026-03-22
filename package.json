@@ -23,7 +23,8 @@
     "devify.js",
     "components/",
     "patterns/",
-    "tokens/"
+    "tokens/",
+    "dist/"
   ],
   "exports": {
     ".": {
@@ -31,6 +32,9 @@
     },
     "./devify.css": "./devify.css",
     "./devify.js": "./devify.js",
+    "./dist/devify.min.js": "./dist/devify.min.js",
+    "./dist/devify.esm.min.js": "./dist/devify.esm.min.js",
+    "./dist/devify.min.css": "./dist/devify.min.css",
     "./components/*": "./components/*",
     "./patterns/*": "./patterns/*",
     "./tokens/*": "./tokens/*"
@@ -38,9 +42,11 @@
   "main": "./devify.js",
   "style": "./devify.css",
   "devDependencies": {
+    "esbuild": "^0.27.4",
     "web-component-analyzer": "^2.0.0"
   },
   "scripts": {
+    "build": "node scripts/build.js",
     "analyze": "wca analyze components/ patterns/ --format json --outFile custom-elements.json",
     "serve": "python3 -m http.server 8090"
   }
