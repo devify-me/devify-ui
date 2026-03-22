@@ -38,6 +38,10 @@ import './components/dvfy-nav.js';
 import './components/dvfy-sidebar.js';
 import './components/dvfy-tree-view.js';
 
+// Wave 2.5: Adaptive / AI-driven patterns
+import './components/dvfy-command-palette.js';
+import './components/dvfy-smart-suggest.js';
+
 // Wave 3: Functional + Interactive
 import './components/dvfy-card.js';
 import './components/dvfy-gradient-card.js';

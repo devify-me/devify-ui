@@ -506,6 +506,55 @@
       ]
     },
     {
+      "name": "dvfy-command",
+      "path": "./components/dvfy-command-palette.js",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "Display label (required)",
+          "type": "string"
+        },
+        {
+          "name": "group",
+          "description": "Section heading",
+          "type": "string"
+        },
+        {
+          "name": "icon",
+          "description": "Leading icon (emoji/glyph)",
+          "type": "string"
+        },
+        {
+          "name": "shortcut",
+          "description": "Single-key hint",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "description": "Item is not selectable",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-command-palette",
+      "path": "./components/dvfy-command-palette.js",
+      "description": "Adaptive command palette with Ctrl/Cmd+K shortcut and\nlocalStorage-backed usage-frequency ranking.",
+      "attributes": [
+        {
+          "name": "open"
+        },
+        {
+          "name": "storage-key"
+        }
+      ],
+      "events": [
+        {
+          "name": "command"
+        }
+      ]
+    },
+    {
       "name": "dvfy-component-playground",
       "path": "./components/dvfy-component-playground.js",
       "attributes": [
@@ -1337,62 +1386,6 @@
       ]
     },
     {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
-        }
-      ]
-    },
-    {
       "name": "dvfy-section",
       "path": "./components/dvfy-section.js",
       "description": "Collapsible section with summary header and toggle animation.",
@@ -1714,6 +1707,51 @@
           "name": "--dvfy-neutral-400",
           "description": "Metallic knob shadow",
           "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-suggestion",
+      "path": "./components/dvfy-smart-suggest.js",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "Chip label (required)",
+          "type": "string"
+        },
+        {
+          "name": "icon",
+          "description": "Leading icon (emoji/glyph)",
+          "type": "string"
+        },
+        {
+          "name": "disabled",
+          "description": "Chip is not clickable",
+          "type": "boolean"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-smart-suggest",
+      "path": "./components/dvfy-smart-suggest.js",
+      "description": "Adaptive suggestion strip with localStorage-backed frequency ranking.",
+      "attributes": [
+        {
+          "name": "context"
+        },
+        {
+          "name": "storage-key"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "max"
+        }
+      ],
+      "events": [
+        {
+          "name": "suggest"
         }
       ]
     },
