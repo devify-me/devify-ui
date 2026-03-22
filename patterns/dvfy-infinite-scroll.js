@@ -123,6 +123,7 @@ class DvfyInfiniteScroll extends HTMLElement {
   }
 
   #build() {
+    if (this.#content) return;
     this.#currentPage = parseInt(this.getAttribute('start-page') || '1', 10);
 
     // Wrap existing children into content container

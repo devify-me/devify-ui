@@ -322,6 +322,12 @@ const DEFAULT_CONTENT = {
   'dvfy-scroll-reveal': '<div style="height:150px;overflow-y:auto;border:1px solid var(--dvfy-border-default);border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-4)"><div style="height:200px;display:flex;align-items:end;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Scroll down</div><dvfy-scroll-reveal animation="fade-up"><dvfy-card padded><h3 style="margin:0 0 0.5rem">Revealed Card</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">This card fades up as you scroll into view.</p></dvfy-card></dvfy-scroll-reveal><div style="height:200px"></div></div>',
   'dvfy-scroll-progress': '<dvfy-scroll-progress></dvfy-scroll-progress><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm);margin:0">Scroll the page to see the progress bar fill at the top of the viewport. Requires a scrollable page and browser support for <code>animation-timeline: scroll()</code>.</p>',
   'dvfy-tree-view': '<dvfy-tree-view><dvfy-tree-node label="Documents" icon="\uD83D\uDCC1" expanded><dvfy-tree-node label="README.md" icon="\uD83D\uDCC4" href="#readme"></dvfy-tree-node><dvfy-tree-node label="Images" icon="\uD83D\uDCC1"><dvfy-tree-node label="logo.png" icon="\uD83D\uDDBC\uFE0F" href="#logo"></dvfy-tree-node><dvfy-tree-node label="banner.jpg" icon="\uD83D\uDDBC\uFE0F" href="#banner"></dvfy-tree-node></dvfy-tree-node></dvfy-tree-node><dvfy-tree-node label="Settings" icon="\u2699\uFE0F" href="#settings"></dvfy-tree-node></dvfy-tree-view>',
+  // Tier 4 — HTMX Patterns
+  'dvfy-htmx-form': '<dvfy-input label="Title" name="title" required></dvfy-input><dvfy-button type="submit" variant="primary">Submit</dvfy-button>',
+  'dvfy-confirm': '<dvfy-button variant="danger">Delete</dvfy-button>',
+  'dvfy-infinite-scroll': '<p style="padding:var(--dvfy-space-2) 0;border-bottom:1px solid var(--dvfy-border-default)">Item 1</p><p style="padding:var(--dvfy-space-2) 0;border-bottom:1px solid var(--dvfy-border-default)">Item 2</p><p style="padding:var(--dvfy-space-2) 0">Item 3</p>',
+  'dvfy-live-search': '',
+  'dvfy-htmx-table': '<table><thead><tr><th data-sort="name">Name</th><th data-sort="status">Status</th><th>Details</th></tr></thead><tbody><tr><td>Task A</td><td>Active</td><td>Priority task</td></tr><tr><td>Task B</td><td>Done</td><td>Completed yesterday</td></tr><tr><td>Task C</td><td>Pending</td><td>Awaiting review</td></tr></tbody></table>',
 };
 
 /* ── Utilities ── */

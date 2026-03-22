@@ -173,6 +173,7 @@ class DvfyConfirm extends HTMLElement {
   }
 
   #setup() {
+    if (this.#triggerEl) return;
     // Find the trigger element (first element child)
     this.#triggerEl = this.firstElementChild;
     if (!this.#triggerEl) return;

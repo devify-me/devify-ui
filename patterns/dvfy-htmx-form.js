@@ -147,6 +147,7 @@ class DvfyHtmxForm extends HTMLElement {
   }
 
   #build() {
+    if (this.#form) return;
     const children = Array.from(this.childNodes);
 
     // Create form element

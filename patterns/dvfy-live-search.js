@@ -113,7 +113,7 @@ dvfy-live-search .dvfy-live-search__input:focus {
 dvfy-live-search .dvfy-live-search__results {
   margin-top: var(--dvfy-space-2);
 }
-dvfy-live-search--loading .dvfy-live-search__spinner {
+dvfy-live-search.dvfy-live-search--loading .dvfy-live-search__spinner {
   display: flex;
 }
 @keyframes dvfy-live-search-spin { to { transform: rotate(360deg); } }
@@ -162,6 +162,7 @@ class DvfyLiveSearch extends HTMLElement {
   }
 
   #build() {
+    if (this.#input) return;
     const wrapper = document.createElement('div');
     wrapper.className = 'dvfy-live-search__wrapper';
 

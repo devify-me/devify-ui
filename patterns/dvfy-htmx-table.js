@@ -129,7 +129,7 @@ dvfy-htmx-table th,
 dvfy-htmx-table td {
   padding: var(--dvfy-space-3) var(--dvfy-space-4);
   text-align: left;
-  border-bottom: 1px solid var(--dvfy-border-default);
+  border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-default);
 }
 dvfy-htmx-table th {
   font-weight: var(--dvfy-weight-semibold);
@@ -147,6 +147,10 @@ dvfy-htmx-table th[data-sort] {
 }
 dvfy-htmx-table th[data-sort]:hover {
   background: var(--dvfy-hover-bg);
+}
+dvfy-htmx-table th[data-sort]:focus-visible {
+  outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);
+  outline-offset: -2px;
 }
 dvfy-htmx-table th .dvfy-htmx-table__sort-indicator {
   margin-left: var(--dvfy-space-1);
@@ -247,6 +251,7 @@ dvfy-htmx-table .dvfy-htmx-table__page-ellipsis {
  */
 class DvfyHtmxTable extends HTMLElement {
   static #styled = false;
+  #built = false;
   #table = null;
   #tbody = null;
   #wrapper = null;
@@ -274,8 +279,10 @@ class DvfyHtmxTable extends HTMLElement {
   }
 
   #enhance() {
+    if (this.#built) return;
     this.#table = this.querySelector('table');
     if (!this.#table) return;
+    this.#built = true;
 
     this.#tbody = this.#table.querySelector('tbody');
 
@@ -349,7 +356,12 @@ class DvfyHtmxTable extends HTMLElement {
       indicator.setAttribute('aria-hidden', 'true');
       th.appendChild(indicator);
 
-      th.addEventListener('click', () => {
+      // Make header keyboard-focusable and activatable
+      th.setAttribute('tabindex', '0');
+      th.setAttribute('role', 'columnheader');
+      th.setAttribute('aria-sort', 'none');
+
+      const activate = () => {
         const column = th.getAttribute('data-sort');
         if (this.#sortColumn === column) {
           this.#sortOrder = this.#sortOrder === 'asc' ? 'desc' : 'asc';
@@ -360,6 +372,14 @@ class DvfyHtmxTable extends HTMLElement {
         this.#currentPage = 1;
         this.#updateSortIndicators();
         this.#fetchData();
+      };
+
+      th.addEventListener('click', activate);
+      th.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          activate();
+        }
       });
     }
   }
@@ -372,9 +392,11 @@ class DvfyHtmxTable extends HTMLElement {
       if (column === this.#sortColumn) {
         th.classList.add('dvfy-htmx-table__th--active');
         indicator.textContent = this.#sortOrder === 'asc' ? '\u25B2' : '\u25BC';
+        th.setAttribute('aria-sort', this.#sortOrder === 'asc' ? 'ascending' : 'descending');
       } else {
         th.classList.remove('dvfy-htmx-table__th--active');
         indicator.textContent = '';
+        th.setAttribute('aria-sort', 'none');
       }
     }
   }
