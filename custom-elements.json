@@ -1339,55 +1339,21 @@
     {
       "name": "dvfy-scroll-reveal",
       "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
+      "description": "CSS scroll-driven clip-path reveal component.",
       "attributes": [
         {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
+          "name": "shape",
+          "description": "Clip shape: inset | circle | ellipse (default: \"inset\")",
+          "type": "string"
+        },
+        {
+          "name": "direction",
+          "description": "Reveal direction (inset only): bottom | top | left | right (default: \"bottom\")",
           "type": "string"
         },
         {
           "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
+          "description": "Starting clip percentage (default: \"15%\")",
           "type": "string"
         }
       ]
