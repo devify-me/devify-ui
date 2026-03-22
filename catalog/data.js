@@ -89,6 +89,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-theme-switcher': { tier: 2, domain: 'utility',    deps: [] },
 
   // Tier 3 — Organisms
+  'dvfy-card-stack': { tier: 3, domain: 'layout',     deps: ['dvfy-card'] },
   'dvfy-carousel':  { tier: 3, domain: 'layout',     deps: [] },
   'dvfy-accordion': { tier: 3, domain: 'layout',     deps: ['dvfy-section'] },
   'dvfy-sidebar':   { tier: 3, domain: 'navigation', deps: [] },

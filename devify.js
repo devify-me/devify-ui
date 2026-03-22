@@ -42,6 +42,7 @@ import './components/dvfy-tree-view.js';
 import './components/dvfy-card.js';
 import './components/dvfy-gradient-card.js';
 import './components/dvfy-spotlight-card.js';
+import './components/dvfy-card-stack.js';
 import './components/dvfy-table.js';
 import './components/dvfy-toast.js';
 import './components/dvfy-empty.js';
