@@ -130,6 +130,16 @@ Use the `/new-component dvfy-{name}` Claude Code skill — it handles all steps:
 5. Adds tag to `COMPONENT_CATEGORIES` in `catalog/data.js`
 6. Runs `npm run analyze` to regenerate `custom-elements.json`
 
+## Versioning & Releases
+
+`@devify/ui` uses [Semantic Versioning](https://semver.org/). See `docs/releasing.md` for the full release checklist and breaking-change policy.
+
+- Patch (`0.0.x`) — bug fixes, backwards-compatible
+- Minor (`0.x.0`) — new components/tokens; may include breaking changes pre-1.0
+- Major (`x.0.0`) — breaking changes post-1.0
+
+Keep `CHANGELOG.md` updated: move `[Unreleased]` items to a new version section on each release.
+
 ## Commands
 
 ```bash
