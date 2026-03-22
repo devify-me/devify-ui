@@ -928,6 +928,61 @@
       ]
     },
     {
+      "name": "dvfy-marquee-scroll",
+      "path": "./components/dvfy-marquee-scroll.js",
+      "description": "Velocity-driven scroll-accelerated marquee. Content loops continuously;\nscrolling the page temporarily accelerates the marquee, with smooth lerp\ndeceleration back to base speed.",
+      "attributes": [
+        {
+          "name": "speed",
+          "description": "Base scroll speed in px/frame (default: 1)",
+          "type": "number"
+        },
+        {
+          "name": "direction",
+          "description": "Scroll direction: left | right (default: \"left\")",
+          "type": "string"
+        },
+        {
+          "name": "multiplier",
+          "description": "Scroll velocity to speed multiplier (default: 3)",
+          "type": "number"
+        },
+        {
+          "name": "gap",
+          "description": "CSS gap between looped content copies (default: \"4rem\")",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Content to be looped in the marquee"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-marquee-bg",
+          "description": "Background and edge-fade color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-marquee-gap",
+          "description": "Gap between content copies (default: 4rem)",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-marquee-padding",
+          "description": "Block padding (default: 1rem)",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-marquee-fade",
+          "description": "Edge fade overlay width (default: 4rem)",
+          "type": "length"
+        }
+      ]
+    },
+    {
       "name": "dvfy-modal",
       "path": "./components/dvfy-modal.js",
       "description": "Modal dialog with backdrop, focus trap, and keyboard support.",
@@ -1333,62 +1388,6 @@
           "name": "--dvfy-scroll-progress-z",
           "description": "z-index (default: 1000)",
           "type": "integer"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
         }
       ]
     },
