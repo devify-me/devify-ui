@@ -24,6 +24,7 @@ import './components/dvfy-scroll-progress.js';
 import './components/dvfy-page-transition.js';
 import './components/dvfy-text-vortex.js';
 import './components/dvfy-scramble-hover.js';
+import './components/dvfy-clip-reveal.js';
 
 // Wave 2: Navigation + Wayfinding
 import './components/dvfy-dropdown.js';
