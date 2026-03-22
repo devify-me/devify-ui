@@ -2,8 +2,8 @@
  * <dvfy-carousel> — Native CSS carousel with zero JavaScript navigation.
  *
  * Uses CSS `::scroll-button()` and `::scroll-marker` pseudo-elements (Chrome 135+)
- * for prev/next buttons and pagination dots. Falls back gracefully to plain
- * `scroll-snap` on older browsers — content remains fully accessible via swipe/scroll.
+ * for prev/next buttons and pagination dots. Falls back to JS-driven buttons and
+ * dots on older browsers — content remains fully accessible via swipe/scroll/keyboard.
  *
  * Usage:
  *   <dvfy-carousel>
@@ -135,18 +135,86 @@ dvfy-slide::scroll-marker:target-current {
   background: var(--dvfy-primary-bg);
   transform: scale(1.4);
 }
+
+/* ── JS Fallback wrapper (browsers without ::scroll-marker support) ── */
+.dvfy-carousel-root {
+  display: flex;
+  align-items: center;
+  gap: var(--dvfy-space-2, 0.5rem);
+}
+.dvfy-carousel-root dvfy-carousel {
+  flex: 1;
+  min-width: 0;
+}
+.dvfy-carousel-root__btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--dvfy-radius-round, 9999px);
+  background: var(--dvfy-surface-raised, var(--dvfy-surface-default, #fff));
+  border: 1px solid var(--dvfy-border-default);
+  color: var(--dvfy-text-primary);
+  font-size: var(--dvfy-text-base, 1rem);
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--dvfy-shadow-md);
+  transition: background var(--dvfy-duration-fast, 150ms) var(--dvfy-ease-out, ease-out),
+              box-shadow var(--dvfy-duration-fast, 150ms) var(--dvfy-ease-out, ease-out);
+}
+.dvfy-carousel-root__btn:hover {
+  background: var(--dvfy-surface-overlay, var(--dvfy-surface-muted));
+  box-shadow: var(--dvfy-shadow-lg);
+}
+.dvfy-carousel-root__btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+  box-shadow: none;
+}
+.dvfy-carousel-root__dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--dvfy-space-1-5, 0.375rem);
+  padding-block-start: var(--dvfy-space-2, 0.5rem);
+}
+.dvfy-carousel-root__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--dvfy-radius-round, 9999px);
+  background: var(--dvfy-border-default);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background var(--dvfy-duration-fast, 150ms) var(--dvfy-ease-out, ease-out),
+              transform var(--dvfy-duration-fast, 150ms) var(--dvfy-ease-out, ease-out);
+}
+.dvfy-carousel-root__dot--active {
+  background: var(--dvfy-primary-bg);
+  transform: scale(1.4);
+}
 `;
+
+/** True when native ::scroll-marker / ::scroll-button() is NOT available. */
+function noScrollMarker() {
+  return !CSS.supports('scroll-marker-group', 'after');
+}
 
 /**
  * Carousel container. Wraps dvfy-slide elements in a horizontally scrollable
  * snap container. Navigation buttons and pagination dots are rendered entirely
- * by CSS pseudo-elements on Chrome 135+; older browsers see a plain swipeable
- * scroll area.
+ * by CSS pseudo-elements on Chrome 135+; older browsers get equivalent JS-driven
+ * buttons and dots injected alongside the element.
  *
  * @element dvfy-carousel
  */
 class DvfyCarousel extends HTMLElement {
   static #styled = false;
+
+  /** WeakSet of instances currently being moved into their fallback wrapper. */
+  static #wrapping = new WeakSet();
 
   connectedCallback() {
     if (!DvfyCarousel.#styled) {
@@ -155,6 +223,13 @@ class DvfyCarousel extends HTMLElement {
       document.head.appendChild(s);
       DvfyCarousel.#styled = true;
     }
+
+    // Guard: re-connection triggered by the wrapper insertion — skip re-init.
+    if (DvfyCarousel.#wrapping.has(this)) {
+      DvfyCarousel.#wrapping.delete(this);
+      return;
+    }
+
     this.setAttribute('role', 'region');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Carousel');
@@ -162,11 +237,30 @@ class DvfyCarousel extends HTMLElement {
     // Keyboard: left/right arrows scroll the carousel
     this.setAttribute('tabindex', '0');
     this.addEventListener('keydown', this.#onKey);
+
+    // JS fallback: inject wrapper + buttons + dots when CSS API unavailable
+    if (noScrollMarker()) {
+      // Defer so declarative children are in the DOM before we count slides
+      queueMicrotask(() => this.#initFallback());
+    }
   }
 
   disconnectedCallback() {
     this.removeEventListener('keydown', this.#onKey);
+    // Tear down fallback DOM when the carousel is removed
+    if (this._fbDots?.isConnected) this._fbDots.remove();
+    if (this._fbRoot?.isConnected) {
+      const parent = this._fbRoot.parentNode;
+      if (parent) {
+        parent.insertBefore(this, this._fbRoot);
+        this._fbRoot.remove();
+      }
+    }
+    this._fbRoot = null;
+    this._fbDots = null;
   }
+
+  // ── Keyboard navigation ───────────────────────────────────────────
 
   #onKey = (e) => {
     const amount = this.offsetWidth * 0.9;
@@ -178,6 +272,90 @@ class DvfyCarousel extends HTMLElement {
       this.scrollBy({ left: -amount, behavior: 'smooth' });
     }
   };
+
+  // ── JS fallback ───────────────────────────────────────────────────
+
+  #initFallback() {
+    if (!this.isConnected) return;
+
+    // Wrapper: flex row with prev | carousel | next
+    const root = document.createElement('div');
+    root.className = 'dvfy-carousel-root';
+
+    const prev = document.createElement('button');
+    prev.className = 'dvfy-carousel-root__btn';
+    prev.setAttribute('aria-label', 'Previous slide');
+    prev.textContent = '◀';
+
+    const next = document.createElement('button');
+    next.className = 'dvfy-carousel-root__btn';
+    next.setAttribute('aria-label', 'Next slide');
+    next.textContent = '▶';
+
+    // Dots row rendered below the wrapper
+    const dotsEl = document.createElement('div');
+    dotsEl.className = 'dvfy-carousel-root__dots';
+    dotsEl.setAttribute('role', 'tablist');
+    dotsEl.setAttribute('aria-label', 'Slide navigation');
+
+    // Move this element into the wrapper (triggers disconnect + reconnect;
+    // #wrapping guard prevents re-init on the reconnect).
+    DvfyCarousel.#wrapping.add(this);
+    this.parentNode.insertBefore(root, this);
+    root.append(prev, this, next);
+    root.after(dotsEl);
+
+    this._fbRoot = root;
+    this._fbDots = dotsEl;
+
+    // Build dots now that slides are accessible
+    this.#buildDots(dotsEl);
+
+    prev.addEventListener('click', () =>
+      this.scrollBy({ left: -this.offsetWidth * 0.9, behavior: 'smooth' })
+    );
+    next.addEventListener('click', () =>
+      this.scrollBy({ left: this.offsetWidth * 0.9, behavior: 'smooth' })
+    );
+    this.addEventListener('scroll', () => this.#syncDots(dotsEl), { passive: true });
+    this.#syncDots(dotsEl);
+  }
+
+  #buildDots(dotsEl) {
+    const slides = Array.from(this.querySelectorAll(':scope > dvfy-slide'));
+    slides.forEach((slide, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'dvfy-carousel-root__dot';
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-label', `Slide ${i + 1} of ${slides.length}`);
+      btn.addEventListener('click', () =>
+        slide.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
+      );
+      dotsEl.appendChild(btn);
+    });
+    this.#syncDots(dotsEl);
+  }
+
+  #syncDots(dotsEl) {
+    const slides = Array.from(this.querySelectorAll(':scope > dvfy-slide'));
+    const dots = Array.from(dotsEl.children);
+    if (!slides.length || !dots.length) return;
+
+    // Find slide whose left edge is closest to the current scroll position
+    let activeIdx = 0;
+    let minDist = Infinity;
+    slides.forEach((slide, i) => {
+      const dist = Math.abs(slide.offsetLeft - this.scrollLeft);
+      if (dist < minDist) { minDist = dist; activeIdx = i; }
+    });
+
+    dots.forEach((dot, i) => {
+      const active = i === activeIdx;
+      dot.classList.toggle('dvfy-carousel-root__dot--active', active);
+      dot.setAttribute('aria-selected', active ? 'true' : 'false');
+      dot.setAttribute('tabindex', active ? '0' : '-1');
+    });
+  }
 }
 
 /**
