@@ -289,6 +289,7 @@ const DEFAULT_CONTENT = {
   'dvfy-input': '',
   'dvfy-textarea': '',
   'dvfy-select': '<option value="a">Option A</option><option value="b">Option B</option><option value="c">Option C</option>',
+  'dvfy-file-upload': '',
   'dvfy-checkbox': '<dvfy-checkbox label="Accept terms" name="terms"></dvfy-checkbox>\n<dvfy-checkbox label="Select all" indeterminate></dvfy-checkbox>\n<dvfy-checkbox label="Small option" size="sm"></dvfy-checkbox>\n<dvfy-checkbox label="Large option" size="lg" checked></dvfy-checkbox>\n<dvfy-checkbox label="Disabled" disabled checked></dvfy-checkbox>',
   'dvfy-radio': '',
   'dvfy-switch': '',
