@@ -516,6 +516,37 @@
       ]
     },
     {
+      "name": "dvfy-compare",
+      "path": "./components/dvfy-compare.js",
+      "description": "Clip-path image comparison slider. Drag the divider to reveal before/after panels.",
+      "attributes": [
+        {
+          "name": "value",
+          "description": "Current divider position (0–100)",
+          "type": "number"
+        },
+        {
+          "name": "label-before"
+        },
+        {
+          "name": "label-after"
+        }
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "attribute": "value",
+          "description": "Current divider position (0–100)",
+          "type": "number"
+        }
+      ],
+      "events": [
+        {
+          "name": "change"
+        }
+      ]
+    },
+    {
       "name": "dvfy-component-playground",
       "path": "./components/dvfy-component-playground.js",
       "attributes": [
