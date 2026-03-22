@@ -69,6 +69,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-page-transition': { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-text-vortex':      { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-scramble-hover':   { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-magnetic-button':  { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-tree-node':       { tier: 1, domain: 'navigation', deps: [] },
 
   // Tier 2 — Composites
