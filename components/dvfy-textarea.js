@@ -232,7 +232,7 @@ class DvfyTextarea extends HTMLElement {
 
   #patchLabel() {
     const label = this.getAttribute('label');
-    let lbl = this.querySelector('.dvfy-textarea__label');
+    const lbl = this.querySelector('.dvfy-textarea__label');
     if (label) {
       if (!lbl) {
         this.#appendLabel();

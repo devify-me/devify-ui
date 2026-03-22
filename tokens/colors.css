@@ -18,7 +18,7 @@
 
 :root {
   /* ─── Neutral (Slate) ─── */
-  --dvfy-neutral-0:   #ffffff;
+  --dvfy-neutral-0:   #fff;
   --dvfy-neutral-50:  #f8fafc;
   --dvfy-neutral-100: #f1f5f9;
   --dvfy-neutral-200: #e2e8f0;
@@ -30,7 +30,7 @@
   --dvfy-neutral-800: #1e293b;
   --dvfy-neutral-900: #0f172a;
   --dvfy-neutral-950: #020617;
-  --dvfy-neutral-1000: #000000;
+  --dvfy-neutral-1000: #000;
 
   /* ─── Hot Pink (Devify brand primary — #FF3CAC) ─── */
   --dvfy-brand-50:  #fff0f7;

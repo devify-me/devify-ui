@@ -394,8 +394,8 @@ class DvfyTable extends HTMLElement {
     this.#initSort(table);
 
     // Global listeners for closing panels
-    this.#boundOutsideClick = (e) => this.#handleOutsideClick(e);
-    this.#boundEscapeKey = (e) => this.#handleEscapeKey(e);
+    this.#boundOutsideClick = e => this.#handleOutsideClick(e);
+    this.#boundEscapeKey = e => this.#handleEscapeKey(e);
     document.addEventListener('mousedown', this.#boundOutsideClick);
     document.addEventListener('keydown', this.#boundEscapeKey);
   }
@@ -474,7 +474,7 @@ class DvfyTable extends HTMLElement {
   #syncSelectAll() {
     if (!this.#selectAllCb) return;
     const visible = this.#originalRows.filter(r => r.style.display !== 'none');
-    const checkedCount = visible.filter(r => {
+    const checkedCount = visible.filter((r) => {
       const cb = r.querySelector('.dvfy-table__checkbox input[type="checkbox"]');
       return cb && cb.checked;
     }).length;
@@ -683,7 +683,7 @@ class DvfyTable extends HTMLElement {
     });
 
     // Prevent clicks inside panel from closing it
-    panel.addEventListener('mousedown', (e) => e.stopPropagation());
+    panel.addEventListener('mousedown', e => e.stopPropagation());
 
     th.appendChild(panel);
     filterState.panel = panel;

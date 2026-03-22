@@ -388,7 +388,7 @@ class DvfySlider extends HTMLElement {
       valueSpan = document.createElement('span');
       valueSpan.className = 'dvfy-slider__value';
       // Determine widest string to lock width
-      const fmt = (v) => String(parseFloat(v.toFixed(10)));
+      const fmt = v => String(parseFloat(v.toFixed(10)));
       const widest = isRange
         ? `${fmt(min)} \u2013 ${fmt(max)}`
         : fmt(min).length >= fmt(max).length ? fmt(min) : fmt(max);

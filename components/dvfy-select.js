@@ -383,7 +383,7 @@ class DvfySelect extends HTMLElement {
       e.stopPropagation();
       this.#open ? this.#close() : this.#openDropdown();
     });
-    trigger.addEventListener('keydown', (e) => this.#onKeydown(e));
+    trigger.addEventListener('keydown', e => this.#onKeydown(e));
     custom.appendChild(trigger);
 
     // Dropdown
@@ -399,8 +399,8 @@ class DvfySelect extends HTMLElement {
       search.setAttribute('placeholder', 'Search...');
       search.setAttribute('aria-label', 'Search options');
       search.addEventListener('input', () => this.#filter(search.value));
-      search.addEventListener('keydown', (e) => this.#onKeydown(e));
-      search.addEventListener('click', (e) => e.stopPropagation());
+      search.addEventListener('keydown', e => this.#onKeydown(e));
+      search.addEventListener('click', e => e.stopPropagation());
       dropdown.appendChild(search);
     }
 

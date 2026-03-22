@@ -9,8 +9,8 @@
 :root {
   /* ─── Font Families ─── */
   --dvfy-font-sans:  'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-  --dvfy-font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
-  --dvfy-font-mono:  'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --dvfy-font-serif: ui-serif, georgia, cambria, "Times New Roman", times, serif;
+  --dvfy-font-mono:  'JetBrains Mono', ui-monospace, sfmono-regular, menlo, monaco, consolas, monospace;
   --dvfy-font-brand: 'Saira Stencil One', var(--dvfy-font-sans);  /* Devify brand — override per project */
 
   /* ─── Font Sizes ─── */

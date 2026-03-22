@@ -4,7 +4,6 @@
  */
 
 [data-theme="dark"] {
-
   /* ─── Surface ─── */
   --dvfy-surface-page:      var(--dvfy-neutral-950);
   --dvfy-surface-raised:    var(--dvfy-neutral-900);

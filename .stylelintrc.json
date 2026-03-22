@@ -1,0 +1,14 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "rules": {
+    "custom-property-pattern": "^dvfy-",
+    "keyframes-name-pattern": "^dvfy-",
+    "color-named": "never",
+    "selector-class-pattern": null,
+    "selector-id-pattern": null,
+    "no-duplicate-selectors": null,
+    "no-descending-specificity": null,
+    "alpha-value-notation": "number",
+    "color-function-notation": "modern"
+  }
+}

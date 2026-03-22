@@ -8,7 +8,6 @@
 
 :root,
 [data-theme="light"] {
-
   /* ─── Surface (backgrounds) ─── */
   --dvfy-surface-page:      var(--dvfy-neutral-0);
   --dvfy-surface-raised:    var(--dvfy-neutral-0);

@@ -39,7 +39,7 @@
   --dvfy-z-tooltip:   70;
 
   /* ─── Overlay ─── */
-  --dvfy-overlay-bg: hsl(220 3% 15% / 0.4);
+  --dvfy-overlay-bg: hsl(220deg 3% 15% / 0.4);
 
   /* ─── Aspect Ratios ─── */
   --dvfy-ratio-square:     1;

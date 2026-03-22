@@ -163,7 +163,7 @@ class DvfyRadio extends HTMLElement {
         // Uncheck siblings in the same name group
         const name = input.name;
         if (name) {
-          document.querySelectorAll(`dvfy-radio[name="${name}"]`).forEach(r => {
+          document.querySelectorAll(`dvfy-radio[name="${name}"]`).forEach((r) => {
             if (r !== this) r.removeAttribute('checked');
           });
         }
