@@ -26,6 +26,7 @@ import './components/dvfy-text-vortex.js';
 import './components/dvfy-scramble-hover.js';
 
 // Wave 2: Navigation + Wayfinding
+import './components/dvfy-stepper.js';
 import './components/dvfy-dropdown.js';
 import './components/dvfy-tooltip.js';
 import './components/dvfy-hovercard.js';

@@ -83,6 +83,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-breadcrumb':     { tier: 2, domain: 'navigation', deps: [] },
   'dvfy-pagination':     { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
   'dvfy-tabs':           { tier: 2, domain: 'navigation', deps: [] },
+  'dvfy-stepper':        { tier: 2, domain: 'navigation', deps: [] },
   'dvfy-dropdown':       { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
   'dvfy-nav':            { tier: 2, domain: 'navigation', deps: ['dvfy-hamburger', 'dvfy-drawer'] },
   'dvfy-tree-view':      { tier: 2, domain: 'navigation', deps: [] },
