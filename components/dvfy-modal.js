@@ -10,6 +10,12 @@
  *   <dvfy-modal title="Confirm" size="sm">
  *     <p>Are you sure?</p>
  *   </dvfy-modal>
+ *
+ * @example
+ * <dvfy-modal open title="Delete Item" size="sm">
+ *   <p>Are you sure you want to delete this item?</p>
+ *   <dvfy-button variant="danger">Delete</dvfy-button>
+ * </dvfy-modal>
  */
 
 const STYLES = `
@@ -116,7 +122,11 @@ class DvfyModal extends HTMLElement {
     if (this.hasAttribute('open')) this.#build();
   }
 
-  static get observedAttributes() { return ['open', 'title', 'required']; }
+  disconnectedCallback() {
+    document.removeEventListener('keydown', this.#onKey);
+  }
+
+  static get observedAttributes() { return ['open', 'title', 'required', 'size']; }
 
   attributeChangedCallback(name) {
     if (name === 'open') {

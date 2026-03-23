@@ -121,6 +121,10 @@ class DvfyThemeSwitcher extends HTMLElement {
   #themes = [];
   #currentTheme = '';
   #currentMode = 'light';
+  #selectEl = null;
+  #toggleEl = null;
+  #selectHandler = null;
+  #toggleHandler = null;
 
   connectedCallback() {
     if (!DvfyThemeSwitcher.#styled) {
@@ -160,6 +164,19 @@ class DvfyThemeSwitcher extends HTMLElement {
     this.#apply();
   }
 
+  disconnectedCallback() {
+    if (this.#selectEl && this.#selectHandler) {
+      this.#selectEl.removeEventListener('change', this.#selectHandler);
+      this.#selectEl = null;
+      this.#selectHandler = null;
+    }
+    if (this.#toggleEl && this.#toggleHandler) {
+      this.#toggleEl.removeEventListener('click', this.#toggleHandler);
+      this.#toggleEl = null;
+      this.#toggleHandler = null;
+    }
+  }
+
   #build() {
     this.textContent = '';
     this.setAttribute('data-mode', this.#currentMode);
@@ -178,10 +195,12 @@ class DvfyThemeSwitcher extends HTMLElement {
         select.appendChild(opt);
       }
 
-      select.addEventListener('change', () => {
+      this.#selectHandler = () => {
         this.#currentTheme = select.value;
         this.#apply();
-      });
+      };
+      select.addEventListener('change', this.#selectHandler);
+      this.#selectEl = select;
 
       this.appendChild(select);
     }
@@ -198,13 +217,15 @@ class DvfyThemeSwitcher extends HTMLElement {
     thumb.textContent = this.#currentMode === 'dark' ? '\u{1F319}' : '\u{2600}';
     toggle.appendChild(thumb);
 
-    toggle.addEventListener('click', () => {
+    this.#toggleHandler = () => {
       this.#currentMode = this.#currentMode === 'light' ? 'dark' : 'light';
       this.setAttribute('data-mode', this.#currentMode);
       toggle.setAttribute('aria-checked', String(this.#currentMode === 'dark'));
       thumb.textContent = this.#currentMode === 'dark' ? '\u{1F319}' : '\u{2600}';
       this.#apply();
-    });
+    };
+    toggle.addEventListener('click', this.#toggleHandler);
+    this.#toggleEl = toggle;
 
     this.appendChild(toggle);
   }
