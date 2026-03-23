@@ -34,6 +34,21 @@ onRouteChange((hash) => {
 // Initialize router (renders initial view)
 initRouter(mainContent);
 
+// Wire hamburger to toggle drawer
+const toggle = document.getElementById('nav-toggle');
+toggle?.addEventListener('toggle', (e) => {
+  if (e.detail.open) {
+    drawer.setAttribute('open', '');
+  } else {
+    drawer.removeAttribute('open');
+  }
+});
+
+// Sync hamburger state when drawer closes via its own close button
+drawer.addEventListener('close', () => {
+  if (toggle) toggle.open = false;
+});
+
 // Re-render active view on theme change
 const observer = new MutationObserver(() => {
   const hash = location.hash || '#overview';

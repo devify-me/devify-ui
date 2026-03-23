@@ -60,7 +60,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-alert':     { tier: 1, domain: 'feedback',   deps: [] },
   'dvfy-loader':    { tier: 1, domain: 'feedback',   deps: [] },
   'dvfy-hamburger': { tier: 1, domain: 'navigation', deps: [] },
-  'dvfy-drawer':    { tier: 1, domain: 'overlay',    deps: [] },
+  'dvfy-drawer':    { tier: 2, domain: 'navigation',  deps: ['dvfy-button'] },
   'dvfy-section':   { tier: 1, domain: 'layout',     deps: [] },
   'dvfy-tooltip':       { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-hovercard':     { tier: 1, domain: 'utility',    deps: [] },

@@ -29,17 +29,6 @@
     #catalog-drawer {
       height: 100%;
     }
-    #catalog-drawer .dvfy-drawer__panel {
-      position: static;
-      transform: none;
-      box-shadow: none;
-      width: var(--dvfy-drawer-width, 17rem);
-      border-right: var(--dvfy-border-1, 1px) solid var(--dvfy-drawer-border, var(--dvfy-border-muted));
-      border-left: none;
-    }
-    #catalog-drawer .dvfy-drawer__backdrop {
-      display: none;
-    }
     #catalog-drawer .dvfy-drawer__body {
       padding: 0;
     }
@@ -57,6 +46,7 @@
 </head>
 <body>
   <dvfy-nav brand="@devify/ui" logo="devify-hz-logo-cyan-pink.svg" sticky scroll-shrink>
+    <dvfy-hamburger id="nav-toggle" label="Menu" size="sm"></dvfy-hamburger>
     <dvfy-theme-switcher default-theme="devify-cyan">
       <option value="devify-cyan">Cyan</option>
       <option value="devify-pink">Pink</option>
