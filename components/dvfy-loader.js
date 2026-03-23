@@ -15,9 +15,24 @@
 const STYLES = `
 dvfy-loader {
   display: inline-flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: var(--dvfy-space-2);
 }
+
+/* Label */
+dvfy-loader .dvfy-loader__label {
+  font-size: var(--dvfy-text-sm);
+  color: var(--dvfy-text-secondary);
+  white-space: nowrap;
+}
+
+/* Label positions (top = default: label DOM-first, spinner below) */
+dvfy-loader[label-position="bottom"] .dvfy-loader__label { order: 1; }
+dvfy-loader[label-position="left"] { flex-direction: row; }
+dvfy-loader[label-position="right"] { flex-direction: row; }
+dvfy-loader[label-position="right"] .dvfy-loader__label { order: 1; }
 
 /* Spinner container for icon overlay */
 dvfy-loader .dvfy-loader__spinner-wrap {
@@ -96,6 +111,8 @@ dvfy-loader[size="xl"] .dvfy-loader__dot { width: 1rem; height: 1rem; }
  * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {string} variant - Animation style: spinner | dots (default: "spinner")
  * @attr {string} icon - URL to brand icon shown at center of spinner
+ * @attr {string} label - Visible text label (e.g. "Uploading..."); also used as aria-label
+ * @attr {string} label-position - top | right | bottom | left (default: "top")
  *
  * @cssprop {color} --dvfy-primary-bg - Spinner accent color and dot color
  * @cssprop {color} --dvfy-border-default - Spinner track color
@@ -111,11 +128,10 @@ class DvfyLoader extends HTMLElement {
       DvfyLoader.#styled = true;
     }
     this.setAttribute('role', 'status');
-    this.setAttribute('aria-label', 'Loading');
     this.#build();
   }
 
-  static get observedAttributes() { return ['variant', 'size', 'icon']; }
+  static get observedAttributes() { return ['variant', 'size', 'icon', 'label', 'label-position']; }
 
   attributeChangedCallback() {
     if (this.isConnected) this.#build();
@@ -125,6 +141,19 @@ class DvfyLoader extends HTMLElement {
     this.textContent = '';
     const variant = this.getAttribute('variant') || 'spinner';
     const iconSrc = this.getAttribute('icon');
+    const labelText = this.getAttribute('label');
+
+    // Update aria-label from label attr or fallback
+    this.setAttribute('aria-label', labelText || 'Loading');
+
+    // Visible label (top by default — DOM-first)
+    if (labelText) {
+      const lbl = document.createElement('span');
+      lbl.className = 'dvfy-loader__label';
+      lbl.setAttribute('aria-hidden', 'true');
+      lbl.textContent = labelText;
+      this.appendChild(lbl);
+    }
 
     if (variant === 'dots') {
       const wrap = document.createElement('span');
@@ -155,11 +184,13 @@ class DvfyLoader extends HTMLElement {
       this.appendChild(wrap);
     }
 
-    // Screen reader text
-    const sr = document.createElement('span');
-    sr.textContent = 'Loading...';
-    sr.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;';
-    this.appendChild(sr);
+    // Screen reader text when no visible label
+    if (!labelText) {
+      const sr = document.createElement('span');
+      sr.textContent = 'Loading...';
+      sr.style.cssText = 'position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;';
+      this.appendChild(sr);
+    }
   }
 }
 
