@@ -92,6 +92,11 @@
   --dvfy-on-warning:        var(--dvfy-neutral-950);
   --dvfy-on-danger:         var(--dvfy-neutral-0);
   --dvfy-on-info:           var(--dvfy-neutral-950);
+
+  /* Tooltip */
+  --dvfy-tooltip-bg:        var(--dvfy-neutral-200);
+  --dvfy-tooltip-text:      var(--dvfy-neutral-900);
+  --dvfy-tooltip-border:    var(--dvfy-neutral-300);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -151,5 +156,10 @@
     --dvfy-on-warning:        var(--dvfy-neutral-950);
     --dvfy-on-danger:         var(--dvfy-neutral-0);
     --dvfy-on-info:           var(--dvfy-neutral-950);
+
+    /* Tooltip */
+    --dvfy-tooltip-bg:        var(--dvfy-neutral-200);
+    --dvfy-tooltip-text:      var(--dvfy-neutral-900);
+    --dvfy-tooltip-border:    var(--dvfy-neutral-300);
   }
 }

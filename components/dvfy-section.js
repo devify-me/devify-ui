@@ -92,6 +92,8 @@ class DvfySection extends HTMLElement {
   static #styled = false;
   #summary = null;
   #body = null;
+  #onClick = () => this.toggle();
+  #onKey = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.toggle(); } };
 
   connectedCallback() {
     if (!DvfySection.#styled) {
@@ -101,6 +103,11 @@ class DvfySection extends HTMLElement {
       DvfySection.#styled = true;
     }
     this.#build();
+  }
+
+  disconnectedCallback() {
+    this.#summary?.removeEventListener('click', this.#onClick);
+    this.#summary?.removeEventListener('keydown', this.#onKey);
   }
 
   static get observedAttributes() { return ['label', 'icon', 'open', 'collapsed']; }
@@ -156,13 +163,8 @@ class DvfySection extends HTMLElement {
     arrow.setAttribute('aria-hidden', 'true');
     this.#summary.appendChild(arrow);
 
-    this.#summary.addEventListener('click', () => this.toggle());
-    this.#summary.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        this.toggle();
-      }
-    });
+    this.#summary.addEventListener('click', this.#onClick);
+    this.#summary.addEventListener('keydown', this.#onKey);
 
     this.appendChild(this.#summary);
 

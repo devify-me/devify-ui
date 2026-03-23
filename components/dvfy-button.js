@@ -166,8 +166,6 @@ dvfy-button[loading]::after {
  * @cssprop {color} --dvfy-primary-text - Primary text color
  * @slot - Button label content
  *
- * @cssprop {color} --dvfy-primary-bg - Primary background color
- * @cssprop {color} --dvfy-primary-text - Primary text color
  * @cssprop {color} --dvfy-danger-bg - Danger variant background
  */
 class DvfyButton extends HTMLElement {

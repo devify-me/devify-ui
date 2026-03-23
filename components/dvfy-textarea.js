@@ -138,6 +138,8 @@ class DvfyTextarea extends HTMLElement {
     this.#build();
   }
 
+  disconnectedCallback() {}
+
   static get observedAttributes() {
     return ['label', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'rows', 'maxlength', 'label-position'];
   }
