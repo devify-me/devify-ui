@@ -21,12 +21,12 @@
 
 ## Plan
 
-- [ ] Audit each component against docs/component-review-checklist.md
-- [ ] Fix issues in-place (tokens, a11y, disconnectedCallback, JSDoc, keyboard nav)
-- [ ] Verify dependency compliance against COMPONENT_REGISTRY
-- [ ] Log out-of-scope findings as separate GitHub issues
-- [ ] Verify: `npm run analyze` succeeds
-- [ ] Ship: push and create PR
+- [x] Audit each component against docs/component-review-checklist.md
+- [x] Fix issues in-place (tokens, a11y, disconnectedCallback, JSDoc, keyboard nav)
+- [x] Verify dependency compliance against COMPONENT_REGISTRY
+- [x] Log out-of-scope findings as separate GitHub issues
+- [x] Verify: `npm run analyze` succeeds
+- [x] Ship: push and create PR
 
 ## Future
 <!-- Unrelated issues discovered during implementation — do NOT fix inline -->
