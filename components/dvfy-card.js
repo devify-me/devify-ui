@@ -16,6 +16,12 @@
  *   <dvfy-card elevated>Content here</dvfy-card>
  *   <dvfy-card interactive padded>Clickable card</dvfy-card>
  *   <dvfy-card spotlight padded>Spotlight card</dvfy-card>
+ *
+ * @example
+ * <dvfy-card padded elevated>
+ *   <h3>Project Update</h3>
+ *   <p>The latest build passed all checks and is ready for review.</p>
+ * </dvfy-card>
  */
 
 const STYLES = `

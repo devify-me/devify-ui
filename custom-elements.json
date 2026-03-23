@@ -732,14 +732,14 @@
       "description": "Dropdown menu with keyboard navigation and click-outside closing.",
       "attributes": [
         {
-          "name": "align",
-          "description": "Menu alignment: left | right (default: \"left\")",
-          "type": "string"
-        },
-        {
           "name": "open",
           "description": "Menu visibility state",
           "type": "boolean"
+        },
+        {
+          "name": "align",
+          "description": "Menu alignment: left | right (default: \"left\")",
+          "type": "string"
         }
       ],
       "slots": [
@@ -1203,11 +1203,6 @@
       "description": "Modal dialog with backdrop, focus trap, and keyboard support.",
       "attributes": [
         {
-          "name": "size",
-          "description": "Dialog size: xs | sm | md | lg | xl (default: \"md\")",
-          "type": "string"
-        },
-        {
           "name": "open",
           "description": "Show/hide the modal",
           "type": "boolean"
@@ -1221,6 +1216,11 @@
           "name": "required",
           "description": "Prevent dismissal via backdrop click or Escape key",
           "type": "boolean"
+        },
+        {
+          "name": "size",
+          "description": "Dialog size: xs | sm | md | lg | xl (default: \"md\")",
+          "type": "string"
         }
       ],
       "events": [
@@ -1669,16 +1669,6 @@
           "type": "string"
         },
         {
-          "name": "searchable",
-          "description": "Enable filter input in dropdown",
-          "type": "boolean"
-        },
-        {
-          "name": "size",
-          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
-          "type": "string"
-        },
-        {
           "name": "error",
           "description": "Error message (enables error styling)",
           "type": "string"
@@ -1712,6 +1702,16 @@
           "name": "label-position",
           "description": "Label placement: top | right | bottom | left (default: \"top\")",
           "type": "string"
+        },
+        {
+          "name": "size",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
+          "type": "string"
+        },
+        {
+          "name": "searchable",
+          "description": "Enable filter input in dropdown",
+          "type": "boolean"
         }
       ],
       "properties": [

@@ -77,6 +77,9 @@ dvfy-pagination .dvfy-pagination__ellipsis {
  *
  * @cssprop {color} --dvfy-primary-bg - Active page button background
  * @cssprop {color} --dvfy-primary-text - Active page button text
+ *
+ * @example
+ * <dvfy-pagination total="20" current="3" max-visible="7"></dvfy-pagination>
  */
 class DvfyPagination extends HTMLElement {
   static #styled = false;
@@ -97,6 +100,10 @@ class DvfyPagination extends HTMLElement {
 
   attributeChangedCallback() {
     if (this.isConnected) this.#render();
+  }
+
+  disconnectedCallback() {
+    this.textContent = '';
   }
 
   get #total() { return Math.max(1, parseInt(this.getAttribute('total') || '1', 10)); }

@@ -307,7 +307,7 @@ const DEFAULT_CONTENT = {
   'dvfy-breadcrumb': '<a href="#">Home</a><a href="#">Products</a><span>Current</span>',
   'dvfy-pagination': '',
   'dvfy-table': '<table><thead><tr><th data-sort>Name</th><th data-sort>Role</th></tr></thead><tbody><tr><td>Alice</td><td>Engineer</td></tr><tr><td>Bob</td><td>Designer</td></tr></tbody></table>',
-  'dvfy-empty': '',
+  'dvfy-empty': '<dvfy-button variant="outline" size="sm">Clear filters</dvfy-button>',
   'dvfy-auth': '',
   'dvfy-nav': '<a href="#home">Home</a><a href="#about">About</a><a href="#contact">Contact</a><dvfy-button variant="default" size="sm">Sign In</dvfy-button>',
   'dvfy-sidebar': '',

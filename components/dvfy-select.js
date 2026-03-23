@@ -20,6 +20,13 @@
  *     <option value="us">United States</option>
  *     <option value="ca">Canada</option>
  *   </dvfy-select>
+ *
+ * @example
+ * <dvfy-select label="Country" name="country" searchable>
+ *   <option value="us">United States</option>
+ *   <option value="ca">Canada</option>
+ *   <option value="mx">Mexico</option>
+ * </dvfy-select>
  */
 
 const STYLES = `
@@ -288,7 +295,7 @@ class DvfySelect extends HTMLElement {
     document.removeEventListener('click', this._onDocClick);
   }
 
-  static get observedAttributes() { return ['error', 'help', 'disabled', 'label', 'placeholder', 'required', 'label-position']; }
+  static get observedAttributes() { return ['error', 'help', 'disabled', 'label', 'placeholder', 'required', 'label-position', 'size', 'searchable']; }
 
   attributeChangedCallback() {
     if (this.isConnected) {
@@ -416,10 +423,14 @@ class DvfySelect extends HTMLElement {
       const item = document.createElement('div');
       item.className = 'dvfy-select__option';
       item.setAttribute('role', 'option');
+      item.setAttribute('aria-selected', 'false');
       item.setAttribute('data-value', opt.value);
       item.setAttribute('data-index', String(i));
       item.textContent = opt.label;
-      if (opt.value === this.#value) item.classList.add('dvfy-select--selected');
+      if (opt.value === this.#value) {
+        item.classList.add('dvfy-select--selected');
+        item.setAttribute('aria-selected', 'true');
+      }
       item.addEventListener('click', (e) => {
         e.stopPropagation();
         this.#select(opt.value);
@@ -501,10 +512,12 @@ class DvfySelect extends HTMLElement {
       triggerText.classList.remove('dvfy-select__trigger--placeholder');
     }
 
-    // Update selected class
+    // Update selected class and aria-selected
     const items = this.querySelectorAll('.dvfy-select__option');
     for (const item of items) {
-      item.classList.toggle('dvfy-select--selected', item.getAttribute('data-value') === value);
+      const isSelected = item.getAttribute('data-value') === value;
+      item.classList.toggle('dvfy-select--selected', isSelected);
+      item.setAttribute('aria-selected', String(isSelected));
     }
 
     this.dispatchEvent(new CustomEvent('change', { detail: { value }, bubbles: true }));

@@ -66,6 +66,13 @@ dvfy-tab[active] { display: block; }
  * @cssprop {color} --dvfy-primary-bg - Active tab underline color
  * @cssprop {color} --dvfy-text-muted - Inactive tab text color
  * @cssprop {color} --dvfy-border-default - Tab list border color
+ *
+ * @example
+ * <dvfy-tabs active="0">
+ *   <dvfy-tab label="Overview">Overview content here</dvfy-tab>
+ *   <dvfy-tab label="Details">Detailed information</dvfy-tab>
+ *   <dvfy-tab label="History">Change history</dvfy-tab>
+ * </dvfy-tabs>
  */
 class DvfyTabs extends HTMLElement {
   static #styled = false;
@@ -79,6 +86,10 @@ class DvfyTabs extends HTMLElement {
       DvfyTabs.#styled = true;
     }
     this.#build();
+  }
+
+  disconnectedCallback() {
+    this.#list?.removeEventListener('keydown', this.#onKey);
   }
 
   static get observedAttributes() { return ['active']; }

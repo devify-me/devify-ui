@@ -30,6 +30,11 @@ dvfy-breadcrumb a {
   text-decoration: none;
 }
 dvfy-breadcrumb a:hover { text-decoration: underline; }
+dvfy-breadcrumb a:focus-visible {
+  outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);
+  outline-offset: var(--dvfy-ring-offset);
+  border-radius: var(--dvfy-radius-sm, 0.25rem);
+}
 dvfy-breadcrumb > :last-child {
   color: var(--dvfy-text-primary);
   font-weight: var(--dvfy-weight-medium);
@@ -48,6 +53,13 @@ dvfy-breadcrumb > :last-child {
  *
  * @cssprop {color} --dvfy-text-link - Link text color
  * @cssprop {color} --dvfy-text-muted - Separator color
+ *
+ * @example
+ * <dvfy-breadcrumb>
+ *   <a href="/">Home</a>
+ *   <a href="/products">Products</a>
+ *   <span>Widget Pro</span>
+ * </dvfy-breadcrumb>
  */
 class DvfyBreadcrumb extends HTMLElement {
   static #styled = false;
