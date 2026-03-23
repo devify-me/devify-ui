@@ -189,6 +189,16 @@
           "name": "interactive",
           "description": "Add hover effect and dispatch click event",
           "type": "boolean"
+        },
+        {
+          "name": "label",
+          "description": "Visible text label beside or below the avatar",
+          "type": "string"
+        },
+        {
+          "name": "label-position",
+          "description": "top | right | bottom | left (default: \"top\")",
+          "type": "string"
         }
       ],
       "events": [
@@ -646,26 +656,36 @@
     {
       "name": "dvfy-drawer",
       "path": "./components/dvfy-drawer.js",
-      "description": "Slide-over panel that overlays content from a viewport edge.\n\nOpens as a fixed overlay from left, right, or bottom. Supports an optional\nbackdrop, focus trap, keyboard dismiss, and responsive full-width on mobile.",
+      "description": "Docking panel that slides from a container edge with push, float, or overlay layout.\n\nIn **push** mode (default) the drawer is a flex item that occupies space and\npushes sibling content. An optional collapsed label tab appears when closed.\nIn **float** mode the panel is positioned absolutely over content within the\ncontainer (container must have `position: relative`).\nIn **overlay** mode the panel is fixed to the viewport with a dimming backdrop.",
       "attributes": [
         {
           "name": "open",
-          "description": "Show/hide the drawer",
+          "description": "Show/hide the drawer panel",
           "type": "boolean"
         },
         {
           "name": "position",
-          "description": "Edge to slide from: left | right | bottom (default: \"right\")",
+          "description": "Slide direction: left | right | top | bottom (default: \"right\")",
           "type": "string"
         },
         {
           "name": "title",
-          "description": "Header title text",
+          "description": "Panel header title text; omit to suppress header",
           "type": "string"
         },
         {
+          "name": "label",
+          "description": "Text on the collapsed tab (push mode); omit to hide tab",
+          "type": "string"
+        },
+        {
+          "name": "float",
+          "description": "Float mode: panel is position absolute over container content",
+          "type": "boolean"
+        },
+        {
           "name": "overlay",
-          "description": "Show a dimming backdrop behind the panel",
+          "description": "Overlay mode: panel is fixed with a dimming backdrop",
           "type": "boolean"
         }
       ],
@@ -673,18 +693,18 @@
         {
           "name": "open",
           "attribute": "open",
-          "description": "Show/hide the drawer",
+          "description": "Show/hide the drawer panel",
           "type": "boolean"
         }
       ],
       "events": [
         {
           "name": "open",
-          "description": "Drawer opened"
+          "description": "Fires when the panel opens"
         },
         {
           "name": "close",
-          "description": "Drawer closed"
+          "description": "Fires when the panel closes"
         }
       ],
       "slots": [
@@ -706,12 +726,17 @@
         },
         {
           "name": "--dvfy-drawer-width",
-          "description": "Panel width for left/right positions (default: 24rem)",
+          "description": "Panel width for left/right positions (default: 17rem push, 24rem overlay)",
           "type": "length"
         },
         {
           "name": "--dvfy-drawer-height",
-          "description": "Panel height for bottom position (default: 50vh)",
+          "description": "Panel height for top/bottom positions (default: 50vh)",
+          "type": "length"
+        },
+        {
+          "name": "--dvfy-drawer-tab-size",
+          "description": "Collapsed label tab thickness (default: 2.5rem)",
           "type": "length"
         }
       ]
@@ -1106,6 +1131,16 @@
         {
           "name": "icon",
           "description": "URL to brand icon shown at center of spinner",
+          "type": "string"
+        },
+        {
+          "name": "label",
+          "description": "Visible text label (e.g. \"Uploading...\"); also used as aria-label",
+          "type": "string"
+        },
+        {
+          "name": "label-position",
+          "description": "top | right | bottom | left (default: \"top\")",
           "type": "string"
         }
       ],
@@ -1591,59 +1626,7 @@
     },
     {
       "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js",
-      "description": "Scroll-triggered reveal animations using CSS animation-timeline with IO fallback.",
-      "attributes": [
-        {
-          "name": "animation",
-          "description": "Animation preset: fade-up | fade-in | fade-left | fade-right | zoom-in | zoom-out",
-          "type": "string"
-        },
-        {
-          "name": "threshold",
-          "description": "Viewport percentage where animation triggers (default: \"20%\")",
-          "type": "string"
-        },
-        {
-          "name": "duration",
-          "description": "Animation speed: fastest | fast | normal | slow | slowest",
-          "type": "string"
-        },
-        {
-          "name": "delay",
-          "description": "CSS delay value for staggering (e.g. \"200ms\")",
-          "type": "string"
-        },
-        {
-          "name": "once",
-          "description": "Only animate once, don't reverse on scroll back",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "reveal",
-          "description": "Element visibility changed, detail: { visible }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to reveal on scroll"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-reveal-duration",
-          "description": "Override animation duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-reveal-easing",
-          "description": "Override animation easing curve",
-          "type": "string"
-        }
-      ]
+      "path": "./components/dvfy-scroll-reveal.js"
     },
     {
       "name": "dvfy-section",
