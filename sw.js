@@ -21,7 +21,7 @@ const PRECACHE_URLS = [
   '/catalog/brand.js',
   '/catalog/overview.js',
   '/catalog/favicon.svg',
-  '/catalog/devify-hz.png',
+  '/catalog/devify-hz-logo-cyan-pink.svg',
   '/devify.css',
   '/devify.js',
   // Token files
