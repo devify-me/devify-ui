@@ -315,7 +315,7 @@ const DEFAULT_CONTENT = {
   'dvfy-nav': '<a href="#home">Home</a><a href="#about">About</a><a href="#contact">Contact</a><dvfy-button variant="default" size="sm">Sign In</dvfy-button>',
   'dvfy-sidebar': '',
   'dvfy-hamburger': '',
-  'dvfy-drawer': '<p>Drawer content goes here. This panel slides in from the edge and can scroll independently.</p><p style="margin-top:0.5rem;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Press Escape or click the × button to close.</p>',
+  'dvfy-drawer': '<p>Panel content here.</p><p style="margin-top:0.5rem;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Push mode: drawer is a flex item that occupies layout space. Click the label tab to reopen when collapsed.</p>',
   'dvfy-section': '<p>Section content here.</p>',
   'dvfy-theme-switcher': '<option value="devify-cyan">Cyan</option><option value="devify-pink">Pink</option>',
   'dvfy-accordion': '<dvfy-section label="Section One" open><p>First section content.</p></dvfy-section><dvfy-section label="Section Two" collapsed><p>Second section content.</p></dvfy-section><dvfy-section label="Section Three" collapsed><p>Third section content.</p></dvfy-section>',
