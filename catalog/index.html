@@ -26,9 +26,6 @@
       display: flex;
       height: calc(100vh - var(--dvfy-nav-height, 3.5rem));
     }
-    #catalog-drawer {
-      height: 100%;
-    }
     #catalog-drawer .dvfy-drawer__body {
       padding: 0;
       overflow-x: hidden;
@@ -55,7 +52,7 @@
   </dvfy-nav>
 
   <div class="catalog-layout">
-    <dvfy-drawer id="catalog-drawer" position="left" label="Navigation" open style="--dvfy-drawer-width: 17rem"></dvfy-drawer>
+    <dvfy-drawer id="catalog-drawer" position="left" title="Navigation" label="Navigation" open></dvfy-drawer>
     <main id="main-content" class="catalog-main"></main>
   </div>
 
