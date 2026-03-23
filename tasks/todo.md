@@ -18,7 +18,7 @@
 - [x] Batch 5: Fix dvfy-checkbox DEFAULT_CONTENT to single instance
 - [x] Batch 6: Create GitHub issues for container queries (#25 comment) + label gaps (#169)
 - [x] Verify: `npm run analyze` succeeds
-- [ ] Ship: push and create PR
+- [x] Ship: push and create PR
 
 ## Future
 <!-- Unrelated issues discovered during implementation — do NOT fix inline -->
