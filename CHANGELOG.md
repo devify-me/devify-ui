@@ -11,43 +11,9 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Changed
+### Fixed
 
-**`dvfy-drawer` — Complete redesign with three layout modes**
-
-Breaking changes (migration path provided below):
-
-- **Default position:** `right` → `left` (now aligns with sidebar conventions)
-- **Default width:** `24rem` → `17rem` (narrower default, matches most sidebars)
-- **Host display:** `display: contents` (overlay only) → `display: flex` (push/float modes)
-  - Component now participates in flex layouts by default
-  - Overlay mode (fixed modal) is opt-in via `overlay` attribute
-- **Removed `width` attribute:** Use CSS custom property `--dvfy-drawer-width` instead
-- **Removed `header` attribute:** Use `title` attribute instead (controls header and ARIA label)
-- **Removed `overlay` styling default:** Overlay is now opt-in; omit `overlay` attribute for push mode (default, recommended)
-
-New attributes:
-
-- `label` — Collapsed label text shown as reopenable tab when drawer is closed (push/float modes only)
-- `float` — Use absolute positioning (overlaps siblings, stays in document flow)
-- `overlay` — Use fixed positioning with backdrop and focus trap (modal behavior)
-
-New CSS property:
-
-- `--dvfy-drawer-tab-size` — Collapsed label tab size (default: `2.5rem`)
-
-**Migration path:**
-
-```html
-<!-- Before (fixed overlay) -->
-<dvfy-drawer position="right" header="Menu" width="24rem" overlay>
-
-<!-- After: same behavior (fixed overlay modal) -->
-<dvfy-drawer position="right" title="Menu" overlay>
-
-<!-- After: new default (sidebar with optional collapse label) -->
-<dvfy-drawer position="left" title="Navigation" label="Navigation">
-```
+- **`dvfy-select`** — Native `<select>` fallback `change` event no longer bubbles past the component's own CustomEvent, fixing broken enum controls in narrow containers (caused by container query migration)
 
 ---
 
