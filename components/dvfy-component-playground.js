@@ -287,25 +287,22 @@ const SKIP_TAGS = new Set([
 const DEFAULT_CONTENT = {
   'dvfy-button': 'Click me',
   'dvfy-input': '',
-  'dvfy-date-picker': '',
   'dvfy-textarea': '',
   'dvfy-select': '<option value="a">Option A</option><option value="b">Option B</option><option value="c">Option C</option>',
-  'dvfy-file-upload': '',
-  'dvfy-checkbox': '<dvfy-checkbox label="Accept terms" name="terms"></dvfy-checkbox>',
+  'dvfy-checkbox': '<dvfy-checkbox label="Accept terms" name="terms"></dvfy-checkbox>\n<dvfy-checkbox label="Select all" indeterminate></dvfy-checkbox>\n<dvfy-checkbox label="Small option" size="sm"></dvfy-checkbox>\n<dvfy-checkbox label="Large option" size="lg" checked></dvfy-checkbox>\n<dvfy-checkbox label="Disabled" disabled checked></dvfy-checkbox>',
   'dvfy-radio': '',
   'dvfy-switch': '',
   'dvfy-slider': '<dvfy-slider label="Volume" value="50" show-value></dvfy-slider>\n<dvfy-slider label="Opacity" min="0" max="1" step="0.01" value="0.5" variant="oval" show-value></dvfy-slider>\n<dvfy-slider label="Knobs Only" value="40" no-fill show-value></dvfy-slider>\n<dvfy-slider label="Price Range" min="0" max="1000" value="200" value-end="800" range show-value></dvfy-slider>\n<dvfy-slider label="Range (no fill)" min="0" max="100" value="25" value-end="75" range no-fill show-value></dvfy-slider>\n<dvfy-slider label="Rating" min="0" max="10" steps="10" value="5" show-value></dvfy-slider>\n<dvfy-slider label="Disabled" value="30" disabled show-value></dvfy-slider>',
   'dvfy-badge': 'Status',
   'dvfy-tag': 'Label',
-  'dvfy-avatar': '<dvfy-avatar name="Jane Doe" label="Jane Doe" label-position="bottom" status="online"></dvfy-avatar>',
+  'dvfy-avatar': '',
   'dvfy-alert': 'This is an alert message.',
-  'dvfy-loader': '<dvfy-loader label="Loading..." label-position="bottom"></dvfy-loader>',
-  'dvfy-card': '<h3 style="margin-bottom:0.5rem">Card Title</h3><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Add <code>spotlight</code> for a cursor-tracking radial gradient glow.</p>',
+  'dvfy-loader': '',
+  'dvfy-card': '<h3 style="margin-bottom:0.5rem">Card Title</h3><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Card content goes here.</p>',
   'dvfy-progress': '',
   'dvfy-tabs': '<dvfy-tab label="Tab 1"><p style="padding:1rem">First tab content</p></dvfy-tab><dvfy-tab label="Tab 2"><p style="padding:1rem">Second tab content</p></dvfy-tab>',
   'dvfy-dropdown': '<dvfy-button variant="outline">Actions</dvfy-button><div class="dvfy-dropdown__item">Edit</div><div class="dvfy-dropdown__item">Delete</div>',
   'dvfy-tooltip': '<dvfy-button variant="outline" size="sm">Hover me</dvfy-button>',
-  'dvfy-hovercard': '<button interestfor="hc-demo" style="padding:0.5rem 1rem;cursor:pointer">Hover me</button><dvfy-hovercard id="hc-demo"><strong>Hovercard</strong><p>Zero-JS via interestfor + popover="hint".</p></dvfy-hovercard>',
   'dvfy-modal': '<p>Modal content goes here.</p>',
   'dvfy-breadcrumb': '<a href="#">Home</a><a href="#">Products</a><span>Current</span>',
   'dvfy-pagination': '',
@@ -315,19 +312,10 @@ const DEFAULT_CONTENT = {
   'dvfy-nav': '<a href="#home">Home</a><a href="#about">About</a><a href="#contact">Contact</a><dvfy-button variant="default" size="sm">Sign In</dvfy-button>',
   'dvfy-sidebar': '',
   'dvfy-hamburger': '',
-  'dvfy-drawer': '<p>Panel content here.</p><p style="margin-top:0.5rem;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Push mode: drawer is a flex item that occupies layout space. Click the label tab to reopen when collapsed.</p>',
+  'dvfy-drawer': '<p>Drawer body content. This panel scrolls independently and can be collapsed.</p><p style="margin-top:0.5rem;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Try the collapse button in the header.</p>',
   'dvfy-section': '<p>Section content here.</p>',
   'dvfy-theme-switcher': '<option value="devify-cyan">Cyan</option><option value="devify-pink">Pink</option>',
   'dvfy-accordion': '<dvfy-section label="Section One" open><p>First section content.</p></dvfy-section><dvfy-section label="Section Two" collapsed><p>Second section content.</p></dvfy-section><dvfy-section label="Section Three" collapsed><p>Third section content.</p></dvfy-section>',
-  'dvfy-carousel': '<dvfy-slide style="background:var(--dvfy-primary-bg);color:#fff;border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-8);display:flex;align-items:center;justify-content:center;min-height:160px;font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-semibold)">Slide 1</dvfy-slide><dvfy-slide style="background:var(--dvfy-surface-raised);border:1px solid var(--dvfy-border-default);border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-8);display:flex;align-items:center;justify-content:center;min-height:160px;font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-semibold)">Slide 2</dvfy-slide><dvfy-slide style="background:var(--dvfy-surface-raised);border:1px solid var(--dvfy-border-default);border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-8);display:flex;align-items:center;justify-content:center;min-height:160px;font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-semibold)">Slide 3</dvfy-slide>',
-  'dvfy-page-transition': '<dvfy-page-transition animation="fade"><dvfy-card padded><h3 style="margin:0 0 0.5rem">Fade Transition</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">MPA: add mpa attr to activate cross-page transitions.</p></dvfy-card></dvfy-page-transition>',
-  'dvfy-transition-root': '<dvfy-transition-root duration="300ms" easing="ease-out"><dvfy-card padded><div dvfy-transition-name="hero" style="width:100%;height:120px;border-radius:var(--dvfy-radius-md);background:linear-gradient(135deg,var(--dvfy-primary-bg),var(--dvfy-accent-brand));display:flex;align-items:center;justify-content:center;color:#fff;font-size:var(--dvfy-text-sm);font-weight:var(--dvfy-weight-semibold);margin-bottom:var(--dvfy-space-3)">dvfy-transition-name=&quot;hero&quot;</div><h3 style="margin:0 0 0.25rem">HTMX Transition Root</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Wraps HTMX swaps in startViewTransition(). Elements with dvfy-transition-name morph between pages.</p></dvfy-card></dvfy-transition-root>',
-  'dvfy-scroll-reveal': '<div style="height:150px;overflow-y:auto;border:1px solid var(--dvfy-border-default);border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-4)"><div style="height:200px;display:flex;align-items:end;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Scroll down</div><dvfy-scroll-reveal animation="fade-up"><dvfy-card padded><h3 style="margin:0 0 0.5rem">Revealed Card</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">This card fades up as you scroll into view.</p></dvfy-card></dvfy-scroll-reveal><div style="height:200px"></div></div>',
-  'dvfy-marquee-scroll': '<dvfy-marquee-scroll style="--dvfy-marquee-bg:var(--dvfy-surface-raised);border-radius:var(--dvfy-radius-lg)"><span style="font-weight:var(--dvfy-weight-semibold);white-space:nowrap">Design Systems</span><span style="color:var(--dvfy-text-muted)">✦</span><span style="font-weight:var(--dvfy-weight-semibold);white-space:nowrap">Web Components</span><span style="color:var(--dvfy-text-muted)">✦</span><span style="font-weight:var(--dvfy-weight-semibold);white-space:nowrap">Zero Build Step</span><span style="color:var(--dvfy-text-muted)">✦</span><span style="font-weight:var(--dvfy-weight-semibold);white-space:nowrap">Scroll to Accelerate</span></dvfy-marquee-scroll>',
-  'dvfy-scroll-progress': '<dvfy-scroll-progress></dvfy-scroll-progress><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm);margin:0">Scroll the page to see the progress bar fill at the top of the viewport. Requires a scrollable page and browser support for <code>animation-timeline: scroll()</code>.</p>',
-  'dvfy-scramble-hover': '<p style="font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-semibold);margin:0">Hover over: <dvfy-scramble-hover>Decryption Active</dvfy-scramble-hover></p>',
-  'dvfy-tree-view': '<dvfy-tree-view><dvfy-tree-node label="Documents" icon="\uD83D\uDCC1" expanded><dvfy-tree-node label="README.md" icon="\uD83D\uDCC4" href="#readme"></dvfy-tree-node><dvfy-tree-node label="Images" icon="\uD83D\uDCC1"><dvfy-tree-node label="logo.png" icon="\uD83D\uDDBC\uFE0F" href="#logo"></dvfy-tree-node><dvfy-tree-node label="banner.jpg" icon="\uD83D\uDDBC\uFE0F" href="#banner"></dvfy-tree-node></dvfy-tree-node></dvfy-tree-node><dvfy-tree-node label="Settings" icon="\u2699\uFE0F" href="#settings"></dvfy-tree-node></dvfy-tree-view>',
-  'dvfy-compare': '<dvfy-compare label-before="Before" label-after="After"><div slot="before" style="width:100%;aspect-ratio:16/9;background:var(--dvfy-surface-raised);border:1px solid var(--dvfy-border-default);display:flex;align-items:center;justify-content:center;color:var(--dvfy-text-secondary);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-2xl);font-weight:700">Before</div><div slot="after" style="width:100%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-2xl);font-weight:700">After</div></dvfy-compare>',
 };
 
 /* ── Utilities ── */
@@ -732,25 +720,67 @@ class DvfyComponentPlayground extends HTMLElement {
   }
 
   /**
-   * Render dvfy-drawer with a trigger button to open/close it.
+   * Render dvfy-drawer inside a flex layout with toggle + sample content.
    * Uses DOM methods only — all content is hardcoded trusted strings.
    */
   #renderDrawerPreview(area, drawer) {
-    // Ensure overlay is set for the preview
-    drawer.setAttribute('overlay', '');
+    // Override preview area to be a flex row filling the space
+    area.style.display = 'flex';
+    area.style.gap = '0';
+    area.style.padding = '0';
+    area.style.position = 'relative';
+    area.style.alignItems = 'stretch';
+    area.style.justifyContent = 'stretch';
 
-    const trigger = document.createElement('dvfy-button');
-    trigger.setAttribute('variant', 'outline');
-    trigger.setAttribute('size', 'sm');
-    trigger.textContent = 'Open Drawer';
-    trigger.addEventListener('click', () => drawer.setAttribute('open', ''));
+    // Main content area
+    const main = document.createElement('div');
+    main.style.flex = '1';
+    main.style.padding = 'var(--dvfy-space-4)';
+    main.style.display = 'flex';
+    main.style.flexDirection = 'column';
+    main.style.gap = 'var(--dvfy-space-3)';
+    main.style.minWidth = '0';
+    main.style.justifyContent = 'center';
+    main.style.alignItems = 'center';
+
+    const toggle = document.createElement('dvfy-button');
+    toggle.setAttribute('variant', 'outline');
+    toggle.setAttribute('size', 'sm');
+    toggle.textContent = drawer.hasAttribute('collapsed') ? 'Open Drawer' : 'Close Drawer';
+    toggle.addEventListener('click', () => {
+      drawer.collapsed = !drawer.collapsed;
+      toggle.textContent = drawer.collapsed ? 'Open Drawer' : 'Close Drawer';
+    });
+    main.appendChild(toggle);
+
+    const hint = document.createElement('p');
+    hint.style.fontSize = 'var(--dvfy-text-sm)';
+    hint.style.color = 'var(--dvfy-text-muted)';
+    hint.style.textAlign = 'center';
+    hint.textContent = 'Main content area';
+    main.appendChild(hint);
 
     // Keep button label in sync with drawer events
-    drawer.addEventListener('close', () => { trigger.textContent = 'Open Drawer'; });
-    drawer.addEventListener('open', () => { trigger.textContent = 'Drawer Open'; });
+    drawer.addEventListener('toggle', (e) => {
+      toggle.textContent = e.detail.collapsed ? 'Open Drawer' : 'Close Drawer';
+    });
 
-    area.appendChild(trigger);
-    area.appendChild(drawer);
+    const pos = drawer.getAttribute('position') || 'right';
+    if (pos === 'left') {
+      area.appendChild(drawer);
+      area.appendChild(main);
+    } else if (pos === 'top') {
+      area.style.flexDirection = 'column';
+      area.appendChild(drawer);
+      area.appendChild(main);
+    } else if (pos === 'bottom') {
+      area.style.flexDirection = 'column';
+      area.appendChild(main);
+      area.appendChild(drawer);
+    } else {
+      area.appendChild(main);
+      area.appendChild(drawer);
+    }
   }
 
   #updateCode() {

@@ -656,61 +656,56 @@
     {
       "name": "dvfy-drawer",
       "path": "./components/dvfy-drawer.js",
-      "description": "Docking panel that slides from a container edge with push, float, or overlay layout.\n\nIn **push** mode (default) the drawer is a flex item that occupies space and\npushes sibling content. An optional collapsed label tab appears when closed.\nIn **float** mode the panel is positioned absolutely over content within the\ncontainer (container must have `position: relative`).\nIn **overlay** mode the panel is fixed to the viewport with a dimming backdrop.",
+      "description": "Collapsible drawer panel for side or bottom content.\n\nA reusable panel that slides in from a configurable edge. Supports\ncollapse/expand with an animated transition and a vertical reopen tab\nthat appears when collapsed. Scrollable body for long content while\nthe parent layout stays fixed.",
       "attributes": [
         {
-          "name": "open",
-          "description": "Show/hide the drawer panel",
+          "name": "collapsed",
+          "description": "Collapsed state (reflected)",
           "type": "boolean"
+        },
+        {
+          "name": "header",
+          "description": "Header title and reopen tab text (default: \"Panel\")",
+          "type": "string"
         },
         {
           "name": "position",
-          "description": "Slide direction: left | right | top | bottom (default: \"right\")",
+          "description": "Edge position: top | right | bottom | left (default: \"right\")",
           "type": "string"
         },
         {
-          "name": "title",
-          "description": "Panel header title text; omit to suppress header",
+          "name": "width",
+          "description": "CSS size value for the drawer dimension (default: \"clamp(200px, 40%, 320px)\")",
           "type": "string"
         },
         {
-          "name": "label",
-          "description": "Text on the collapsed tab (push mode); omit to hide tab",
-          "type": "string"
-        },
-        {
-          "name": "float",
-          "description": "Float mode: panel is position absolute over container content",
+          "name": "fixed",
+          "description": "Disable collapse toggle and reopen tab (always open)",
           "type": "boolean"
         },
         {
-          "name": "overlay",
-          "description": "Overlay mode: panel is fixed with a dimming backdrop",
+          "name": "no-header",
+          "description": "Hide the header bar (for embedding inside other components)",
           "type": "boolean"
         }
       ],
       "properties": [
         {
-          "name": "open",
-          "attribute": "open",
-          "description": "Show/hide the drawer panel",
+          "name": "collapsed",
+          "attribute": "collapsed",
+          "description": "Collapsed state (reflected)",
           "type": "boolean"
         }
       ],
       "events": [
         {
-          "name": "open",
-          "description": "Fires when the panel opens"
-        },
-        {
-          "name": "close",
-          "description": "Fires when the panel closes"
+          "name": "toggle"
         }
       ],
       "slots": [
         {
           "name": "",
-          "description": "Drawer body content"
+          "description": "Default slot for drawer body content"
         }
       ],
       "cssProperties": [
@@ -726,17 +721,7 @@
         },
         {
           "name": "--dvfy-drawer-width",
-          "description": "Panel width for left/right positions (default: 17rem push, 24rem overlay)",
-          "type": "length"
-        },
-        {
-          "name": "--dvfy-drawer-height",
-          "description": "Panel height for top/bottom positions (default: 50vh)",
-          "type": "length"
-        },
-        {
-          "name": "--dvfy-drawer-tab-size",
-          "description": "Collapsed label tab thickness (default: 2.5rem)",
+          "description": "Override panel width via CSS",
           "type": "length"
         }
       ]

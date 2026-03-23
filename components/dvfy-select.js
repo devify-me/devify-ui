@@ -351,7 +351,8 @@ class DvfySelect extends HTMLElement {
       if (opt.value === this.#value) o.selected = true;
       native.appendChild(o);
     }
-    native.addEventListener('change', () => {
+    native.addEventListener('change', (e) => {
+      e.stopPropagation();
       this.#value = native.value;
       this.dispatchEvent(new CustomEvent('change', { detail: { value: this.#value }, bubbles: true }));
     });
