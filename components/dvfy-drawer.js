@@ -234,7 +234,7 @@ class DvfyDrawer extends HTMLElement {
     this.#panel.setAttribute('role', 'dialog');
     this.#panel.setAttribute('aria-modal', 'true');
     if (titleText) this.#panel.setAttribute('aria-labelledby', 'dvfy-drawer-title');
-    this.#panel.inert = true;
+    this.#panel.inert = hasOverlay;
 
     // Header
     const header = document.createElement('div');
@@ -279,7 +279,7 @@ class DvfyDrawer extends HTMLElement {
   }
 
   #closePanel() {
-    this.#panel.inert = true;
+    this.#panel.inert = this.hasAttribute('overlay');
     document.removeEventListener('keydown', this.#onKey);
     this.#prevFocus?.focus();
     this.dispatchEvent(new CustomEvent('close', { bubbles: true }));
