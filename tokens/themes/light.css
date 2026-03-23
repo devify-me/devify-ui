@@ -96,4 +96,9 @@
   --dvfy-on-warning:        var(--dvfy-neutral-950);
   --dvfy-on-danger:         var(--dvfy-neutral-0);
   --dvfy-on-info:           var(--dvfy-neutral-950);
+
+  /* Tooltip */
+  --dvfy-tooltip-bg:        var(--dvfy-neutral-700);
+  --dvfy-tooltip-text:      var(--dvfy-neutral-100);
+  --dvfy-tooltip-border:    var(--dvfy-neutral-600);
 }

@@ -135,8 +135,11 @@ class DvfyRadio extends HTMLElement {
       document.head.appendChild(s);
       DvfyRadio.#styled = true;
     }
+    this.setAttribute('role', 'radio');
     this.#build();
   }
+
+  disconnectedCallback() {}
 
   static get observedAttributes() { return ['checked', 'disabled', 'label', 'label-position']; }
 
@@ -164,10 +167,14 @@ class DvfyRadio extends HTMLElement {
         const name = input.name;
         if (name) {
           document.querySelectorAll(`dvfy-radio[name="${name}"]`).forEach(r => {
-            if (r !== this) r.removeAttribute('checked');
+            if (r !== this) {
+              r.removeAttribute('checked');
+              r.setAttribute('aria-checked', 'false');
+            }
           });
         }
         this.setAttribute('checked', '');
+        this.setAttribute('aria-checked', 'true');
         this.dispatchEvent(new Event('change', { bubbles: true }));
       }
     });
@@ -182,6 +189,7 @@ class DvfyRadio extends HTMLElement {
       lbl.textContent = label;
       this.appendChild(lbl);
     }
+    this.setAttribute('aria-checked', this.hasAttribute('checked') ? 'true' : 'false');
   }
 
   get checked() { return this.querySelector('input')?.checked ?? false; }
