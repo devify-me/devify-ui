@@ -9,6 +9,9 @@ import { initRouter, onRouteChange } from './router.js';
 const drawer = document.getElementById('catalog-drawer');
 const mainContent = document.getElementById('main-content');
 
+// Wait for dvfy-drawer to upgrade before querying internal structure
+await customElements.whenDefined('dvfy-drawer');
+
 // Create sidebar container inside the drawer body
 const sidebarContainer = document.createElement('div');
 sidebarContainer.id = 'catalog-sidebar';
