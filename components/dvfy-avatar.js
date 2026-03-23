@@ -30,20 +30,40 @@
 const STYLES = `
 dvfy-avatar {
   display: inline-flex;
-  position: relative;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--dvfy-space-1-5);
   flex-shrink: 0;
 }
 
-dvfy-avatar[interactive] {
+dvfy-avatar .dvfy-avatar__visual {
+  position: relative;
+  display: inline-flex;
+}
+
+dvfy-avatar[interactive] .dvfy-avatar__visual {
   cursor: pointer;
   transition: transform var(--dvfy-duration-fast) var(--dvfy-ease-out),
               box-shadow var(--dvfy-duration-fast) var(--dvfy-ease-out);
   border-radius: var(--dvfy-radius-round);
 }
-dvfy-avatar[interactive]:hover {
+dvfy-avatar[interactive]:hover .dvfy-avatar__visual {
   transform: scale(1.08);
   box-shadow: var(--dvfy-shadow-md);
 }
+
+dvfy-avatar .dvfy-avatar__label {
+  font-size: var(--dvfy-text-sm);
+  font-weight: var(--dvfy-weight-medium);
+  color: var(--dvfy-text-primary);
+  white-space: nowrap;
+}
+
+/* Label position (top = default: label DOM-first, visual below) */
+dvfy-avatar[label-position="bottom"] .dvfy-avatar__label { order: 1; }
+dvfy-avatar[label-position="left"] { flex-direction: row; align-items: center; }
+dvfy-avatar[label-position="right"] { flex-direction: row; align-items: center; }
+dvfy-avatar[label-position="right"] .dvfy-avatar__label { order: 1; }
 
 dvfy-avatar .dvfy-avatar__img,
 dvfy-avatar .dvfy-avatar__initials {
@@ -103,6 +123,8 @@ dvfy-avatar-group {
 }
 dvfy-avatar-group dvfy-avatar {
   margin-left: -0.5rem;
+}
+dvfy-avatar-group dvfy-avatar .dvfy-avatar__visual {
   border: 2px solid var(--dvfy-surface-page);
   border-radius: var(--dvfy-radius-round);
 }
@@ -137,6 +159,8 @@ dvfy-avatar-group .dvfy-avatar-group__overflow {
  * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {string} status - Status indicator dot: online | offline | busy
  * @attr {boolean} interactive - Add hover effect and dispatch click event
+ * @attr {string} label - Visible text label beside or below the avatar
+ * @attr {string} label-position - top | right | bottom | left (default: "top")
  *
  * @fires avatar-click - Interactive avatar clicked, detail: { name, src }
  *
@@ -157,7 +181,7 @@ class DvfyAvatar extends HTMLElement {
     this.#build();
   }
 
-  static get observedAttributes() { return ['src', 'name', 'size', 'status', 'interactive']; }
+  static get observedAttributes() { return ['src', 'name', 'size', 'status', 'interactive', 'label', 'label-position']; }
 
   attributeChangedCallback() {
     if (this.isConnected) this.#build();
@@ -170,6 +194,19 @@ class DvfyAvatar extends HTMLElement {
     const name = this.getAttribute('name') || '';
     const status = this.getAttribute('status');
     const interactive = this.hasAttribute('interactive');
+    const label = this.getAttribute('label');
+
+    // Label (top by default — DOM-first so it renders above)
+    if (label) {
+      const lbl = document.createElement('span');
+      lbl.className = 'dvfy-avatar__label';
+      lbl.textContent = label;
+      this.appendChild(lbl);
+    }
+
+    // Visual wrapper (holds image/initials + status dot)
+    const visual = document.createElement('span');
+    visual.className = 'dvfy-avatar__visual';
 
     if (src) {
       const img = document.createElement('img');
@@ -178,26 +215,35 @@ class DvfyAvatar extends HTMLElement {
       img.alt = name;
       img.addEventListener('error', () => {
         img.remove();
-        this.#showInitials(name);
+        const el = document.createElement('span');
+        el.className = 'dvfy-avatar__initials';
+        el.textContent = this.#getInitials(name);
+        const dot = visual.querySelector('.dvfy-avatar__status');
+        dot ? visual.insertBefore(el, dot) : visual.appendChild(el);
       });
-      this.appendChild(img);
+      visual.appendChild(img);
     } else {
-      this.#showInitials(name);
+      const el = document.createElement('span');
+      el.className = 'dvfy-avatar__initials';
+      el.textContent = this.#getInitials(name);
+      visual.appendChild(el);
     }
 
     if (status) {
       const dot = document.createElement('span');
       dot.className = 'dvfy-avatar__status';
       dot.dataset.status = status;
-      this.appendChild(dot);
+      visual.appendChild(dot);
     }
+
+    this.appendChild(visual);
 
     // Interactive: keyboard + click support
     if (interactive) {
       if (!this.getAttribute('role')) this.setAttribute('role', 'button');
       if (!this.getAttribute('tabindex')) this.setAttribute('tabindex', '0');
       if (!this.getAttribute('aria-label')) {
-        this.setAttribute('aria-label', name || 'User avatar');
+        this.setAttribute('aria-label', label || name || 'User avatar');
       }
       this.addEventListener('click', this.#handleClick);
       this.addEventListener('keydown', this.#handleKey);
@@ -222,21 +268,6 @@ class DvfyAvatar extends HTMLElement {
       this.#handleClick();
     }
   };
-
-  #showInitials(name) {
-    // Don't add if already present
-    if (this.querySelector('.dvfy-avatar__initials')) return;
-    const el = document.createElement('span');
-    el.className = 'dvfy-avatar__initials';
-    el.textContent = this.#getInitials(name);
-    // Insert before status dot if present
-    const dot = this.querySelector('.dvfy-avatar__status');
-    if (dot) {
-      this.insertBefore(el, dot);
-    } else {
-      this.appendChild(el);
-    }
-  }
 
   #getInitials(name) {
     if (!name) return '?';
