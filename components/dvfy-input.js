@@ -166,6 +166,8 @@ class DvfyInput extends HTMLElement {
     this.#build();
   }
 
+  disconnectedCallback() {}
+
   static get observedAttributes() {
     return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'no-preview', 'clearable', 'label-position'];
   }

@@ -124,6 +124,8 @@ class DvfyAlert extends HTMLElement {
     this.#build();
   }
 
+  disconnectedCallback() {}
+
   static get observedAttributes() { return ['status', 'title', 'dismissible']; }
 
   attributeChangedCallback() {

@@ -151,6 +151,8 @@ class DvfyTag extends HTMLElement {
     this.#render();
   }
 
+  disconnectedCallback() {}
+
   static get observedAttributes() { return ['removable']; }
 
   attributeChangedCallback() {

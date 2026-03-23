@@ -160,6 +160,7 @@ class DvfyCheckbox extends HTMLElement {
     } else {
       this.#state = 'unchecked';
     }
+    this.setAttribute('role', 'checkbox');
     this.#build();
   }
 
@@ -225,6 +226,7 @@ class DvfyCheckbox extends HTMLElement {
       lbl.textContent = label;
       this.appendChild(lbl);
     }
+    this.#syncAttributes();
   }
 
   #syncInput(input) {
@@ -243,6 +245,9 @@ class DvfyCheckbox extends HTMLElement {
     } else {
       this.removeAttribute('indeterminate');
     }
+    const ariaVal = this.#state === 'indeterminate' ? 'mixed'
+      : this.#state === 'checked' ? 'true' : 'false';
+    this.setAttribute('aria-checked', ariaVal);
   }
 
   get checked() { return this.querySelector('input')?.checked ?? false; }
