@@ -20,9 +20,9 @@ Q4: None of the above (pure tokens + native HTML only)?
 
 | Tier | Name       | Max dvfy-* deps | Allowed dep tiers | Count |
 |------|------------|-----------------|-------------------|-------|
-| 1    | Primitive  | 0               | None              | 19    |
-| 2    | Composite  | 2               | Tier 1 only       | 13    |
-| 3    | Organism   | Unlimited       | Tier 1 + Tier 2   | 3     |
+| 1    | Primitive  | 0               | None              | 27    |
+| 2    | Composite  | 2               | Tier 1 only       | 17    |
+| 3    | Organism   | Unlimited       | Tier 1 + Tier 2   | 4     |
 | 4    | Pattern    | Unlimited       | Any               | 5     |
 
 ## Domain Assignment
@@ -49,38 +49,49 @@ Q4: None of the above (pure tokens + native HTML only)?
 
 ## Classification Reference
 
-### Tier 1 — Primitives (19)
+### Tier 1 — Primitives (27)
 
-| Component          | Domain     |
-|-------------------|------------|
-| dvfy-button       | Forms      |
-| dvfy-input        | Forms      |
-| dvfy-textarea     | Forms      |
-| dvfy-checkbox     | Forms      |
-| dvfy-radio        | Forms      |
-| dvfy-switch       | Forms      |
-| dvfy-slider       | Forms      |
-| dvfy-badge        | Display    |
-| dvfy-tag          | Display    |
-| dvfy-avatar       | Display    |
-| dvfy-progress     | Display    |
-| dvfy-alert        | Feedback   |
-| dvfy-loader       | Feedback   |
-| dvfy-hamburger    | Navigation |
-| dvfy-tree-node    | Navigation |
-| dvfy-drawer       | Layout     |
-| dvfy-section      | Layout     |
-| dvfy-tooltip      | Utility    |
-| dvfy-scroll-reveal| Utility    |
+| Component             | Domain     |
+|----------------------|------------|
+| dvfy-button          | Forms      |
+| dvfy-input           | Forms      |
+| dvfy-textarea        | Forms      |
+| dvfy-checkbox        | Forms      |
+| dvfy-radio           | Forms      |
+| dvfy-switch          | Forms      |
+| dvfy-slider          | Forms      |
+| dvfy-badge           | Display    |
+| dvfy-tag             | Display    |
+| dvfy-avatar          | Display    |
+| dvfy-progress        | Display    |
+| dvfy-compare         | Display    |
+| dvfy-gradient-card   | Display    |
+| dvfy-spotlight-card  | Display    |
+| dvfy-marquee-scroll  | Display    |
+| dvfy-scramble-hover  | Display    |
+| dvfy-scroll-progress | Display    |
+| dvfy-text-vortex     | Display    |
+| dvfy-alert           | Feedback   |
+| dvfy-loader          | Feedback   |
+| dvfy-hovercard       | Feedback   |
+| dvfy-hamburger       | Navigation |
+| dvfy-drawer          | Layout     |
+| dvfy-section         | Layout     |
+| dvfy-tooltip         | Utility    |
+| dvfy-scroll-reveal   | Utility    |
+| dvfy-page-transition | Utility    |
 
-### Tier 2 — Composites (13)
+### Tier 2 — Composites (17)
 
 | Component            | Domain     | Dependencies                  |
 |---------------------|------------|-------------------------------|
 | dvfy-select         | Forms      | —                             |
+| dvfy-date-picker    | Forms      | —                             |
+| dvfy-file-upload    | Forms      | —                             |
 | dvfy-card           | Display    | —                             |
 | dvfy-empty          | Display    | dvfy-button                   |
 | dvfy-table          | Display    | dvfy-checkbox                 |
+| dvfy-carousel       | Display    | —                             |
 | dvfy-modal          | Feedback   | dvfy-button                   |
 | dvfy-toast          | Feedback   | —                             |
 | dvfy-breadcrumb     | Navigation | —                             |
@@ -90,14 +101,16 @@ Q4: None of the above (pure tokens + native HTML only)?
 | dvfy-nav            | Navigation | dvfy-hamburger, dvfy-drawer   |
 | dvfy-tree-view      | Navigation | —                             |
 | dvfy-theme-switcher | Utility    | —                             |
+| dvfy-transition-root| Utility    | —                             |
 
-### Tier 3 — Organisms (3)
+### Tier 3 — Organisms (4)
 
-| Component      | Domain     | Dependencies              |
-|---------------|------------|---------------------------|
-| dvfy-accordion| Layout     | dvfy-section              |
-| dvfy-sidebar  | Navigation | —                         |
-| dvfy-auth     | Utility    | dvfy-input, dvfy-button   |
+| Component                | Domain     | Dependencies                          |
+|-------------------------|------------|---------------------------------------|
+| dvfy-accordion          | Layout     | dvfy-section                          |
+| dvfy-sidebar            | Navigation | —                                     |
+| dvfy-auth               | Utility    | dvfy-input, dvfy-button               |
+| dvfy-component-playground| Utility   | dvfy-button, dvfy-section, dvfy-slider|
 
 ### Tier 4 — HTMX Patterns (5)
 

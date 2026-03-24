@@ -40,8 +40,8 @@ All responsive components were migrated from viewport `@media` queries to CSS Co
 
 ```html
 <!-- Ensure a wrapping container exists -->
-<div class="site-header">
-  <dvfy-header brand="My App">...</dvfy-header>
+<div class="site-nav">
+  <dvfy-nav brand="My App">...</dvfy-nav>
 </div>
 ```
 
