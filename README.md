@@ -85,16 +85,28 @@ Three-tier token system following [UI Collective](https://uicollective.co/) meth
 | Accent | Hot Pink `#FF3CAC` | `--dvfy-brand-*` |
 | Dark | Indigo `#1A1040` | `--dvfy-indigo-*` |
 
-## Components (30)
+## Components (48)
 
-### Foundation
-`dvfy-button` `dvfy-input` `dvfy-textarea` `dvfy-select` `dvfy-checkbox` `dvfy-radio` `dvfy-switch` `dvfy-badge` `dvfy-tag` `dvfy-avatar` `dvfy-alert` `dvfy-loader`
+### Forms
+`dvfy-button` `dvfy-input` `dvfy-textarea` `dvfy-select` `dvfy-checkbox` `dvfy-radio` `dvfy-switch` `dvfy-slider` `dvfy-date-picker` `dvfy-file-upload`
+
+### Data Display
+`dvfy-badge` `dvfy-tag` `dvfy-avatar` `dvfy-card` `dvfy-gradient-card` `dvfy-spotlight-card` `dvfy-table` `dvfy-empty` `dvfy-progress` `dvfy-scroll-progress` `dvfy-compare` `dvfy-marquee-scroll` `dvfy-carousel`
+
+### Feedback & Overlays
+`dvfy-alert` `dvfy-loader` `dvfy-toast` `dvfy-modal` `dvfy-hovercard`
 
 ### Navigation & Wayfinding
-`dvfy-dropdown` `dvfy-tooltip` `dvfy-modal` `dvfy-tabs` `dvfy-breadcrumb` `dvfy-pagination` `dvfy-progress` `dvfy-header` `dvfy-hamburger` `dvfy-sidebar` `dvfy-nav`
+`dvfy-dropdown` `dvfy-tooltip` `dvfy-tabs` `dvfy-breadcrumb` `dvfy-pagination` `dvfy-hamburger` `dvfy-sidebar` `dvfy-nav` `dvfy-tree-view`
 
-### Layout & Composition
-`dvfy-card` `dvfy-table` `dvfy-toast` `dvfy-empty` `dvfy-section` `dvfy-auth` `dvfy-theme-switcher` `dvfy-avatar-group`
+### Layout
+`dvfy-drawer` `dvfy-section` `dvfy-accordion`
+
+### Visual Effects
+`dvfy-scroll-reveal` `dvfy-scramble-hover` `dvfy-text-vortex` `dvfy-page-transition` `dvfy-transition-root`
+
+### Utility
+`dvfy-theme-switcher` `dvfy-auth` `dvfy-component-playground`
 
 ### HTMX Patterns (5)
 `dvfy-htmx-form` `dvfy-infinite-scroll` `dvfy-live-search` `dvfy-htmx-table` `dvfy-confirm`
@@ -107,7 +119,7 @@ Three-tier token system following [UI Collective](https://uicollective.co/) meth
 - **CSS custom properties** for all styling — no hardcoded values
 - **Keyboard accessible** — tab navigation, Enter/Space activation, Escape to close
 - **Zero build step** — ES modules served directly, no bundler required
-- **Container queries** on responsive components (header, hamburger) — adapts to parent width, not viewport
+- **Container queries** on responsive components — adapts to parent width, not viewport
 
 ## Theming
 
@@ -158,24 +170,6 @@ Create a theme file that overrides semantic tokens:
 ```
 
 ## Key Features
-
-### Responsive Header
-
-```html
-<dvfy-header brand="My App" logo="/logo.png" sticky scroll-shrink>
-  <a href="/products" data-icon="🚀">Products</a>
-  <a href="/pricing" data-icon="💰">Pricing</a>
-  <a href="/cart" data-action data-icon="🛒" data-badge="3"></a>
-  <dvfy-theme-switcher data-action>
-    <option value="devify-cyan">Cyan</option>
-  </dvfy-theme-switcher>
-</dvfy-header>
-```
-
-- Tab-style nav on desktop, 3-stage hamburger on mobile (☰ → > → ✕)
-- CSS Container Queries — responds to parent width, not viewport
-- Scroll-shrink: header compresses on scroll
-- Action badges, theme switcher integration
 
 ### Auth Forms
 
@@ -247,10 +241,9 @@ devify-ui/
 │       ├── dark.css        # Default dark theme
 │       ├── devify-cyan.css # Cyan brand (light + dark)
 │       └── devify-pink.css # Pink brand (light + dark)
-├── components/             # 30 Web Components
+├── components/             # 48 Web Components
 │   ├── dvfy-button.js
 │   ├── dvfy-input.js
-│   ├── dvfy-header.js
 │   └── ...
 ├── patterns/               # 5 HTMX integration patterns
 │   ├── dvfy-htmx-form.js
