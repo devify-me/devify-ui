@@ -34,8 +34,6 @@ const PRECACHE_URLS = [
   '/tokens/layout.css',
   '/tokens/themes/light.css',
   '/tokens/themes/dark.css',
-  '/tokens/themes/devify-cyan.css',
-  '/tokens/themes/devify-pink.css',
   // Components
   '/components/dvfy-accordion.js',
   '/components/dvfy-alert.js',

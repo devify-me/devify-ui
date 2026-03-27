@@ -1,26 +1,26 @@
 /*
  * @devify/ui — Elevation Tokens
  *
- * Shadows use --dvfy-shadow-color for dark mode adaptation.
- * 7 levels from subtle (2xs) to dramatic (2xl).
+ * Shadows use --dvfy-shadow-color (defaults to --dvfy-primary-bg) for
+ * themed LED-glow effect. 7 levels from subtle (2xs) to dramatic (2xl).
  */
 
 :root {
-  /* ─── Shadow Color (override in dark theme) ─── */
-  --dvfy-shadow-color: 220 3% 15%;
+  /* ─── Shadow Color — inherits from theme primary ─── */
+  --dvfy-shadow-color: var(--dvfy-primary-bg);
 
   /* ─── Shadow Scale ─── */
-  --dvfy-shadow-2xs: 0 1px 2px 0 hsl(var(--dvfy-shadow-color) / 0.05);
-  --dvfy-shadow-xs:  0 1px 3px 0 hsl(var(--dvfy-shadow-color) / 0.08),
-                     0 1px 2px -1px hsl(var(--dvfy-shadow-color) / 0.08);
-  --dvfy-shadow-sm:  0 2px 4px -1px hsl(var(--dvfy-shadow-color) / 0.08),
-                     0 1px 3px -1px hsl(var(--dvfy-shadow-color) / 0.06);
-  --dvfy-shadow-md:  0 4px 6px -1px hsl(var(--dvfy-shadow-color) / 0.1),
-                     0 2px 4px -2px hsl(var(--dvfy-shadow-color) / 0.08);
-  --dvfy-shadow-lg:  0 10px 15px -3px hsl(var(--dvfy-shadow-color) / 0.1),
-                     0 4px 6px -4px hsl(var(--dvfy-shadow-color) / 0.08);
-  --dvfy-shadow-xl:  0 20px 25px -5px hsl(var(--dvfy-shadow-color) / 0.1),
-                     0 8px 10px -6px hsl(var(--dvfy-shadow-color) / 0.08);
-  --dvfy-shadow-2xl: 0 25px 50px -12px hsl(var(--dvfy-shadow-color) / 0.25);
+  --dvfy-shadow-2xs: 0 1px 2px 0 color-mix(in srgb, var(--dvfy-shadow-color) 5%, transparent);
+  --dvfy-shadow-xs:  0 1px 3px 0 color-mix(in srgb, var(--dvfy-shadow-color) 8%, transparent),
+                     0 1px 2px -1px color-mix(in srgb, var(--dvfy-shadow-color) 8%, transparent);
+  --dvfy-shadow-sm:  0 2px 4px -1px color-mix(in srgb, var(--dvfy-shadow-color) 8%, transparent),
+                     0 1px 3px -1px color-mix(in srgb, var(--dvfy-shadow-color) 6%, transparent);
+  --dvfy-shadow-md:  0 4px 6px -1px color-mix(in srgb, var(--dvfy-shadow-color) 10%, transparent),
+                     0 2px 4px -2px color-mix(in srgb, var(--dvfy-shadow-color) 8%, transparent);
+  --dvfy-shadow-lg:  0 10px 15px -3px color-mix(in srgb, var(--dvfy-shadow-color) 10%, transparent),
+                     0 4px 6px -4px color-mix(in srgb, var(--dvfy-shadow-color) 8%, transparent);
+  --dvfy-shadow-xl:  0 20px 25px -5px color-mix(in srgb, var(--dvfy-shadow-color) 10%, transparent),
+                     0 8px 10px -6px color-mix(in srgb, var(--dvfy-shadow-color) 8%, transparent);
+  --dvfy-shadow-2xl: 0 25px 35px -10px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
   --dvfy-shadow-none: none;
 }

@@ -30,13 +30,14 @@ Initial public release of `@devify/ui`.
 - Light and dark semantic themes; `devify-cyan` and `devify-pink` brand themes
 - `devify.css` bundle entry point
 
-**Web Components (31 total, all `dvfy-` prefixed, Light DOM)**
-- Layout & navigation: `dvfy-drawer`, `dvfy-nav`, `dvfy-header`, `dvfy-section`, `dvfy-carousel`, `dvfy-tree-view`, `dvfy-tree-node`
-- Forms & inputs: `dvfy-button`, `dvfy-input`, `dvfy-textarea`, `dvfy-select`, `dvfy-checkbox`, `dvfy-radio`, `dvfy-slider`, `dvfy-switch`, `dvfy-file-upload`
-- Feedback & overlays: `dvfy-toast`, `dvfy-modal`, `dvfy-tooltip`, `dvfy-hovercard`, `dvfy-badge`
-- Data display: `dvfy-table`, `dvfy-card`, `dvfy-avatar`, `dvfy-progress`, `dvfy-scroll-progress`
-- Visual effects: `dvfy-gradient-card`, `dvfy-spotlight-card`, `dvfy-scramble-hover`, `dvfy-text-vortex`, `dvfy-page-transition`
-- Utility: `dvfy-accordion`, `dvfy-hamburger`
+**Web Components (48 total, all `dvfy-` prefixed, Light DOM)**
+- Forms: `dvfy-button`, `dvfy-input`, `dvfy-textarea`, `dvfy-select`, `dvfy-checkbox`, `dvfy-radio`, `dvfy-slider`, `dvfy-switch`, `dvfy-date-picker`, `dvfy-file-upload`
+- Data display: `dvfy-badge`, `dvfy-tag`, `dvfy-avatar`, `dvfy-card`, `dvfy-gradient-card`, `dvfy-spotlight-card`, `dvfy-table`, `dvfy-empty`, `dvfy-progress`, `dvfy-scroll-progress`, `dvfy-compare`, `dvfy-marquee-scroll`, `dvfy-carousel`
+- Feedback & overlays: `dvfy-alert`, `dvfy-loader`, `dvfy-toast`, `dvfy-modal`, `dvfy-hovercard`
+- Navigation: `dvfy-dropdown`, `dvfy-tooltip`, `dvfy-tabs`, `dvfy-breadcrumb`, `dvfy-pagination`, `dvfy-hamburger`, `dvfy-sidebar`, `dvfy-nav`, `dvfy-tree-view`
+- Layout: `dvfy-drawer`, `dvfy-section`, `dvfy-accordion`
+- Visual effects: `dvfy-scroll-reveal`, `dvfy-scramble-hover`, `dvfy-text-vortex`, `dvfy-page-transition`, `dvfy-transition-root`
+- Utility: `dvfy-theme-switcher`, `dvfy-auth`, `dvfy-component-playground`
 - `devify.js` barrel entry point
 
 **HTMX Patterns (5)**

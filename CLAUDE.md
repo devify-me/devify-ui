@@ -30,7 +30,7 @@ devify-ui/
 │       ├── dark.css
 │       ├── devify-cyan.css
 │       └── devify-pink.css
-├── components/            # 31 Web Components (dvfy-*.js)
+├── components/            # 48 Web Components (dvfy-*.js)
 ├── patterns/              # 5 HTMX integration patterns (dvfy-*.js)
 └── catalog/               # Design System Explorer
     ├── index.html         # Shell: header + sidebar + main layout

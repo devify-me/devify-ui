@@ -24,6 +24,4 @@
 @import url('./tokens/themes/light.css');
 @import url('./tokens/themes/dark.css');
 
-/* Tier 2b: Brand themes (project-specific overrides) */
-@import url('./tokens/themes/devify-cyan.css');
-@import url('./tokens/themes/devify-pink.css');
+/* Tier 2b: Brand themes are generated programmatically via the Palette Generator */

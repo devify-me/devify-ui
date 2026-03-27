@@ -25,6 +25,18 @@
  *       <tbody><tr><td>...</td></tr></tbody>
  *     </table>
  *   </dvfy-table>
+ *
+ * @example
+ * <dvfy-table striped hoverable>
+ *   <table>
+ *     <thead><tr><th data-sort>Name</th><th data-sort>Role</th></tr></thead>
+ *     <tbody>
+ *       <tr><td>Alice</td><td>Engineer</td></tr>
+ *       <tr><td>Bob</td><td>Designer</td></tr>
+ *       <tr><td>Carol</td><td>Manager</td></tr>
+ *     </tbody>
+ *   </table>
+ * </dvfy-table>
  */
 
 const STYLES = `
@@ -158,13 +170,13 @@ dvfy-table th[data-sort] .dvfy-table__sort {
   background: var(--dvfy-primary-bg);
 }
 .dvfy-table__filter-icon--active .dvfy-table__filter-line {
-  background: var(--dvfy-primary-text, #fff);
+  background: var(--dvfy-primary-text, var(--dvfy-text-inverse, #fff));
 }
 .dvfy-table__filter-icon--active:hover {
   background: var(--dvfy-primary-hover);
 }
 .dvfy-table__filter-icon--active:hover .dvfy-table__filter-line {
-  background: var(--dvfy-primary-text, #fff);
+  background: var(--dvfy-primary-text, var(--dvfy-text-inverse, #fff));
 }
 
 /* Filter dropdown panel */

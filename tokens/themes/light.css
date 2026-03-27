@@ -88,9 +88,6 @@
   --dvfy-input-placeholder: var(--dvfy-neutral-400);
   --dvfy-input-error:       var(--dvfy-red-500);
 
-  /* ─── Elevation (shadow color for light mode) ─── */
-  --dvfy-shadow-color:      220 3% 15%;
-
   /* ─── Status text on solid backgrounds (white for readability) ─── */
   --dvfy-on-success:        var(--dvfy-neutral-950);
   --dvfy-on-warning:        var(--dvfy-neutral-950);

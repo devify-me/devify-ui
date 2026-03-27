@@ -77,6 +77,7 @@ class DvfyEmpty extends HTMLElement {
       document.head.appendChild(s);
       DvfyEmpty.#styled = true;
     }
+    this.setAttribute('role', 'status');
     this.#render();
   }
 
