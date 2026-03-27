@@ -1,22 +1,30 @@
-# Issue #31: Tier 1 component audit — 15 primitives
+# Issue #32: Tier 2 component audit — 12 composites
 
-**Type:** chore
-**Branch:** chore/31-tier1-component-audit
+**Type:** fix (audit)
+**Branch:** feat/32-tier-2-component-audit-12
 **Labels:** enhancement
 
-## Audit Results
+## Components (priority order from checklist)
 
-5 pass cleanly: switch, avatar, loader, progress, hamburger.
-10 fixes across 9 files, organized in 6 batches.
+1. dvfy-select
+2. dvfy-dropdown (→ button)
+3. dvfy-modal (→ button)
+4. dvfy-table (→ checkbox)
+5. dvfy-tabs
+6. dvfy-card
+7. dvfy-empty (→ button)
+8. dvfy-toast
+9. dvfy-breadcrumb
+10. dvfy-pagination (→ button)
+11. dvfy-nav
+12. dvfy-theme-switcher
 
-## Implementation
+## Plan
 
-- [x] Batch 1: Add disconnectedCallback to dvfy-input, dvfy-radio, dvfy-textarea, dvfy-section, dvfy-tag, dvfy-alert
-- [x] Batch 2: Add aria-checked to dvfy-checkbox and dvfy-radio
-- [x] Batch 3: Migrate dvfy-tooltip from primitives to Tier 3 component tokens
-- [x] Batch 4: Remove duplicate @cssprop in dvfy-button JSDoc
-- [x] Batch 5: Fix dvfy-checkbox DEFAULT_CONTENT to single instance
-- [x] Batch 6: Create GitHub issues for container queries (#25 comment) + label gaps (#169)
+- [x] Audit each component against docs/component-review-checklist.md
+- [x] Fix issues in-place (tokens, a11y, disconnectedCallback, JSDoc, keyboard nav)
+- [x] Verify dependency compliance against COMPONENT_REGISTRY
+- [x] Log out-of-scope findings as separate GitHub issues
 - [x] Verify: `npm run analyze` succeeds
 - [x] Ship: push and create PR
 

@@ -87,6 +87,14 @@ dvfy-dropdown .dvfy-dropdown__item + .dvfy-dropdown__item {
  * @cssprop {color} --dvfy-surface-overlay - Menu background
  * @cssprop {color} --dvfy-shadow-lg - Menu shadow
  * @cssprop {color} --dvfy-selected-bg - Selected item background
+ *
+ * @example
+ * <dvfy-dropdown>
+ *   <dvfy-button>Actions</dvfy-button>
+ *   <a href="/edit">Edit</a>
+ *   <a href="/duplicate">Duplicate</a>
+ *   <button>Delete</button>
+ * </dvfy-dropdown>
  */
 class DvfyDropdown extends HTMLElement {
   static #styled = false;
@@ -107,10 +115,11 @@ class DvfyDropdown extends HTMLElement {
   }
 
   disconnectedCallback() {
+    this.removeEventListener('keydown', this.#onKey);
     document.removeEventListener('click', this.#onOutside);
   }
 
-  static get observedAttributes() { return ['open']; }
+  static get observedAttributes() { return ['open', 'align']; }
 
   attributeChangedCallback(name) {
     if (name === 'open' && this.#menu) {

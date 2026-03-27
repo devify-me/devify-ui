@@ -117,6 +117,30 @@ function getContainer(position) {
 class DvfyToast extends HTMLElement {
   static #styled = false;
   #timer = null;
+  #clickHandler = null;
+
+  static get observedAttributes() { return ['status', 'duration', 'position']; }
+
+  attributeChangedCallback() {
+    if (this.isConnected) {
+      // Re-read message from existing DOM before rebuilding
+      const msg = this.querySelector('.dvfy-toast__msg');
+      if (msg) {
+        const message = msg.textContent;
+        this.textContent = '';
+        const status = this.getAttribute('status') || 'info';
+        const icon = document.createElement('span');
+        icon.className = 'dvfy-toast__icon';
+        icon.setAttribute('aria-hidden', 'true');
+        icon.textContent = STATUS_ICONS[status] || STATUS_ICONS.info;
+        this.appendChild(icon);
+        const msgEl = document.createElement('span');
+        msgEl.className = 'dvfy-toast__msg';
+        msgEl.textContent = message;
+        this.appendChild(msgEl);
+      }
+    }
+  }
 
   static show({ message, status = 'info', duration = 4000, position = 'top-right' } = {}) {
     const toast = document.createElement('dvfy-toast');
@@ -157,7 +181,8 @@ class DvfyToast extends HTMLElement {
     this.appendChild(msg);
 
     this.setAttribute('role', 'alert');
-    this.addEventListener('click', () => this.dismiss());
+    this.#clickHandler = () => this.dismiss();
+    this.addEventListener('click', this.#clickHandler);
 
     // Animate in
     requestAnimationFrame(() => {
@@ -172,6 +197,10 @@ class DvfyToast extends HTMLElement {
 
   disconnectedCallback() {
     if (this.#timer) clearTimeout(this.#timer);
+    if (this.#clickHandler) {
+      this.removeEventListener('click', this.#clickHandler);
+      this.#clickHandler = null;
+    }
   }
 
   dismiss() {
