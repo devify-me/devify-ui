@@ -47,15 +47,23 @@ export function buildSidebar(containerEl) {
     // Overview
     t.appendChild(createNode('Overview', '#overview'));
 
-    // Tokens
-    const tokensNode = createNode(`Tokens (${Object.keys(TOKEN_GROUPS).length})`);
+    // Tokens — all items sorted alphabetically
+    const tokenKeys = Object.keys(TOKEN_GROUPS).filter(k => k !== 'typography');
+    const allTokenItems = [
+      { label: 'Colors', href: '#tokens/colors' },
+      { label: 'Typography', href: '#tokens/typography' },
+      { label: 'Themes', href: '#tokens/themes' },
+      ...tokenKeys.map(k => ({ label: TOKEN_GROUPS[k].label, href: `#tokens/${k}` })),
+    ].sort((a, b) => a.label.localeCompare(b.label));
+
+    const tokensNode = createNode(`Tokens (${allTokenItems.length})`);
     tokensNode.setAttribute('expanded', '');
-    for (const key of Object.keys(TOKEN_GROUPS)) {
-      tokensNode.appendChild(createNode(TOKEN_GROUPS[key].label, `#tokens/${key}`));
+    for (const item of allTokenItems) {
+      tokensNode.appendChild(createNode(item.label, item.href));
     }
     t.appendChild(tokensNode);
 
-    // Components
+    // Components — items sorted alphabetically within each group
     const totalComponents = Object.keys(COMPONENT_REGISTRY).filter(t => COMPONENT_REGISTRY[t].tier <= 3).length;
     const componentsNode = createNode(`Components (${totalComponents})`);
     componentsNode.setAttribute('expanded', '');
@@ -63,7 +71,7 @@ export function buildSidebar(containerEl) {
     if (view === 'tier') {
       for (const n of [1, 2, 3]) {
         const tier = TIERS[n];
-        const tags = getComponentsByTier(n);
+        const tags = getComponentsByTier(n).sort();
         const tierNode = createNode(`${tier.name} (${tags.length})`);
         tierNode.setAttribute('expanded', '');
         for (const tag of tags) {
@@ -73,9 +81,10 @@ export function buildSidebar(containerEl) {
       }
     } else {
       for (const [category, tags] of Object.entries(COMPONENT_CATEGORIES)) {
-        const catNode = createNode(`${category} (${tags.length})`);
+        const sorted = [...tags].sort();
+        const catNode = createNode(`${category} (${sorted.length})`);
         catNode.setAttribute('expanded', '');
-        for (const tag of tags) {
+        for (const tag of sorted) {
           catNode.appendChild(createNode(tag.replace('dvfy-', ''), `#components/${tag}`));
         }
         componentsNode.appendChild(catNode);
@@ -83,15 +92,13 @@ export function buildSidebar(containerEl) {
     }
     t.appendChild(componentsNode);
 
-    // HTMX Patterns
-    const patternsNode = createNode(`HTMX Patterns (${Object.keys(HTMX_PATTERNS).length})`);
-    for (const tag of Object.keys(HTMX_PATTERNS)) {
+    // HTMX Patterns — sorted alphabetically
+    const patternTags = Object.keys(HTMX_PATTERNS).sort();
+    const patternsNode = createNode(`HTMX Patterns (${patternTags.length})`);
+    for (const tag of patternTags) {
       patternsNode.appendChild(createNode(tag.replace('dvfy-', ''), `#patterns/${tag}`));
     }
     t.appendChild(patternsNode);
-
-    // Brand Settings
-    t.appendChild(createNode('Brand Settings', '#brand'));
 
     // Navigate on select
     t.addEventListener('select', (e) => {

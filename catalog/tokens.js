@@ -3,6 +3,7 @@
  *
  * Reads live computed values via getComputedStyle for accuracy with active theme.
  */
+import { copyToClipboard } from './clipboard.js';
 import { TOKEN_GROUPS } from './data.js';
 
 const cs = () => getComputedStyle(document.documentElement);
@@ -43,7 +44,7 @@ export function renderTokenView(mainEl, group) {
 function renderColors(mainEl, meta) {
   for (const [family, info] of Object.entries(meta.families)) {
     const section = document.createElement('dvfy-section');
-    section.setAttribute('title', family);
+    section.setAttribute('label', family);
     section.style.marginBottom = 'var(--dvfy-space-4)';
 
     const grid = document.createElement('div');
@@ -76,7 +77,7 @@ function renderColors(mainEl, meta) {
       swatch.style.cursor = 'pointer';
       swatch.title = `Click to copy: var(${prop})`;
       swatch.addEventListener('click', () => {
-        navigator.clipboard.writeText(`var(${prop})`);
+        copyToClipboard(`var(${prop})`);
         label.textContent = 'Copied!';
         setTimeout(() => { label.textContent = step; }, 1500);
       });
@@ -90,10 +91,10 @@ function renderColors(mainEl, meta) {
 }
 
 /* ── Typography ── */
-function renderTypography(mainEl, meta) {
+export function renderTypography(mainEl, meta) {
   for (const [groupName, tokens] of Object.entries(meta.tokens)) {
     const section = document.createElement('dvfy-section');
-    section.setAttribute('title', groupName);
+    section.setAttribute('label', groupName);
     section.style.marginBottom = 'var(--dvfy-space-4)';
 
     for (const token of tokens) {
@@ -105,7 +106,7 @@ function renderTypography(mainEl, meta) {
       name.style.cssText = 'font-size: var(--dvfy-text-xs); color: var(--dvfy-text-link); min-width: 14rem; cursor: pointer;';
       name.title = `Click to copy: var(${token.name})`;
       name.addEventListener('click', () => {
-        navigator.clipboard.writeText(`var(${token.name})`);
+        copyToClipboard(`var(${token.name})`);
         name.textContent = 'Copied!';
         setTimeout(() => { name.textContent = token.name; }, 1500);
       });
@@ -152,7 +153,7 @@ function renderSpacing(mainEl, meta) {
     name.style.cssText = 'font-size: var(--dvfy-text-xs); color: var(--dvfy-text-link); min-width: 12rem; cursor: pointer;';
     name.title = `Click to copy: var(${token.name})`;
     name.addEventListener('click', () => {
-      navigator.clipboard.writeText(`var(${token.name})`);
+      copyToClipboard(`var(${token.name})`);
       name.textContent = 'Copied!';
       setTimeout(() => { name.textContent = token.name; }, 1500);
     });
@@ -182,7 +183,7 @@ function renderSpacing(mainEl, meta) {
 function renderBorders(mainEl, meta) {
   for (const [groupName, tokens] of Object.entries(meta.tokens)) {
     const section = document.createElement('dvfy-section');
-    section.setAttribute('title', groupName);
+    section.setAttribute('label', groupName);
     section.style.marginBottom = 'var(--dvfy-space-4)';
 
     if (groupName === 'Border Radius') {
@@ -206,7 +207,7 @@ function renderBorders(mainEl, meta) {
         name.textContent = token.name.replace('--dvfy-', '');
         name.style.cssText = 'font-size: var(--dvfy-text-xs); color: var(--dvfy-text-link); cursor: pointer; display: block;';
         name.addEventListener('click', () => {
-          navigator.clipboard.writeText(`var(${token.name})`);
+          copyToClipboard(`var(${token.name})`);
           name.textContent = 'Copied!';
           setTimeout(() => { name.textContent = token.name.replace('--dvfy-', ''); }, 1500);
         });
@@ -230,7 +231,7 @@ function renderBorders(mainEl, meta) {
         tdName.style.cssText = 'font-family: var(--dvfy-font-mono); font-size: var(--dvfy-text-xs); color: var(--dvfy-text-link); cursor: pointer;';
         tdName.textContent = token.name;
         tdName.addEventListener('click', () => {
-          navigator.clipboard.writeText(`var(${token.name})`);
+          copyToClipboard(`var(${token.name})`);
           tdName.textContent = 'Copied!';
           setTimeout(() => { tdName.textContent = token.name; }, 1500);
         });
@@ -260,6 +261,38 @@ function renderBorders(mainEl, meta) {
 
 /* ── Elevation ── */
 function renderElevation(mainEl, meta) {
+  // Shadow color swatch
+  const colorRow = document.createElement('div');
+  colorRow.style.cssText = 'display: flex; align-items: center; gap: var(--dvfy-space-3); margin-bottom: var(--dvfy-space-6); padding: var(--dvfy-space-3); border: var(--dvfy-border-1) solid var(--dvfy-border-default); border-radius: var(--dvfy-radius-md);';
+
+  const swatch = document.createElement('div');
+  swatch.style.cssText = 'width: 2.5rem; height: 2.5rem; border-radius: var(--dvfy-radius-md); background: var(--dvfy-shadow-color); flex-shrink: 0;';
+  colorRow.appendChild(swatch);
+
+  const colorInfo = document.createElement('div');
+  const colorLabel = document.createElement('code');
+  colorLabel.textContent = '--dvfy-shadow-color';
+  colorLabel.style.cssText = 'font-size: var(--dvfy-text-sm); color: var(--dvfy-text-link); cursor: pointer; display: block;';
+  colorLabel.addEventListener('click', () => {
+    copyToClipboard('var(--dvfy-shadow-color)');
+    colorLabel.textContent = 'Copied!';
+    setTimeout(() => { colorLabel.textContent = '--dvfy-shadow-color'; }, 1500);
+  });
+  colorInfo.appendChild(colorLabel);
+
+  const colorValue = document.createElement('div');
+  colorValue.style.cssText = 'font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted); font-family: var(--dvfy-font-mono);';
+  colorValue.textContent = getComputedStyle(document.documentElement).getPropertyValue('--dvfy-shadow-color').trim();
+  colorInfo.appendChild(colorValue);
+
+  const colorDesc = document.createElement('div');
+  colorDesc.style.cssText = 'font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted);';
+  colorDesc.textContent = 'Derived from theme primary — tints all shadows';
+  colorInfo.appendChild(colorDesc);
+
+  colorRow.appendChild(colorInfo);
+  mainEl.appendChild(colorRow);
+
   const grid = document.createElement('div');
   grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--dvfy-space-6);';
 
@@ -274,7 +307,7 @@ function renderElevation(mainEl, meta) {
     name.textContent = token.name.replace('--dvfy-', '');
     name.style.cssText = 'font-size: var(--dvfy-text-xs); color: var(--dvfy-text-link); cursor: pointer; display: block; margin-bottom: var(--dvfy-space-1);';
     name.addEventListener('click', () => {
-      navigator.clipboard.writeText(`var(${token.name})`);
+      copyToClipboard(`var(${token.name})`);
       name.textContent = 'Copied!';
       setTimeout(() => { name.textContent = token.name.replace('--dvfy-', ''); }, 1500);
     });
@@ -294,7 +327,7 @@ function renderElevation(mainEl, meta) {
 function renderAnimation(mainEl, meta) {
   for (const [groupName, tokens] of Object.entries(meta.tokens)) {
     const section = document.createElement('dvfy-section');
-    section.setAttribute('title', groupName);
+    section.setAttribute('label', groupName);
     section.style.marginBottom = 'var(--dvfy-space-4)';
 
     const table = createTable(['Token', 'Value']);
@@ -305,7 +338,7 @@ function renderAnimation(mainEl, meta) {
       tdName.style.cssText = 'font-family: var(--dvfy-font-mono); font-size: var(--dvfy-text-xs); color: var(--dvfy-text-link); cursor: pointer;';
       tdName.textContent = token.name;
       tdName.addEventListener('click', () => {
-        navigator.clipboard.writeText(`var(${token.name})`);
+        copyToClipboard(`var(${token.name})`);
         tdName.textContent = 'Copied!';
         setTimeout(() => { tdName.textContent = token.name; }, 1500);
       });
@@ -327,7 +360,7 @@ function renderAnimation(mainEl, meta) {
 function renderTable(mainEl, meta) {
   for (const [groupName, tokens] of Object.entries(meta.tokens)) {
     const section = document.createElement('dvfy-section');
-    section.setAttribute('title', groupName);
+    section.setAttribute('label', groupName);
     section.style.marginBottom = 'var(--dvfy-space-4)';
 
     const table = createTable(['Token', 'Value']);
@@ -338,7 +371,7 @@ function renderTable(mainEl, meta) {
       tdName.style.cssText = 'font-family: var(--dvfy-font-mono); font-size: var(--dvfy-text-xs); color: var(--dvfy-text-link); cursor: pointer;';
       tdName.textContent = token.name;
       tdName.addEventListener('click', () => {
-        navigator.clipboard.writeText(`var(${token.name})`);
+        copyToClipboard(`var(${token.name})`);
         tdName.textContent = 'Copied!';
         setTimeout(() => { tdName.textContent = token.name; }, 1500);
       });
