@@ -170,7 +170,7 @@ dvfy-select[disabled] .dvfy-select__trigger {
 dvfy-select .dvfy-select__native {
   display: none;
 }
-@container dvfy-select (max-width: 767px) {
+@container dvfy-select (max-width: 319px) {
   dvfy-select .dvfy-select__custom { display: none !important; }
   dvfy-select .dvfy-select__native {
     display: block;

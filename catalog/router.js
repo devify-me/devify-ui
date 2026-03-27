@@ -4,7 +4,8 @@
 import { HTMX_PATTERNS, TIERS, COMPONENT_REGISTRY, DOMAINS, getComponentsByTier } from './data.js';
 import { renderOverview } from './overview.js';
 import { renderTokenView } from './tokens.js';
-import { renderBrandSettings } from './brand.js';
+import { renderThemes } from './brand.js';
+import { renderColorsPage, renderTypographyPage } from './palette.js';
 
 /** @type {function[]} */
 const listeners = [];
@@ -56,8 +57,19 @@ function render(mainEl, section, item) {
       break;
 
     case 'tokens':
-      renderTokenView(mainEl, item || 'colors');
+      if (item === 'colors' || item === 'palette') renderColorsPage(mainEl);
+      else if (item === 'themes') renderThemes(mainEl);
+      else if (item === 'typography') renderTypographyPage(mainEl);
+      else renderTokenView(mainEl, item || 'typography');
       break;
+
+    case 'brand':
+      // Legacy routes — redirect to tokens
+      if (item === 'colors' || item === 'palette') { location.hash = '#tokens/colors'; return; }
+      if (item === 'fonts') { location.hash = '#tokens/typography'; return; }
+      if (item === 'themes') { location.hash = '#tokens/themes'; return; }
+      location.hash = '#tokens/colors';
+      return;
 
     case 'components':
       renderComponentView(mainEl, item);
@@ -65,10 +77,6 @@ function render(mainEl, section, item) {
 
     case 'patterns':
       renderPatternView(mainEl, item);
-      break;
-
-    case 'brand':
-      renderBrandSettings(mainEl);
       break;
 
     case 'tier':
@@ -98,6 +106,8 @@ function renderComponentView(mainEl, tagName) {
   const playground = document.createElement('dvfy-component-playground');
   playground.setAttribute('component', tagName);
   playground.setAttribute('src', '../custom-elements.json');
+  const reg = COMPONENT_REGISTRY[tagName];
+  if (reg?.layout) playground.setAttribute('layout', reg.layout);
   mainEl.appendChild(playground);
 }
 
@@ -133,6 +143,8 @@ function renderPatternView(mainEl, tagName) {
   const playground = document.createElement('dvfy-component-playground');
   playground.setAttribute('component', tagName);
   playground.setAttribute('src', '../custom-elements.json');
+  const preg = COMPONENT_REGISTRY[tagName];
+  if (preg?.layout) playground.setAttribute('layout', preg.layout);
   mainEl.appendChild(playground);
 }
 

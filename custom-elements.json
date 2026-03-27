@@ -585,6 +585,9 @@
         },
         {
           "name": "src"
+        },
+        {
+          "name": "layout"
         }
       ]
     },
@@ -2408,6 +2411,16 @@
           "name": "default-mode",
           "description": "Initial mode: light | dark (default: \"light\")",
           "type": "string"
+        },
+        {
+          "name": "round",
+          "description": "Use fully rounded track and thumb (pill shape)",
+          "type": "boolean"
+        },
+        {
+          "name": "variant",
+          "description": "Selector style: select | dropdown (default: \"select\")",
+          "type": "string"
         }
       ],
       "slots": [
@@ -2423,13 +2436,8 @@
           "type": "color"
         },
         {
-          "name": "--dvfy-neutral-0",
-          "description": "Toggle thumb color (light mode)",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-indigo-950",
-          "description": "Toggle track background (dark mode)",
+          "name": "--dvfy-surface-raised",
+          "description": "Toggle thumb color / track background (dark mode)",
           "type": "color"
         }
       ]

@@ -9,6 +9,7 @@
  *
  * @attr {string} component - Tag name to showcase (shows picker if omitted)
  * @attr {string} src - Path to custom-elements.json (default: "../custom-elements.json")
+ * @attr {string} layout - Preview layout mode: center | stretch | fill | edge | overlay (default: "center")
  *
  * @slot - Not used
  *
@@ -44,6 +45,7 @@ dvfy-component-playground .sc__preview-col {
   min-width: 0;
   display: flex;
   flex-direction: column;
+  position: relative;
 }
 
 /* Stretch tabs to fill preview column */
@@ -58,7 +60,7 @@ dvfy-component-playground .sc__preview-col dvfy-tab[active] {
   flex-direction: column;
 }
 
-/* Preview area — fills available height */
+/* Preview area — fills available height, default layout: center */
 dvfy-component-playground .sc__preview-area {
   position: relative;
   flex: 1;
@@ -71,6 +73,60 @@ dvfy-component-playground .sc__preview-area {
   justify-content: center;
   flex-wrap: wrap;
   gap: var(--dvfy-space-3);
+}
+
+/* Layout: stretch — full-width, vertically centered (inputs, navs, progress) */
+dvfy-component-playground .sc__preview-area[data-layout="stretch"] {
+  justify-content: stretch;
+  flex-wrap: nowrap;
+}
+dvfy-component-playground .sc__preview-area[data-layout="stretch"] > * {
+  width: 100%;
+}
+
+/* Layout: fill — component fills entire preview (cards, tables, accordion) */
+dvfy-component-playground .sc__preview-area[data-layout="fill"] {
+  padding: 0;
+  align-items: stretch;
+  justify-content: stretch;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+dvfy-component-playground .sc__preview-area[data-layout="fill"] > * {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Layout: edge — attached to container edges with sibling content (drawer, sidebar) */
+dvfy-component-playground .sc__preview-area[data-layout="edge"] {
+  padding: 0;
+  gap: 0;
+  align-items: stretch;
+  justify-content: stretch;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+/* Layout: overlay — centered trigger, component positions itself (modal, toast, tooltip) */
+dvfy-component-playground .sc__preview-area[data-layout="overlay"] {
+  align-items: center;
+  justify-content: center;
+}
+
+/* Layout mode label — aligned with the tab bar, top-right of preview column */
+dvfy-component-playground .sc__layout-label {
+  position: absolute;
+  top: var(--dvfy-space-2);
+  right: var(--dvfy-space-2);
+  font-family: var(--dvfy-font-mono);
+  font-size: var(--dvfy-text-xs);
+  color: var(--dvfy-text-muted);
+  padding: var(--dvfy-space-1) var(--dvfy-space-2);
+  border: var(--dvfy-border-1) solid var(--dvfy-border-muted);
+  border-radius: var(--dvfy-radius-md);
+  background: var(--dvfy-surface-raised);
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 /* Code block wrapper */
@@ -272,6 +328,11 @@ const SKIP_TAGS = new Set([
   'dvfy-component-playground',
 ]);
 
+/** Attributes to hide from playground controls (init-only, not interactive). */
+const SKIP_ATTRS = {
+  'dvfy-theme-switcher': new Set(['default-theme']),
+};
+
 /*
  * ── Default innerHTML per component ──
  *
@@ -314,7 +375,7 @@ const DEFAULT_CONTENT = {
   'dvfy-hamburger': '',
   'dvfy-drawer': '<p>Drawer body content. This panel scrolls independently and can be collapsed.</p><p style="margin-top:0.5rem;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Try the collapse button in the header.</p>',
   'dvfy-section': '<p>Section content here.</p>',
-  'dvfy-theme-switcher': '<option value="devify-cyan">Cyan</option><option value="devify-pink">Pink</option>',
+  'dvfy-theme-switcher': '<option value="devify-cyan">Devify Cyan</option><option value="devify-pink">Devify Pink</option>',
   'dvfy-accordion': '<dvfy-section label="Section One" open><p>First section content.</p></dvfy-section><dvfy-section label="Section Two" collapsed><p>Second section content.</p></dvfy-section><dvfy-section label="Section Three" collapsed><p>Third section content.</p></dvfy-section>',
 };
 
@@ -356,6 +417,7 @@ class DvfyComponentPlayground extends HTMLElement {
   #currentTag = null;
   #attrValues = {};       // { attrName: currentValue }
   #contentValue = '';      // current innerHTML for preview
+  #loadId = 0;            // Invalidates stale fetches
 
   connectedCallback() {
     if (!DvfyComponentPlayground.#styled) {
@@ -367,11 +429,11 @@ class DvfyComponentPlayground extends HTMLElement {
     this.#loadManifest();
   }
 
-  static get observedAttributes() { return ['component', 'src']; }
+  static get observedAttributes() { return ['component', 'src', 'layout']; }
 
   attributeChangedCallback(name) {
     if (!this.isConnected || !this.#manifest) return;
-    if (name === 'component') {
+    if (name === 'component' || name === 'layout') {
       const tagName = this.getAttribute('component');
       const tag = this.#tags.find(t => t.name === tagName);
       if (tag) this.#selectComponent(tag);
@@ -380,15 +442,18 @@ class DvfyComponentPlayground extends HTMLElement {
   }
 
   async #loadManifest() {
+    const id = ++this.#loadId;
     const src = this.getAttribute('src') || '../custom-elements.json';
     try {
       const res = await fetch(src);
+      if (id !== this.#loadId || !this.isConnected) return; // stale
       this.#manifest = await res.json();
       this.#tags = (this.#manifest.tags || [])
         .filter(t => !SKIP_TAGS.has(t.name))
         .sort((a, b) => a.name.localeCompare(b.name));
       this.#build();
     } catch (e) {
+      if (id !== this.#loadId || !this.isConnected) return;
       this.textContent = '';
       const err = document.createElement('dvfy-alert');
       err.setAttribute('status', 'danger');
@@ -509,6 +574,13 @@ class DvfyComponentPlayground extends HTMLElement {
     tabs.appendChild(apiTab);
 
     left.appendChild(tabs);
+
+    // Layout mode label — sits at the end of the tab bar
+    const layoutLabel = document.createElement('span');
+    layoutLabel.className = 'sc__layout-label';
+    layoutLabel.textContent = this.getAttribute('layout') || 'center';
+    left.appendChild(layoutLabel);
+
     body.appendChild(left);
 
     // ── Right: collapsible drawer with scrollable controls ──
@@ -570,7 +642,9 @@ class DvfyComponentPlayground extends HTMLElement {
     if (!wrap || !this.#currentTag) return;
     wrap.textContent = '';
 
-    const attrs = this.#currentTag.attributes || [];
+    const skipSet = SKIP_ATTRS[this.#currentTag.name];
+    const attrs = (this.#currentTag.attributes || [])
+      .filter(a => !skipSet?.has(a.name));
 
     for (const attr of attrs) {
       const enumVals = parseEnumValues(attr.description);
@@ -692,6 +766,10 @@ class DvfyComponentPlayground extends HTMLElement {
     area.textContent = '';
     area.removeAttribute('style'); // reset any per-component overrides
 
+    // Apply layout hint from attribute (set by catalog router from COMPONENT_REGISTRY)
+    const layout = this.getAttribute('layout') || 'center';
+    area.setAttribute('data-layout', layout);
+
     const el = document.createElement(this.#currentTag.name);
 
     // Apply attribute values
@@ -706,13 +784,14 @@ class DvfyComponentPlayground extends HTMLElement {
     }
 
     // Set content — sourced from trusted DEFAULT_CONTENT or local developer input only
+    // SECURITY: innerHTML source is hardcoded DEFAULT_CONTENT or local developer textarea only
     if (this.#contentValue) {
       el.innerHTML = this.#contentValue;  // eslint-disable-line no-unsanitized/property
     }
 
-    // Layout components need a container context to demonstrate properly
-    if (this.#currentTag.name === 'dvfy-drawer') {
-      this.#renderDrawerPreview(area, el);
+    // Edge-attached components need a container context to demonstrate properly
+    if (layout === 'edge') {
+      this.#renderEdgePreview(area, el);
       return;
     }
 
@@ -720,19 +799,14 @@ class DvfyComponentPlayground extends HTMLElement {
   }
 
   /**
-   * Render dvfy-drawer inside a flex layout with toggle + sample content.
+   * Render edge-attached components (drawer, sidebar) inside a flex layout
+   * with toggle + sample content area.
    * Uses DOM methods only — all content is hardcoded trusted strings.
    */
-  #renderDrawerPreview(area, drawer) {
-    // Override preview area to be a flex row filling the space
-    area.style.display = 'flex';
-    area.style.gap = '0';
-    area.style.padding = '0';
-    area.style.position = 'relative';
-    area.style.alignItems = 'stretch';
-    area.style.justifyContent = 'stretch';
+  #renderEdgePreview(area, el) {
+    const tagName = this.#currentTag.name;
 
-    // Main content area
+    // Main content area — fills remaining space next to the edge component
     const main = document.createElement('div');
     main.style.flex = '1';
     main.style.padding = 'var(--dvfy-space-4)';
@@ -743,15 +817,23 @@ class DvfyComponentPlayground extends HTMLElement {
     main.style.justifyContent = 'center';
     main.style.alignItems = 'center';
 
-    const toggle = document.createElement('dvfy-button');
-    toggle.setAttribute('variant', 'outline');
-    toggle.setAttribute('size', 'sm');
-    toggle.textContent = drawer.hasAttribute('collapsed') ? 'Open Drawer' : 'Close Drawer';
-    toggle.addEventListener('click', () => {
-      drawer.collapsed = !drawer.collapsed;
-      toggle.textContent = drawer.collapsed ? 'Open Drawer' : 'Close Drawer';
-    });
-    main.appendChild(toggle);
+    // Toggle button for collapsible edge components
+    if (typeof el.collapsed !== 'undefined' || el.hasAttribute('collapsed')) {
+      const label = tagName.replace('dvfy-', '').replace('-', ' ');
+      const toggle = document.createElement('dvfy-button');
+      toggle.setAttribute('variant', 'outline');
+      toggle.setAttribute('size', 'sm');
+      toggle.textContent = el.hasAttribute('collapsed') ? `Open ${label}` : `Close ${label}`;
+      toggle.addEventListener('click', () => {
+        el.collapsed = !el.collapsed;
+        toggle.textContent = el.collapsed ? `Open ${label}` : `Close ${label}`;
+      });
+      main.appendChild(toggle);
+
+      el.addEventListener('toggle', (e) => {
+        toggle.textContent = e.detail?.collapsed ? `Open ${label}` : `Close ${label}`;
+      });
+    }
 
     const hint = document.createElement('p');
     hint.style.fontSize = 'var(--dvfy-text-sm)';
@@ -760,26 +842,22 @@ class DvfyComponentPlayground extends HTMLElement {
     hint.textContent = 'Main content area';
     main.appendChild(hint);
 
-    // Keep button label in sync with drawer events
-    drawer.addEventListener('toggle', (e) => {
-      toggle.textContent = e.detail.collapsed ? 'Open Drawer' : 'Close Drawer';
-    });
-
-    const pos = drawer.getAttribute('position') || 'right';
+    // Position: drawer supports left/right/top/bottom, sidebar is typically left/right
+    const pos = el.getAttribute('position') || 'right';
     if (pos === 'left') {
-      area.appendChild(drawer);
+      area.appendChild(el);
       area.appendChild(main);
     } else if (pos === 'top') {
       area.style.flexDirection = 'column';
-      area.appendChild(drawer);
+      area.appendChild(el);
       area.appendChild(main);
     } else if (pos === 'bottom') {
       area.style.flexDirection = 'column';
       area.appendChild(main);
-      area.appendChild(drawer);
+      area.appendChild(el);
     } else {
       area.appendChild(main);
-      area.appendChild(drawer);
+      area.appendChild(el);
     }
   }
 
