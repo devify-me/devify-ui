@@ -1,51 +1,51 @@
 const STYLES = `
-dvfy-compare {
+dvfy-compare-slider {
   display: block;
   position: relative;
   overflow: hidden;
   user-select: none;
   touch-action: none;
   cursor: ew-resize;
-  border-radius: var(--dvfy-compare-radius, var(--dvfy-radius-lg, 0.5rem));
+  border-radius: var(--dvfy-compare-slider-radius, var(--dvfy-radius-lg, 0.5rem));
 }
 
-dvfy-compare:focus-visible {
+dvfy-compare-slider:focus-visible {
   outline: 2px solid var(--dvfy-focus-ring, var(--dvfy-accent-brand, #7c3aed));
   outline-offset: 2px;
 }
 
 /* Before slot: defines the component height */
-dvfy-compare [slot="before"] {
+dvfy-compare-slider [slot="before"] {
   display: block;
   width: 100%;
   height: auto;
 }
 
 /* After slot: fills the absolutely-positioned wrapper */
-dvfy-compare [slot="after"] {
+dvfy-compare-slider [slot="after"] {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.dvfy-compare-before-wrap {
+.dvfy-compare-slider-before-wrap {
   display: block;
   position: relative;
 }
 
-.dvfy-compare-after-wrap {
+.dvfy-compare-slider-after-wrap {
   position: absolute;
   inset: 0;
   pointer-events: none;
 }
 
 /* Labels */
-.dvfy-compare-label {
+.dvfy-compare-slider-label {
   position: absolute;
   bottom: 0.75rem;
   padding: 0.2rem 0.5rem;
-  background: var(--dvfy-compare-label-bg, rgba(0, 0, 0, 0.5));
+  background: var(--dvfy-compare-slider-label-bg, rgba(0, 0, 0, 0.5));
   color: #fff;
   font-size: var(--dvfy-text-xs, 0.75rem);
   font-family: var(--dvfy-font-sans, system-ui, sans-serif);
@@ -57,17 +57,17 @@ dvfy-compare [slot="after"] {
   line-height: 1.4;
 }
 
-.dvfy-compare-label-before { left: 0.75rem; }
-.dvfy-compare-label-after  { right: 0.75rem; }
+.dvfy-compare-slider-label-before { left: 0.75rem; }
+.dvfy-compare-slider-label-after  { right: 0.75rem; }
 
 /* Divider line */
-.dvfy-compare-divider {
+.dvfy-compare-slider-divider {
   position: absolute;
   top: 0;
   bottom: 0;
   left: 50%;
   width: 2px;
-  background: var(--dvfy-compare-divider-color, rgba(255, 255, 255, 0.9));
+  background: var(--dvfy-compare-slider-divider-color, rgba(255, 255, 255, 0.9));
   transform: translateX(-50%);
   pointer-events: none;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.25);
@@ -75,14 +75,14 @@ dvfy-compare [slot="after"] {
 }
 
 /* Handle circle */
-.dvfy-compare-handle {
+.dvfy-compare-slider-handle {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 2.5rem;
   height: 2.5rem;
-  background: var(--dvfy-compare-handle-bg, #fff);
+  background: var(--dvfy-compare-slider-handle-bg, #fff);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -92,13 +92,13 @@ dvfy-compare [slot="after"] {
   pointer-events: none;
 }
 
-dvfy-compare[dragging] .dvfy-compare-handle {
+dvfy-compare-slider[dragging] .dvfy-compare-slider-handle {
   transform: translate(-50%, -50%) scale(1.15);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3), 0 0 0 2px rgba(255, 255, 255, 0.6);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dvfy-compare-handle { transition: none; }
+  .dvfy-compare-slider-handle { transition: none; }
 }
 `;
 
@@ -135,7 +135,7 @@ function makeHandleSVG() {
 }
 
 /**
- * <dvfy-compare> — Clip-path image comparison slider
+ * <dvfy-compare-slider> — Clip-path image comparison slider
  *
  * Overlay two images (before/after) and reveal via drag using clip-path.
  * Hardware-accelerated — no layout shifts since clip-path doesn't affect layout.
@@ -143,14 +143,14 @@ function makeHandleSVG() {
  * Inspired by Emil Kowalski: https://emilkowal.ski/ui/the-magic-of-clip-path
  *
  * Usage:
- *   <dvfy-compare label-before="Before" label-after="After">
+ *   <dvfy-compare-slider label-before="Before" label-after="After">
  *     <img slot="before" src="before.jpg" alt="Before" />
  *     <img slot="after"  src="after.jpg"  alt="After"  />
- *   </dvfy-compare>
+ *   </dvfy-compare-slider>
  *
  * Any block element can be used in the slots (not just images).
  *
- * @element dvfy-compare
+ * @element dvfy-compare-slider
  *
  * @attr {number} value - Divider position 0–100 (default: 50)
  * @attr {string} label-before - Label overlay on the before panel
@@ -161,18 +161,18 @@ function makeHandleSVG() {
  * @slot before - The "before" content (defines height of the component)
  * @slot after  - The "after" content (absolutely fills same area)
  *
- * @cssprop {length} --dvfy-compare-radius - Border radius (default: var(--dvfy-radius-lg))
- * @cssprop {color}  --dvfy-compare-divider-color - Divider line color (default: rgba(255,255,255,0.9))
- * @cssprop {color}  --dvfy-compare-handle-bg - Handle circle background (default: #fff)
- * @cssprop {color}  --dvfy-compare-label-bg - Label background (default: rgba(0,0,0,0.5))
+ * @cssprop {length} --dvfy-compare-slider-radius - Border radius (default: var(--dvfy-radius-lg))
+ * @cssprop {color}  --dvfy-compare-slider-divider-color - Divider line color (default: rgba(255,255,255,0.9))
+ * @cssprop {color}  --dvfy-compare-slider-handle-bg - Handle circle background (default: #fff)
+ * @cssprop {color}  --dvfy-compare-slider-label-bg - Label background (default: rgba(0,0,0,0.5))
  *
  * @example
- * <dvfy-compare label-before="Before" label-after="After" value="40">
+ * <dvfy-compare-slider label-before="Before" label-after="After" value="40">
  *   <img slot="before" src="photo-before.jpg" alt="Before" />
  *   <img slot="after"  src="photo-after.jpg"  alt="After"  />
- * </dvfy-compare>
+ * </dvfy-compare-slider>
  */
-class DvfyCompare extends HTMLElement {
+class DvfyCompareSlider extends HTMLElement {
   static #styled = false;
 
   /** @type {number} Current divider position 0–100 */
@@ -183,11 +183,11 @@ class DvfyCompare extends HTMLElement {
   #divider = null;
 
   connectedCallback() {
-    if (!DvfyCompare.#styled) {
+    if (!DvfyCompareSlider.#styled) {
       const s = document.createElement('style');
       s.textContent = STYLES;
       document.head.appendChild(s);
-      DvfyCompare.#styled = true;
+      DvfyCompareSlider.#styled = true;
     }
 
     this.#build();
@@ -225,12 +225,12 @@ class DvfyCompare extends HTMLElement {
 
     // Before wrapper (in-flow — defines component height)
     const beforeWrap = document.createElement('div');
-    beforeWrap.className = 'dvfy-compare-before-wrap';
+    beforeWrap.className = 'dvfy-compare-slider-before-wrap';
     beforeWrap.appendChild(beforeEl);
 
     // After wrapper (absolute overlay, clip-path applied here)
     const afterWrap = document.createElement('div');
-    afterWrap.className = 'dvfy-compare-after-wrap';
+    afterWrap.className = 'dvfy-compare-slider-after-wrap';
     afterWrap.setAttribute('aria-hidden', 'true');
     afterWrap.appendChild(afterEl);
 
@@ -240,23 +240,23 @@ class DvfyCompare extends HTMLElement {
 
     if (labelBefore) {
       const span = document.createElement('span');
-      span.className = 'dvfy-compare-label dvfy-compare-label-before';
+      span.className = 'dvfy-compare-slider-label dvfy-compare-slider-label-before';
       span.textContent = labelBefore;
       beforeWrap.appendChild(span);
     }
     if (labelAfter) {
       const span = document.createElement('span');
-      span.className = 'dvfy-compare-label dvfy-compare-label-after';
+      span.className = 'dvfy-compare-slider-label dvfy-compare-slider-label-after';
       span.textContent = labelAfter;
       afterWrap.appendChild(span);
     }
 
     // Divider + handle
     const divider = document.createElement('div');
-    divider.className = 'dvfy-compare-divider';
+    divider.className = 'dvfy-compare-slider-divider';
 
     const handle = document.createElement('div');
-    handle.className = 'dvfy-compare-handle';
+    handle.className = 'dvfy-compare-slider-handle';
     handle.appendChild(makeHandleSVG());
     divider.appendChild(handle);
 
@@ -358,4 +358,4 @@ class DvfyCompare extends HTMLElement {
   }
 }
 
-customElements.define('dvfy-compare', DvfyCompare);
+customElements.define('dvfy-compare-slider', DvfyCompareSlider);

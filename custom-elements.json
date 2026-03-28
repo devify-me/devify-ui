@@ -546,9 +546,9 @@
       ]
     },
     {
-      "name": "dvfy-compare",
-      "path": "./components/dvfy-compare.js",
-      "description": "<dvfy-compare> — Clip-path image comparison slider\n\nOverlay two images (before/after) and reveal via drag using clip-path.\nHardware-accelerated — no layout shifts since clip-path doesn't affect layout.\n\nInspired by Emil Kowalski: https://emilkowal.ski/ui/the-magic-of-clip-path\n\nUsage:\n  <dvfy-compare label-before=\"Before\" label-after=\"After\">\n    <img slot=\"before\" src=\"before.jpg\" alt=\"Before\" />\n    <img slot=\"after\"  src=\"after.jpg\"  alt=\"After\"  />\n  </dvfy-compare>\n\nAny block element can be used in the slots (not just images).",
+      "name": "dvfy-compare-slider",
+      "path": "./components/dvfy-compare-slider.js",
+      "description": "<dvfy-compare-slider> — Clip-path image comparison slider\n\nOverlay two images (before/after) and reveal via drag using clip-path.\nHardware-accelerated — no layout shifts since clip-path doesn't affect layout.\n\nInspired by Emil Kowalski: https://emilkowal.ski/ui/the-magic-of-clip-path\n\nUsage:\n  <dvfy-compare-slider label-before=\"Before\" label-after=\"After\">\n    <img slot=\"before\" src=\"before.jpg\" alt=\"Before\" />\n    <img slot=\"after\"  src=\"after.jpg\"  alt=\"After\"  />\n  </dvfy-compare-slider>\n\nAny block element can be used in the slots (not just images).",
       "attributes": [
         {
           "name": "value",
@@ -592,22 +592,22 @@
       ],
       "cssProperties": [
         {
-          "name": "--dvfy-compare-radius",
+          "name": "--dvfy-compare-slider-radius",
           "description": "Border radius (default: var(--dvfy-radius-lg))",
           "type": "length"
         },
         {
-          "name": "--dvfy-compare-divider-color",
+          "name": "--dvfy-compare-slider-divider-color",
           "description": "Divider line color (default: rgba(255,255,255,0.9))",
           "type": "color"
         },
         {
-          "name": "--dvfy-compare-handle-bg",
+          "name": "--dvfy-compare-slider-handle-bg",
           "description": "Handle circle background (default: #fff)",
           "type": "color"
         },
         {
-          "name": "--dvfy-compare-label-bg",
+          "name": "--dvfy-compare-slider-label-bg",
           "description": "Label background (default: rgba(0,0,0,0.5))",
           "type": "color"
         }
