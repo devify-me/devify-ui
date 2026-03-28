@@ -65,6 +65,7 @@ dvfy-nav-bar[sticky] .dvfy-nav-bar__bar {
   font-family: var(--dvfy-font-brand);
   font-size: var(--dvfy-text-lg);
   font-weight: var(--dvfy-weight-bold);
+  color: var(--dvfy-nav-brand-text, var(--dvfy-text-primary));
   white-space: nowrap;
   line-height: 1.2;
 }
@@ -178,6 +179,7 @@ const NAV_BAR_RESPONSIVE_FN = (id, bp) => `
  *
  * @cssprop {color} --dvfy-nav-bg - Nav background (default: var(--dvfy-surface-raised))
  * @cssprop {color} --dvfy-nav-border - Bottom border color (default: var(--dvfy-border-default))
+ * @cssprop {color} --dvfy-nav-brand-text - Brand name text color (default: var(--dvfy-text-primary))
  * @cssprop {length} --dvfy-nav-height - Bar height (default: 3.5rem)
  *
  * @example
