@@ -2,6 +2,18 @@
 
 HTML Web Component library with design tokens, HTMX patterns, and PWA support.
 
+## Goal & Purpose
+
+**Goal:** Provide a complete, tier-structured component library that enables any Devify product to ship a production-ready, accessible, themeable frontend using only HTML attributes — no framework, no build step, no client-side state management required.
+
+**Purpose:** @devify/ui is the shared visual language and UI engineering layer across all Devify products. It exists to:
+1. **Eliminate per-product UI engineering** — products compose components, they don't build UI from scratch
+2. **Enforce consistency** across the portfolio without mandating a frontend framework
+3. **Complement the server-first architecture** (Go + Templ + HTMX) by keeping the frontend thin and declarative
+4. **Enable AI-assisted development** by providing a predictable, attribute-driven API that Claude can generate, modify, and reason about reliably
+
+**Litmus test:** Does this decision make it faster for a Devify product (built by humans + AI) to go from zero to production-ready frontend?
+
 ## Architecture
 
 - **Zero build step** — ES modules + CSS custom properties served directly
@@ -30,8 +42,8 @@ devify-ui/
 │       ├── dark.css
 │       ├── devify-cyan.css
 │       └── devify-pink.css
-├── components/            # 48 Web Components (dvfy-*.js)
-├── patterns/              # 5 HTMX integration patterns (dvfy-*.js)
+├── components/            # Web Components (dvfy-*.js)
+├── patterns/              # 5 HTMX server components (dvfy-*.js)
 └── catalog/               # Design System Explorer
     ├── index.html         # Shell: header + sidebar + main layout
     ├── catalog.js         # Entry point: init sidebar, router, theme observer
@@ -61,7 +73,7 @@ When creating or modifying components:
 4. Support keyboard navigation (Tab, Enter, Space, Escape)
 5. Add ARIA roles and labels
 6. Add component to `devify.js` barrel file
-7. Add entry to `COMPONENT_REGISTRY` in `catalog/data.js` with tier, domain, and deps (see `docs/taxonomy.md` for classification rules)
+7. Add entry to `COMPONENT_REGISTRY` in `catalog/data.js` with tier (1-5), domain, deps, and `server: true` if HTMX (see `docs/taxonomy.md` for classification rules)
 8. Add `DEFAULT_CONTENT` entry in `components/dvfy-component-playground.js`
 9. Run `npm run analyze` to regenerate manifest
 
@@ -114,8 +126,8 @@ The manifest drives the **Playground** in the catalog via `<dvfy-component-playg
 ## Design System Explorer (Catalog)
 
 The catalog (`catalog/index.html`) is a full Design System Explorer with:
-- **Sidebar navigation** with search, organized by: Tokens, Components (by category), HTMX Patterns, Brand Settings
-- **Hash-based routing** (`#tokens/colors`, `#components/dvfy-button`, `#patterns/dvfy-confirm`, `#brand`, `#overview`)
+- **Sidebar navigation** with search, organized by: Tokens, Components (by tier or domain), Brand Settings
+- **Hash-based routing** (`#tokens/colors`, `#components/dvfy-button`, `#tier/1`, `#brand`, `#overview`)
 - **Token showcases** — live computed values from active theme (colors grid, typography samples, spacing bars, elevation cards)
 - **Component views** — `dvfy-component-playground` with `component` attr set (picker hidden, sidebar navigates)
 - **Brand Settings** — live-edit semantic tokens with color pickers, reset per section, export as CSS theme block
