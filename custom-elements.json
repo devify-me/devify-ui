@@ -1428,6 +1428,11 @@
           "type": "color"
         },
         {
+          "name": "--dvfy-nav-brand-text",
+          "description": "Brand name text color (default: var(--dvfy-text-primary))",
+          "type": "color"
+        },
+        {
           "name": "--dvfy-nav-height",
           "description": "Bar height (default: 3.5rem)",
           "type": "length"
