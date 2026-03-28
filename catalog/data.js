@@ -81,7 +81,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-card':            { tier: 1, domain: 'display',    deps: [], layout: 'center' },
   'dvfy-gradient-card':   { tier: 1, domain: 'display',    deps: [], layout: 'center' },
   'dvfy-spotlight-card':  { tier: 1, domain: 'display',    deps: [], layout: 'center' },
-  'dvfy-compare':         { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
+  'dvfy-compare-slider':  { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
   'dvfy-empty':           { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
   'dvfy-carousel':        { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
   'dvfy-scroll-progress': { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
