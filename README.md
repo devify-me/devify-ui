@@ -85,19 +85,19 @@ Three-tier token system following [UI Collective](https://uicollective.co/) meth
 | Accent | Hot Pink `#FF3CAC` | `--dvfy-brand-*` |
 | Dark | Indigo `#1A1040` | `--dvfy-indigo-*` |
 
-## Components (48)
+## Components (54)
 
 ### Forms
-`dvfy-button` `dvfy-input` `dvfy-textarea` `dvfy-select` `dvfy-checkbox` `dvfy-radio` `dvfy-switch` `dvfy-slider` `dvfy-date-picker` `dvfy-file-upload`
+`dvfy-button` `dvfy-input` `dvfy-textarea` `dvfy-select` `dvfy-checkbox` `dvfy-radio` `dvfy-switch` `dvfy-slider` `dvfy-date-picker` `dvfy-file-upload` `dvfy-live-search` [server] `dvfy-htmx-form` [server]
 
 ### Data Display
-`dvfy-badge` `dvfy-tag` `dvfy-avatar` `dvfy-card` `dvfy-gradient-card` `dvfy-spotlight-card` `dvfy-table` `dvfy-empty` `dvfy-progress` `dvfy-scroll-progress` `dvfy-compare` `dvfy-marquee-scroll` `dvfy-carousel`
+`dvfy-badge` `dvfy-tag` `dvfy-avatar` `dvfy-card` `dvfy-gradient-card` `dvfy-spotlight-card` `dvfy-table` `dvfy-empty` `dvfy-progress` `dvfy-scroll-progress` `dvfy-compare` `dvfy-marquee-scroll` `dvfy-carousel` `dvfy-htmx-table` [server]
 
 ### Feedback & Overlays
-`dvfy-alert` `dvfy-loader` `dvfy-toast` `dvfy-modal` `dvfy-hovercard`
+`dvfy-alert` `dvfy-loader` `dvfy-toast` `dvfy-modal` `dvfy-hovercard` `dvfy-confirm` [server]
 
 ### Navigation & Wayfinding
-`dvfy-dropdown` `dvfy-tooltip` `dvfy-tabs` `dvfy-breadcrumb` `dvfy-pagination` `dvfy-hamburger` `dvfy-sidebar` `dvfy-nav` `dvfy-tree-view`
+`dvfy-dropdown` `dvfy-tooltip` `dvfy-tabs` `dvfy-breadcrumb` `dvfy-pagination` `dvfy-hamburger` `dvfy-sidebar` `dvfy-nav` `dvfy-tree-view` `dvfy-tree-node`
 
 ### Layout
 `dvfy-drawer` `dvfy-section` `dvfy-accordion`
@@ -106,10 +106,7 @@ Three-tier token system following [UI Collective](https://uicollective.co/) meth
 `dvfy-scroll-reveal` `dvfy-scramble-hover` `dvfy-text-vortex` `dvfy-page-transition` `dvfy-transition-root`
 
 ### Utility
-`dvfy-theme-switcher` `dvfy-auth` `dvfy-component-playground`
-
-### HTMX Patterns (5)
-`dvfy-htmx-form` `dvfy-infinite-scroll` `dvfy-live-search` `dvfy-htmx-table` `dvfy-confirm`
+`dvfy-theme-switcher` `dvfy-auth` `dvfy-component-playground` `dvfy-infinite-scroll` [server]
 
 ## Component Conventions
 
