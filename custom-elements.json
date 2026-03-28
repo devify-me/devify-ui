@@ -1252,87 +1252,53 @@
       ]
     },
     {
-      "name": "dvfy-nav",
-      "path": "./components/dvfy-nav.js",
-      "description": "Responsive navigation bar composing dvfy-hamburger for animated mobile toggle.\nUses container queries for responsive behavior. Mobile menu renders as a\nslide-in drawer from the right edge.",
+      "name": "dvfy-nav-bar",
+      "path": "./components/dvfy-nav-bar.js",
       "attributes": [
         {
-          "name": "href",
-          "description": "Brand link destination (default: \"/\")",
-          "type": "string"
+          "name": "brand"
         },
         {
-          "name": "tagline",
-          "description": "Subtitle below brand name",
-          "type": "string"
-        },
-        {
-          "name": "sticky",
-          "description": "Stick to top on scroll",
-          "type": "boolean"
-        },
-        {
-          "name": "scroll-shrink",
-          "description": "Reduce padding and add shadow on scroll",
-          "type": "boolean"
-        },
-        {
-          "name": "breakpoint",
-          "description": "Pixel width for mobile collapse (default: 768)",
-          "type": "number"
-        },
-        {
-          "name": "animation",
-          "description": "Hamburger animation: x | x-rotate-r | x-rotate-l | chevron-left | chevron-right | minus",
-          "type": "string"
-        },
-        {
-          "name": "brand",
-          "description": "Brand name text",
-          "type": "string"
-        },
-        {
-          "name": "logo",
-          "description": "Logo image URL",
-          "type": "string"
+          "name": "logo"
         }
-      ],
-      "slots": [
+      ]
+    },
+    {
+      "name": "dvfy-nav-menu",
+      "path": "./components/dvfy-nav-menu.js",
+      "attributes": [
         {
-          "name": "",
-          "description": "Navigation links (<a>) and action elements (buttons, etc.)"
+          "name": "orientation"
+        },
+        {
+          "name": "label"
+        },
+        {
+          "name": "label-position"
         }
-      ],
-      "cssProperties": [
+      ]
+    },
+    {
+      "name": "dvfy-nav",
+      "path": "./components/dvfy-nav.js",
+      "attributes": [
         {
-          "name": "--dvfy-nav-bg",
-          "description": "Nav background (default: var(--dvfy-surface-raised))",
-          "type": "color"
+          "name": "href"
         },
         {
-          "name": "--dvfy-nav-border",
-          "description": "Bottom border color (default: var(--dvfy-border-default))",
-          "type": "color"
+          "name": "icon"
         },
         {
-          "name": "--dvfy-nav-link-color",
-          "description": "Link text color (default: var(--dvfy-text-secondary))",
-          "type": "color"
+          "name": "active"
         },
         {
-          "name": "--dvfy-nav-link-hover",
-          "description": "Link hover color (default: var(--dvfy-text-primary))",
-          "type": "color"
+          "name": "disabled"
         },
         {
-          "name": "--dvfy-nav-link-active",
-          "description": "Active link indicator (default: var(--dvfy-primary-bg))",
-          "type": "color"
+          "name": "label"
         },
         {
-          "name": "--dvfy-nav-height",
-          "description": "Bar height (default: 3.5rem)",
-          "type": "length"
+          "name": "label-position"
         }
       ]
     },

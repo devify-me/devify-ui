@@ -38,6 +38,8 @@ import './components/dvfy-breadcrumb.js';
 import './components/dvfy-pagination.js';
 import './components/dvfy-progress.js';
 import './components/dvfy-nav.js';
+import './components/dvfy-nav-menu.js';
+import './components/dvfy-nav-bar.js';
 import './components/dvfy-sidebar.js';
 import './components/dvfy-tree-view.js';
 
