@@ -7,7 +7,7 @@
  *  - Everything else: network-first with cache fallback
  */
 
-const CACHE_NAME = 'dvfy-v2';
+const CACHE_NAME = 'dvfy-v3';
 
 // Critical app shell — precached on install
 const PRECACHE_URLS = [
@@ -56,6 +56,8 @@ const PRECACHE_URLS = [
   '/components/dvfy-loader.js',
   '/components/dvfy-modal.js',
   '/components/dvfy-nav.js',
+  '/components/dvfy-nav-menu.js',
+  '/components/dvfy-nav-bar.js',
   '/components/dvfy-page-transition.js',
   '/components/dvfy-pagination.js',
   '/components/dvfy-progress.js',
