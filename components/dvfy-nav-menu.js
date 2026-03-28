@@ -1,26 +1,3 @@
-/**
- * Navigation link group that arranges dvfy-nav items.
- * Tier 2 composite — groups navigation links horizontally (desktop)
- * or vertically (mobile/drawer context).
- *
- * @element dvfy-nav-menu
- *
- * @attr {string} orientation - Layout direction: horizontal (default) | vertical
- * @attr {string} aria-label - Accessible group label
- * @attr {string} label - Visible text label
- * @attr {string} label-position - Label position: top | right | bottom | left
- *
- * @slot - dvfy-nav elements
- *
- * @cssprop {length} --dvfy-nav-menu-gap - Gap between items (default: 0 horizontal, var(--dvfy-space-1) vertical)
- *
- * @example
- * <dvfy-nav-menu>
- *   <dvfy-nav href="/docs" icon="📖">Docs</dvfy-nav>
- *   <dvfy-nav href="/pricing">Pricing</dvfy-nav>
- * </dvfy-nav-menu>
- */
-
 const NAV_MENU_STYLES = `
 dvfy-nav-menu {
   display: flex;
@@ -61,6 +38,28 @@ dvfy-nav-menu[orientation="vertical"] dvfy-nav a.dvfy-nav__link:hover {
 }
 `;
 
+/**
+ * Navigation link group that arranges dvfy-nav items.
+ * Tier 2 composite — groups navigation links horizontally (desktop)
+ * or vertically (mobile/drawer context).
+ *
+ * @element dvfy-nav-menu
+ *
+ * @attr {string} orientation - Layout direction: horizontal (default) | vertical
+ * @attr {string} aria-label - Accessible group label
+ * @attr {string} label - Visible text label
+ * @attr {string} label-position - Label position: top | right | bottom | left
+ *
+ * @slot - dvfy-nav elements
+ *
+ * @cssprop {length} --dvfy-nav-menu-gap - Gap between items (default: 0 horizontal, var(--dvfy-space-1) vertical)
+ *
+ * @example
+ * <dvfy-nav-menu>
+ *   <dvfy-nav href="/docs" icon="📖">Docs</dvfy-nav>
+ *   <dvfy-nav href="/pricing">Pricing</dvfy-nav>
+ * </dvfy-nav-menu>
+ */
 class DvfyNavMenu extends HTMLElement {
   static #styled = false;
 

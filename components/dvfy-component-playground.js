@@ -1,23 +1,3 @@
-/**
- * <dvfy-component-playground> — Interactive component playground
- *
- * Loads the WCA custom-elements.json manifest, renders a component picker,
- * auto-generates controls from attribute metadata, and provides live Preview,
- * Code, and API tabs.
- *
- * @element dvfy-component-playground
- *
- * @attr {string} component - Tag name to showcase (shows picker if omitted)
- * @attr {string} src - Path to custom-elements.json (default: "../custom-elements.json")
- * @attr {string} layout - Preview layout mode: center | stretch | fill | edge | overlay (default: "center")
- *
- * @slot - Not used
- *
- * @cssprop {color} --dvfy-surface-raised - Card/panel background
- * @cssprop {color} --dvfy-border-muted - Panel borders
- * @cssprop {color} --dvfy-primary-bg - Active tab accent
- */
-
 const PLAYGROUND_STYLES = `
 dvfy-component-playground {
   display: block;
@@ -411,6 +391,25 @@ function esc(s) {
   return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+/**
+ * <dvfy-component-playground> — Interactive component playground
+ *
+ * Loads the WCA custom-elements.json manifest, renders a component picker,
+ * auto-generates controls from attribute metadata, and provides live Preview,
+ * Code, and API tabs.
+ *
+ * @element dvfy-component-playground
+ *
+ * @attr {string} component - Tag name to showcase (shows picker if omitted)
+ * @attr {string} src - Path to custom-elements.json (default: "../custom-elements.json")
+ * @attr {string} layout - Preview layout mode: center | stretch | fill | edge | overlay (default: "center")
+ *
+ * @slot - Not used
+ *
+ * @cssprop {color} --dvfy-surface-raised - Card/panel background
+ * @cssprop {color} --dvfy-border-muted - Panel borders
+ * @cssprop {color} --dvfy-primary-bg - Active tab accent
+ */
 class DvfyComponentPlayground extends HTMLElement {
   static #styled = false;
 
@@ -418,6 +417,7 @@ class DvfyComponentPlayground extends HTMLElement {
   #tags = [];
   #currentTag = null;
   #attrValues = {};       // { attrName: currentValue }
+  #cssValues = {};        // { '--dvfy-prop-name': currentValue }
   #contentValue = '';      // current innerHTML for preview
   #loadId = 0;            // Invalidates stale fetches
 
@@ -512,6 +512,7 @@ class DvfyComponentPlayground extends HTMLElement {
   #selectComponent(tag) {
     this.#currentTag = tag;
     this.#attrValues = {};
+    this.#cssValues = {};
     this.#contentValue = tag.name in DEFAULT_CONTENT ? DEFAULT_CONTENT[tag.name] : 'Sample content';
 
     // Init all attributes — booleans respect (default: true) from description
@@ -746,6 +747,46 @@ class DvfyComponentPlayground extends HTMLElement {
       });
       wrap.appendChild(ta);
     }
+
+    // CSS custom property controls — color pickers for @cssprop entries
+    const cssProps = (this.#currentTag.cssProperties || [])
+      .filter(p => p.type === 'color');
+    if (cssProps.length) {
+      const cssSep = document.createElement('hr');
+      cssSep.style.cssText = 'border:none;border-top:var(--dvfy-border-1) solid var(--dvfy-border-muted);margin:var(--dvfy-space-2) 0';
+      wrap.appendChild(cssSep);
+
+      const cssLabel = document.createElement('p');
+      cssLabel.style.cssText = 'font-size:var(--dvfy-text-xs);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-text-muted);text-transform:uppercase;letter-spacing:var(--dvfy-tracking-wider);margin:var(--dvfy-space-2) 0 var(--dvfy-space-1)';
+      cssLabel.textContent = 'CSS Properties';
+      wrap.appendChild(cssLabel);
+
+      for (const prop of cssProps) {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;align-items:center;gap:var(--dvfy-space-2);margin-bottom:var(--dvfy-space-1-5)';
+
+        const color = document.createElement('input');
+        color.type = 'color';
+        color.style.cssText = 'width:28px;height:28px;padding:0;border:var(--dvfy-border-1) solid var(--dvfy-border-muted);border-radius:var(--dvfy-radius-sm);cursor:pointer;background:none;flex-shrink:0';
+        // Read the current computed value to set initial color
+        const defaultDesc = prop.description || '';
+        color.title = defaultDesc;
+
+        const label = document.createElement('span');
+        label.style.cssText = 'font-size:var(--dvfy-text-xs);color:var(--dvfy-text-secondary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+        label.textContent = prop.name.replace('--dvfy-', '');
+        label.title = prop.name;
+
+        color.addEventListener('input', () => {
+          this.#cssValues[prop.name] = color.value;
+          this.#updatePreview();
+        });
+
+        row.appendChild(color);
+        row.appendChild(label);
+        wrap.appendChild(row);
+      }
+    }
   }
 
   /**
@@ -789,6 +830,11 @@ class DvfyComponentPlayground extends HTMLElement {
     // SECURITY: innerHTML source is hardcoded DEFAULT_CONTENT or local developer textarea only
     if (this.#contentValue) {
       el.innerHTML = this.#contentValue;  // eslint-disable-line no-unsanitized/property
+    }
+
+    // Apply CSS custom property overrides from color picker controls
+    for (const [name, value] of Object.entries(this.#cssValues)) {
+      if (value) el.style.setProperty(name, value);
     }
 
     // Edge-attached components need a container context to demonstrate properly
@@ -875,6 +921,13 @@ class DvfyComponentPlayground extends HTMLElement {
       } else if (value && value !== '') {
         html += ` ${name}="${esc(value)}"`;
       }
+    }
+
+    // Include CSS custom property overrides as inline style
+    const cssEntries = Object.entries(this.#cssValues).filter(([, v]) => v);
+    if (cssEntries.length) {
+      const styleStr = cssEntries.map(([k, v]) => `${k}: ${v}`).join('; ');
+      html += ` style="${esc(styleStr)}"`;
     }
 
     html += '>';

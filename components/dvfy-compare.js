@@ -1,42 +1,3 @@
-/**
- * <dvfy-compare> — Clip-path image comparison slider
- *
- * Overlay two images (before/after) and reveal via drag using clip-path.
- * Hardware-accelerated — no layout shifts since clip-path doesn't affect layout.
- *
- * Inspired by Emil Kowalski: https://emilkowal.ski/ui/the-magic-of-clip-path
- *
- * Usage:
- *   <dvfy-compare label-before="Before" label-after="After">
- *     <img slot="before" src="before.jpg" alt="Before" />
- *     <img slot="after"  src="after.jpg"  alt="After"  />
- *   </dvfy-compare>
- *
- * Any block element can be used in the slots (not just images).
- *
- * @element dvfy-compare
- *
- * @attr {number} value - Divider position 0–100 (default: 50)
- * @attr {string} label-before - Label overlay on the before panel
- * @attr {string} label-after - Label overlay on the after panel
- *
- * @fires change - Fires on every drag update. detail: { value: number }
- *
- * @slot before - The "before" content (defines height of the component)
- * @slot after  - The "after" content (absolutely fills same area)
- *
- * @cssprop {length} --dvfy-compare-radius - Border radius (default: var(--dvfy-radius-lg))
- * @cssprop {color}  --dvfy-compare-divider-color - Divider line color (default: rgba(255,255,255,0.9))
- * @cssprop {color}  --dvfy-compare-handle-bg - Handle circle background (default: #fff)
- * @cssprop {color}  --dvfy-compare-label-bg - Label background (default: rgba(0,0,0,0.5))
- *
- * @example
- * <dvfy-compare label-before="Before" label-after="After" value="40">
- *   <img slot="before" src="photo-before.jpg" alt="Before" />
- *   <img slot="after"  src="photo-after.jpg"  alt="After"  />
- * </dvfy-compare>
- */
-
 const STYLES = `
 dvfy-compare {
   display: block;
@@ -174,7 +135,42 @@ function makeHandleSVG() {
 }
 
 /**
- * Clip-path image comparison slider. Drag the divider to reveal before/after panels.
+ * <dvfy-compare> — Clip-path image comparison slider
+ *
+ * Overlay two images (before/after) and reveal via drag using clip-path.
+ * Hardware-accelerated — no layout shifts since clip-path doesn't affect layout.
+ *
+ * Inspired by Emil Kowalski: https://emilkowal.ski/ui/the-magic-of-clip-path
+ *
+ * Usage:
+ *   <dvfy-compare label-before="Before" label-after="After">
+ *     <img slot="before" src="before.jpg" alt="Before" />
+ *     <img slot="after"  src="after.jpg"  alt="After"  />
+ *   </dvfy-compare>
+ *
+ * Any block element can be used in the slots (not just images).
+ *
+ * @element dvfy-compare
+ *
+ * @attr {number} value - Divider position 0–100 (default: 50)
+ * @attr {string} label-before - Label overlay on the before panel
+ * @attr {string} label-after - Label overlay on the after panel
+ *
+ * @fires change - Fires on every drag update. detail: { value: number }
+ *
+ * @slot before - The "before" content (defines height of the component)
+ * @slot after  - The "after" content (absolutely fills same area)
+ *
+ * @cssprop {length} --dvfy-compare-radius - Border radius (default: var(--dvfy-radius-lg))
+ * @cssprop {color}  --dvfy-compare-divider-color - Divider line color (default: rgba(255,255,255,0.9))
+ * @cssprop {color}  --dvfy-compare-handle-bg - Handle circle background (default: #fff)
+ * @cssprop {color}  --dvfy-compare-label-bg - Label background (default: rgba(0,0,0,0.5))
+ *
+ * @example
+ * <dvfy-compare label-before="Before" label-after="After" value="40">
+ *   <img slot="before" src="photo-before.jpg" alt="Before" />
+ *   <img slot="after"  src="photo-after.jpg"  alt="After"  />
+ * </dvfy-compare>
  */
 class DvfyCompare extends HTMLElement {
   static #styled = false;

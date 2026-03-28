@@ -1,52 +1,3 @@
-/**
- * <dvfy-page-transition> — View Transitions API wrapper
- *
- * Seamless cross-page (MPA) and in-page (SPA) transitions via the native View
- * Transitions API. MPA mode is zero-JS — just add the element once per page.
- * SPA mode wraps DOM mutations via startTransition(). HTMX integration is
- * automatic when the `htmx` attribute is present.
- *
- * Browser support: Chrome 111+, Edge 111+, Firefox 128+, Safari 18+.
- * Gracefully degrades to instant transitions in older browsers.
- *
- * @element dvfy-page-transition
- *
- * @attr {boolean} mpa - Enable cross-page (MPA) transitions via CSS @view-transition
- * @attr {boolean} htmx - Auto-enable HTMX globalViewTransitions when htmx is detected
- * @attr {string} animation - Preset: fade | slide-left | slide-right | slide-up | slide-down | scale (default: "fade")
- * @attr {string} duration - Speed: fastest | fast | normal | slow | slowest (default: "normal")
- * @attr {string} name - view-transition-name for named element morphing between states
- *
- * @fires transition-start - Fires when a SPA transition begins
- * @fires transition-finish - Fires when a SPA transition completes, detail: { success }
- *
- * @slot - Content to wrap with transitions
- *
- * @cssprop {time} --dvfy-pt-duration - Override transition duration (defaults to duration attr)
- * @cssprop {string} --dvfy-pt-easing - Override transition easing curve
- *
- * @example
- * <!-- MPA cross-page transitions (add once per page, typically near </body>) -->
- * <dvfy-page-transition mpa animation="slide-left"></dvfy-page-transition>
- *
- * <!-- MPA + HTMX: also wraps hx-boost and non-boost HTMX swaps automatically -->
- * <dvfy-page-transition mpa htmx animation="fade"></dvfy-page-transition>
- *
- * <!-- Named element morphing — same name on both pages morphs between them -->
- * <dvfy-page-transition name="hero-image">
- *   <img src="hero.jpg" alt="Hero" />
- * </dvfy-page-transition>
- *
- * <!-- SPA in-page transition via JS API -->
- * <dvfy-page-transition id="main" animation="fade">
- *   <p>Current content</p>
- * </dvfy-page-transition>
- * <script>
- *   const pt = document.querySelector('#main');
- *   pt.startTransition(() => { replaceContentWithTrustedData(pt); });
- * </script>
- */
-
 const DURATION_MAP = {
   fastest: 'var(--dvfy-duration-fastest)',
   fast:    'var(--dvfy-duration-fast)',
@@ -128,9 +79,52 @@ function buildAnimationCSS(animation, duration) {
 }
 
 /**
- * View Transitions API wrapper for MPA and SPA transitions.
+ * <dvfy-page-transition> — View Transitions API wrapper
+ *
+ * Seamless cross-page (MPA) and in-page (SPA) transitions via the native View
+ * Transitions API. MPA mode is zero-JS — just add the element once per page.
+ * SPA mode wraps DOM mutations via startTransition(). HTMX integration is
+ * automatic when the `htmx` attribute is present.
+ *
+ * Browser support: Chrome 111+, Edge 111+, Firefox 128+, Safari 18+.
+ * Gracefully degrades to instant transitions in older browsers.
  *
  * @element dvfy-page-transition
+ *
+ * @attr {boolean} mpa - Enable cross-page (MPA) transitions via CSS @view-transition
+ * @attr {boolean} htmx - Auto-enable HTMX globalViewTransitions when htmx is detected
+ * @attr {string} animation - Preset: fade | slide-left | slide-right | slide-up | slide-down | scale (default: "fade")
+ * @attr {string} duration - Speed: fastest | fast | normal | slow | slowest (default: "normal")
+ * @attr {string} name - view-transition-name for named element morphing between states
+ *
+ * @fires transition-start - Fires when a SPA transition begins
+ * @fires transition-finish - Fires when a SPA transition completes, detail: { success }
+ *
+ * @slot - Content to wrap with transitions
+ *
+ * @cssprop {time} --dvfy-pt-duration - Override transition duration (defaults to duration attr)
+ * @cssprop {string} --dvfy-pt-easing - Override transition easing curve
+ *
+ * @example
+ * <!-- MPA cross-page transitions (add once per page, typically near </body>) -->
+ * <dvfy-page-transition mpa animation="slide-left"></dvfy-page-transition>
+ *
+ * <!-- MPA + HTMX: also wraps hx-boost and non-boost HTMX swaps automatically -->
+ * <dvfy-page-transition mpa htmx animation="fade"></dvfy-page-transition>
+ *
+ * <!-- Named element morphing — same name on both pages morphs between them -->
+ * <dvfy-page-transition name="hero-image">
+ *   <img src="hero.jpg" alt="Hero" />
+ * </dvfy-page-transition>
+ *
+ * <!-- SPA in-page transition via JS API -->
+ * <dvfy-page-transition id="main" animation="fade">
+ *   <p>Current content</p>
+ * </dvfy-page-transition>
+ * <script>
+ *   const pt = document.querySelector('#main');
+ *   pt.startTransition(() => { replaceContentWithTrustedData(pt); });
+ * </script>
  */
 class DvfyPageTransition extends HTMLElement {
   static #baseStyled = false;
