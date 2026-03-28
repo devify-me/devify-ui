@@ -51,13 +51,15 @@ export const DOMAINS = {
 /**
  * Preview layout hints — how the playground preview area should present the component.
  *
- *   center  — Centered in preview (buttons, badges, toggles)
- *   stretch — Full-width, vertically centered (inputs, navs, progress bars)
- *   fill    — Fills entire preview area (cards, tables, accordion)
- *   edge    — Attached to container edges with sibling content (drawer, sidebar)
- *   overlay — Needs a trigger to demonstrate (modal, toast, tooltip)
+ *   center       — Centered in preview (buttons, badges, toggles)
+ *   stretch      — Full-width, vertically centered (inputs, progress bars)
+ *   fill         — Fills entire preview area (cards, tables, accordion)
+ *   edge         — Attached to container edges with sibling content (drawer, sidebar)
+ *   overlay      — Needs a trigger to demonstrate (modal, toast, tooltip)
+ *   top-bar      — Pinned to top with simulated page content below (nav-bar)
+ *   inline-group — Horizontal flex at natural size (nav-menu, tag groups)
  */
-export const LAYOUTS = ['center', 'stretch', 'fill', 'edge', 'overlay'];
+export const LAYOUTS = ['center', 'stretch', 'fill', 'edge', 'overlay', 'top-bar', 'inline-group'];
 
 /** Component registry — single source of truth for classification */
 export const COMPONENT_REGISTRY = {
@@ -112,8 +114,8 @@ export const COMPONENT_REGISTRY = {
   'dvfy-table':                { tier: 2, domain: 'display',    deps: ['dvfy-checkbox'], layout: 'fill' },
   'dvfy-modal':                { tier: 2, domain: 'feedback',   deps: ['dvfy-button'], layout: 'overlay' },
   'dvfy-nav':                  { tier: 1, domain: 'navigation', deps: [], layout: 'center' },
-  'dvfy-nav-menu':             { tier: 2, domain: 'navigation', deps: ['dvfy-nav'], layout: 'stretch' },
-  'dvfy-nav-bar':              { tier: 3, domain: 'navigation', deps: ['dvfy-nav-menu', 'dvfy-hamburger', 'dvfy-drawer'], layout: 'stretch' },
+  'dvfy-nav-menu':             { tier: 2, domain: 'navigation', deps: ['dvfy-nav'], layout: 'inline-group' },
+  'dvfy-nav-bar':              { tier: 3, domain: 'navigation', deps: ['dvfy-nav-menu', 'dvfy-hamburger', 'dvfy-drawer'], layout: 'top-bar' },
   'dvfy-theme-switcher':       { tier: 2, domain: 'utility',    deps: ['dvfy-dropdown', 'dvfy-button'], layout: 'center' },
   'dvfy-accordion':            { tier: 2, domain: 'layout',     deps: ['dvfy-section'], layout: 'fill' },
   'dvfy-component-playground': { tier: 2, domain: 'utility',    deps: ['dvfy-button', 'dvfy-section', 'dvfy-slider'], layout: 'fill' },

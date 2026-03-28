@@ -93,6 +93,26 @@ dvfy-component-playground .sc__preview-area[data-layout="overlay"] {
   justify-content: center;
 }
 
+/* Layout: top-bar — pinned to top with simulated page content below */
+dvfy-component-playground .sc__preview-area[data-layout="top-bar"] {
+  padding: 0;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  flex-wrap: nowrap;
+  overflow: hidden;
+}
+
+/* Layout: inline-group — horizontal flex at natural size, not stretched */
+dvfy-component-playground .sc__preview-area[data-layout="inline-group"] {
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+dvfy-component-playground .sc__preview-area[data-layout="inline-group"] > * {
+  flex: none;
+}
+
 /* Layout mode label — aligned with the tab bar, top-right of preview column */
 dvfy-component-playground .sc__layout-label {
   position: absolute;
@@ -843,6 +863,12 @@ class DvfyComponentPlayground extends HTMLElement {
       return;
     }
 
+    // Top-bar components pin to top with simulated page content below
+    if (layout === 'top-bar') {
+      this.#renderTopBarPreview(area, el);
+      return;
+    }
+
     area.appendChild(el);
   }
 
@@ -907,6 +933,48 @@ class DvfyComponentPlayground extends HTMLElement {
       area.appendChild(main);
       area.appendChild(el);
     }
+  }
+
+  /**
+   * Render top-bar components (nav-bar) pinned to top of preview
+   * with simulated page content below. Uses DOM methods only.
+   */
+  #renderTopBarPreview(area, el) {
+    // Component pinned to top
+    area.appendChild(el);
+
+    // Simulated page content below
+    const page = document.createElement('div');
+    page.style.cssText = 'flex:1;padding:var(--dvfy-space-6);display:flex;flex-direction:column;gap:var(--dvfy-space-4);overflow-y:auto';
+
+    const heading = document.createElement('h3');
+    heading.style.cssText = 'font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-bold);color:var(--dvfy-text-primary);margin:0';
+    heading.textContent = 'Page Content';
+    page.appendChild(heading);
+
+    const para = document.createElement('p');
+    para.style.cssText = 'font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-sm);color:var(--dvfy-text-muted);line-height:var(--dvfy-leading-relaxed);margin:0;max-width:40rem';
+    para.textContent = 'This simulated content shows how the navigation bar appears at the top of a page. Resize the preview area or change the breakpoint attribute to see responsive behavior.';
+    page.appendChild(para);
+
+    const cards = document.createElement('div');
+    cards.style.cssText = 'display:flex;gap:var(--dvfy-space-3);flex-wrap:wrap';
+    for (let i = 0; i < 3; i++) {
+      const card = document.createElement('div');
+      card.style.cssText = 'flex:1;min-width:8rem;padding:var(--dvfy-space-4);background:var(--dvfy-surface-raised);border:var(--dvfy-border-1) solid var(--dvfy-border-muted);border-radius:var(--dvfy-radius-lg)';
+      const title = document.createElement('p');
+      title.style.cssText = 'font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-sm);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-text-primary);margin:0 0 var(--dvfy-space-1)';
+      title.textContent = ['Dashboard', 'Analytics', 'Settings'][i];
+      const desc = document.createElement('p');
+      desc.style.cssText = 'font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-xs);color:var(--dvfy-text-muted);margin:0';
+      desc.textContent = 'Sample card content';
+      card.appendChild(title);
+      card.appendChild(desc);
+      cards.appendChild(card);
+    }
+    page.appendChild(cards);
+
+    area.appendChild(page);
   }
 
   #updateCode() {
