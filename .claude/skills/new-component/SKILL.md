@@ -50,8 +50,9 @@ Before writing any code, study the codebase to understand conventions and plan t
 
 Present a brief plan to the user via AskUserQuestion before building:
 
-1. **Category** — which of the 6 categories (Forms, Data Display, Feedback, Navigation, Layout, Utility)
-2. **One-line description**
+1. **Category** — which of the 6 domains (Forms, Data Display, Feedback, Navigation, Layout, Utility)
+2. **Server flag** — does it require HTMX/server interaction? (`server: true`)
+3. **One-line description**
 3. **Planned attributes** — list with types and defaults (derived from issue + similar components)
 4. **Key behavior** — 2-3 bullet points on what the component does
 5. **Child elements** — what goes inside it (slots, expected children)
@@ -107,9 +108,9 @@ The value MUST be **actual HTML** that demonstrates the component in the playgro
 
 Add as the last entry before the closing `};`.
 
-## Step 6: Add to COMPONENT_CATEGORIES
+## Step 6: Verify Catalog Registration
 
-Read `catalog/data.js` and append the tag name to the chosen category array in `COMPONENT_CATEGORIES`.
+`COMPONENT_CATEGORIES` is derived from `COMPONENT_REGISTRY` — no separate step needed. Verify the component appears in the correct domain by checking the registry entry added in Step 2b. If the component requires server interaction, ensure `server: true` is set in the registry entry.
 
 ## Step 7: Run Analyzer
 
