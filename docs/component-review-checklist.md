@@ -69,9 +69,8 @@ Use this checklist when auditing or reviewing a `dvfy-*` component for productio
 
 Audit in tier order — primitives first because bugs cascade:
 
-| Phase | Tier | Priority (most-depended-on first)                                                                    |
+| Phase | Tier | Components                                                                                           |
 |-------|------|------------------------------------------------------------------------------------------------------|
-| 1     | T1   | button, input, checkbox, radio, switch, textarea, section, badge, tag, avatar, alert, loader, progress, tooltip, hamburger |
-| 2     | T2   | select, dropdown, modal, table, tabs, card, empty, toast, breadcrumb, pagination, nav, theme-switcher |
-| 3     | T3   | sidebar, accordion, header, auth                                                                      |
-| 4     | T4   | htmx-form, confirm, infinite-scroll, live-search, htmx-table                                         |
+| 1     | T1   | button, input, checkbox, radio, switch, textarea, section, badge, tag, avatar, alert, loader, progress, tooltip, hamburger, select, dropdown, tabs, card, empty, toast, breadcrumb, pagination, sidebar, carousel, and remaining primitives |
+| 2     | T2   | drawer, table, modal, nav, theme-switcher, accordion, component-playground                            |
+| 3     | T3   | auth, htmx-form, confirm                                                                             |

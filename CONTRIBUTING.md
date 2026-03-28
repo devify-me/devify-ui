@@ -168,9 +168,10 @@ import './components/dvfy-<name>.js';
 `catalog/data.js` — add to `COMPONENT_REGISTRY`:
 ```javascript
 'dvfy-<name>': {
-  tier: 1,           // 1–4, see docs/taxonomy.md
-  domain: 'display', // forms | display | feedback | navigation | layout | utility | htmx
+  tier: 1,           // 1–5, see docs/taxonomy.md
+  domain: 'display', // forms | display | feedback | navigation | layout | utility
   deps: [],          // other dvfy-* components this depends on
+  // server: true,   // add if component requires HTMX/server backend
 },
 ```
 
