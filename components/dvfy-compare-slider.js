@@ -14,6 +14,14 @@ dvfy-compare-slider:focus-visible {
   outline-offset: 2px;
 }
 
+/* Prevent native image drag from hijacking pointer events */
+dvfy-compare-slider img,
+dvfy-compare-slider [slot] {
+  -webkit-user-drag: none;
+  user-drag: none;
+  pointer-events: none;
+}
+
 /* Before slot: defines the component height */
 dvfy-compare-slider [slot="before"] {
   display: block;
