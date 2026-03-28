@@ -181,6 +181,7 @@ class DvfyCompareSlider extends HTMLElement {
   #afterWrap = null;
   /** @type {HTMLElement|null} */
   #divider = null;
+  #observer = null;
 
   connectedCallback() {
     if (!DvfyCompareSlider.#styled) {
@@ -192,11 +193,20 @@ class DvfyCompareSlider extends HTMLElement {
 
     this.#build();
     this.#attachInteraction();
+
+    // Watch for slot content added after connectedCallback (e.g., playground innerHTML)
+    this.#observer = new MutationObserver(() => {
+      if (!this.querySelector('.dvfy-compare-slider-before-wrap') && this.querySelector('[slot="before"]')) {
+        this.#build();
+      }
+    });
+    this.#observer.observe(this, { childList: true });
   }
 
   disconnectedCallback() {
     this.removeEventListener('pointerdown', this.#onPointerDown);
     this.removeEventListener('keydown', this.#onKeyDown);
+    this.#observer?.disconnect();
   }
 
   static get observedAttributes() {

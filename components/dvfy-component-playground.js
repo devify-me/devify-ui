@@ -360,7 +360,7 @@ const DEFAULT_CONTENT = {
   'dvfy-alert': 'This is an alert message.',
   'dvfy-loader': '',
   'dvfy-card': '<h3 style="margin-bottom:0.5rem">Card Title</h3><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Card content goes here.</p>',
-  'dvfy-compare-slider': '<img slot="before" src="https://picsum.photos/seed/devify/800/500" alt="Before" style="filter:grayscale(1)"/><img slot="after" src="https://picsum.photos/seed/devify/800/500" alt="After"/>',
+  'dvfy-compare-slider': '<img slot="before" src="https://picsum.photos/seed/cityscape/800/500?grayscale" alt="Before"/><img slot="after" src="https://picsum.photos/seed/cityscape/800/500" alt="After"/>',
   'dvfy-carousel': '<dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-primary-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-primary-bg)">Slide 1</div></dvfy-slide><dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-accent-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-accent-bg)">Slide 2</div></dvfy-slide><dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-success-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-success-text)">Slide 3</div></dvfy-slide><dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-warning-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-warning-text)">Slide 4</div></dvfy-slide>',
   'dvfy-progress': '',
   'dvfy-tabs': '<dvfy-tab label="Tab 1"><p style="padding:1rem">First tab content</p></dvfy-tab><dvfy-tab label="Tab 2"><p style="padding:1rem">Second tab content</p></dvfy-tab>',
@@ -745,7 +745,7 @@ class DvfyComponentPlayground extends HTMLElement {
       }
     }
 
-    // Compare-slider: image URL inputs instead of raw content textarea
+    // Compare-slider: two image URL inputs instead of raw content textarea
     if (this.#currentTag.name === 'dvfy-compare-slider') {
       const imgSep = document.createElement('hr');
       imgSep.style.cssText = 'border:none;border-top:var(--dvfy-border-1) solid var(--dvfy-border-muted);margin:var(--dvfy-space-2) 0';
@@ -756,20 +756,34 @@ class DvfyComponentPlayground extends HTMLElement {
       imgLabel.textContent = 'Images';
       wrap.appendChild(imgLabel);
 
-      const defaultUrl = 'https://picsum.photos/seed/devify/800/500';
+      const defaultBefore = 'https://picsum.photos/seed/cityscape/800/500?grayscale';
+      const defaultAfter = 'https://picsum.photos/seed/cityscape/800/500';
+      let beforeUrl = defaultBefore;
+      let afterUrl = defaultAfter;
 
-      const urlInput = document.createElement('dvfy-input');
-      urlInput.setAttribute('label', 'Image URL');
-      urlInput.setAttribute('placeholder', defaultUrl);
-      urlInput.setAttribute('help', 'Same image used for both — before is grayscale');
-      urlInput.addEventListener('input', (e) => {
-        const url = e.target?.value ?? urlInput.querySelector('input')?.value ?? defaultUrl;
-        const src = url || defaultUrl;
-        this.#contentValue = `<img slot="before" src="${src}" alt="Before" style="filter:grayscale(1)"/><img slot="after" src="${src}" alt="After"/>`;
+      const rebuildContent = () => {
+        this.#contentValue = `<img slot="before" src="${beforeUrl}" alt="Before"/><img slot="after" src="${afterUrl}" alt="After"/>`;
         this.#updatePreview();
         this.#updateCode();
+      };
+
+      const beforeInput = document.createElement('dvfy-input');
+      beforeInput.setAttribute('label', 'Before image URL');
+      beforeInput.setAttribute('placeholder', defaultBefore);
+      beforeInput.addEventListener('input', (e) => {
+        beforeUrl = (e.target?.value ?? beforeInput.querySelector('input')?.value) || defaultBefore;
+        rebuildContent();
       });
-      wrap.appendChild(urlInput);
+      wrap.appendChild(beforeInput);
+
+      const afterInput = document.createElement('dvfy-input');
+      afterInput.setAttribute('label', 'After image URL');
+      afterInput.setAttribute('placeholder', defaultAfter);
+      afterInput.addEventListener('input', (e) => {
+        afterUrl = (e.target?.value ?? afterInput.querySelector('input')?.value) || defaultAfter;
+        rebuildContent();
+      });
+      wrap.appendChild(afterInput);
 
     } else {
     // Content control (innerHTML) — only if component uses content
