@@ -1,35 +1,3 @@
-/**
- * Full responsive navigation bar composing lower-tier components.
- * Tier 3 organism — brand section + dvfy-nav-menu + action items.
- * Mobile breakpoint triggers dvfy-hamburger toggle and dvfy-drawer slide-in.
- *
- * @element dvfy-nav-bar
- *
- * @attr {string} brand - Brand name text
- * @attr {string} logo - Logo image URL
- * @attr {string} href - Brand link destination (default: "/")
- * @attr {string} tagline - Subtitle below brand name
- * @attr {boolean} sticky - Stick to top on scroll
- * @attr {boolean} scroll-shrink - Reduce height and add shadow on scroll
- * @attr {number} breakpoint - Pixel width for mobile collapse (default: 768)
- * @attr {string} animation - Hamburger animation: x | x-rotate-r | x-rotate-l | chevron-left | chevron-right | minus
- *
- * @slot - dvfy-nav-menu for links, other elements treated as actions
- *
- * @cssprop {color} --dvfy-nav-bg - Nav background (default: var(--dvfy-surface-raised))
- * @cssprop {color} --dvfy-nav-border - Bottom border color (default: var(--dvfy-border-default))
- * @cssprop {length} --dvfy-nav-height - Bar height (default: 3.5rem)
- *
- * @example
- * <dvfy-nav-bar brand="Devify" sticky scroll-shrink>
- *   <dvfy-nav-menu>
- *     <dvfy-nav href="/docs">Docs</dvfy-nav>
- *     <dvfy-nav href="/pricing">Pricing</dvfy-nav>
- *   </dvfy-nav-menu>
- *   <dvfy-button variant="default" size="sm">Sign In</dvfy-button>
- * </dvfy-nav-bar>
- */
-
 let _navBarIdCounter = 0;
 
 const NAV_BAR_STYLES = `
@@ -190,6 +158,37 @@ const NAV_BAR_RESPONSIVE_FN = (id, bp) => `
 }
 `;
 
+/**
+ * Full responsive navigation bar composing lower-tier components.
+ * Tier 3 organism — brand section + dvfy-nav-menu + action items.
+ * Mobile breakpoint triggers dvfy-hamburger toggle and dvfy-drawer slide-in.
+ *
+ * @element dvfy-nav-bar
+ *
+ * @attr {string} brand - Brand name text
+ * @attr {string} logo - Logo image URL
+ * @attr {string} href - Brand link destination (default: "/")
+ * @attr {string} tagline - Subtitle below brand name
+ * @attr {boolean} sticky - Stick to top on scroll
+ * @attr {boolean} scroll-shrink - Reduce height and add shadow on scroll
+ * @attr {number} breakpoint - Pixel width for mobile collapse (default: 768)
+ * @attr {string} animation - Hamburger animation: x | x-rotate-r | x-rotate-l | chevron-left | chevron-right | minus
+ *
+ * @slot - dvfy-nav-menu for links, other elements treated as actions
+ *
+ * @cssprop {color} --dvfy-nav-bg - Nav background (default: var(--dvfy-surface-raised))
+ * @cssprop {color} --dvfy-nav-border - Bottom border color (default: var(--dvfy-border-default))
+ * @cssprop {length} --dvfy-nav-height - Bar height (default: 3.5rem)
+ *
+ * @example
+ * <dvfy-nav-bar brand="Devify" sticky scroll-shrink>
+ *   <dvfy-nav-menu>
+ *     <dvfy-nav href="/docs">Docs</dvfy-nav>
+ *     <dvfy-nav href="/pricing">Pricing</dvfy-nav>
+ *   </dvfy-nav-menu>
+ *   <dvfy-button variant="default" size="sm">Sign In</dvfy-button>
+ * </dvfy-nav-bar>
+ */
 class DvfyNavBar extends HTMLElement {
   static #baseStyled = false;
   #barId = null;

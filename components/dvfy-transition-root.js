@@ -1,3 +1,28 @@
+const SUPPORTS_VIEW_TRANSITIONS = typeof document !== 'undefined' &&
+  typeof document.startViewTransition === 'function';
+
+const BASE_STYLES = `
+/* ── dvfy-transition-root: display ── */
+dvfy-transition-root {
+  display: contents;
+}
+
+/* ── dvfy-transition-root: ::view-transition pseudo-element defaults ── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--dvfy-tr-duration, 300ms);
+  animation-timing-function: var(--dvfy-tr-easing, ease-out);
+}
+
+/* ── Reduced motion: collapse all view transition durations to zero ── */
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation-duration: 0ms !important;
+  }
+}
+`;
+
 /**
  * <dvfy-transition-root> — View Transitions API page/element morphing
  *
@@ -49,37 +74,6 @@
  * <dvfy-transition-root duration="300ms" easing="ease-out">
  *   <main hx-get="/page" hx-target="this">Page content</main>
  * </dvfy-transition-root>
- */
-
-const SUPPORTS_VIEW_TRANSITIONS = typeof document !== 'undefined' &&
-  typeof document.startViewTransition === 'function';
-
-const BASE_STYLES = `
-/* ── dvfy-transition-root: display ── */
-dvfy-transition-root {
-  display: contents;
-}
-
-/* ── dvfy-transition-root: ::view-transition pseudo-element defaults ── */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation-duration: var(--dvfy-tr-duration, 300ms);
-  animation-timing-function: var(--dvfy-tr-easing, ease-out);
-}
-
-/* ── Reduced motion: collapse all view transition durations to zero ── */
-@media (prefers-reduced-motion: reduce) {
-  ::view-transition-old(*),
-  ::view-transition-new(*) {
-    animation-duration: 0ms !important;
-  }
-}
-`;
-
-/**
- * View Transitions API wrapper with HTMX integration and named element morphing.
- *
- * @element dvfy-transition-root
  */
 class DvfyTransitionRoot extends HTMLElement {
   static #baseStyled = false;

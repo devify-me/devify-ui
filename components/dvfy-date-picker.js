@@ -1,43 +1,3 @@
-/**
- * <dvfy-date-picker> — Calendar date/time picker with dropdown
- *
- * Renders a text input that opens a floating calendar panel. Supports single
- * date, date range, time, and datetime modes. Fully keyboard accessible with
- * locale-aware display formatting.
- *
- * @element dvfy-date-picker
- *
- * @attr {string} label - Label text shown above the input
- * @attr {string} value - Selected date in ISO format (YYYY-MM-DD for date, HH:MM for time, YYYY-MM-DDTHH:MM for datetime)
- * @attr {string} value-end - Range end date (YYYY-MM-DD), requires range attribute
- * @attr {string} min - Minimum selectable date (YYYY-MM-DD)
- * @attr {string} max - Maximum selectable date (YYYY-MM-DD)
- * @attr {string} type - Picker mode: date | time | datetime (default: "date")
- * @attr {boolean} range - Enable date range selection (two-click: start then end)
- * @attr {boolean} required - Mark field as required
- * @attr {boolean} disabled - Disable the component
- * @attr {string} placeholder - Placeholder text for the input
- * @attr {string} name - Form field name
- * @attr {string} error - Error message (enables error styling)
- * @attr {string} help - Help text shown below input
- * @attr {string} label-position - Label placement: top | right | bottom | left (default: "top")
- *
- * @event {CustomEvent} change - Fires on selection; detail: { value, valueEnd? }
- *
- * @cssProperty {color} --dvfy-date-picker-selected-bg - Selected day background (default: --dvfy-primary-bg)
- * @cssProperty {color} --dvfy-date-picker-selected-text - Selected day text color (default: #fff)
- * @cssProperty {color} --dvfy-date-picker-range-bg - In-range days background
- *
- * @example
- * <dvfy-date-picker label="Appointment" value="2026-03-22"></dvfy-date-picker>
- *
- * @example
- * <dvfy-date-picker label="Stay" range value="2026-03-10" value-end="2026-03-20"></dvfy-date-picker>
- *
- * @example
- * <dvfy-date-picker label="Meeting" type="datetime" value="2026-03-22T14:30"></dvfy-date-picker>
- */
-
 const STYLES = `
 dvfy-date-picker {
   display: flex;
@@ -431,6 +391,45 @@ function buildCalendarIcon() {
   return svg;
 }
 
+/**
+ * <dvfy-date-picker> — Calendar date/time picker with dropdown
+ *
+ * Renders a text input that opens a floating calendar panel. Supports single
+ * date, date range, time, and datetime modes. Fully keyboard accessible with
+ * locale-aware display formatting.
+ *
+ * @element dvfy-date-picker
+ *
+ * @attr {string} label - Label text shown above the input
+ * @attr {string} value - Selected date in ISO format (YYYY-MM-DD for date, HH:MM for time, YYYY-MM-DDTHH:MM for datetime)
+ * @attr {string} value-end - Range end date (YYYY-MM-DD), requires range attribute
+ * @attr {string} min - Minimum selectable date (YYYY-MM-DD)
+ * @attr {string} max - Maximum selectable date (YYYY-MM-DD)
+ * @attr {string} type - Picker mode: date | time | datetime (default: "date")
+ * @attr {boolean} range - Enable date range selection (two-click: start then end)
+ * @attr {boolean} required - Mark field as required
+ * @attr {boolean} disabled - Disable the component
+ * @attr {string} placeholder - Placeholder text for the input
+ * @attr {string} name - Form field name
+ * @attr {string} error - Error message (enables error styling)
+ * @attr {string} help - Help text shown below input
+ * @attr {string} label-position - Label placement: top | right | bottom | left (default: "top")
+ *
+ * @event {CustomEvent} change - Fires on selection; detail: { value, valueEnd? }
+ *
+ * @cssProperty {color} --dvfy-date-picker-selected-bg - Selected day background (default: --dvfy-primary-bg)
+ * @cssProperty {color} --dvfy-date-picker-selected-text - Selected day text color (default: #fff)
+ * @cssProperty {color} --dvfy-date-picker-range-bg - In-range days background
+ *
+ * @example
+ * <dvfy-date-picker label="Appointment" value="2026-03-22"></dvfy-date-picker>
+ *
+ * @example
+ * <dvfy-date-picker label="Stay" range value="2026-03-10" value-end="2026-03-20"></dvfy-date-picker>
+ *
+ * @example
+ * <dvfy-date-picker label="Meeting" type="datetime" value="2026-03-22T14:30"></dvfy-date-picker>
+ */
 class DvfyDatePicker extends HTMLElement {
   static #styled = false;
 

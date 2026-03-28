@@ -1,27 +1,3 @@
-/**
- * Single navigation link with active state detection.
- * Tier 1 primitive — a styled anchor with hover/focus states,
- * optional icon, and automatic active indicator based on current URL.
- *
- * @element dvfy-nav
- *
- * @attr {string} href - Link destination URL
- * @attr {string} icon - Icon text displayed before the label
- * @attr {boolean} active - Force active state (auto-detected from URL if omitted)
- * @attr {boolean} disabled - Disable the link
- * @attr {string} label - Visible text label (alternative to slot content)
- * @attr {string} label-position - Label position: top | right | bottom | left
- *
- * @slot - Default slot for link text
- *
- * @cssprop {color} --dvfy-nav-link-color - Link text color (default: var(--dvfy-text-secondary))
- * @cssprop {color} --dvfy-nav-link-hover - Hover text color (default: var(--dvfy-text-primary))
- * @cssprop {color} --dvfy-nav-link-active - Active link color (default: var(--dvfy-primary-bg))
- *
- * @example
- * <dvfy-nav href="/docs" icon="📖">Docs</dvfy-nav>
- */
-
 const NAV_STYLES = `
 dvfy-nav {
   display: inline-flex;
@@ -71,6 +47,29 @@ dvfy-nav[disabled] a.dvfy-nav__link {
 }
 `;
 
+/**
+ * Single navigation link with active state detection.
+ * Tier 1 primitive — a styled anchor with hover/focus states,
+ * optional icon, and automatic active indicator based on current URL.
+ *
+ * @element dvfy-nav
+ *
+ * @attr {string} href - Link destination URL
+ * @attr {string} icon - Icon text displayed before the label
+ * @attr {boolean} active - Force active state (auto-detected from URL if omitted)
+ * @attr {boolean} disabled - Disable the link
+ * @attr {string} label - Visible text label (alternative to slot content)
+ * @attr {string} label-position - Label position: top | right | bottom | left
+ *
+ * @slot - Default slot for link text
+ *
+ * @cssprop {color} --dvfy-nav-link-color - Link text color (default: var(--dvfy-text-secondary))
+ * @cssprop {color} --dvfy-nav-link-hover - Hover text color (default: var(--dvfy-text-primary))
+ * @cssprop {color} --dvfy-nav-link-active - Active link color (default: var(--dvfy-primary-bg))
+ *
+ * @example
+ * <dvfy-nav href="/docs" icon="📖">Docs</dvfy-nav>
+ */
 class DvfyNav extends HTMLElement {
   static #styled = false;
   #autoActive = false; // tracks whether active was set by auto-detection
