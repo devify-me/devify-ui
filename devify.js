@@ -61,7 +61,7 @@ import './components/dvfy-component-playground.js';
 import './components/dvfy-accordion.js';
 import './components/dvfy-carousel.js';
 
-// HTMX Integration Patterns
+// Server Components (HTMX)
 import './patterns/dvfy-htmx-form.js';
 import './patterns/dvfy-infinite-scroll.js';
 import './patterns/dvfy-live-search.js';

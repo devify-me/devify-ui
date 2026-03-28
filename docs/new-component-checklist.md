@@ -6,7 +6,8 @@ For auditing existing components, use `docs/component-review-checklist.md`.
 ## Step 1 — Plan
 
 - [ ] Chose a name following `dvfy-<noun>[-<qualifier>]` convention
-- [ ] Determined tier (1–4) using the decision tree in `docs/taxonomy.md`
+- [ ] Determined tier (1–5) using the decision tree in `docs/taxonomy.md`
+- [ ] Determined if component requires server interaction (`server: true`)
 - [ ] Listed all HTML attributes the component will expose
 - [ ] Listed all `CustomEvent` names the component will fire
 - [ ] Listed all named slots (plus default slot if applicable)
@@ -60,7 +61,7 @@ For auditing existing components, use `docs/component-review-checklist.md`.
 ## Step 7 — Catalog Integration
 
 - [ ] Import added to `devify.js` barrel file
-- [ ] `COMPONENT_REGISTRY` entry added in `catalog/data.js` with correct tier, domain, deps
+- [ ] `COMPONENT_REGISTRY` entry added in `catalog/data.js` with correct tier, domain, deps, and `server` flag
 - [ ] Component tag added to the correct `COMPONENT_CATEGORIES` array
 - [ ] `DEFAULT_CONTENT` entry added in `components/dvfy-component-playground.js`
   - Shows a single representative instance (not multiple variants)

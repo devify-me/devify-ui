@@ -1,11 +1,11 @@
 /**
  * catalog/overview.js — Landing page renderer
  */
-import { COMPONENT_CATEGORIES, HTMX_PATTERNS, TOKEN_GROUPS, TIERS, getComponentsByTier } from './data.js';
+import { COMPONENT_CATEGORIES, TOKEN_GROUPS, TIERS, getComponentsByTier, getServerComponents } from './data.js';
 
 export function renderOverview(mainEl) {
   const componentCount = Object.values(COMPONENT_CATEGORIES).flat().length;
-  const patternCount = Object.keys(HTMX_PATTERNS).length;
+  const serverCount = getServerComponents().length;
   const tokenGroupCount = Object.keys(TOKEN_GROUPS).length;
 
   // Title
@@ -25,9 +25,9 @@ export function renderOverview(mainEl) {
 
   const stats = [
     { label: 'Components', value: componentCount, hash: '#components/dvfy-button' },
-    { label: 'HTMX Patterns', value: patternCount, hash: '#patterns/dvfy-htmx-form' },
+    { label: 'Server Components', value: serverCount, hash: '#components/dvfy-htmx-form' },
     { label: 'Token Groups', value: tokenGroupCount, hash: '#tokens/colors' },
-    { label: 'Architecture Tiers', value: 4, hash: '#tier/1' },
+    { label: 'Architecture Tiers', value: 5, hash: '#tier/1' },
   ];
 
   for (const stat of stats) {
@@ -58,7 +58,7 @@ export function renderOverview(mainEl) {
   const tierRow = document.createElement('div');
   tierRow.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: var(--dvfy-space-4); margin-bottom: var(--dvfy-space-8); align-items: start;';
 
-  for (const n of [1, 2, 3, 4]) {
+  for (const n of [1, 2, 3, 4, 5]) {
     const tier = TIERS[n];
     const tags = getComponentsByTier(n);
     const examples = tags.slice(0, 3).map(t => t.replace('dvfy-', ''));
@@ -70,7 +70,7 @@ export function renderOverview(mainEl) {
     // Tier badge
     const tierBadge = document.createElement('dvfy-badge');
     tierBadge.textContent = `T${n}`;
-    tierBadge.setAttribute('variant', n === 1 ? 'primary' : n === 2 ? 'secondary' : n === 3 ? 'warning' : 'info');
+    tierBadge.setAttribute('variant', n === 1 ? 'primary' : n === 2 ? 'secondary' : n === 3 ? 'warning' : n === 4 ? 'info' : 'accent');
     tierBadge.style.cssText = 'margin-bottom: var(--dvfy-space-2); display: inline-block;';
     card.appendChild(tierBadge);
 

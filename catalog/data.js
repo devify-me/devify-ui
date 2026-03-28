@@ -4,31 +4,37 @@
  * Taxonomy (tiers, domains, registry), HTMX patterns, token groups, and semantic tokens.
  */
 
-/** Tier definitions — complexity/dependency classification */
+/** Tier definitions — composition hierarchy (each tier requires ≥1 dep from previous tier) */
 export const TIERS = {
   1: {
     name: 'Primitives',
     label: 'Tier 1 — Primitives',
-    description: 'Zero dvfy-* structural dependencies. Pure tokens + native HTML.',
+    description: 'Zero dvfy-* dependencies. Leaf nodes of the composition tree.',
     rules: 'Must not import or render other dvfy-* components.',
   },
   2: {
     name: 'Composites',
     label: 'Tier 2 — Composites',
-    description: 'May use 0–2 Tier 1 components. Enhanced behavior over native.',
-    rules: 'May depend on up to 2 Tier 1 components. No Tier 2+ deps.',
+    description: 'One composition layer. Combines Tier 1 primitives into richer controls.',
+    rules: 'Must have ≥1 Tier 1 dependency. Only Tier 1 deps allowed.',
   },
   3: {
     name: 'Organisms',
     label: 'Tier 3 — Organisms',
-    description: 'Compose 2+ components. Cross-component state management.',
-    rules: 'May depend on Tier 1 and Tier 2 components. Complex composition.',
+    description: 'Two+ composition layers. Combines Tier 1 and Tier 2 components.',
+    rules: 'Must have ≥1 Tier 2 dependency. Tier 1 and Tier 2 deps allowed.',
   },
   4: {
-    name: 'Patterns',
-    label: 'Tier 4 — HTMX Patterns',
-    description: 'HTMX server-interaction orchestration. Can use any tier.',
-    rules: 'Requires server backend. May depend on any tier.',
+    name: 'Widgets',
+    label: 'Tier 4 — Widgets',
+    description: 'Self-contained functional unit with own state machine and UX flow.',
+    rules: 'Must have ≥1 Tier 3 dependency. Full composition depth.',
+  },
+  5: {
+    name: 'Layouts',
+    label: 'Tier 5 — Layouts',
+    description: 'Page-level spatial scaffold. Defines regions for content and navigation.',
+    rules: 'Must have ≥1 Tier 3+ dependency. Defines page-level spatial arrangement.',
   },
 };
 
@@ -40,7 +46,6 @@ export const DOMAINS = {
   navigation: 'Navigation',
   layout:     'Layout',
   utility:    'Utility',
-  htmx:       'HTMX Patterns',
 };
 
 /**
@@ -56,73 +61,78 @@ export const LAYOUTS = ['center', 'stretch', 'fill', 'edge', 'overlay'];
 
 /** Component registry — single source of truth for classification */
 export const COMPONENT_REGISTRY = {
-  // Tier 1 — Primitives
-  'dvfy-button':    { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
-  'dvfy-input':     { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
-  'dvfy-textarea':  { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
-  'dvfy-checkbox':  { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
-  'dvfy-radio':     { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
-  'dvfy-switch':    { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
-  'dvfy-slider':    { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
-  'dvfy-badge':     { tier: 1, domain: 'display',    deps: [], layout: 'center' },
-  'dvfy-tag':       { tier: 1, domain: 'display',    deps: [], layout: 'center' },
-  'dvfy-avatar':    { tier: 1, domain: 'display',    deps: [], layout: 'center' },
-  'dvfy-progress':  { tier: 1, domain: 'display',    deps: [], layout: 'stretch' },
-  'dvfy-alert':     { tier: 1, domain: 'feedback',   deps: [], layout: 'stretch' },
-  'dvfy-loader':    { tier: 1, domain: 'feedback',   deps: [], layout: 'center' },
-  'dvfy-hamburger': { tier: 1, domain: 'navigation', deps: [], layout: 'center' },
-  'dvfy-drawer':    { tier: 2, domain: 'navigation', deps: ['dvfy-button'], layout: 'edge' },
-  'dvfy-section':   { tier: 1, domain: 'layout',     deps: [], layout: 'fill' },
-  'dvfy-tooltip':       { tier: 1, domain: 'utility',    deps: [], layout: 'overlay' },
-  'dvfy-hovercard':     { tier: 1, domain: 'utility',    deps: [], layout: 'overlay' },
-  'dvfy-scroll-reveal':    { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
-  'dvfy-scroll-progress':  { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
-  'dvfy-page-transition':  { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
-  'dvfy-transition-root':  { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
-  'dvfy-text-vortex':      { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
-  'dvfy-scramble-hover':   { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
-  'dvfy-marquee-scroll':   { tier: 1, domain: 'utility',    deps: [], layout: 'stretch' },
+  // Tier 1 — Primitives (zero dvfy-* deps)
+  'dvfy-button':          { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
+  'dvfy-input':           { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
+  'dvfy-textarea':        { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
+  'dvfy-checkbox':        { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
+  'dvfy-radio':           { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
+  'dvfy-switch':          { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
+  'dvfy-slider':          { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
+  'dvfy-select':          { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
+  'dvfy-file-upload':     { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
+  'dvfy-date-picker':     { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
+  'dvfy-badge':           { tier: 1, domain: 'display',    deps: [], layout: 'center' },
+  'dvfy-tag':             { tier: 1, domain: 'display',    deps: [], layout: 'center' },
+  'dvfy-avatar':          { tier: 1, domain: 'display',    deps: [], layout: 'center' },
+  'dvfy-progress':        { tier: 1, domain: 'display',    deps: [], layout: 'stretch' },
+  'dvfy-card':            { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
+  'dvfy-gradient-card':   { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
+  'dvfy-spotlight-card':  { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
+  'dvfy-compare':         { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
+  'dvfy-empty':           { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
+  'dvfy-carousel':        { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
+  'dvfy-scroll-progress': { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
+  'dvfy-marquee-scroll':  { tier: 1, domain: 'display',    deps: [], layout: 'stretch' },
+  'dvfy-alert':           { tier: 1, domain: 'feedback',   deps: [], layout: 'stretch' },
+  'dvfy-loader':          { tier: 1, domain: 'feedback',   deps: [], layout: 'center' },
+  'dvfy-toast':           { tier: 1, domain: 'feedback',   deps: [], layout: 'overlay' },
+  'dvfy-hovercard':       { tier: 1, domain: 'feedback',   deps: [], layout: 'overlay' },
+  'dvfy-hamburger':       { tier: 1, domain: 'navigation', deps: [], layout: 'center' },
+  'dvfy-breadcrumb':      { tier: 1, domain: 'navigation', deps: [], layout: 'stretch' },
+  'dvfy-pagination':      { tier: 1, domain: 'navigation', deps: [], layout: 'stretch' },
+  'dvfy-tabs':            { tier: 1, domain: 'navigation', deps: [], layout: 'fill' },
+  'dvfy-dropdown':        { tier: 1, domain: 'navigation', deps: [], layout: 'overlay' },
   'dvfy-tree-node':       { tier: 1, domain: 'navigation', deps: [], layout: 'stretch' },
+  'dvfy-tree-view':       { tier: 1, domain: 'navigation', deps: [], layout: 'stretch' },
+  'dvfy-sidebar':         { tier: 1, domain: 'navigation', deps: [], layout: 'edge' },
+  'dvfy-section':         { tier: 1, domain: 'layout',     deps: [], layout: 'fill' },
+  'dvfy-tooltip':         { tier: 1, domain: 'utility',    deps: [], layout: 'overlay' },
+  'dvfy-scroll-reveal':   { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
+  'dvfy-page-transition': { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
+  'dvfy-transition-root': { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
+  'dvfy-text-vortex':     { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
+  'dvfy-scramble-hover':  { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
+  'dvfy-infinite-scroll': { tier: 1, domain: 'utility',    deps: [], layout: 'fill',    server: true },
+  'dvfy-live-search':     { tier: 1, domain: 'forms',      deps: [], layout: 'stretch', server: true },
+  'dvfy-htmx-table':      { tier: 1, domain: 'display',    deps: [], layout: 'fill',    server: true },
 
-  'dvfy-date-picker':   { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
+  // Tier 2 — Composites (≥1 Tier 1 dep, only Tier 1 deps)
+  'dvfy-drawer':               { tier: 2, domain: 'layout',     deps: ['dvfy-button'], layout: 'edge' },
+  'dvfy-table':                { tier: 2, domain: 'display',    deps: ['dvfy-checkbox'], layout: 'fill' },
+  'dvfy-modal':                { tier: 2, domain: 'feedback',   deps: ['dvfy-button'], layout: 'overlay' },
+  'dvfy-nav':                  { tier: 2, domain: 'navigation', deps: ['dvfy-hamburger'], layout: 'stretch' },
+  'dvfy-theme-switcher':       { tier: 2, domain: 'utility',    deps: ['dvfy-dropdown', 'dvfy-button'], layout: 'center' },
+  'dvfy-accordion':            { tier: 2, domain: 'layout',     deps: ['dvfy-section'], layout: 'fill' },
+  'dvfy-component-playground': { tier: 2, domain: 'utility',    deps: ['dvfy-button', 'dvfy-section', 'dvfy-slider'], layout: 'fill' },
 
-  // Tier 2 — Composites
-  'dvfy-select':         { tier: 2, domain: 'forms',      deps: [], layout: 'stretch' },
-  'dvfy-file-upload':    { tier: 2, domain: 'forms',      deps: [], layout: 'stretch' },
-  'dvfy-card':           { tier: 2, domain: 'display',    deps: [], layout: 'fill' },
-  'dvfy-gradient-card':  { tier: 2, domain: 'display',    deps: [], layout: 'fill' },
-  'dvfy-spotlight-card': { tier: 2, domain: 'display',    deps: [], layout: 'fill' },
-  'dvfy-compare':        { tier: 2, domain: 'display',    deps: [], layout: 'fill' },
-  'dvfy-empty':          { tier: 2, domain: 'display',    deps: [], layout: 'fill' },
-  'dvfy-table':          { tier: 2, domain: 'display',    deps: ['dvfy-checkbox'], layout: 'fill' },
-  'dvfy-modal':          { tier: 2, domain: 'feedback',   deps: ['dvfy-button'], layout: 'overlay' },
-  'dvfy-toast':          { tier: 2, domain: 'feedback',   deps: [], layout: 'overlay' },
-  'dvfy-breadcrumb':     { tier: 2, domain: 'navigation', deps: [], layout: 'stretch' },
-  'dvfy-pagination':     { tier: 2, domain: 'navigation', deps: [], layout: 'stretch' },
-  'dvfy-tabs':           { tier: 2, domain: 'navigation', deps: [], layout: 'fill' },
-  'dvfy-dropdown':       { tier: 2, domain: 'navigation', deps: [], layout: 'overlay' },
-  'dvfy-nav':            { tier: 2, domain: 'navigation', deps: ['dvfy-hamburger'], layout: 'stretch' },
-  'dvfy-tree-view':      { tier: 2, domain: 'navigation', deps: [], layout: 'stretch' },
-  'dvfy-theme-switcher': { tier: 2, domain: 'utility',    deps: ['dvfy-dropdown', 'dvfy-button'], layout: 'center' },
-
-  // Tier 3 — Organisms
-  'dvfy-carousel':  { tier: 3, domain: 'layout',     deps: [], layout: 'fill' },
-  'dvfy-accordion': { tier: 3, domain: 'layout',     deps: ['dvfy-section'], layout: 'fill' },
-  'dvfy-sidebar':   { tier: 3, domain: 'navigation', deps: [], layout: 'edge' },
-  'dvfy-auth':      { tier: 3, domain: 'utility',    deps: ['dvfy-modal'], layout: 'fill' },
-
-  // Tier 4 — HTMX Patterns
-  'dvfy-htmx-form':       { tier: 4, domain: 'htmx', deps: [], layout: 'stretch' },
-  'dvfy-confirm':         { tier: 4, domain: 'htmx', deps: [], layout: 'overlay' },
-  'dvfy-infinite-scroll':  { tier: 4, domain: 'htmx', deps: [], layout: 'fill' },
-  'dvfy-live-search':      { tier: 4, domain: 'htmx', deps: [], layout: 'stretch' },
-  'dvfy-htmx-table':       { tier: 4, domain: 'htmx', deps: [], layout: 'fill' },
+  // Tier 3 — Organisms (≥1 Tier 2 dep)
+  'dvfy-auth':      { tier: 3, domain: 'utility',  deps: ['dvfy-modal'], layout: 'fill' },
+  'dvfy-htmx-form': { tier: 3, domain: 'forms',    deps: ['dvfy-modal'], layout: 'stretch', server: true },
+  'dvfy-confirm':   { tier: 3, domain: 'feedback',  deps: ['dvfy-modal'], layout: 'overlay', server: true },
 };
 
-/** Get tags for a given tier number (excludes Tier 4 patterns) */
+/** Get tags for a given tier number */
 export function getComponentsByTier(n) {
   return Object.entries(COMPONENT_REGISTRY)
     .filter(([, meta]) => meta.tier === n)
+    .map(([tag]) => tag);
+}
+
+/** Get all server-interaction (HTMX) component tags */
+export function getServerComponents() {
+  return Object.entries(COMPONENT_REGISTRY)
+    .filter(([, meta]) => meta.server)
     .map(([tag]) => tag);
 }
 
@@ -142,7 +152,6 @@ export function getTierForComponent(tag) {
 /** Components grouped by domain for sidebar navigation — derived from registry */
 export const COMPONENT_CATEGORIES = Object.fromEntries(
   Object.entries(DOMAINS)
-    .filter(([k]) => k !== 'htmx')
     .map(([key, label]) => [label, getComponentsByDomain(key)])
     .filter(([, tags]) => tags.length)
 );
