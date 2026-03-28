@@ -2,7 +2,7 @@
  * catalog/sidebar.js — Sidebar construction with tree-view navigation
  */
 import {
-  COMPONENT_CATEGORIES, HTMX_PATTERNS, TOKEN_GROUPS,
+  COMPONENT_CATEGORIES, TOKEN_GROUPS,
   TIERS, COMPONENT_REGISTRY, getComponentsByTier,
 } from './data.js';
 
@@ -64,18 +64,21 @@ export function buildSidebar(containerEl) {
     t.appendChild(tokensNode);
 
     // Components — items sorted alphabetically within each group
-    const totalComponents = Object.keys(COMPONENT_REGISTRY).filter(t => COMPONENT_REGISTRY[t].tier <= 3).length;
+    const totalComponents = Object.keys(COMPONENT_REGISTRY).length;
     const componentsNode = createNode(`Components (${totalComponents})`);
     componentsNode.setAttribute('expanded', '');
 
     if (view === 'tier') {
-      for (const n of [1, 2, 3]) {
-        const tier = TIERS[n];
+      for (const n of [1, 2, 3, 4, 5]) {
         const tags = getComponentsByTier(n).sort();
+        if (!tags.length) continue;
+        const tier = TIERS[n];
         const tierNode = createNode(`${tier.name} (${tags.length})`);
         tierNode.setAttribute('expanded', '');
         for (const tag of tags) {
-          tierNode.appendChild(createNode(tag.replace('dvfy-', ''), `#components/${tag}`));
+          const label = tag.replace('dvfy-', '');
+          const suffix = COMPONENT_REGISTRY[tag]?.server ? ' [server]' : '';
+          tierNode.appendChild(createNode(label + suffix, `#components/${tag}`));
         }
         componentsNode.appendChild(tierNode);
       }
@@ -85,20 +88,14 @@ export function buildSidebar(containerEl) {
         const catNode = createNode(`${category} (${sorted.length})`);
         catNode.setAttribute('expanded', '');
         for (const tag of sorted) {
-          catNode.appendChild(createNode(tag.replace('dvfy-', ''), `#components/${tag}`));
+          const label = tag.replace('dvfy-', '');
+          const suffix = COMPONENT_REGISTRY[tag]?.server ? ' [server]' : '';
+          catNode.appendChild(createNode(label + suffix, `#components/${tag}`));
         }
         componentsNode.appendChild(catNode);
       }
     }
     t.appendChild(componentsNode);
-
-    // HTMX Patterns — sorted alphabetically
-    const patternTags = Object.keys(HTMX_PATTERNS).sort();
-    const patternsNode = createNode(`HTMX Patterns (${patternTags.length})`);
-    for (const tag of patternTags) {
-      patternsNode.appendChild(createNode(tag.replace('dvfy-', ''), `#patterns/${tag}`));
-    }
-    t.appendChild(patternsNode);
 
     // Navigate on select
     t.addEventListener('select', (e) => {
