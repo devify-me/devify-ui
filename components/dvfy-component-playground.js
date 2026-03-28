@@ -1,23 +1,3 @@
-/**
- * <dvfy-component-playground> — Interactive component playground
- *
- * Loads the WCA custom-elements.json manifest, renders a component picker,
- * auto-generates controls from attribute metadata, and provides live Preview,
- * Code, and API tabs.
- *
- * @element dvfy-component-playground
- *
- * @attr {string} component - Tag name to showcase (shows picker if omitted)
- * @attr {string} src - Path to custom-elements.json (default: "../custom-elements.json")
- * @attr {string} layout - Preview layout mode: center | stretch | fill | edge | overlay (default: "center")
- *
- * @slot - Not used
- *
- * @cssprop {color} --dvfy-surface-raised - Card/panel background
- * @cssprop {color} --dvfy-border-muted - Panel borders
- * @cssprop {color} --dvfy-primary-bg - Active tab accent
- */
-
 const PLAYGROUND_STYLES = `
 dvfy-component-playground {
   display: block;
@@ -411,6 +391,25 @@ function esc(s) {
   return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
 
+/**
+ * <dvfy-component-playground> — Interactive component playground
+ *
+ * Loads the WCA custom-elements.json manifest, renders a component picker,
+ * auto-generates controls from attribute metadata, and provides live Preview,
+ * Code, and API tabs.
+ *
+ * @element dvfy-component-playground
+ *
+ * @attr {string} component - Tag name to showcase (shows picker if omitted)
+ * @attr {string} src - Path to custom-elements.json (default: "../custom-elements.json")
+ * @attr {string} layout - Preview layout mode: center | stretch | fill | edge | overlay (default: "center")
+ *
+ * @slot - Not used
+ *
+ * @cssprop {color} --dvfy-surface-raised - Card/panel background
+ * @cssprop {color} --dvfy-border-muted - Panel borders
+ * @cssprop {color} --dvfy-primary-bg - Active tab accent
+ */
 class DvfyComponentPlayground extends HTMLElement {
   static #styled = false;
 
