@@ -395,6 +395,12 @@ const DEFAULT_CONTENT = {
   'dvfy-scroll-progress': '<dvfy-scroll-progress></dvfy-scroll-progress><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm);margin:0">Scroll the page to see the progress bar fill at the top of the viewport. Requires a scrollable page and browser support for <code>animation-timeline: scroll()</code>.</p>',
   'dvfy-stagger-enter': '<dvfy-stagger-enter direction="up" delay="0.08" duration="0.4" style="display:flex;flex-direction:column;gap:var(--dvfy-space-3)"><dvfy-card padded><strong>Item one</strong><p style="margin:0.25rem 0 0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Fades and slides up on entry.</p></dvfy-card><dvfy-card padded><strong>Item two</strong><p style="margin:0.25rem 0 0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Staggered by sibling-index().</p></dvfy-card><dvfy-card padded><strong>Item three</strong><p style="margin:0.25rem 0 0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">No JavaScript timers needed.</p></dvfy-card></dvfy-stagger-enter>',
   'dvfy-tree-view': '<dvfy-tree-view><dvfy-tree-node label="Documents" icon="\uD83D\uDCC1" expanded><dvfy-tree-node label="README.md" icon="\uD83D\uDCC4" href="#readme"></dvfy-tree-node><dvfy-tree-node label="Images" icon="\uD83D\uDCC1"><dvfy-tree-node label="logo.png" icon="\uD83D\uDDBC\uFE0F" href="#logo"></dvfy-tree-node><dvfy-tree-node label="banner.jpg" icon="\uD83D\uDDBC\uFE0F" href="#banner"></dvfy-tree-node></dvfy-tree-node></dvfy-tree-node><dvfy-tree-node label="Settings" icon="\u2699\uFE0F" href="#settings"></dvfy-tree-node></dvfy-tree-view>',
+  'dvfy-usage-meter': '',
+  'dvfy-invoice-list': '',
+  'dvfy-subscription-card': '',
+  'dvfy-plan-picker': '',
+  'dvfy-payment-methods': '',
+  'dvfy-payment-setup': '',
 };
 
 /** Default attribute values per component — applied when selected in the playground. */
@@ -407,6 +413,49 @@ const DEFAULT_ATTRS = {
       { src: '../catalog/assets/Grobma.png', alt: 'Grobma' },
       { src: '../catalog/assets/Grobpa.png', alt: 'Grobpa' },
     ]),
+  },
+  'dvfy-usage-meter': {
+    data: JSON.stringify([
+      { feature: 'API Calls', used: 8500, limit: 10000, unit: 'calls' },
+      { feature: 'Storage', used: 3, limit: 10, unit: 'GB' },
+      { feature: 'Team Members', used: 4, limit: 5, unit: 'seats' },
+    ]),
+  },
+  'dvfy-invoice-list': {
+    data: JSON.stringify([
+      { external_id: 'in_001', amount_cents: 2500, currency: 'usd', status: 'paid', period_start: 1700000000, period_end: 1702592000, paid_at: 1700001000, hosted_url: '#' },
+      { external_id: 'in_002', amount_cents: 2500, currency: 'usd', status: 'paid', period_start: 1697318400, period_end: 1700000000, paid_at: 1697319000, hosted_url: '#' },
+      { external_id: 'in_003', amount_cents: 2500, currency: 'usd', status: 'open', period_start: 1702592000, period_end: 1705270400, hosted_url: '#' },
+    ]),
+  },
+  'dvfy-subscription-card': {
+    data: JSON.stringify({
+      status: 'active',
+      plan_name: 'Pro',
+      price_cents: 2500,
+      currency: 'usd',
+      interval: 'month',
+      current_period_start: 1700000000,
+      current_period_end: 1702592000,
+    }),
+  },
+  'dvfy-plan-picker': {
+    data: JSON.stringify([
+      { name: 'free', display_name: 'Free', price_cents: 0, currency: 'usd', interval: 'month', features: { 'API Calls': '1,000/mo', 'Storage': '1 GB', 'Support': 'Community' } },
+      { name: 'starter', display_name: 'Starter', price_cents: 1500, currency: 'usd', interval: 'month', features: { 'API Calls': '10,000/mo', 'Storage': '5 GB', 'Support': 'Email' } },
+      { name: 'pro', display_name: 'Pro', price_cents: 4900, currency: 'usd', interval: 'month', features: { 'API Calls': '100,000/mo', 'Storage': '50 GB', 'Support': 'Priority' } },
+    ]),
+    'current-plan': 'starter',
+  },
+  'dvfy-payment-methods': {
+    gateway: 'stripe',
+    data: JSON.stringify([
+      { id: 'pm_1', type: 'card', last4: '4242', brand: 'visa', expiry_m: 12, expiry_y: 2027, is_default: true },
+      { id: 'pm_2', type: 'card', last4: '5555', brand: 'mastercard', expiry_m: 6, expiry_y: 2026, is_default: false },
+    ]),
+  },
+  'dvfy-payment-setup': {
+    gateway: 'stripe',
   },
 };
 

@@ -96,6 +96,14 @@ export const COMPONENT_REGISTRY = {
   'dvfy-sidebar':   { tier: 3, domain: 'navigation', deps: [] },
   'dvfy-auth':      { tier: 3, domain: 'utility',    deps: ['dvfy-input', 'dvfy-button'] },
 
+  // Billing & Payments
+  'dvfy-usage-meter':       { tier: 2, domain: 'display',  deps: ['dvfy-progress'] },
+  'dvfy-invoice-list':      { tier: 2, domain: 'display',  deps: ['dvfy-badge'] },
+  'dvfy-subscription-card': { tier: 2, domain: 'display',  deps: ['dvfy-badge', 'dvfy-button'] },
+  'dvfy-plan-picker':       { tier: 2, domain: 'display',  deps: ['dvfy-button', 'dvfy-badge'] },
+  'dvfy-payment-methods':   { tier: 2, domain: 'forms',    deps: ['dvfy-button'] },
+  'dvfy-payment-setup':     { tier: 2, domain: 'forms',    deps: ['dvfy-button', 'dvfy-loader'] },
+
   // Tier 4 — HTMX Patterns
   'dvfy-htmx-form':       { tier: 4, domain: 'htmx', deps: [] },
   'dvfy-confirm':         { tier: 4, domain: 'htmx', deps: [] },
