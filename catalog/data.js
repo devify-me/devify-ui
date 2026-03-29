@@ -57,6 +57,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-tag':       { tier: 1, domain: 'display',    deps: [] },
   'dvfy-avatar':    { tier: 1, domain: 'display',    deps: [] },
   'dvfy-progress':  { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-description-list': { tier: 1, domain: 'display', deps: [] },
   'dvfy-alert':     { tier: 1, domain: 'feedback',   deps: [] },
   'dvfy-loader':    { tier: 1, domain: 'feedback',   deps: [] },
   'dvfy-hamburger': { tier: 1, domain: 'navigation', deps: [] },

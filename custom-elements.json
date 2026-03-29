@@ -804,6 +804,79 @@
       ]
     },
     {
+      "name": "dvfy-description-list",
+      "path": "./components/dvfy-description-list.js",
+      "description": "Key-value description list for detail views.",
+      "attributes": [
+        {
+          "name": "divider",
+          "description": "Show dividers between items",
+          "type": "boolean"
+        },
+        {
+          "name": "striped",
+          "description": "Alternate row backgrounds",
+          "type": "boolean"
+        },
+        {
+          "name": "layout",
+          "description": "Layout mode: stacked | horizontal | grid (default: \"stacked\")",
+          "type": "string"
+        },
+        {
+          "name": "columns",
+          "description": "Grid columns: 1 | 2 | 3 (default: \"1\")",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "dvfy-dl-item children"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-text-muted",
+          "description": "Label color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-text-primary",
+          "description": "Value color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-muted",
+          "description": "Divider color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-surface-muted",
+          "description": "Striped row background",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-dl-item",
+      "path": "./components/dvfy-description-list.js",
+      "description": "Single item in a description list.",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "The key/label text",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "The value content"
+        }
+      ]
+    },
+    {
       "name": "dvfy-drawer",
       "path": "./components/dvfy-drawer.js",
       "description": "Collapsible drawer panel for side or bottom content.\n\nA reusable panel that slides in from a configurable edge. Supports\ncollapse/expand with an animated transition and a vertical reopen tab\nthat appears when collapsed. Scrollable body for long content while\nthe parent layout stays fixed.",
