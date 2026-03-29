@@ -1,42 +1,20 @@
-# Issue #211: Add payment component suite for Stripe, Paddle, and PayPal
+# /next session — 2026-03-29
 
-**Type:** feat
-**Branch:** feat/211-payment-component-suite
-**Labels:** enhancement
+All open issues resolved. Board is clear.
 
-## Context
+## Completed
 
-The Devify framework billing module ships three gateways (Stripe, Paddle, PayPal) with a complete REST API but zero frontend. This suite provides 6 Web Components that work with all three gateways, adapting their UX per gateway type.
+- [x] #211 — Payment component suite (6 components) → PR #224
+- [x] #19 — dvfy-popover interactive popover → PR #225
+- [x] #15 — dvfy-description-list key-value display → PR #226
+- [x] #20 — dvfy-command-palette spotlight search → PR #227
+- [x] #196 — dvfy-tree-view deps verification → PR #228
+- [x] #33 — Tier 3 component audit (sidebar, accordion, auth) → PR #229
+- [x] #34 — Tier 4 HTMX patterns audit → PR #230
+- [x] #206 — Hamburger animation convention → PR #231
 
-## Architecture
+## Closed (evaluation only)
 
-All components follow the standard @devify/ui pattern: Light DOM, attributes-as-API, semantic tokens, ARIA support. Data-fetching components accept either an `api-base` + `tenant-id` for live API calls, or static data via attributes/children for standalone use (playground, testing). Gateway-specific SDK loading is lazy.
-
-## File Structure
-
-| File | Purpose |
-|------|---------|
-| `components/dvfy-usage-meter.js` | Feature usage progress bars |
-| `components/dvfy-invoice-list.js` | Billing history with status badges |
-| `components/dvfy-subscription-card.js` | Current subscription status card |
-| `components/dvfy-plan-picker.js` | Plan comparison grid |
-| `components/dvfy-payment-methods.js` | Saved payment method list + management |
-| `components/dvfy-payment-setup.js` | Gateway-specific add payment method flow |
-
-## Tasks
-
-- [ ] Implement dvfy-usage-meter (Tier 2, deps: dvfy-progress)
-- [ ] Implement dvfy-invoice-list (Tier 2, deps: dvfy-badge)
-- [ ] Implement dvfy-subscription-card (Tier 2, deps: dvfy-badge, dvfy-button)
-- [ ] Implement dvfy-plan-picker (Tier 2, deps: dvfy-button, dvfy-badge)
-- [ ] Implement dvfy-payment-methods (Tier 2, deps: dvfy-button)
-- [ ] Implement dvfy-payment-setup (Tier 2, deps: dvfy-button, dvfy-loader)
-- [ ] Register all components in devify.js, data.js, playground DEFAULT_CONTENT
-- [ ] Run npm run analyze
-- [ ] Run npm run lint — fix issues
-- [ ] Run npm test — verify no regressions
-- [ ] Diff review against main
-- [ ] Create PR
-
-## Future
-<!-- Unrelated issues discovered during implementation -->
+- #18 — Already implemented (dvfy-slider exists)
+- #190, #189, #188, #187, #185, #192, #195, #197 — Decomposition evaluated: keep as-is
+- #184, #183, #186, #193, #194, #191 — Decomposition deferred: not cost-effective now
