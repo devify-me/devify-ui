@@ -189,16 +189,6 @@
           "name": "interactive",
           "description": "Add hover effect and dispatch click event",
           "type": "boolean"
-        },
-        {
-          "name": "label",
-          "description": "Visible text label beside or below the avatar",
-          "type": "string"
-        },
-        {
-          "name": "label-position",
-          "description": "top | right | bottom | left (default: \"top\")",
-          "type": "string"
         }
       ],
       "events": [
@@ -323,7 +313,7 @@
       "attributes": [
         {
           "name": "variant",
-          "description": "Button style: default | subtle | outline | ghost | danger | gradient (default: \"default\")",
+          "description": "Button style: default | subtle | outline | ghost | danger (default: \"default\")",
           "type": "string"
         },
         {
@@ -350,16 +340,6 @@
           "name": "loading",
           "description": "Show loading state with spinner indicator",
           "type": "boolean"
-        },
-        {
-          "name": "from",
-          "description": "Gradient start color for variant=\"gradient\" (default: \"#7c3aed\")",
-          "type": "string"
-        },
-        {
-          "name": "to",
-          "description": "Gradient end color for variant=\"gradient\" (default: \"#2563eb\")",
-          "type": "string"
         }
       ],
       "slots": [
@@ -387,9 +367,49 @@
       ]
     },
     {
+      "name": "dvfy-card-glow",
+      "path": "./components/dvfy-card-glow.js",
+      "description": "Card with a mouse-tracked radial gradient glow that bleeds through the border.",
+      "attributes": [
+        {
+          "name": "elevated",
+          "description": "Add shadow elevation",
+          "type": "boolean"
+        },
+        {
+          "name": "padded",
+          "description": "Enable padding",
+          "type": "boolean"
+        },
+        {
+          "name": "interactive",
+          "description": "Enable cursor pointer and active scale",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Card content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--glow-color",
+          "description": "Glow color (default: rgba(124, 58, 237, 0.2))",
+          "type": "color"
+        },
+        {
+          "name": "--glow-size",
+          "description": "Gradient radius (default: 60%)",
+          "type": "length|percentage"
+        }
+      ]
+    },
+    {
       "name": "dvfy-card",
       "path": "./components/dvfy-card.js",
-      "description": "Content card with elevation, interactive, and spotlight variants.",
+      "description": "Content card with elevation and interactive variants.",
       "attributes": [
         {
           "name": "elevated",
@@ -404,11 +424,6 @@
         {
           "name": "interactive",
           "description": "Enable hover effect and cursor pointer",
-          "type": "boolean"
-        },
-        {
-          "name": "spotlight",
-          "description": "Enable cursor-tracking radial gradient spotlight overlay",
           "type": "boolean"
         }
       ],
@@ -433,63 +448,19 @@
           "name": "--dvfy-shadow-md",
           "description": "Elevated shadow",
           "type": "color"
-        },
-        {
-          "name": "--dvfy-card-spotlight-size",
-          "description": "Spotlight radius (default: 400px)",
-          "type": "length"
-        },
-        {
-          "name": "--dvfy-card-spotlight-color",
-          "description": "Inner surface glow color",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-card-spotlight-border-color",
-          "description": "Border glow color",
-          "type": "color"
         }
       ]
     },
     {
       "name": "dvfy-carousel",
       "path": "./components/dvfy-carousel.js",
-      "description": "Carousel container. Wraps dvfy-slide elements in a horizontally scrollable\nsnap container. Navigation buttons and pagination dots are rendered entirely\nby CSS pseudo-elements on Chrome 135+; older browsers get equivalent JS-driven\nbuttons and dots injected alongside the element.",
+      "description": "Carousel container. Wraps dvfy-slide elements in a horizontally scrollable\nsnap container. Navigation buttons and pagination dots are rendered entirely\nby CSS pseudo-elements on Chrome 135+; older browsers see a plain swipeable\nscroll area.",
       "attributes": [
         {
-          "name": "peek",
-          "description": "Show ~12% of adjacent slides to hint scrollability",
-          "type": "boolean"
+          "name": "gap"
         },
         {
-          "name": "expandable",
-          "description": "Show expand button that enters fullscreen mode on click",
-          "type": "boolean"
-        },
-        {
-          "name": "aria-label",
-          "description": "Accessible label for the carousel region (default: \"Carousel\")",
-          "type": "string"
-        },
-        {
-          "name": "autoplay",
-          "description": "Auto-advance interval in seconds; 0 or omitted = off",
-          "type": "number"
-        },
-        {
-          "name": "fullscreen",
-          "description": "Display carousel in fullscreen mode with dark backdrop",
-          "type": "boolean"
-        },
-        {
-          "name": "dot-position",
-          "description": "Dot placement: bottom | top | left | right (default: \"bottom\")",
-          "type": "string"
-        },
-        {
-          "name": "images",
-          "description": "JSON array of image URLs or objects with src and alt properties",
-          "type": "string"
+          "name": "autoplay"
         }
       ]
     },
@@ -583,226 +554,14 @@
       ]
     },
     {
-      "name": "dvfy-compare-slider",
-      "path": "./components/dvfy-compare-slider.js",
-      "description": "<dvfy-compare-slider> — Clip-path image comparison slider\n\nOverlay two images (before/after) and reveal via drag using clip-path.\nHardware-accelerated — no layout shifts since clip-path doesn't affect layout.\n\nInspired by Emil Kowalski: https://emilkowal.ski/ui/the-magic-of-clip-path\n\nUsage:\n  <dvfy-compare-slider label-before=\"Before\" label-after=\"After\">\n    <img slot=\"before\" src=\"before.jpg\" alt=\"Before\" />\n    <img slot=\"after\"  src=\"after.jpg\"  alt=\"After\"  />\n  </dvfy-compare-slider>\n\nAny block element can be used in the slots (not just images).",
-      "attributes": [
-        {
-          "name": "value",
-          "description": "Current divider position (0–100)",
-          "type": "number"
-        },
-        {
-          "name": "label-before",
-          "description": "Label overlay on the before panel",
-          "type": "string"
-        },
-        {
-          "name": "label-after",
-          "description": "Label overlay on the after panel",
-          "type": "string"
-        }
-      ],
-      "properties": [
-        {
-          "name": "value",
-          "attribute": "value",
-          "description": "Current divider position (0–100)",
-          "type": "number"
-        }
-      ],
-      "events": [
-        {
-          "name": "change",
-          "description": "Fires on every drag update. detail: { value: number }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "before",
-          "description": "The \"before\" content (defines height of the component)"
-        },
-        {
-          "name": "after",
-          "description": "The \"after\" content (absolutely fills same area)"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-compare-slider-radius",
-          "description": "Border radius (default: var(--dvfy-radius-lg))",
-          "type": "length"
-        },
-        {
-          "name": "--dvfy-compare-slider-divider-color",
-          "description": "Divider line color (default: rgba(255,255,255,0.9))",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-compare-slider-handle-bg",
-          "description": "Handle circle background (default: #fff)",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-compare-slider-label-bg",
-          "description": "Label background (default: rgba(0,0,0,0.5))",
-          "type": "color"
-        }
-      ]
-    },
-    {
       "name": "dvfy-component-playground",
       "path": "./components/dvfy-component-playground.js",
-      "description": "<dvfy-component-playground> — Interactive component playground\n\nLoads the WCA custom-elements.json manifest, renders a component picker,\nauto-generates controls from attribute metadata, and provides live Preview,\nCode, and API tabs.",
       "attributes": [
         {
-          "name": "component",
-          "description": "Tag name to showcase (shows picker if omitted)",
-          "type": "string"
+          "name": "component"
         },
         {
-          "name": "src",
-          "description": "Path to custom-elements.json (default: \"../custom-elements.json\")",
-          "type": "string"
-        },
-        {
-          "name": "layout",
-          "description": "Preview layout mode: center | stretch | fill | edge | overlay (default: \"center\")",
-          "type": "string"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Not used"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-surface-raised",
-          "description": "Card/panel background",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-border-muted",
-          "description": "Panel borders",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-primary-bg",
-          "description": "Active tab accent",
-          "type": "color"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-date-picker",
-      "path": "./components/dvfy-date-picker.js",
-      "description": "<dvfy-date-picker> — Calendar date/time picker with dropdown\n\nRenders a text input that opens a floating calendar panel. Supports single\ndate, date range, time, and datetime modes. Fully keyboard accessible with\nlocale-aware display formatting.",
-      "attributes": [
-        {
-          "name": "value",
-          "description": "Selected date in ISO format (YYYY-MM-DD for date, HH:MM for time, YYYY-MM-DDTHH:MM for datetime)",
-          "type": "string"
-        },
-        {
-          "name": "label",
-          "description": "Label text shown above the input",
-          "type": "string"
-        },
-        {
-          "name": "value-end",
-          "description": "Range end date (YYYY-MM-DD), requires range attribute",
-          "type": "string"
-        },
-        {
-          "name": "min",
-          "description": "Minimum selectable date (YYYY-MM-DD)",
-          "type": "string"
-        },
-        {
-          "name": "max",
-          "description": "Maximum selectable date (YYYY-MM-DD)",
-          "type": "string"
-        },
-        {
-          "name": "type",
-          "description": "Picker mode: date | time | datetime (default: \"date\")",
-          "type": "string"
-        },
-        {
-          "name": "range",
-          "description": "Enable date range selection (two-click: start then end)",
-          "type": "boolean"
-        },
-        {
-          "name": "required",
-          "description": "Mark field as required",
-          "type": "boolean"
-        },
-        {
-          "name": "disabled",
-          "description": "Disable the component",
-          "type": "boolean"
-        },
-        {
-          "name": "placeholder",
-          "description": "Placeholder text for the input",
-          "type": "string"
-        },
-        {
-          "name": "name",
-          "description": "Form field name",
-          "type": "string"
-        },
-        {
-          "name": "error",
-          "description": "Error message (enables error styling)",
-          "type": "string"
-        },
-        {
-          "name": "help",
-          "description": "Help text shown below input",
-          "type": "string"
-        },
-        {
-          "name": "label-position",
-          "description": "Label placement: top | right | bottom | left (default: \"top\")",
-          "type": "string"
-        }
-      ],
-      "properties": [
-        {
-          "name": "valueEnd",
-          "type": "string"
-        },
-        {
-          "name": "value",
-          "attribute": "value",
-          "description": "Selected date in ISO format (YYYY-MM-DD for date, HH:MM for time, YYYY-MM-DDTHH:MM for datetime)",
-          "type": "string"
-        }
-      ],
-      "events": [
-        {
-          "name": "change"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-date-picker-selected-bg",
-          "description": "Selected day background (default: --dvfy-primary-bg)",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-date-picker-selected-text",
-          "description": "Selected day text color (default: #fff)",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-date-picker-range-bg",
-          "description": "In-range days background",
-          "type": "color"
+          "name": "src"
         }
       ]
     },
@@ -885,14 +644,14 @@
       "description": "Dropdown menu with keyboard navigation and click-outside closing.",
       "attributes": [
         {
-          "name": "open",
-          "description": "Menu visibility state",
-          "type": "boolean"
-        },
-        {
           "name": "align",
           "description": "Menu alignment: left | right (default: \"left\")",
           "type": "string"
+        },
+        {
+          "name": "open",
+          "description": "Menu visibility state",
+          "type": "boolean"
         }
       ],
       "slots": [
@@ -955,75 +714,6 @@
         {
           "name": "--dvfy-text-secondary",
           "description": "Title color",
-          "type": "color"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-file-upload",
-      "path": "./components/dvfy-file-upload.js",
-      "description": "Drag-and-drop file upload zone with validation and file list preview.",
-      "attributes": [
-        {
-          "name": "label",
-          "description": "Accessible label for the drop zone",
-          "type": "string"
-        },
-        {
-          "name": "accept",
-          "description": "Accepted MIME types or extensions (e.g. \"image/*,.pdf\")",
-          "type": "string"
-        },
-        {
-          "name": "multiple",
-          "description": "Allow selecting multiple files",
-          "type": "boolean"
-        },
-        {
-          "name": "max-size",
-          "description": "Maximum file size in MB (e.g. \"5\" for 5 MB)",
-          "type": "number"
-        },
-        {
-          "name": "state",
-          "description": "Visual state: idle | dragover | uploading | success | error (default: \"idle\")",
-          "type": "string"
-        },
-        {
-          "name": "progress",
-          "description": "Upload progress 0–100 (shown when state=\"uploading\")",
-          "type": "number"
-        },
-        {
-          "name": "disabled",
-          "description": "Disable the drop zone",
-          "type": "boolean"
-        }
-      ],
-      "properties": [
-        {
-          "name": "files",
-          "description": "Returns a copy of the currently selected files",
-          "type": "File[]"
-        }
-      ],
-      "events": [
-        {
-          "name": "dvfy-files-selected"
-        },
-        {
-          "name": "dvfy-file-removed"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-fu-zone-border",
-          "description": "Drop zone border color override",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-fu-zone-bg",
-          "description": "Drop zone background override",
           "type": "color"
         }
       ]
@@ -1270,16 +960,6 @@
           "name": "icon",
           "description": "URL to brand icon shown at center of spinner",
           "type": "string"
-        },
-        {
-          "name": "label",
-          "description": "Visible text label (e.g. \"Uploading...\"); also used as aria-label",
-          "type": "string"
-        },
-        {
-          "name": "label-position",
-          "description": "top | right | bottom | left (default: \"top\")",
-          "type": "string"
         }
       ],
       "cssProperties": [
@@ -1296,65 +976,15 @@
       ]
     },
     {
-      "name": "dvfy-marquee-scroll",
-      "path": "./components/dvfy-marquee-scroll.js",
-      "description": "Velocity-driven scroll-accelerated marquee. Content loops continuously;\nscrolling the page temporarily accelerates the marquee, with smooth lerp\ndeceleration back to base speed.",
-      "attributes": [
-        {
-          "name": "speed",
-          "description": "Base scroll speed in px/frame (default: 1)",
-          "type": "number"
-        },
-        {
-          "name": "direction",
-          "description": "Scroll direction: left | right (default: \"left\")",
-          "type": "string"
-        },
-        {
-          "name": "multiplier",
-          "description": "Scroll velocity to speed multiplier (default: 3)",
-          "type": "number"
-        },
-        {
-          "name": "gap",
-          "description": "CSS gap between looped content copies (default: \"4rem\")",
-          "type": "string"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to be looped in the marquee"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-marquee-bg",
-          "description": "Background and edge-fade color",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-marquee-gap",
-          "description": "Gap between content copies (default: 4rem)",
-          "type": "length"
-        },
-        {
-          "name": "--dvfy-marquee-padding",
-          "description": "Block padding (default: 1rem)",
-          "type": "length"
-        },
-        {
-          "name": "--dvfy-marquee-fade",
-          "description": "Edge fade overlay width (default: 4rem)",
-          "type": "length"
-        }
-      ]
-    },
-    {
       "name": "dvfy-modal",
       "path": "./components/dvfy-modal.js",
       "description": "Modal dialog with backdrop, focus trap, and keyboard support.",
       "attributes": [
+        {
+          "name": "size",
+          "description": "Dialog size: xs | sm | md | lg | xl (default: \"md\")",
+          "type": "string"
+        },
         {
           "name": "open",
           "description": "Show/hide the modal",
@@ -1369,11 +999,6 @@
           "name": "required",
           "description": "Prevent dismissal via backdrop click or Escape key",
           "type": "boolean"
-        },
-        {
-          "name": "size",
-          "description": "Dialog size: xs | sm | md | lg | xl (default: \"md\")",
-          "type": "string"
         }
       ],
       "events": [
@@ -1402,9 +1027,9 @@
       ]
     },
     {
-      "name": "dvfy-nav-bar",
-      "path": "./components/dvfy-nav-bar.js",
-      "description": "Full responsive navigation bar composing lower-tier components.\nTier 3 organism — brand section + dvfy-nav-menu + action items.\nMobile breakpoint triggers dvfy-hamburger toggle and dvfy-drawer slide-in.",
+      "name": "dvfy-nav",
+      "path": "./components/dvfy-nav.js",
+      "description": "Responsive navigation bar composing dvfy-hamburger for animated mobile toggle.\nUses container queries for responsive behavior. Mobile menu renders as a\nslide-in drawer from the right edge.",
       "attributes": [
         {
           "name": "href",
@@ -1423,7 +1048,7 @@
         },
         {
           "name": "scroll-shrink",
-          "description": "Reduce height and add shadow on scroll",
+          "description": "Reduce padding and add shadow on scroll",
           "type": "boolean"
         },
         {
@@ -1450,7 +1075,7 @@
       "slots": [
         {
           "name": "",
-          "description": "dvfy-nav-menu for links, other elements treated as actions"
+          "description": "Navigation links (<a>) and action elements (buttons, etc.)"
         }
       ],
       "cssProperties": [
@@ -1465,8 +1090,18 @@
           "type": "color"
         },
         {
-          "name": "--dvfy-nav-brand-text",
-          "description": "Brand name text color (default: var(--dvfy-text-primary))",
+          "name": "--dvfy-nav-link-color",
+          "description": "Link text color (default: var(--dvfy-text-secondary))",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-nav-link-hover",
+          "description": "Link hover color (default: var(--dvfy-text-primary))",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-nav-link-active",
+          "description": "Active link indicator (default: var(--dvfy-primary-bg))",
           "type": "color"
         },
         {
@@ -1477,162 +1112,29 @@
       ]
     },
     {
-      "name": "dvfy-nav-menu",
-      "path": "./components/dvfy-nav-menu.js",
-      "description": "Navigation link group that arranges dvfy-nav items.\nTier 2 composite — groups navigation links horizontally (desktop)\nor vertically (mobile/drawer context).",
-      "attributes": [
-        {
-          "name": "aria-label",
-          "description": "Accessible group label",
-          "type": "string"
-        },
-        {
-          "name": "orientation",
-          "description": "Layout direction: horizontal (default) | vertical",
-          "type": "string"
-        },
-        {
-          "name": "label",
-          "description": "Visible text label",
-          "type": "string"
-        },
-        {
-          "name": "label-position",
-          "description": "Label position: top | right | bottom | left",
-          "type": "string"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "dvfy-nav elements"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-nav-menu-gap",
-          "description": "Gap between items (default: 0 horizontal, var(--dvfy-space-1) vertical)",
-          "type": "length"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-nav",
-      "path": "./components/dvfy-nav.js",
-      "description": "Single navigation link with active state detection.\nTier 1 primitive — a styled anchor with hover/focus states,\noptional icon, and automatic active indicator based on current URL.",
-      "attributes": [
-        {
-          "name": "href",
-          "description": "Link destination URL",
-          "type": "string"
-        },
-        {
-          "name": "icon",
-          "description": "Icon text displayed before the label",
-          "type": "string"
-        },
-        {
-          "name": "active",
-          "description": "Force active state (auto-detected from URL if omitted)",
-          "type": "boolean"
-        },
-        {
-          "name": "disabled",
-          "description": "Disable the link",
-          "type": "boolean"
-        },
-        {
-          "name": "label",
-          "description": "Visible text label (alternative to slot content)",
-          "type": "string"
-        },
-        {
-          "name": "label-position",
-          "description": "Label position: top | right | bottom | left",
-          "type": "string"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Default slot for link text"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-nav-link-color",
-          "description": "Link text color (default: var(--dvfy-text-secondary))",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-nav-link-hover",
-          "description": "Hover text color (default: var(--dvfy-text-primary))",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-nav-link-active",
-          "description": "Active link color (default: var(--dvfy-primary-bg))",
-          "type": "color"
-        }
-      ]
-    },
-    {
       "name": "dvfy-page-transition",
       "path": "./components/dvfy-page-transition.js",
-      "description": "<dvfy-page-transition> — View Transitions API wrapper\n\nSeamless cross-page (MPA) and in-page (SPA) transitions via the native View\nTransitions API. MPA mode is zero-JS — just add the element once per page.\nSPA mode wraps DOM mutations via startTransition(). HTMX integration is\nautomatic when the `htmx` attribute is present.\n\nBrowser support: Chrome 111+, Edge 111+, Firefox 128+, Safari 18+.\nGracefully degrades to instant transitions in older browsers.",
+      "description": "View Transitions API wrapper for MPA and SPA transitions.",
       "attributes": [
         {
-          "name": "animation",
-          "description": "Preset: fade | slide-left | slide-right | slide-up | slide-down | scale (default: \"fade\")",
-          "type": "string"
+          "name": "animation"
         },
         {
-          "name": "duration",
-          "description": "Speed: fastest | fast | normal | slow | slowest (default: \"normal\")",
-          "type": "string"
+          "name": "duration"
         },
         {
-          "name": "mpa",
-          "description": "Enable cross-page (MPA) transitions via CSS",
-          "type": "boolean"
+          "name": "mpa"
         },
         {
-          "name": "htmx",
-          "description": "Auto-enable HTMX globalViewTransitions when htmx is detected",
-          "type": "boolean"
-        },
-        {
-          "name": "name",
-          "description": "view-transition-name for named element morphing between states",
-          "type": "string"
+          "name": "name"
         }
       ],
       "events": [
         {
-          "name": "transition-start",
-          "description": "Fires when a SPA transition begins"
+          "name": "transition-start"
         },
         {
-          "name": "transition-finish",
-          "description": "Fires when a SPA transition completes, detail: { success }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to wrap with transitions"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-pt-duration",
-          "description": "Override transition duration (defaults to duration attr)",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-pt-easing",
-          "description": "Override transition easing curve",
-          "type": "string"
+          "name": "transition-finish"
         }
       ]
     },
@@ -1883,10 +1385,6 @@
       ]
     },
     {
-      "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js"
-    },
-    {
       "name": "dvfy-section",
       "path": "./components/dvfy-section.js",
       "description": "Collapsible section with summary header and toggle animation.",
@@ -1942,6 +1440,16 @@
           "type": "string"
         },
         {
+          "name": "searchable",
+          "description": "Enable filter input in dropdown",
+          "type": "boolean"
+        },
+        {
+          "name": "size",
+          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
+          "type": "string"
+        },
+        {
           "name": "error",
           "description": "Error message (enables error styling)",
           "type": "string"
@@ -1975,16 +1483,6 @@
           "name": "label-position",
           "description": "Label placement: top | right | bottom | left (default: \"top\")",
           "type": "string"
-        },
-        {
-          "name": "size",
-          "description": "Size: xs | sm | md | lg | xl (default: \"md\")",
-          "type": "string"
-        },
-        {
-          "name": "searchable",
-          "description": "Enable filter input in dropdown",
-          "type": "boolean"
         }
       ],
       "properties": [
@@ -2681,16 +2179,6 @@
           "name": "default-mode",
           "description": "Initial mode: light | dark (default: \"light\")",
           "type": "string"
-        },
-        {
-          "name": "round",
-          "description": "Use fully rounded track and thumb (pill shape)",
-          "type": "boolean"
-        },
-        {
-          "name": "variant",
-          "description": "Selector style: select | dropdown (default: \"select\")",
-          "type": "string"
         }
       ],
       "slots": [
@@ -2706,8 +2194,13 @@
           "type": "color"
         },
         {
-          "name": "--dvfy-surface-raised",
-          "description": "Toggle thumb color / track background (dark mode)",
+          "name": "--dvfy-neutral-0",
+          "description": "Toggle thumb color (light mode)",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-indigo-950",
+          "description": "Toggle track background (dark mode)",
           "type": "color"
         }
       ]
@@ -2785,69 +2278,19 @@
       ],
       "cssProperties": [
         {
-          "name": "--dvfy-tooltip-bg",
-          "description": "Tooltip background color",
+          "name": "--dvfy-neutral-700",
+          "description": "Tooltip background (light mode)",
           "type": "color"
         },
         {
-          "name": "--dvfy-tooltip-text",
-          "description": "Tooltip text color",
+          "name": "--dvfy-neutral-100",
+          "description": "Tooltip text color (light mode)",
           "type": "color"
         },
         {
-          "name": "--dvfy-tooltip-border",
-          "description": "Tooltip border color",
+          "name": "--dvfy-neutral-200",
+          "description": "Tooltip background (dark mode)",
           "type": "color"
-        }
-      ]
-    },
-    {
-      "name": "dvfy-transition-root",
-      "path": "./components/dvfy-transition-root.js",
-      "description": "<dvfy-transition-root> — View Transitions API page/element morphing\n\nWraps HTMX navigation in document.startViewTransition() for smooth\nelement-level morphing between pages and states. Hero images, headers,\nand cards animate seamlessly between routes — zero framework required.\n\nAlso processes the dvfy-transition-name attribute on any descendant element,\nmapping it to the CSS view-transition-name property for named element morphing.\n\nAttributes:\n  duration: CSS time value, e.g. \"300ms\" or \"0.3s\" (default: \"300ms\")\n  easing:   CSS easing function (default: \"ease-out\")\n  mpa:      boolean — inject",
-      "attributes": [
-        {
-          "name": "duration",
-          "description": "CSS time value for transition speed (default: \"300ms\")",
-          "type": "string"
-        },
-        {
-          "name": "easing",
-          "description": "CSS easing function (default: \"ease-out\")",
-          "type": "string"
-        },
-        {
-          "name": "mpa",
-          "description": "Enable",
-          "type": "boolean"
-        }
-      ],
-      "events": [
-        {
-          "name": "transition-start",
-          "description": "Fires when a view transition begins"
-        },
-        {
-          "name": "transition-finish",
-          "description": "Fires when a view transition completes, detail: { success }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Content to wrap; place around HTMX-driven page regions"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-tr-duration",
-          "description": "Override transition duration",
-          "type": "time"
-        },
-        {
-          "name": "--dvfy-tr-easing",
-          "description": "Override transition easing",
-          "type": "string"
         }
       ]
     },

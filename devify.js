@@ -10,7 +10,6 @@
 // Wave 1: Foundation (form + data display)
 import './components/dvfy-button.js';
 import './components/dvfy-input.js';
-import './components/dvfy-date-picker.js';
 import './components/dvfy-badge.js';
 import './components/dvfy-switch.js';
 import './components/dvfy-slider.js';
@@ -23,10 +22,8 @@ import './components/dvfy-loader.js';
 import './components/dvfy-scroll-reveal.js';
 import './components/dvfy-scroll-progress.js';
 import './components/dvfy-page-transition.js';
-import './components/dvfy-transition-root.js';
 import './components/dvfy-text-vortex.js';
 import './components/dvfy-scramble-hover.js';
-import './components/dvfy-marquee-scroll.js';
 
 // Wave 2: Navigation + Wayfinding
 import './components/dvfy-dropdown.js';
@@ -38,8 +35,6 @@ import './components/dvfy-breadcrumb.js';
 import './components/dvfy-pagination.js';
 import './components/dvfy-progress.js';
 import './components/dvfy-nav.js';
-import './components/dvfy-nav-menu.js';
-import './components/dvfy-nav-bar.js';
 import './components/dvfy-sidebar.js';
 import './components/dvfy-tree-view.js';
 
@@ -47,13 +42,12 @@ import './components/dvfy-tree-view.js';
 import './components/dvfy-card.js';
 import './components/dvfy-gradient-card.js';
 import './components/dvfy-spotlight-card.js';
-import './components/dvfy-compare-slider.js';
+import './components/dvfy-card-glow.js';
 import './components/dvfy-table.js';
 import './components/dvfy-toast.js';
 import './components/dvfy-empty.js';
 import './components/dvfy-tag.js';
 import './components/dvfy-select.js';
-import './components/dvfy-file-upload.js';
 import './components/dvfy-theme-switcher.js';
 import './components/dvfy-auth.js';
 import './components/dvfy-hamburger.js';
@@ -63,7 +57,7 @@ import './components/dvfy-component-playground.js';
 import './components/dvfy-accordion.js';
 import './components/dvfy-carousel.js';
 
-// Server Components (HTMX)
+// HTMX Integration Patterns
 import './patterns/dvfy-htmx-form.js';
 import './patterns/dvfy-infinite-scroll.js';
 import './patterns/dvfy-live-search.js';

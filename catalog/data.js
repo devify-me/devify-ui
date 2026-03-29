@@ -4,37 +4,31 @@
  * Taxonomy (tiers, domains, registry), HTMX patterns, token groups, and semantic tokens.
  */
 
-/** Tier definitions — composition hierarchy (each tier requires ≥1 dep from previous tier) */
+/** Tier definitions — complexity/dependency classification */
 export const TIERS = {
   1: {
     name: 'Primitives',
     label: 'Tier 1 — Primitives',
-    description: 'Zero dvfy-* dependencies. Leaf nodes of the composition tree.',
+    description: 'Zero dvfy-* structural dependencies. Pure tokens + native HTML.',
     rules: 'Must not import or render other dvfy-* components.',
   },
   2: {
     name: 'Composites',
     label: 'Tier 2 — Composites',
-    description: 'One composition layer. Combines Tier 1 primitives into richer controls.',
-    rules: 'Must have ≥1 Tier 1 dependency. Only Tier 1 deps allowed.',
+    description: 'May use 0–2 Tier 1 components. Enhanced behavior over native.',
+    rules: 'May depend on up to 2 Tier 1 components. No Tier 2+ deps.',
   },
   3: {
     name: 'Organisms',
     label: 'Tier 3 — Organisms',
-    description: 'Two+ composition layers. Combines Tier 1 and Tier 2 components.',
-    rules: 'Must have ≥1 Tier 2 dependency. Tier 1 and Tier 2 deps allowed.',
+    description: 'Compose 2+ components. Cross-component state management.',
+    rules: 'May depend on Tier 1 and Tier 2 components. Complex composition.',
   },
   4: {
-    name: 'Widgets',
-    label: 'Tier 4 — Widgets',
-    description: 'Self-contained functional unit with own state machine and UX flow.',
-    rules: 'Must have ≥1 Tier 3 dependency. Full composition depth.',
-  },
-  5: {
-    name: 'Layouts',
-    label: 'Tier 5 — Layouts',
-    description: 'Page-level spatial scaffold. Defines regions for content and navigation.',
-    rules: 'Must have ≥1 Tier 3+ dependency. Defines page-level spatial arrangement.',
+    name: 'Patterns',
+    label: 'Tier 4 — HTMX Patterns',
+    description: 'HTMX server-interaction orchestration. Can use any tier.',
+    rules: 'Requires server backend. May depend on any tier.',
   },
 };
 
@@ -46,97 +40,73 @@ export const DOMAINS = {
   navigation: 'Navigation',
   layout:     'Layout',
   utility:    'Utility',
+  htmx:       'HTMX Patterns',
 };
-
-/**
- * Preview layout hints — how the playground preview area should present the component.
- *
- *   center       — Centered in preview (buttons, badges, toggles)
- *   stretch      — Full-width, vertically centered (inputs, progress bars)
- *   fill         — Fills entire preview area (cards, tables, accordion)
- *   edge         — Attached to container edges with sibling content (drawer, sidebar)
- *   overlay      — Needs a trigger to demonstrate (modal, toast, tooltip)
- *   top-bar      — Pinned to top with simulated page content below (nav-bar)
- *   inline-group — Horizontal flex at natural size (nav-menu, tag groups)
- */
-export const LAYOUTS = ['center', 'stretch', 'fill', 'edge', 'overlay', 'top-bar', 'inline-group'];
 
 /** Component registry — single source of truth for classification */
 export const COMPONENT_REGISTRY = {
-  // Tier 1 — Primitives (zero dvfy-* deps)
-  'dvfy-button':          { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
-  'dvfy-input':           { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
-  'dvfy-textarea':        { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
-  'dvfy-checkbox':        { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
-  'dvfy-radio':           { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
-  'dvfy-switch':          { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
-  'dvfy-slider':          { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
-  'dvfy-select':          { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
-  'dvfy-file-upload':     { tier: 1, domain: 'forms',      deps: [], layout: 'stretch' },
-  'dvfy-date-picker':     { tier: 1, domain: 'forms',      deps: [], layout: 'center' },
-  'dvfy-badge':           { tier: 1, domain: 'display',    deps: [], layout: 'center' },
-  'dvfy-tag':             { tier: 1, domain: 'display',    deps: [], layout: 'center' },
-  'dvfy-avatar':          { tier: 1, domain: 'display',    deps: [], layout: 'center' },
-  'dvfy-progress':        { tier: 1, domain: 'display',    deps: [], layout: 'stretch' },
-  'dvfy-card':            { tier: 1, domain: 'display',    deps: [], layout: 'center' },
-  'dvfy-gradient-card':   { tier: 1, domain: 'display',    deps: [], layout: 'center' },
-  'dvfy-spotlight-card':  { tier: 1, domain: 'display',    deps: [], layout: 'center' },
-  'dvfy-compare-slider':  { tier: 1, domain: 'display',    deps: [], layout: 'center' },
-  'dvfy-empty':           { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
-  'dvfy-carousel':        { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
-  'dvfy-scroll-progress': { tier: 1, domain: 'display',    deps: [], layout: 'fill' },
-  'dvfy-marquee-scroll':  { tier: 1, domain: 'display',    deps: [], layout: 'stretch' },
-  'dvfy-alert':           { tier: 1, domain: 'feedback',   deps: [], layout: 'stretch' },
-  'dvfy-loader':          { tier: 1, domain: 'feedback',   deps: [], layout: 'center' },
-  'dvfy-toast':           { tier: 1, domain: 'feedback',   deps: [], layout: 'overlay' },
-  'dvfy-hovercard':       { tier: 1, domain: 'feedback',   deps: [], layout: 'overlay' },
-  'dvfy-hamburger':       { tier: 1, domain: 'navigation', deps: [], layout: 'center' },
-  'dvfy-breadcrumb':      { tier: 1, domain: 'navigation', deps: [], layout: 'stretch' },
-  'dvfy-pagination':      { tier: 1, domain: 'navigation', deps: [], layout: 'stretch' },
-  'dvfy-tabs':            { tier: 1, domain: 'navigation', deps: [], layout: 'fill' },
-  'dvfy-dropdown':        { tier: 1, domain: 'navigation', deps: [], layout: 'overlay' },
-  'dvfy-tree-node':       { tier: 1, domain: 'navigation', deps: [], layout: 'stretch' },
-  'dvfy-tree-view':       { tier: 1, domain: 'navigation', deps: [], layout: 'stretch' },
-  'dvfy-sidebar':         { tier: 1, domain: 'navigation', deps: [], layout: 'edge' },
-  'dvfy-section':         { tier: 1, domain: 'layout',     deps: [], layout: 'fill' },
-  'dvfy-tooltip':         { tier: 1, domain: 'utility',    deps: [], layout: 'overlay' },
-  'dvfy-scroll-reveal':   { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
-  'dvfy-page-transition': { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
-  'dvfy-transition-root': { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
-  'dvfy-text-vortex':     { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
-  'dvfy-scramble-hover':  { tier: 1, domain: 'utility',    deps: [], layout: 'fill' },
-  'dvfy-infinite-scroll': { tier: 1, domain: 'utility',    deps: [], layout: 'fill',    server: true },
-  'dvfy-live-search':     { tier: 1, domain: 'forms',      deps: [], layout: 'stretch', server: true },
-  'dvfy-htmx-table':      { tier: 1, domain: 'display',    deps: [], layout: 'fill',    server: true },
+  // Tier 1 — Primitives
+  'dvfy-button':    { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-input':     { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-textarea':  { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-checkbox':  { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-radio':     { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-switch':    { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-slider':    { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-badge':     { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-tag':       { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-avatar':    { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-progress':  { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-alert':     { tier: 1, domain: 'feedback',   deps: [] },
+  'dvfy-loader':    { tier: 1, domain: 'feedback',   deps: [] },
+  'dvfy-hamburger': { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-drawer':    { tier: 1, domain: 'layout',     deps: [] },
+  'dvfy-section':   { tier: 1, domain: 'layout',     deps: [] },
+  'dvfy-tooltip':       { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-hovercard':     { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-scroll-reveal':    { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-scroll-progress':  { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-page-transition': { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-text-vortex':      { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-scramble-hover':   { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-tree-node':       { tier: 1, domain: 'navigation', deps: [] },
 
-  // Tier 2 — Composites (≥1 Tier 1 dep, only Tier 1 deps)
-  'dvfy-drawer':               { tier: 2, domain: 'layout',     deps: ['dvfy-button'], layout: 'edge' },
-  'dvfy-table':                { tier: 2, domain: 'display',    deps: ['dvfy-checkbox'], layout: 'fill' },
-  'dvfy-modal':                { tier: 2, domain: 'feedback',   deps: ['dvfy-button'], layout: 'overlay' },
-  'dvfy-nav':                  { tier: 1, domain: 'navigation', deps: [], layout: 'center' },
-  'dvfy-nav-menu':             { tier: 2, domain: 'navigation', deps: ['dvfy-nav'], layout: 'inline-group' },
-  'dvfy-nav-bar':              { tier: 3, domain: 'navigation', deps: ['dvfy-nav-menu', 'dvfy-hamburger', 'dvfy-drawer'], layout: 'top-bar' },
-  'dvfy-theme-switcher':       { tier: 2, domain: 'utility',    deps: ['dvfy-dropdown', 'dvfy-button'], layout: 'center' },
-  'dvfy-accordion':            { tier: 2, domain: 'layout',     deps: ['dvfy-section'], layout: 'fill' },
-  'dvfy-component-playground': { tier: 2, domain: 'utility',    deps: ['dvfy-button', 'dvfy-section', 'dvfy-slider'], layout: 'fill' },
+  // Tier 2 — Composites
+  'dvfy-select':         { tier: 2, domain: 'forms',      deps: [] },
+  'dvfy-card':           { tier: 2, domain: 'display',    deps: [] },
+  'dvfy-gradient-card':  { tier: 2, domain: 'display',    deps: [] },
+  'dvfy-spotlight-card': { tier: 2, domain: 'display',    deps: [] },
+  'dvfy-card-glow':      { tier: 2, domain: 'display',    deps: [] },
+  'dvfy-empty':          { tier: 2, domain: 'display',    deps: ['dvfy-button'] },
+  'dvfy-table':          { tier: 2, domain: 'display',    deps: ['dvfy-checkbox'] },
+  'dvfy-modal':          { tier: 2, domain: 'feedback',   deps: ['dvfy-button'] },
+  'dvfy-toast':          { tier: 2, domain: 'feedback',   deps: [] },
+  'dvfy-breadcrumb':     { tier: 2, domain: 'navigation', deps: [] },
+  'dvfy-pagination':     { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
+  'dvfy-tabs':           { tier: 2, domain: 'navigation', deps: [] },
+  'dvfy-dropdown':       { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
+  'dvfy-nav':            { tier: 2, domain: 'navigation', deps: ['dvfy-hamburger', 'dvfy-drawer'] },
+  'dvfy-tree-view':      { tier: 2, domain: 'navigation', deps: [] },
+  'dvfy-theme-switcher': { tier: 2, domain: 'utility',    deps: [] },
 
-  // Tier 3 — Organisms (≥1 Tier 2 dep)
-  'dvfy-auth':      { tier: 3, domain: 'utility',  deps: ['dvfy-modal'], layout: 'fill' },
-  'dvfy-htmx-form': { tier: 3, domain: 'forms',    deps: ['dvfy-modal'], layout: 'stretch', server: true },
-  'dvfy-confirm':   { tier: 3, domain: 'feedback',  deps: ['dvfy-modal'], layout: 'overlay', server: true },
+  // Tier 3 — Organisms
+  'dvfy-carousel':  { tier: 3, domain: 'layout',     deps: [] },
+  'dvfy-accordion': { tier: 3, domain: 'layout',     deps: ['dvfy-section'] },
+  'dvfy-sidebar':   { tier: 3, domain: 'navigation', deps: [] },
+  'dvfy-auth':      { tier: 3, domain: 'utility',    deps: ['dvfy-input', 'dvfy-button'] },
+
+  // Tier 4 — HTMX Patterns
+  'dvfy-htmx-form':       { tier: 4, domain: 'htmx', deps: [] },
+  'dvfy-confirm':         { tier: 4, domain: 'htmx', deps: [] },
+  'dvfy-infinite-scroll':  { tier: 4, domain: 'htmx', deps: [] },
+  'dvfy-live-search':      { tier: 4, domain: 'htmx', deps: [] },
+  'dvfy-htmx-table':       { tier: 4, domain: 'htmx', deps: [] },
 };
 
-/** Get tags for a given tier number */
+/** Get tags for a given tier number (excludes Tier 4 patterns) */
 export function getComponentsByTier(n) {
   return Object.entries(COMPONENT_REGISTRY)
     .filter(([, meta]) => meta.tier === n)
-    .map(([tag]) => tag);
-}
-
-/** Get all server-interaction (HTMX) component tags */
-export function getServerComponents() {
-  return Object.entries(COMPONENT_REGISTRY)
-    .filter(([, meta]) => meta.server)
     .map(([tag]) => tag);
 }
 
@@ -156,6 +126,7 @@ export function getTierForComponent(tag) {
 /** Components grouped by domain for sidebar navigation — derived from registry */
 export const COMPONENT_CATEGORIES = Object.fromEntries(
   Object.entries(DOMAINS)
+    .filter(([k]) => k !== 'htmx')
     .map(([key, label]) => [label, getComponentsByDomain(key)])
     .filter(([, tags]) => tags.length)
 );
@@ -171,6 +142,24 @@ export const HTMX_PATTERNS = {
 
 /** Token groups — metadata for each token file driving the token views */
 export const TOKEN_GROUPS = {
+  colors: {
+    label: 'Colors',
+    description: '11 color families × 11 steps (50–950)',
+    families: {
+      'Neutral':  { prefix: '--dvfy-neutral', steps: ['0','50','100','200','300','400','500','600','700','800','900','950','1000'] },
+      'Brand':    { prefix: '--dvfy-brand',   steps: ['50','100','200','300','400','500','600','700','800','900','950'] },
+      'Cyan':     { prefix: '--dvfy-cyan',    steps: ['50','100','200','300','400','500','600','700','800','900','950'] },
+      'Indigo':   { prefix: '--dvfy-indigo',  steps: ['50','100','200','300','400','500','600','700','800','900','950'] },
+      'Blue':     { prefix: '--dvfy-blue',    steps: ['50','100','200','300','400','500','600','700','800','900','950'] },
+      'Green':    { prefix: '--dvfy-green',   steps: ['50','100','200','300','400','500','600','700','800','900','950'] },
+      'Red':      { prefix: '--dvfy-red',     steps: ['50','100','200','300','400','500','600','700','800','900','950'] },
+      'Amber':    { prefix: '--dvfy-amber',   steps: ['50','100','200','300','400','500','600','700','800','900','950'] },
+      'Purple':   { prefix: '--dvfy-purple',  steps: ['50','100','200','300','400','500','600','700','800','900','950'] },
+      'Teal':     { prefix: '--dvfy-teal',    steps: ['50','100','200','300','400','500','600','700','800','900','950'] },
+      'Orange':   { prefix: '--dvfy-orange',  steps: ['50','100','200','300','400','500','600','700','800','900','950'] },
+      'Pink':     { prefix: '--dvfy-pink',    steps: ['50','100','200','300','400','500','600','700','800','900','950'] },
+    },
+  },
   typography: {
     label: 'Typography',
     description: 'Font families, sizes, weights, line heights, and letter spacing',
@@ -208,19 +197,6 @@ export const TOKEN_GROUPS = {
         { name: '--dvfy-leading-normal',  type: 'number', desc: '1.5' },
         { name: '--dvfy-leading-relaxed', type: 'number', desc: '1.625' },
         { name: '--dvfy-leading-loose',   type: 'number', desc: '2' },
-      ],
-      'Semantic Presets': [
-        { name: 'display',  type: 'preset', desc: 'Hero headings, landing page titles' },
-        { name: 'h1',       type: 'preset', desc: 'Page titles' },
-        { name: 'h2',       type: 'preset', desc: 'Section headings' },
-        { name: 'h3',       type: 'preset', desc: 'Subsection headings' },
-        { name: 'h4',       type: 'preset', desc: 'Card titles, minor headings' },
-        { name: 'body',     type: 'preset', desc: 'Default paragraph text' },
-        { name: 'body-sm',  type: 'preset', desc: 'Secondary content, descriptions' },
-        { name: 'caption',  type: 'preset', desc: 'Labels, metadata, timestamps' },
-        { name: 'quote',    type: 'preset', desc: 'Blockquotes, testimonials' },
-        { name: 'code',     type: 'preset', desc: 'Inline code, code blocks' },
-        { name: 'overline', type: 'preset', desc: 'Section markers, category labels' },
       ],
       'Letter Spacing': [
         { name: '--dvfy-tracking-tighter', type: 'length', desc: '-0.05em' },
@@ -401,113 +377,14 @@ export const SEMANTIC_TOKENS = {
     { name: '--dvfy-accent-text',      type: 'color', desc: 'Accent text' },
     { name: '--dvfy-accent-border',    type: 'color', desc: 'Accent border' },
   ],
-  'Success': [
-    { name: '--dvfy-success-bg',        type: 'color', desc: 'Success background (solid)' },
-    { name: '--dvfy-success-bg-subtle', type: 'color', desc: 'Success subtle background' },
-    { name: '--dvfy-success-text',      type: 'color', desc: 'Success text' },
-    { name: '--dvfy-success-border',    type: 'color', desc: 'Success border' },
-  ],
-  'Warning': [
-    { name: '--dvfy-warning-bg',        type: 'color', desc: 'Warning background (solid)' },
-    { name: '--dvfy-warning-bg-subtle', type: 'color', desc: 'Warning subtle background' },
-    { name: '--dvfy-warning-text',      type: 'color', desc: 'Warning text' },
-    { name: '--dvfy-warning-border',    type: 'color', desc: 'Warning border' },
-  ],
-  'Danger': [
-    { name: '--dvfy-danger-bg',        type: 'color', desc: 'Danger/error background (solid)' },
-    { name: '--dvfy-danger-bg-subtle', type: 'color', desc: 'Danger subtle background' },
-    { name: '--dvfy-danger-text',      type: 'color', desc: 'Danger text' },
-    { name: '--dvfy-danger-border',    type: 'color', desc: 'Danger border' },
-  ],
-  'Info': [
-    { name: '--dvfy-info-bg',        type: 'color', desc: 'Info background (solid)' },
-    { name: '--dvfy-info-bg-subtle', type: 'color', desc: 'Info subtle background' },
-    { name: '--dvfy-info-text',      type: 'color', desc: 'Info text' },
-    { name: '--dvfy-info-border',    type: 'color', desc: 'Info border' },
-  ],
   'Interactive': [
-    { name: '--dvfy-hover-bg',     type: 'color', desc: 'Hover background for interactive elements' },
-    { name: '--dvfy-active-bg',    type: 'color', desc: 'Active/pressed background' },
     { name: '--dvfy-selected-bg',  type: 'color', desc: 'Selected item background' },
-    { name: '--dvfy-disabled-bg',  type: 'color', desc: 'Disabled element background' },
-    { name: '--dvfy-disabled-text', type: 'color', desc: 'Disabled element text' },
     { name: '--dvfy-ring-color',   type: 'color', desc: 'Focus ring color' },
   ],
   'Input': [
-    { name: '--dvfy-input-bg',           type: 'color', desc: 'Input background' },
-    { name: '--dvfy-input-border',       type: 'color', desc: 'Input border' },
-    { name: '--dvfy-input-border-hover', type: 'color', desc: 'Input border on hover' },
-    { name: '--dvfy-input-border-focus', type: 'color', desc: 'Input border on focus' },
-    { name: '--dvfy-input-placeholder',  type: 'color', desc: 'Input placeholder text' },
-    { name: '--dvfy-input-error',        type: 'color', desc: 'Input error border' },
-  ],
-  'Status On': [
-    { name: '--dvfy-on-success', type: 'color', desc: 'Text color on solid success background' },
-    { name: '--dvfy-on-warning', type: 'color', desc: 'Text color on solid warning background' },
-    { name: '--dvfy-on-danger',  type: 'color', desc: 'Text color on solid danger background' },
-    { name: '--dvfy-on-info',    type: 'color', desc: 'Text color on solid info background' },
-  ],
-  'Tooltip': [
-    { name: '--dvfy-tooltip-bg',     type: 'color', desc: 'Tooltip background' },
-    { name: '--dvfy-tooltip-text',   type: 'color', desc: 'Tooltip text' },
-    { name: '--dvfy-tooltip-border', type: 'color', desc: 'Tooltip border' },
+    { name: '--dvfy-input-border-focus', type: 'color', desc: 'Input focus border' },
   ],
   'Elevation': [
     { name: '--dvfy-shadow-color', type: 'string', desc: 'HSL components for shadow color (e.g. "220 3% 15%")' },
-  ],
-};
-
-/** Built-in themes (empty — themes are generated from the Palette Generator) */
-export const THEMES = [];
-
-/** Curated Google Fonts for brand identity picker */
-export const CURATED_FONTS = {
-  sans: [
-    { name: 'Inter', weights: [300, 400, 500, 600, 700] },
-    { name: 'Roboto', weights: [300, 400, 500, 700] },
-    { name: 'Open Sans', weights: [300, 400, 600, 700] },
-    { name: 'Lato', weights: [300, 400, 700] },
-    { name: 'Poppins', weights: [300, 400, 500, 600, 700] },
-    { name: 'Nunito', weights: [300, 400, 600, 700] },
-    { name: 'Manrope', weights: [300, 400, 500, 600, 700] },
-    { name: 'DM Sans', weights: [400, 500, 700] },
-    { name: 'Plus Jakarta Sans', weights: [300, 400, 500, 600, 700] },
-    { name: 'Work Sans', weights: [300, 400, 500, 600, 700] },
-    { name: 'Source Sans 3', weights: [300, 400, 600, 700] },
-    { name: 'Outfit', weights: [300, 400, 500, 600, 700] },
-    { name: 'Figtree', weights: [300, 400, 500, 600, 700] },
-    { name: 'Geist', weights: [300, 400, 500, 600, 700] },
-  ],
-  serif: [
-    { name: 'Merriweather', weights: [300, 400, 700] },
-    { name: 'Playfair Display', weights: [400, 500, 600, 700] },
-    { name: 'Lora', weights: [400, 500, 600, 700] },
-    { name: 'Source Serif 4', weights: [300, 400, 600, 700] },
-    { name: 'DM Serif Display', weights: [400] },
-    { name: 'Libre Baskerville', weights: [400, 700] },
-    { name: 'Crimson Text', weights: [400, 600, 700] },
-    { name: 'EB Garamond', weights: [400, 500, 600, 700] },
-  ],
-  mono: [
-    { name: 'JetBrains Mono', weights: [300, 400, 500, 600, 700] },
-    { name: 'Fira Code', weights: [300, 400, 500, 600, 700] },
-    { name: 'Source Code Pro', weights: [300, 400, 500, 600, 700] },
-    { name: 'IBM Plex Mono', weights: [300, 400, 500, 600, 700] },
-    { name: 'Roboto Mono', weights: [300, 400, 500, 700] },
-    { name: 'Space Mono', weights: [400, 700] },
-    { name: 'Inconsolata', weights: [300, 400, 500, 600, 700] },
-    { name: 'Geist Mono', weights: [300, 400, 500, 600, 700] },
-  ],
-  display: [
-    { name: 'Saira Stencil One', weights: [400] },
-    { name: 'Righteous', weights: [400] },
-    { name: 'Fredoka', weights: [300, 400, 500, 600, 700] },
-    { name: 'Archivo Black', weights: [400] },
-    { name: 'Bebas Neue', weights: [400] },
-    { name: 'Oswald', weights: [300, 400, 500, 600, 700] },
-    { name: 'Raleway', weights: [300, 400, 500, 600, 700] },
-    { name: 'Montserrat', weights: [300, 400, 500, 600, 700] },
-    { name: 'Sora', weights: [300, 400, 500, 600, 700] },
-    { name: 'Space Grotesk', weights: [300, 400, 500, 600, 700] },
   ],
 };
