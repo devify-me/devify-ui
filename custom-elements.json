@@ -503,8 +503,12 @@
         },
         {
           "name": "gap",
-          "description": "Gap between slides",
-          "type": "string"
+          "description": "Add gap between slides",
+          "type": "boolean"
+        },
+        {
+          "name": "objects",
+          "type": "string} images - JSON array of image URLs or {src, alt"
         },
         {
           "name": "autoplay",
@@ -515,6 +519,9 @@
           "name": "dot-position",
           "description": "Dot placement: bottom | top | left | right (default: \"bottom\")",
           "type": "string"
+        },
+        {
+          "name": "images"
         }
       ]
     },

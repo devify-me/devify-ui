@@ -317,12 +317,25 @@ const DEFAULT_CONTENT = {
   'dvfy-section': '<p>Section content here.</p>',
   'dvfy-theme-switcher': '<option value="devify-cyan">Cyan</option><option value="devify-pink">Pink</option>',
   'dvfy-accordion': '<dvfy-section label="Section One" open><p>First section content.</p></dvfy-section><dvfy-section label="Section Two" collapsed><p>Second section content.</p></dvfy-section><dvfy-section label="Section Three" collapsed><p>Third section content.</p></dvfy-section>',
-  'dvfy-carousel': '<dvfy-slide><img src="../catalog/assets/Grob.png" alt="Grob" style="width:100%;border-radius:var(--dvfy-radius-lg);object-fit:cover;height:16rem"></dvfy-slide><dvfy-slide><img src="../catalog/assets/Grobette.png" alt="Grobette" style="width:100%;border-radius:var(--dvfy-radius-lg);object-fit:cover;height:16rem"></dvfy-slide><dvfy-slide><img src="../catalog/assets/Grobby.png" alt="Grobby" style="width:100%;border-radius:var(--dvfy-radius-lg);object-fit:cover;height:16rem"></dvfy-slide><dvfy-slide><img src="../catalog/assets/Grobma.png" alt="Grobma" style="width:100%;border-radius:var(--dvfy-radius-lg);object-fit:cover;height:16rem"></dvfy-slide><dvfy-slide><img src="../catalog/assets/Grobpa.png" alt="Grobpa" style="width:100%;border-radius:var(--dvfy-radius-lg);object-fit:cover;height:16rem"></dvfy-slide>',
+  'dvfy-carousel': '',
   'dvfy-page-transition': '<dvfy-page-transition animation="fade"><dvfy-card padded><h3 style="margin:0 0 0.5rem">Fade Transition</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">MPA: add mpa attr to activate cross-page transitions.</p></dvfy-card></dvfy-page-transition>',
   'dvfy-scroll-reveal': '<div style="height:150px;overflow-y:auto;border:1px solid var(--dvfy-border-default);border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-4)"><div style="height:200px;display:flex;align-items:end;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Scroll down</div><dvfy-scroll-reveal animation="fade-up"><dvfy-card padded><h3 style="margin:0 0 0.5rem">Revealed Card</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">This card fades up as you scroll into view.</p></dvfy-card></dvfy-scroll-reveal><div style="height:200px"></div></div>',
   'dvfy-scroll-progress': '<dvfy-scroll-progress></dvfy-scroll-progress><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm);margin:0">Scroll the page to see the progress bar fill at the top of the viewport. Requires a scrollable page and browser support for <code>animation-timeline: scroll()</code>.</p>',
   'dvfy-stagger-enter': '<dvfy-stagger-enter direction="up" delay="0.08" duration="0.4" style="display:flex;flex-direction:column;gap:var(--dvfy-space-3)"><dvfy-card padded><strong>Item one</strong><p style="margin:0.25rem 0 0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Fades and slides up on entry.</p></dvfy-card><dvfy-card padded><strong>Item two</strong><p style="margin:0.25rem 0 0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Staggered by sibling-index().</p></dvfy-card><dvfy-card padded><strong>Item three</strong><p style="margin:0.25rem 0 0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">No JavaScript timers needed.</p></dvfy-card></dvfy-stagger-enter>',
   'dvfy-tree-view': '<dvfy-tree-view><dvfy-tree-node label="Documents" icon="\uD83D\uDCC1" expanded><dvfy-tree-node label="README.md" icon="\uD83D\uDCC4" href="#readme"></dvfy-tree-node><dvfy-tree-node label="Images" icon="\uD83D\uDCC1"><dvfy-tree-node label="logo.png" icon="\uD83D\uDDBC\uFE0F" href="#logo"></dvfy-tree-node><dvfy-tree-node label="banner.jpg" icon="\uD83D\uDDBC\uFE0F" href="#banner"></dvfy-tree-node></dvfy-tree-node></dvfy-tree-node><dvfy-tree-node label="Settings" icon="\u2699\uFE0F" href="#settings"></dvfy-tree-node></dvfy-tree-view>',
+};
+
+/** Default attribute values per component — applied when selected in the playground. */
+const DEFAULT_ATTRS = {
+  'dvfy-carousel': {
+    images: JSON.stringify([
+      { src: '../catalog/assets/Grob.png', alt: 'Grob' },
+      { src: '../catalog/assets/Grobette.png', alt: 'Grobette' },
+      { src: '../catalog/assets/Grobby.png', alt: 'Grobby' },
+      { src: '../catalog/assets/Grobma.png', alt: 'Grobma' },
+      { src: '../catalog/assets/Grobpa.png', alt: 'Grobpa' },
+    ]),
+  },
 };
 
 /* ── Utilities ── */
@@ -455,9 +468,12 @@ class DvfyComponentPlayground extends HTMLElement {
     this.#contentValue = tag.name in DEFAULT_CONTENT ? DEFAULT_CONTENT[tag.name] : 'Sample content';
 
     // Init all attributes — booleans respect (default: true) from description
+    const defaults = DEFAULT_ATTRS[tag.name] || {};
     if (tag.attributes) {
       for (const attr of tag.attributes) {
-        if (attr.type === 'boolean') {
+        if (attr.name in defaults) {
+          this.#attrValues[attr.name] = defaults[attr.name];
+        } else if (attr.type === 'boolean') {
           this.#attrValues[attr.name] = parseDefault(attr.description) === 'true';
         } else {
           this.#attrValues[attr.name] = '';

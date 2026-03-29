@@ -16,8 +16,12 @@
  *   <dvfy-carousel autoplay>...</dvfy-carousel>
  *   <dvfy-carousel autoplay="3000">...</dvfy-carousel>
  *
- * Custom gap:
- *   <dvfy-carousel gap="2rem">...</dvfy-carousel>
+ * Gap between slides:
+ *   <dvfy-carousel gap>...</dvfy-carousel>
+ *
+ * Images from data:
+ *   <dvfy-carousel images='[{"src":"a.jpg","alt":"A"},{"src":"b.jpg","alt":"B"}]'></dvfy-carousel>
+ *   <dvfy-carousel images='["a.jpg","b.jpg","c.jpg"]'></dvfy-carousel>
  *
  * Dot position:
  *   <dvfy-carousel dot-position="top">...</dvfy-carousel>
@@ -36,11 +40,12 @@
  *
  * @attr {boolean} peek - Show ~12% of adjacent slides to hint scrollability
  * @attr {boolean|number} autoplay - Auto-advance interval in ms (default: 5000). Pauses on hover, focus, or user interaction. Disabled when prefers-reduced-motion is active.
- * @attr {string} gap - Gap between slides (e.g. "1rem", "16px"). Maps to --dvfy-carousel-gap.
+ * @attr {boolean} gap - Add gap between slides
  * @attr {string} dot-position - Dot placement: bottom | top | left | right (default: "bottom")
+ * @attr {string} images - JSON array of image URLs or objects with src and alt properties
  * @attr {string} aria-label - Accessible label for the carousel region (default: "Carousel")
  *
- * @slot - <dvfy-slide> elements
+ * @slot - <dvfy-slide> elements (ignored when images attr is set)
  *
  * @cssprop {length} --dvfy-carousel-gap - Gap between slides (default: var(--dvfy-space-4))
  * @cssprop {length} --dvfy-carousel-slide-width - Width of each slide (default: 100%)
@@ -66,9 +71,12 @@ dvfy-carousel {
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   scrollbar-width: none;
-  gap: var(--dvfy-carousel-gap, var(--dvfy-space-4, 1rem));
+  gap: 0;
   scroll-marker-group: after;
   outline: none;
+}
+dvfy-carousel[gap] {
+  gap: var(--dvfy-carousel-gap, var(--dvfy-space-4, 1rem));
 }
 dvfy-carousel::-webkit-scrollbar { display: none; }
 
@@ -154,6 +162,15 @@ dvfy-slide::scroll-marker {
 dvfy-slide::scroll-marker:target-current {
   background: var(--dvfy-primary-bg);
   transform: scale(1.4);
+}
+dvfy-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--dvfy-radius-lg, 0.5rem);
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
 }
 
 /* ── JS Fallback (browsers without ::scroll-marker support) ──────── */
@@ -242,15 +259,16 @@ function needsFallback() {
  *
  * @attr {boolean} peek - Show ~12% of adjacent slides to hint scrollability
  * @attr {boolean|number} autoplay - Auto-advance interval in ms (default: 5000)
- * @attr {string} gap - Gap between slides
+ * @attr {boolean} gap - Add gap between slides
  * @attr {string} dot-position - Dot placement: bottom | top | left | right (default: "bottom")
+ * @attr {string} images - JSON array of image URLs or {src, alt} objects
  */
 class DvfyCarousel extends HTMLElement {
   static #styled = false;
   /** Guard against re-init when the DOM wrapper triggers reconnect. */
   static #wrapping = new WeakSet();
 
-  static get observedAttributes() { return ['gap', 'autoplay', 'dot-position']; }
+  static get observedAttributes() { return ['autoplay', 'dot-position', 'images']; }
 
   #autoplayTimer = null;
   #userPaused = false;
@@ -278,7 +296,7 @@ class DvfyCarousel extends HTMLElement {
     this.setAttribute('tabindex', '0');
     this.addEventListener('keydown', this.#onKey);
 
-    this.#applyGap();
+    if (this.hasAttribute('images')) this.#buildFromImages();
     this.#startAutoplay();
 
     this.addEventListener('mouseenter', this.#pauseAutoplay);
@@ -316,7 +334,7 @@ class DvfyCarousel extends HTMLElement {
 
   attributeChangedCallback(name) {
     if (!this.isConnected) return;
-    if (name === 'gap') this.#applyGap();
+    if (name === 'images') this.#buildFromImages();
     if (name === 'autoplay') {
       this.#stopAutoplay();
       this.#startAutoplay();
@@ -324,14 +342,32 @@ class DvfyCarousel extends HTMLElement {
     if (name === 'dot-position') this.#updateDotPosition();
   }
 
-  // ── Gap ──────────────────────────────────────────────────────────
+  // ── Images ───────────────────────────────────────────────────────
 
-  #applyGap() {
-    const gap = this.getAttribute('gap');
-    if (gap) {
-      this.style.setProperty('--dvfy-carousel-gap', gap);
-    } else {
-      this.style.removeProperty('--dvfy-carousel-gap');
+  #buildFromImages() {
+    const raw = this.getAttribute('images');
+    if (!raw) return;
+
+    let items;
+    try { items = JSON.parse(raw); } catch { return; }
+    if (!Array.isArray(items) || !items.length) return;
+
+    // Clear previously generated slides
+    this.querySelectorAll(':scope > dvfy-slide[data-generated]').forEach(s => s.remove());
+
+    for (const item of items) {
+      const slide = document.createElement('dvfy-slide');
+      slide.setAttribute('data-generated', '');
+      const img = document.createElement('img');
+      if (typeof item === 'string') {
+        img.src = item;
+        img.alt = '';
+      } else {
+        img.src = item.src || '';
+        img.alt = item.alt || '';
+      }
+      slide.appendChild(img);
+      this.appendChild(slide);
     }
   }
 
@@ -363,10 +399,9 @@ class DvfyCarousel extends HTMLElement {
     const slides = Array.from(this.querySelectorAll(':scope > dvfy-slide'));
     if (slides.length < 2) return;
 
-    const slideWidth = this.offsetWidth;
-    const currentIdx = Math.round(this.scrollLeft / slideWidth);
+    const currentIdx = this.#getActiveIndex();
     const nextIdx = (currentIdx + 1) % slides.length;
-    this.scrollTo({ left: nextIdx * slideWidth, behavior: 'smooth' });
+    slides[nextIdx].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
   }
 
   // ── Keyboard ─────────────────────────────────────────────────────
@@ -386,10 +421,12 @@ class DvfyCarousel extends HTMLElement {
 
   #getActiveIndex() {
     const slides = Array.from(this.querySelectorAll(':scope > dvfy-slide'));
+    if (!slides.length) return 0;
+    const carouselLeft = this.getBoundingClientRect().left;
     let idx = 0;
     let min = Infinity;
     slides.forEach((slide, i) => {
-      const d = Math.abs(slide.offsetLeft - this.scrollLeft);
+      const d = Math.abs(slide.getBoundingClientRect().left - carouselLeft);
       if (d < min) { min = d; idx = i; }
     });
     return idx;

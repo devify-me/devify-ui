@@ -43,23 +43,31 @@ describe('dvfy-carousel', () => {
   });
 
   describe('gap attribute', () => {
-    it('sets CSS custom property from gap attribute', async () => {
+    it('is a boolean toggle', async () => {
       const el = await fixture(html`
-        <dvfy-carousel gap="2rem">
+        <dvfy-carousel gap>
           <dvfy-slide>Slide 1</dvfy-slide>
         </dvfy-carousel>
       `);
-      expect(el.style.getPropertyValue('--dvfy-carousel-gap')).to.equal('2rem');
+      expect(el.hasAttribute('gap')).to.be.true;
+    });
+  });
+
+  describe('images attribute', () => {
+    it('generates slides from JSON array of strings', async () => {
+      const images = JSON.stringify(['img1.jpg', 'img2.jpg', 'img3.jpg']);
+      const el = await fixture(html`<dvfy-carousel images=${images}></dvfy-carousel>`);
+      const slides = el.querySelectorAll('dvfy-slide[data-generated]');
+      expect(slides.length).to.equal(3);
+      expect(slides[0].querySelector('img').src).to.contain('img1.jpg');
     });
 
-    it('removes CSS property when gap is removed', async () => {
-      const el = await fixture(html`
-        <dvfy-carousel gap="2rem">
-          <dvfy-slide>Slide 1</dvfy-slide>
-        </dvfy-carousel>
-      `);
-      el.removeAttribute('gap');
-      expect(el.style.getPropertyValue('--dvfy-carousel-gap')).to.equal('');
+    it('generates slides from JSON array of objects', async () => {
+      const images = JSON.stringify([{ src: 'a.jpg', alt: 'Photo A' }, { src: 'b.jpg', alt: 'Photo B' }]);
+      const el = await fixture(html`<dvfy-carousel images=${images}></dvfy-carousel>`);
+      const slides = el.querySelectorAll('dvfy-slide[data-generated]');
+      expect(slides.length).to.equal(2);
+      expect(slides[0].querySelector('img').alt).to.equal('Photo A');
     });
   });
 
