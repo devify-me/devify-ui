@@ -73,28 +73,28 @@
   --dvfy-type-display-tracking: var(--dvfy-tracking-tight);
 
   /* H1 — page titles */
-  --dvfy-type-h1-family:   var(--dvfy-font-sans);
+  --dvfy-type-h1-family:   var(--dvfy-font-brand);
   --dvfy-type-h1-size:     var(--dvfy-text-3xl);
   --dvfy-type-h1-weight:   var(--dvfy-weight-bold);
   --dvfy-type-h1-leading:  var(--dvfy-leading-tight);
   --dvfy-type-h1-tracking: var(--dvfy-tracking-tight);
 
   /* H2 — section headings */
-  --dvfy-type-h2-family:   var(--dvfy-font-sans);
+  --dvfy-type-h2-family:   var(--dvfy-font-brand);
   --dvfy-type-h2-size:     var(--dvfy-text-2xl);
   --dvfy-type-h2-weight:   var(--dvfy-weight-semibold);
   --dvfy-type-h2-leading:  var(--dvfy-leading-snug);
   --dvfy-type-h2-tracking: var(--dvfy-tracking-normal);
 
   /* H3 — subsection headings */
-  --dvfy-type-h3-family:   var(--dvfy-font-sans);
+  --dvfy-type-h3-family:   var(--dvfy-font-brand);
   --dvfy-type-h3-size:     var(--dvfy-text-xl);
   --dvfy-type-h3-weight:   var(--dvfy-weight-semibold);
   --dvfy-type-h3-leading:  var(--dvfy-leading-snug);
   --dvfy-type-h3-tracking: var(--dvfy-tracking-normal);
 
   /* H4 — card titles, minor headings */
-  --dvfy-type-h4-family:   var(--dvfy-font-sans);
+  --dvfy-type-h4-family:   var(--dvfy-font-brand);
   --dvfy-type-h4-size:     var(--dvfy-text-lg);
   --dvfy-type-h4-weight:   var(--dvfy-weight-semibold);
   --dvfy-type-h4-leading:  var(--dvfy-leading-normal);
