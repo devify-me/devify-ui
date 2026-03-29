@@ -131,6 +131,11 @@ export const COMPONENT_CATEGORIES = Object.fromEntries(
     .filter(([, tags]) => tags.length)
 );
 
+/** Get server component tags (HTMX patterns — domain: htmx) */
+export function getServerComponents() {
+  return getComponentsByDomain('htmx');
+}
+
 /** HTMX integration patterns with descriptions */
 export const HTMX_PATTERNS = {
   'dvfy-htmx-form':       'AJAX form submission with validation and loading states',
@@ -336,6 +341,61 @@ export const TOKEN_GROUPS = {
       ],
     },
   },
+};
+
+/** Theme presets available in the brand settings view */
+export const THEMES = [];
+
+/** Curated Google Fonts for brand identity picker */
+export const CURATED_FONTS = {
+  sans: [
+    { name: 'Inter', weights: [300, 400, 500, 600, 700] },
+    { name: 'Roboto', weights: [300, 400, 500, 700] },
+    { name: 'Open Sans', weights: [300, 400, 600, 700] },
+    { name: 'Lato', weights: [300, 400, 700] },
+    { name: 'Poppins', weights: [300, 400, 500, 600, 700] },
+    { name: 'Nunito', weights: [300, 400, 600, 700] },
+    { name: 'Manrope', weights: [300, 400, 500, 600, 700] },
+    { name: 'DM Sans', weights: [400, 500, 700] },
+    { name: 'Plus Jakarta Sans', weights: [300, 400, 500, 600, 700] },
+    { name: 'Work Sans', weights: [300, 400, 500, 600, 700] },
+    { name: 'Source Sans 3', weights: [300, 400, 600, 700] },
+    { name: 'Outfit', weights: [300, 400, 500, 600, 700] },
+    { name: 'Figtree', weights: [300, 400, 500, 600, 700] },
+    { name: 'Geist', weights: [300, 400, 500, 600, 700] },
+  ],
+  serif: [
+    { name: 'Merriweather', weights: [300, 400, 700] },
+    { name: 'Playfair Display', weights: [400, 500, 600, 700] },
+    { name: 'Lora', weights: [400, 500, 600, 700] },
+    { name: 'Source Serif 4', weights: [300, 400, 600, 700] },
+    { name: 'DM Serif Display', weights: [400] },
+    { name: 'Libre Baskerville', weights: [400, 700] },
+    { name: 'Crimson Text', weights: [400, 600, 700] },
+    { name: 'EB Garamond', weights: [400, 500, 600, 700] },
+  ],
+  mono: [
+    { name: 'JetBrains Mono', weights: [300, 400, 500, 600, 700] },
+    { name: 'Fira Code', weights: [300, 400, 500, 600, 700] },
+    { name: 'Source Code Pro', weights: [300, 400, 500, 600, 700] },
+    { name: 'IBM Plex Mono', weights: [300, 400, 500, 600, 700] },
+    { name: 'Roboto Mono', weights: [300, 400, 500, 700] },
+    { name: 'Space Mono', weights: [400, 700] },
+    { name: 'Inconsolata', weights: [300, 400, 500, 600, 700] },
+    { name: 'Geist Mono', weights: [300, 400, 500, 600, 700] },
+  ],
+  display: [
+    { name: 'Saira Stencil One', weights: [400] },
+    { name: 'Righteous', weights: [400] },
+    { name: 'Fredoka', weights: [300, 400, 500, 600, 700] },
+    { name: 'Archivo Black', weights: [400] },
+    { name: 'Bebas Neue', weights: [400] },
+    { name: 'Oswald', weights: [300, 400, 500, 600, 700] },
+    { name: 'Raleway', weights: [300, 400, 500, 600, 700] },
+    { name: 'Montserrat', weights: [300, 400, 500, 600, 700] },
+    { name: 'Sora', weights: [300, 400, 500, 600, 700] },
+    { name: 'Space Grotesk', weights: [300, 400, 500, 600, 700] },
+  ],
 };
 
 /** Semantic tokens organized by role — drives Brand Settings view */
