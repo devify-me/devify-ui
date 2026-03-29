@@ -41,6 +41,9 @@
   "style": "./devify.css",
   "devDependencies": {
     "@open-wc/eslint-config": "^13.0.0",
+    "@open-wc/testing": "^4.0.0",
+    "@web/test-runner": "^0.20.2",
+    "@web/test-runner-playwright": "^0.11.1",
     "eslint": "^10.1.0",
     "stylelint": "^17.6.0",
     "stylelint-config-standard": "^40.0.0",
@@ -53,6 +56,8 @@
     "contrast:ci": "node scripts/check-contrast.js --ci",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:js": "eslint components/ patterns/ catalog/ tokens/ scripts/",
-    "lint:css": "stylelint 'tokens/**/*.css'"
+    "lint:css": "stylelint 'tokens/**/*.css'",
+    "test": "web-test-runner",
+    "test:watch": "web-test-runner --watch"
   }
 }
