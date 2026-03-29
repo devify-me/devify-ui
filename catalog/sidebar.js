@@ -44,8 +44,14 @@ export function buildSidebar(containerEl) {
     const t = document.createElement('dvfy-tree-view');
     t.style.cssText = 'flex: 1; overflow-y: auto; padding: 0 var(--dvfy-space-1);';
 
-    // Overview
-    t.appendChild(createNode('Overview', '#overview'));
+    // Overview section
+    const overviewNode = createNode('Overview', '#overview');
+    overviewNode.setAttribute('expanded', '');
+    overviewNode.appendChild(createNode('Goal & Purpose', '#overview/goal'));
+    overviewNode.appendChild(createNode('Stack & Philosophy', '#overview/stack'));
+    overviewNode.appendChild(createNode('Getting Started', '#overview/start'));
+    overviewNode.appendChild(createNode('Composition Model', '#overview/tiers'));
+    t.appendChild(overviewNode);
 
     // Tokens — all items sorted alphabetically
     const tokenKeys = Object.keys(TOKEN_GROUPS).filter(k => k !== 'typography');
