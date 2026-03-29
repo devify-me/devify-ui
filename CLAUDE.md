@@ -160,6 +160,15 @@ npm run analyze
 
 # Serve catalog locally (with api-viewer playground)
 npm run serve
+
+# Build CDN-ready minified bundles (dist/devify.min.js + dist/devify.min.css)
+npm run build
+
+# Run unit tests (Chromium via @web/test-runner)
+npm test
+
+# Lint JS + CSS
+npm run lint
 ```
 
 ## Catalog Service
