@@ -24,6 +24,7 @@ import './components/dvfy-scroll-progress.js';
 import './components/dvfy-page-transition.js';
 import './components/dvfy-text-vortex.js';
 import './components/dvfy-scramble-hover.js';
+import './components/dvfy-stagger-enter.js';
 
 // Wave 2: Navigation + Wayfinding
 import './components/dvfy-dropdown.js';
@@ -42,7 +43,6 @@ import './components/dvfy-tree-view.js';
 import './components/dvfy-card.js';
 import './components/dvfy-gradient-card.js';
 import './components/dvfy-spotlight-card.js';
-import './components/dvfy-card-glow.js';
 import './components/dvfy-table.js';
 import './components/dvfy-toast.js';
 import './components/dvfy-empty.js';

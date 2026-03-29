@@ -69,6 +69,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-page-transition': { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-text-vortex':      { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-scramble-hover':   { tier: 1, domain: 'utility',    deps: [] },
+  'dvfy-stagger-enter':    { tier: 1, domain: 'utility',    deps: [] },
   'dvfy-tree-node':       { tier: 1, domain: 'navigation', deps: [] },
 
   // Tier 2 — Composites
@@ -76,7 +77,6 @@ export const COMPONENT_REGISTRY = {
   'dvfy-card':           { tier: 2, domain: 'display',    deps: [] },
   'dvfy-gradient-card':  { tier: 2, domain: 'display',    deps: [] },
   'dvfy-spotlight-card': { tier: 2, domain: 'display',    deps: [] },
-  'dvfy-card-glow':      { tier: 2, domain: 'display',    deps: [] },
   'dvfy-empty':          { tier: 2, domain: 'display',    deps: ['dvfy-button'] },
   'dvfy-table':          { tier: 2, domain: 'display',    deps: ['dvfy-checkbox'] },
   'dvfy-modal':          { tier: 2, domain: 'feedback',   deps: ['dvfy-button'] },
