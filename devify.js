@@ -57,6 +57,7 @@ import './components/dvfy-section.js';
 import './components/dvfy-component-playground.js';
 import './components/dvfy-accordion.js';
 import './components/dvfy-carousel.js';
+import './components/dvfy-description-list.js';
 import './components/dvfy-stepper.js';
 
 // Wave 4: Billing & Payments
