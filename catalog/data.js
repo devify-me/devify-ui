@@ -96,7 +96,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-accordion': { tier: 3, domain: 'layout',     deps: ['dvfy-section'] },
   'dvfy-stepper':   { tier: 3, domain: 'layout',     deps: [] },
   'dvfy-sidebar':   { tier: 3, domain: 'navigation', deps: [] },
-  'dvfy-auth':      { tier: 3, domain: 'utility',    deps: ['dvfy-input', 'dvfy-button'] },
+  'dvfy-auth':      { tier: 3, domain: 'utility',    deps: ['dvfy-modal'] },
   'dvfy-command-palette': { tier: 3, domain: 'navigation', deps: [] },
 
   // Billing & Payments

@@ -2504,13 +2504,13 @@
       "description": "Side navigation with collapsible compact mode and automatic active link highlighting.",
       "attributes": [
         {
-          "name": "collapsible",
-          "description": "Show collapse toggle button",
+          "name": "collapsed",
+          "description": "Compact icon-only mode",
           "type": "boolean"
         },
         {
-          "name": "collapsed",
-          "description": "Compact icon-only mode",
+          "name": "collapsible",
+          "description": "Show collapse toggle button",
           "type": "boolean"
         },
         {
