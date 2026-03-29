@@ -315,8 +315,17 @@ class DvfyNavBar extends HTMLElement {
     this.#hamburger.className = 'dvfy-nav-bar__hamburger';
     this.#hamburger.setAttribute('size', 'sm');
     this.#hamburger.setAttribute('aria-label', 'Open menu');
+    // Hamburger animation convention: match visual flow to drawer position.
+    // right/top → x-rotate-l (spin toward closing direction)
+    // left/bottom → x-rotate-r
     const animation = this.getAttribute('animation');
-    if (animation) this.#hamburger.setAttribute('animation', animation);
+    if (animation) {
+      this.#hamburger.setAttribute('animation', animation);
+    } else {
+      const pos = this.getAttribute('drawer-position') || 'right';
+      const defaultAnim = (pos === 'left' || pos === 'bottom') ? 'x-rotate-r' : 'x-rotate-l';
+      this.#hamburger.setAttribute('animation', defaultAnim);
+    }
     this.#hamburger.addEventListener('toggle', (e) => {
       if (e.detail.open) this.#openMenu();
       else this.#closeMenu();
