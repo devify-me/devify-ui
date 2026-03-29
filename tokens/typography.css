@@ -60,4 +60,85 @@
   --dvfy-prose-sm: 45ch;
   --dvfy-prose-md: 60ch;
   --dvfy-prose-lg: 75ch;
+
+  /* ─── Semantic Typography Presets ─── */
+  /* Compose primitives into reusable text roles.
+     Override per theme to change what "h1" or "body" looks like globally. */
+
+  /* Display — hero headings, landing page titles */
+  --dvfy-type-display-family:   var(--dvfy-font-brand);
+  --dvfy-type-display-size:     var(--dvfy-text-4xl);
+  --dvfy-type-display-weight:   var(--dvfy-weight-bold);
+  --dvfy-type-display-leading:  var(--dvfy-leading-tight);
+  --dvfy-type-display-tracking: var(--dvfy-tracking-tight);
+
+  /* H1 — page titles */
+  --dvfy-type-h1-family:   var(--dvfy-font-brand);
+  --dvfy-type-h1-size:     var(--dvfy-text-3xl);
+  --dvfy-type-h1-weight:   var(--dvfy-weight-bold);
+  --dvfy-type-h1-leading:  var(--dvfy-leading-tight);
+  --dvfy-type-h1-tracking: var(--dvfy-tracking-tight);
+
+  /* H2 — section headings */
+  --dvfy-type-h2-family:   var(--dvfy-font-brand);
+  --dvfy-type-h2-size:     var(--dvfy-text-2xl);
+  --dvfy-type-h2-weight:   var(--dvfy-weight-semibold);
+  --dvfy-type-h2-leading:  var(--dvfy-leading-snug);
+  --dvfy-type-h2-tracking: var(--dvfy-tracking-normal);
+
+  /* H3 — subsection headings */
+  --dvfy-type-h3-family:   var(--dvfy-font-brand);
+  --dvfy-type-h3-size:     var(--dvfy-text-xl);
+  --dvfy-type-h3-weight:   var(--dvfy-weight-semibold);
+  --dvfy-type-h3-leading:  var(--dvfy-leading-snug);
+  --dvfy-type-h3-tracking: var(--dvfy-tracking-normal);
+
+  /* H4 — card titles, minor headings */
+  --dvfy-type-h4-family:   var(--dvfy-font-brand);
+  --dvfy-type-h4-size:     var(--dvfy-text-lg);
+  --dvfy-type-h4-weight:   var(--dvfy-weight-semibold);
+  --dvfy-type-h4-leading:  var(--dvfy-leading-normal);
+  --dvfy-type-h4-tracking: var(--dvfy-tracking-normal);
+
+  /* Body — default paragraph text */
+  --dvfy-type-body-family:   var(--dvfy-font-sans);
+  --dvfy-type-body-size:     var(--dvfy-text-base);
+  --dvfy-type-body-weight:   var(--dvfy-weight-normal);
+  --dvfy-type-body-leading:  var(--dvfy-leading-relaxed);
+  --dvfy-type-body-tracking: var(--dvfy-tracking-normal);
+
+  /* Body Small — secondary content, descriptions */
+  --dvfy-type-body-sm-family:   var(--dvfy-font-sans);
+  --dvfy-type-body-sm-size:     var(--dvfy-text-sm);
+  --dvfy-type-body-sm-weight:   var(--dvfy-weight-normal);
+  --dvfy-type-body-sm-leading:  var(--dvfy-leading-relaxed);
+  --dvfy-type-body-sm-tracking: var(--dvfy-tracking-normal);
+
+  /* Caption — labels, metadata, timestamps */
+  --dvfy-type-caption-family:   var(--dvfy-font-sans);
+  --dvfy-type-caption-size:     var(--dvfy-text-xs);
+  --dvfy-type-caption-weight:   var(--dvfy-weight-medium);
+  --dvfy-type-caption-leading:  var(--dvfy-leading-normal);
+  --dvfy-type-caption-tracking: var(--dvfy-tracking-wide);
+
+  /* Quote — blockquotes, testimonials */
+  --dvfy-type-quote-family:   var(--dvfy-font-serif);
+  --dvfy-type-quote-size:     var(--dvfy-text-lg);
+  --dvfy-type-quote-weight:   var(--dvfy-weight-normal);
+  --dvfy-type-quote-leading:  var(--dvfy-leading-relaxed);
+  --dvfy-type-quote-tracking: var(--dvfy-tracking-normal);
+
+  /* Code — inline code, code blocks */
+  --dvfy-type-code-family:   var(--dvfy-font-mono);
+  --dvfy-type-code-size:     var(--dvfy-text-sm);
+  --dvfy-type-code-weight:   var(--dvfy-weight-normal);
+  --dvfy-type-code-leading:  var(--dvfy-leading-relaxed);
+  --dvfy-type-code-tracking: var(--dvfy-tracking-normal);
+
+  /* Overline — section markers, category labels */
+  --dvfy-type-overline-family:   var(--dvfy-font-sans);
+  --dvfy-type-overline-size:     var(--dvfy-text-xs);
+  --dvfy-type-overline-weight:   var(--dvfy-weight-semibold);
+  --dvfy-type-overline-leading:  var(--dvfy-leading-normal);
+  --dvfy-type-overline-tracking: var(--dvfy-tracking-wider);
 }

@@ -102,13 +102,15 @@ export function renderTypography(mainEl, meta) {
       row.style.cssText = 'display: flex; align-items: baseline; gap: var(--dvfy-space-4); padding: var(--dvfy-space-2) 0; border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-muted);';
 
       const name = document.createElement('code');
-      name.textContent = token.name;
+      const displayName = token.type === 'preset' ? `--dvfy-type-${token.name}-*` : token.name;
+      const copyText = token.type === 'preset' ? `--dvfy-type-${token.name}` : `var(${token.name})`;
+      name.textContent = displayName;
       name.style.cssText = 'font-size: var(--dvfy-text-xs); color: var(--dvfy-text-link); min-width: 14rem; cursor: pointer;';
-      name.title = `Click to copy: var(${token.name})`;
+      name.title = `Click to copy: ${copyText}`;
       name.addEventListener('click', () => {
-        copyToClipboard(`var(${token.name})`);
+        copyToClipboard(copyText);
         name.textContent = 'Copied!';
-        setTimeout(() => { name.textContent = token.name; }, 1500);
+        setTimeout(() => { name.textContent = displayName; }, 1500);
       });
       row.appendChild(name);
 
@@ -116,7 +118,22 @@ export function renderTypography(mainEl, meta) {
       sample.style.cssText = 'flex: 1; color: var(--dvfy-text-primary);';
       const computed = getToken(token.name);
 
-      if (token.type === 'font') {
+      if (token.type === 'preset') {
+        const prefix = `--dvfy-type-${token.name}`;
+        sample.textContent = token.name === 'code'
+          ? 'const theme = generatePalette(brand);'
+          : token.name === 'quote'
+          ? '\u201CDesign is not just what it looks like. Design is how it works.\u201D'
+          : token.name === 'overline'
+          ? 'SECTION LABEL'
+          : 'The quick brown fox jumps over the lazy dog';
+        sample.style.fontFamily = `var(${prefix}-family)`;
+        sample.style.fontSize = `var(${prefix}-size)`;
+        sample.style.fontWeight = `var(${prefix}-weight)`;
+        sample.style.lineHeight = `var(${prefix}-leading)`;
+        sample.style.letterSpacing = `var(${prefix}-tracking)`;
+        if (token.name === 'overline') sample.style.textTransform = 'uppercase';
+      } else if (token.type === 'font') {
         sample.textContent = 'The quick brown fox jumps over the lazy dog';
         sample.style.fontFamily = `var(${token.name})`;
       } else if (token.type === 'size') {
