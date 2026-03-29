@@ -494,13 +494,27 @@
     {
       "name": "dvfy-carousel",
       "path": "./components/dvfy-carousel.js",
-      "description": "Carousel container. Wraps dvfy-slide elements in a horizontally scrollable\nsnap container. Navigation buttons and pagination dots are rendered entirely\nby CSS pseudo-elements on Chrome 135+; older browsers see a plain swipeable\nscroll area.",
+      "description": "Carousel container. Wraps dvfy-slide elements in a horizontally scrollable\nsnap container. Navigation buttons and pagination dots are rendered entirely\nby CSS pseudo-elements on Chrome 135+; older browsers get equivalent JS-driven\nbuttons and dots injected alongside the element.",
       "attributes": [
         {
-          "name": "gap"
+          "name": "peek",
+          "description": "Show ~12% of adjacent slides to hint scrollability",
+          "type": "boolean"
         },
         {
-          "name": "autoplay"
+          "name": "gap",
+          "description": "Gap between slides",
+          "type": "string"
+        },
+        {
+          "name": "autoplay",
+          "description": "Auto-advance interval in ms (default: 5000)",
+          "type": "boolean|number"
+        },
+        {
+          "name": "dot-position",
+          "description": "Dot placement: bottom | top | left | right (default: \"bottom\")",
+          "type": "string"
         }
       ]
     },

@@ -1,9 +1,9 @@
 /**
- * <dvfy-carousel> — Native CSS carousel with zero JavaScript navigation.
+ * <dvfy-carousel> — Native CSS carousel with JS fallback.
  *
  * Uses CSS `::scroll-button()` and `::scroll-marker` pseudo-elements (Chrome 135+)
- * for prev/next buttons and pagination dots. Falls back gracefully to plain
- * `scroll-snap` on older browsers — content remains fully accessible via swipe/scroll.
+ * for prev/next buttons and pagination dots. Falls back to JS-driven buttons and
+ * dots on older browsers — content remains fully accessible via swipe/scroll/keyboard.
  *
  * Usage:
  *   <dvfy-carousel>
@@ -19,6 +19,9 @@
  * Custom gap:
  *   <dvfy-carousel gap="2rem">...</dvfy-carousel>
  *
+ * Dot position:
+ *   <dvfy-carousel dot-position="top">...</dvfy-carousel>
+ *
  * Partial-slide peek (shows edge of next slide):
  *   <dvfy-carousel peek>
  *     ...slides
@@ -32,8 +35,9 @@
  * @element dvfy-carousel
  *
  * @attr {boolean} peek - Show ~12% of adjacent slides to hint scrollability
- * @attr {boolean|number} autoplay - Auto-advance slides. Value is the interval in ms (default: 5000). Pauses on hover, focus, or user interaction. Disabled when prefers-reduced-motion is active.
+ * @attr {boolean|number} autoplay - Auto-advance interval in ms (default: 5000). Pauses on hover, focus, or user interaction. Disabled when prefers-reduced-motion is active.
  * @attr {string} gap - Gap between slides (e.g. "1rem", "16px"). Maps to --dvfy-carousel-gap.
+ * @attr {string} dot-position - Dot placement: bottom | top | left | right (default: "bottom")
  * @attr {string} aria-label - Accessible label for the carousel region (default: "Carousel")
  *
  * @slot - <dvfy-slide> elements
@@ -49,7 +53,7 @@
  * </dvfy-carousel>
  *
  * @example
- * <dvfy-carousel autoplay gap="1rem">
+ * <dvfy-carousel autoplay dot-position="top" gap="1rem">
  *   <dvfy-slide><dvfy-card padded><h3>Auto 1</h3></dvfy-card></dvfy-slide>
  *   <dvfy-slide><dvfy-card padded><h3>Auto 2</h3></dvfy-card></dvfy-slide>
  * </dvfy-carousel>
@@ -122,6 +126,13 @@ dvfy-carousel::scroll-marker-group {
   padding-block-start: var(--dvfy-space-2, 0.5rem);
 }
 
+/* ── Dot position (native path) ─────────────────────────────────── */
+dvfy-carousel[dot-position="top"] { scroll-marker-group: before; }
+dvfy-carousel[dot-position="top"]::scroll-marker-group {
+  padding-block-start: 0;
+  padding-block-end: var(--dvfy-space-2, 0.5rem);
+}
+
 /* ── Slides ──────────────────────────────────────────────────────── */
 dvfy-slide {
   display: block;
@@ -144,22 +155,108 @@ dvfy-slide::scroll-marker:target-current {
   background: var(--dvfy-primary-bg);
   transform: scale(1.4);
 }
+
+/* ── JS Fallback (browsers without ::scroll-marker support) ──────── */
+.dvfy-carousel-wrap {
+  width: 100%;
+}
+.dvfy-carousel-wrap[data-dot-position="left"],
+.dvfy-carousel-wrap[data-dot-position="right"] {
+  display: flex;
+}
+
+.dvfy-carousel-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--dvfy-space-2, 0.5rem);
+}
+.dvfy-carousel-nav dvfy-carousel {
+  flex: 1;
+  min-width: 0;
+}
+.dvfy-carousel-nav__btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--dvfy-radius-round, 9999px);
+  background: var(--dvfy-surface-raised, var(--dvfy-surface-default, #fff));
+  border: 1px solid var(--dvfy-border-default);
+  color: var(--dvfy-text-primary);
+  font-size: var(--dvfy-text-base, 1rem);
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--dvfy-shadow-md);
+  transition: background var(--dvfy-duration-fast, 150ms) var(--dvfy-ease-out, ease-out),
+              box-shadow var(--dvfy-duration-fast, 150ms) var(--dvfy-ease-out, ease-out);
+}
+.dvfy-carousel-nav__btn:hover {
+  background: var(--dvfy-surface-overlay, var(--dvfy-surface-muted));
+  box-shadow: var(--dvfy-shadow-lg);
+}
+
+/* ── Dots (JS fallback) ──────────────────────────────────────────── */
+.dvfy-carousel-dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--dvfy-space-1-5, 0.375rem);
+  padding: var(--dvfy-space-2, 0.5rem) 0;
+}
+.dvfy-carousel-wrap[data-dot-position="left"] .dvfy-carousel-dots,
+.dvfy-carousel-wrap[data-dot-position="right"] .dvfy-carousel-dots {
+  flex-direction: column;
+  padding: 0 var(--dvfy-space-2, 0.5rem);
+}
+.dvfy-carousel-dots__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--dvfy-radius-round, 9999px);
+  background: var(--dvfy-border-default);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background var(--dvfy-duration-fast, 150ms) var(--dvfy-ease-out, ease-out),
+              transform var(--dvfy-duration-fast, 150ms) var(--dvfy-ease-out, ease-out);
+}
+.dvfy-carousel-dots__dot--active {
+  background: var(--dvfy-primary-bg);
+  transform: scale(1.4);
+}
 `;
+
+/** True when native ::scroll-marker / ::scroll-button() is NOT available. */
+function needsFallback() {
+  return !CSS.supports('scroll-marker-group', 'after');
+}
 
 /**
  * Carousel container. Wraps dvfy-slide elements in a horizontally scrollable
  * snap container. Navigation buttons and pagination dots are rendered entirely
- * by CSS pseudo-elements on Chrome 135+; older browsers see a plain swipeable
- * scroll area.
+ * by CSS pseudo-elements on Chrome 135+; older browsers get equivalent JS-driven
+ * buttons and dots injected alongside the element.
  *
  * @element dvfy-carousel
+ *
+ * @attr {boolean} peek - Show ~12% of adjacent slides to hint scrollability
+ * @attr {boolean|number} autoplay - Auto-advance interval in ms (default: 5000)
+ * @attr {string} gap - Gap between slides
+ * @attr {string} dot-position - Dot placement: bottom | top | left | right (default: "bottom")
  */
 class DvfyCarousel extends HTMLElement {
   static #styled = false;
-  static get observedAttributes() { return ['gap', 'autoplay']; }
+  /** Guard against re-init when the DOM wrapper triggers reconnect. */
+  static #wrapping = new WeakSet();
+
+  static get observedAttributes() { return ['gap', 'autoplay', 'dot-position']; }
 
   #autoplayTimer = null;
   #userPaused = false;
+  #wrap = null;   // outer wrapper (.dvfy-carousel-wrap)
+  #nav = null;    // flex row (.dvfy-carousel-nav)
+  #dots = null;   // dots container (.dvfy-carousel-dots)
 
   connectedCallback() {
     if (!DvfyCarousel.#styled) {
@@ -168,6 +265,12 @@ class DvfyCarousel extends HTMLElement {
       document.head.appendChild(s);
       DvfyCarousel.#styled = true;
     }
+
+    if (DvfyCarousel.#wrapping.has(this)) {
+      DvfyCarousel.#wrapping.delete(this);
+      return;
+    }
+
     this.setAttribute('role', 'region');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Carousel');
@@ -178,13 +281,15 @@ class DvfyCarousel extends HTMLElement {
     this.#applyGap();
     this.#startAutoplay();
 
-    // Pause autoplay on hover / focus-within
     this.addEventListener('mouseenter', this.#pauseAutoplay);
     this.addEventListener('mouseleave', this.#resumeAutoplay);
     this.addEventListener('focusin', this.#pauseAutoplay);
     this.addEventListener('focusout', this.#resumeAutoplay);
-    // Pause when user manually scrolls
     this.addEventListener('pointerdown', this.#onUserInteract);
+
+    if (needsFallback()) {
+      queueMicrotask(() => this.#initFallback());
+    }
   }
 
   disconnectedCallback() {
@@ -195,15 +300,31 @@ class DvfyCarousel extends HTMLElement {
     this.removeEventListener('focusout', this.#resumeAutoplay);
     this.removeEventListener('pointerdown', this.#onUserInteract);
     this.#stopAutoplay();
+
+    if (this.#dots?.isConnected) this.#dots.remove();
+    if (this.#wrap?.isConnected) {
+      const parent = this.#wrap.parentNode;
+      if (parent) {
+        parent.insertBefore(this, this.#wrap);
+        this.#wrap.remove();
+      }
+    }
+    this.#wrap = null;
+    this.#nav = null;
+    this.#dots = null;
   }
 
   attributeChangedCallback(name) {
+    if (!this.isConnected) return;
     if (name === 'gap') this.#applyGap();
     if (name === 'autoplay') {
       this.#stopAutoplay();
       this.#startAutoplay();
     }
+    if (name === 'dot-position') this.#updateDotPosition();
   }
+
+  // ── Gap ──────────────────────────────────────────────────────────
 
   #applyGap() {
     const gap = this.getAttribute('gap');
@@ -213,6 +334,8 @@ class DvfyCarousel extends HTMLElement {
       this.style.removeProperty('--dvfy-carousel-gap');
     }
   }
+
+  // ── Autoplay ─────────────────────────────────────────────────────
 
   #startAutoplay() {
     if (!this.hasAttribute('autoplay')) return;
@@ -246,6 +369,8 @@ class DvfyCarousel extends HTMLElement {
     this.scrollTo({ left: nextIdx * slideWidth, behavior: 'smooth' });
   }
 
+  // ── Keyboard ─────────────────────────────────────────────────────
+
   #onKey = (e) => {
     const amount = this.offsetWidth * 0.9;
     if (e.key === 'ArrowRight') {
@@ -256,6 +381,121 @@ class DvfyCarousel extends HTMLElement {
       this.scrollBy({ left: -amount, behavior: 'smooth' });
     }
   };
+
+  // ── Active slide index ───────────────────────────────────────────
+
+  #getActiveIndex() {
+    const slides = Array.from(this.querySelectorAll(':scope > dvfy-slide'));
+    let idx = 0;
+    let min = Infinity;
+    slides.forEach((slide, i) => {
+      const d = Math.abs(slide.offsetLeft - this.scrollLeft);
+      if (d < min) { min = d; idx = i; }
+    });
+    return idx;
+  }
+
+  // ── JS Fallback ──────────────────────────────────────────────────
+
+  #initFallback() {
+    if (!this.isConnected) return;
+
+    const dotPos = this.getAttribute('dot-position') || 'bottom';
+
+    // Outer wrapper for dot positioning
+    const wrap = document.createElement('div');
+    wrap.className = 'dvfy-carousel-wrap';
+    wrap.dataset.dotPosition = dotPos;
+
+    // Nav row: prev | carousel | next
+    const nav = document.createElement('div');
+    nav.className = 'dvfy-carousel-nav';
+
+    const prev = document.createElement('button');
+    prev.className = 'dvfy-carousel-nav__btn';
+    prev.setAttribute('aria-label', 'Previous slide');
+    prev.textContent = '◀';
+
+    const next = document.createElement('button');
+    next.className = 'dvfy-carousel-nav__btn';
+    next.setAttribute('aria-label', 'Next slide');
+    next.textContent = '▶';
+
+    // Dots
+    const dots = document.createElement('div');
+    dots.className = 'dvfy-carousel-dots';
+    dots.setAttribute('role', 'tablist');
+    dots.setAttribute('aria-label', 'Slide navigation');
+
+    // Move carousel into wrapper (triggers disconnect/reconnect — guard prevents re-init)
+    DvfyCarousel.#wrapping.add(this);
+    this.parentNode.insertBefore(wrap, this);
+    nav.append(prev, this, next);
+
+    // Place dots according to position
+    if (dotPos === 'top' || dotPos === 'left') {
+      wrap.append(dots, nav);
+    } else {
+      wrap.append(nav, dots);
+    }
+
+    this.#wrap = wrap;
+    this.#nav = nav;
+    this.#dots = dots;
+
+    this.#buildDots();
+
+    prev.addEventListener('click', () =>
+      this.scrollBy({ left: -this.offsetWidth * 0.9, behavior: 'smooth' })
+    );
+    next.addEventListener('click', () =>
+      this.scrollBy({ left: this.offsetWidth * 0.9, behavior: 'smooth' })
+    );
+    this.addEventListener('scroll', () => this.#syncDots(), { passive: true });
+  }
+
+  #buildDots() {
+    if (!this.#dots) return;
+    this.#dots.textContent = '';
+    const slides = Array.from(this.querySelectorAll(':scope > dvfy-slide'));
+    slides.forEach((slide, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'dvfy-carousel-dots__dot';
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('aria-label', `Slide ${i + 1} of ${slides.length}`);
+      btn.addEventListener('click', () =>
+        slide.scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' })
+      );
+      this.#dots.appendChild(btn);
+    });
+    this.#syncDots();
+  }
+
+  #syncDots() {
+    if (!this.#dots) return;
+    const dots = Array.from(this.#dots.children);
+    if (!dots.length) return;
+    const activeIdx = this.#getActiveIndex();
+    dots.forEach((dot, i) => {
+      const active = i === activeIdx;
+      dot.classList.toggle('dvfy-carousel-dots__dot--active', active);
+      dot.setAttribute('aria-selected', active ? 'true' : 'false');
+      dot.setAttribute('tabindex', active ? '0' : '-1');
+    });
+  }
+
+  // ── Dot position ─────────────────────────────────────────────────
+
+  #updateDotPosition() {
+    if (!this.#wrap || !this.#dots || !this.#nav) return;
+    const pos = this.getAttribute('dot-position') || 'bottom';
+    this.#wrap.dataset.dotPosition = pos;
+    if (pos === 'top' || pos === 'left') {
+      this.#wrap.insertBefore(this.#dots, this.#nav);
+    } else {
+      this.#wrap.appendChild(this.#dots);
+    }
+  }
 }
 
 /**
@@ -272,7 +512,6 @@ class DvfySlide extends HTMLElement {
       this.setAttribute('aria-roledescription', 'slide');
     }
     if (!this.hasAttribute('aria-label')) {
-      // Defer label assignment so all siblings are in the DOM
       queueMicrotask(() => this.#updateLabel());
     }
   }

@@ -85,6 +85,17 @@ describe('dvfy-carousel', () => {
     });
   });
 
+  describe('dot-position attribute', () => {
+    it('accepts dot-position values', async () => {
+      const el = await fixture(html`
+        <dvfy-carousel dot-position="top">
+          <dvfy-slide>Slide 1</dvfy-slide>
+        </dvfy-carousel>
+      `);
+      expect(el.getAttribute('dot-position')).to.equal('top');
+    });
+  });
+
   describe('keyboard navigation', () => {
     it('responds to ArrowRight key', async () => {
       const el = await fixture(html`
