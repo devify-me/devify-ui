@@ -137,6 +137,10 @@ class DvfyHtmxForm extends HTMLElement {
       document.head.appendChild(s);
       DvfyHtmxForm.#styled = true;
     }
+    this.setAttribute('role', 'form');
+    if (!this.hasAttribute('aria-label')) {
+      this.setAttribute('aria-label', 'Form');
+    }
     this.#build();
   }
 

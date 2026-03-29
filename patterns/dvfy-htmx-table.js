@@ -266,6 +266,10 @@ class DvfyHtmxTable extends HTMLElement {
       document.head.appendChild(s);
       DvfyHtmxTable.#styled = true;
     }
+    this.setAttribute('role', 'region');
+    if (!this.hasAttribute('aria-label')) {
+      this.setAttribute('aria-label', 'Data table');
+    }
     this.#enhance();
   }
 
