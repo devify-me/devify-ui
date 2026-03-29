@@ -47,7 +47,7 @@ const needsRegen = storedVersion < THEME_VERSION
 if (needsRegen) {
   // Regenerate defaults, keep user-created themes
   const userThemes = savedCustomThemes.filter(ct => !DEFAULT_THEMES.some(dt => dt.name === ct.name));
-  const freshDefaults = DEFAULT_THEMES.map(dt => {
+  const freshDefaults = DEFAULT_THEMES.map((dt) => {
     const palette = generatePalette({ brandColors: dt.brandColors, supportCount: 6, prefix: '--brand' });
     const theme = generateTheme(palette, dt.brandIndex);
     return { name: dt.name, label: dt.label, brandIndex: dt.brandIndex, ...theme };

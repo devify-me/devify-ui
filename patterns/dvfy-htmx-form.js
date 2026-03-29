@@ -204,8 +204,8 @@ class DvfyHtmxForm extends HTMLElement {
 
     // HTMX event listeners
     this.#form.addEventListener('htmx:beforeRequest', () => this.#setLoading(true));
-    this.#form.addEventListener('htmx:afterRequest', (e) => this.#handleResponse(e));
-    this.#form.addEventListener('htmx:responseError', (e) => this.#handleError(e));
+    this.#form.addEventListener('htmx:afterRequest', e => this.#handleResponse(e));
+    this.#form.addEventListener('htmx:responseError', e => this.#handleError(e));
 
     this.appendChild(this.#form);
 

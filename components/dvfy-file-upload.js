@@ -463,7 +463,7 @@ class DvfyFileUpload extends HTMLElement {
   }
 
   #matchesAccept(file, accept) {
-    return accept.split(',').map(s => s.trim()).some(token => {
+    return accept.split(',').map(s => s.trim()).some((token) => {
       if (token.endsWith('/*')) return file.type.startsWith(token.slice(0, -1));
       if (token.startsWith('.')) return file.name.toLowerCase().endsWith(token.toLowerCase());
       return file.type === token;
