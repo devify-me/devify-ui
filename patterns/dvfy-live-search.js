@@ -153,6 +153,10 @@ class DvfyLiveSearch extends HTMLElement {
       document.head.appendChild(s);
       DvfyLiveSearch.#styled = true;
     }
+    this.setAttribute('role', 'search');
+    if (!this.hasAttribute('aria-label')) {
+      this.setAttribute('aria-label', 'Live search');
+    }
     this.#build();
   }
 

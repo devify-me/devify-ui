@@ -163,6 +163,9 @@ class DvfyConfirm extends HTMLElement {
       document.head.appendChild(s);
       DvfyConfirm.#styled = true;
     }
+    if (!this.hasAttribute('aria-label')) {
+      this.setAttribute('aria-label', 'Confirmation action');
+    }
     this.#setup();
   }
 

@@ -112,6 +112,10 @@ class DvfyInfiniteScroll extends HTMLElement {
       document.head.appendChild(s);
       DvfyInfiniteScroll.#styled = true;
     }
+    this.setAttribute('role', 'feed');
+    if (!this.hasAttribute('aria-label')) {
+      this.setAttribute('aria-label', 'Infinite scroll content');
+    }
     this.#build();
   }
 
