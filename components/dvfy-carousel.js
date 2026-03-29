@@ -421,9 +421,13 @@ class DvfyCarousel extends HTMLElement {
     if (this.#progressEl) return;
     this.#progressEl = document.createElement('div');
     this.#progressEl.className = 'dvfy-carousel-progress';
-    // Insert after the carousel (inside nav or wrap)
-    const container = this.#nav || this.parentElement;
-    if (container) container.appendChild(this.#progressEl);
+    // Insert after the nav row, before the dots
+    const container = this.#wrap || this.parentElement;
+    if (container && this.#nav) {
+      this.#nav.after(this.#progressEl);
+    } else if (container) {
+      container.appendChild(this.#progressEl);
+    }
   }
 
   #resetProgress() {
