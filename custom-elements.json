@@ -1905,6 +1905,75 @@
       ]
     },
     {
+      "name": "dvfy-popover",
+      "path": "./components/dvfy-popover.js",
+      "description": "Interactive popover with click/hover/focus triggers and auto-positioning.",
+      "attributes": [
+        {
+          "name": "delay",
+          "description": "Delay in ms for hover trigger (default: 200)",
+          "type": "number"
+        },
+        {
+          "name": "offset",
+          "description": "Gap in px between trigger and panel (default: 8)",
+          "type": "number"
+        },
+        {
+          "name": "position",
+          "description": "Preferred placement: top | right | bottom | left (default: \"bottom\")",
+          "type": "string"
+        },
+        {
+          "name": "open",
+          "description": "Programmatically control visibility",
+          "type": "boolean"
+        },
+        {
+          "name": "trigger",
+          "description": "Trigger mode: click | hover | focus (default: \"click\")",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "dvfy-popover-show",
+          "description": "Fires when popover opens"
+        },
+        {
+          "name": "dvfy-popover-hide",
+          "description": "Fires when popover closes"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Trigger element (first child)"
+        },
+        {
+          "name": "content",
+          "description": "Popover content panel"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Panel background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-default",
+          "description": "Panel border",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-shadow-lg",
+          "description": "Panel shadow",
+          "type": "length"
+        }
+      ]
+    },
+    {
       "name": "dvfy-progress",
       "path": "./components/dvfy-progress.js",
       "description": "Progress indicator with bar and circle variants.",

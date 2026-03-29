@@ -30,6 +30,7 @@ import './components/dvfy-stagger-enter.js';
 import './components/dvfy-dropdown.js';
 import './components/dvfy-tooltip.js';
 import './components/dvfy-hovercard.js';
+import './components/dvfy-popover.js';
 import './components/dvfy-modal.js';
 import './components/dvfy-tabs.js';
 import './components/dvfy-breadcrumb.js';
