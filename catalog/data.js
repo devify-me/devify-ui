@@ -88,7 +88,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-tabs':           { tier: 2, domain: 'navigation', deps: [] },
   'dvfy-dropdown':       { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
   'dvfy-nav':            { tier: 2, domain: 'navigation', deps: ['dvfy-hamburger', 'dvfy-drawer'] },
-  'dvfy-tree-view':      { tier: 2, domain: 'navigation', deps: [] },
+  'dvfy-tree-view':      { tier: 2, domain: 'navigation', deps: ['dvfy-tree-node'] },
   'dvfy-theme-switcher': { tier: 2, domain: 'utility',    deps: [] },
 
   // Tier 3 — Organisms
