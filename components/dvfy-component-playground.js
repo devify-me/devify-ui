@@ -58,10 +58,53 @@ dvfy-component-playground .sc__preview-col dvfy-tab[active] {
   flex-direction: column;
 }
 
-/* Preview area — fills available height */
+/* Preview toolbar — width presets + readout */
+dvfy-component-playground .sc__preview-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--dvfy-space-2);
+  padding: var(--dvfy-space-2) var(--dvfy-space-3);
+  font-size: var(--dvfy-text-xs);
+  color: var(--dvfy-text-muted);
+  font-family: var(--dvfy-font-mono);
+}
+dvfy-component-playground .sc__preset-btn {
+  padding: var(--dvfy-space-1) var(--dvfy-space-2);
+  border: var(--dvfy-border-1) solid var(--dvfy-border-default);
+  border-radius: var(--dvfy-radius-md);
+  background: var(--dvfy-surface-raised);
+  color: var(--dvfy-text-secondary);
+  font-size: var(--dvfy-text-xs);
+  font-family: var(--dvfy-font-mono);
+  cursor: pointer;
+  transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
+}
+dvfy-component-playground .sc__preset-btn:hover {
+  background: var(--dvfy-hover-bg);
+}
+dvfy-component-playground .sc__preset-btn[data-active] {
+  background: var(--dvfy-primary-bg);
+  color: var(--dvfy-primary-text);
+  border-color: var(--dvfy-primary-bg);
+}
+dvfy-component-playground .sc__width-readout {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Preview wrapper — handles resize constraint */
+dvfy-component-playground .sc__preview-wrap {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Preview area — fills available height, resizable */
 dvfy-component-playground .sc__preview-area {
   position: relative;
-  flex: 1;
+  width: 100%;
   padding: var(--dvfy-space-6);
   background: var(--dvfy-surface-sunken);
   border: var(--dvfy-border-1) dashed var(--dvfy-border-default);
@@ -71,6 +114,34 @@ dvfy-component-playground .sc__preview-area {
   justify-content: center;
   flex-wrap: wrap;
   gap: var(--dvfy-space-3);
+  container-type: inline-size;
+  transition: max-width var(--dvfy-duration-fast) var(--dvfy-ease-out);
+}
+
+/* Resize handle */
+dvfy-component-playground .sc__resize-handle {
+  position: absolute;
+  top: 0;
+  right: -6px;
+  width: 12px;
+  height: 100%;
+  cursor: col-resize;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+dvfy-component-playground .sc__resize-handle::after {
+  content: '';
+  width: 4px;
+  height: 2rem;
+  border-radius: var(--dvfy-radius-round);
+  background: var(--dvfy-border-default);
+  transition: background var(--dvfy-duration-fast);
+}
+dvfy-component-playground .sc__resize-handle:hover::after,
+dvfy-component-playground .sc__resize-handle[data-dragging]::after {
+  background: var(--dvfy-primary-bg);
 }
 
 /* Code block wrapper */
@@ -383,6 +454,9 @@ class DvfyComponentPlayground extends HTMLElement {
   #currentTag = null;
   #attrValues = {};       // { attrName: currentValue }
   #contentValue = '';      // current innerHTML for preview
+  #cssValues = {};        // { cssPropertyName: currentValue }
+  #previewArea = null;
+  #widthReadout = null;
 
   connectedCallback() {
     if (!DvfyComponentPlayground.#styled) {
@@ -499,10 +573,49 @@ class DvfyComponentPlayground extends HTMLElement {
     const tabs = document.createElement('dvfy-tabs');
     const previewTab = document.createElement('dvfy-tab');
     previewTab.setAttribute('label', 'Preview');
+
+    // Toolbar with width presets + readout
+    const toolbar = document.createElement('div');
+    toolbar.className = 'sc__preview-toolbar';
+    const presets = [
+      { label: '320', width: 320 },
+      { label: '768', width: 768 },
+      { label: '1024', width: 1024 },
+      { label: 'Full', width: 0 },
+    ];
+    const readout = document.createElement('span');
+    readout.className = 'sc__width-readout';
+    this.#widthReadout = readout;
+
+    for (const p of presets) {
+      const btn = document.createElement('button');
+      btn.className = 'sc__preset-btn';
+      btn.textContent = p.label;
+      btn.addEventListener('click', () => {
+        this.#setPreviewWidth(p.width);
+        toolbar.querySelectorAll('.sc__preset-btn').forEach(b => b.removeAttribute('data-active'));
+        btn.setAttribute('data-active', '');
+      });
+      if (p.width === 0) btn.setAttribute('data-active', '');
+      toolbar.appendChild(btn);
+    }
+    toolbar.appendChild(readout);
+    previewTab.appendChild(toolbar);
+
+    // Preview wrapper + area + resize handle
+    const previewWrap = document.createElement('div');
+    previewWrap.className = 'sc__preview-wrap';
     const previewArea = document.createElement('div');
     previewArea.className = 'sc__preview-area';
     previewArea.setAttribute('data-sc-preview', '');
-    previewTab.appendChild(previewArea);
+    this.#previewArea = previewArea;
+
+    const handle = document.createElement('div');
+    handle.className = 'sc__resize-handle';
+    this.#initResize(handle, previewArea, readout, toolbar);
+
+    previewWrap.append(previewArea, handle);
+    previewTab.appendChild(previewWrap);
     tabs.appendChild(previewTab);
 
     const codeTab = document.createElement('dvfy-tab');
@@ -701,6 +814,60 @@ class DvfyComponentPlayground extends HTMLElement {
       });
       wrap.appendChild(ta);
     }
+  }
+
+  // ── Resize ─────────────────────────────────────────────────────────
+
+  #setPreviewWidth(px) {
+    if (!this.#previewArea) return;
+    if (px <= 0) {
+      this.#previewArea.style.maxWidth = '';
+      this.#previewArea.style.transition = '';
+    } else {
+      this.#previewArea.style.transition = 'max-width var(--dvfy-duration-fast) var(--dvfy-ease-out)';
+      this.#previewArea.style.maxWidth = `${px}px`;
+    }
+    this.#updateWidthReadout();
+  }
+
+  #updateWidthReadout() {
+    if (!this.#widthReadout || !this.#previewArea) return;
+    const w = Math.round(this.#previewArea.getBoundingClientRect().width);
+    this.#widthReadout.textContent = `${w}px`;
+  }
+
+  #initResize(handle, area, readout, toolbar) {
+    let startX = 0;
+    let startW = 0;
+
+    const onMove = (e) => {
+      const dx = e.clientX - startX;
+      const newW = Math.max(320, startW + dx);
+      area.style.maxWidth = `${newW}px`;
+      area.style.transition = 'none';
+      readout.textContent = `${Math.round(area.getBoundingClientRect().width)}px`;
+      // Clear active preset
+      toolbar.querySelectorAll('.sc__preset-btn').forEach(b => b.removeAttribute('data-active'));
+    };
+
+    const onUp = () => {
+      handle.removeAttribute('data-dragging');
+      document.removeEventListener('pointermove', onMove);
+      document.removeEventListener('pointerup', onUp);
+    };
+
+    handle.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      handle.setAttribute('data-dragging', '');
+      startX = e.clientX;
+      startW = area.getBoundingClientRect().width;
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+
+    // Update readout when tab becomes visible or layout changes
+    const ro = new ResizeObserver(() => this.#updateWidthReadout());
+    ro.observe(area);
   }
 
   /**
