@@ -29,9 +29,10 @@
  * @attr {number} autoplay - Auto-advance interval in seconds; 0 or omitted = off
  * @attr {boolean} fullscreen - Display carousel in fullscreen mode with dark backdrop
  * @attr {boolean} expandable - Show expand button that enters fullscreen mode on click
+ * @attr {string} images - JSON array of image URLs or objects with src and alt properties
  * @attr {string} aria-label - Accessible label for the carousel region (default: "Carousel")
  *
- * @slot - <dvfy-slide> elements
+ * @slot - <dvfy-slide> elements (ignored when images attr is set)
  *
  * @cssprop {length} --dvfy-carousel-gap - Gap between slides (default: var(--dvfy-space-4))
  * @cssprop {length} --dvfy-carousel-slide-width - Width of each slide (default: 100%)
@@ -44,9 +45,7 @@
  * </dvfy-carousel>
  *
  * @example
- * <dvfy-carousel peek autoplay="5">
- *   <dvfy-slide><img src="photo1.jpg" alt="Photo 1" style="width:100%;border-radius:var(--dvfy-radius-lg)"></dvfy-slide>
- *   <dvfy-slide><img src="photo2.jpg" alt="Photo 2" style="width:100%;border-radius:var(--dvfy-radius-lg)"></dvfy-slide>
+ * <dvfy-carousel peek autoplay="5" images='[{"src":"photo1.jpg","alt":"Photo 1"},{"src":"photo2.jpg","alt":"Photo 2"}]'>
  * </dvfy-carousel>
  */
 
@@ -131,6 +130,15 @@ dvfy-slide {
   flex: 0 0 var(--dvfy-carousel-slide-width, 100%);
   min-width: 0;
 }
+dvfy-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--dvfy-radius-lg, 0.5rem);
+  display: block;
+  user-select: none;
+  -webkit-user-drag: none;
+}
 
 dvfy-slide::scroll-marker {
   content: "";
@@ -150,12 +158,13 @@ dvfy-slide::scroll-marker:target-current {
 /* ── JS Fallback wrapper (browsers without ::scroll-marker support) ── */
 .dvfy-carousel-wrap {
   position: relative;
+  width: 100%;
 }
 .dvfy-carousel-wrap[data-dot-position="left"],
 .dvfy-carousel-wrap[data-dot-position="right"] {
   display: flex;
 }
-.dvfy-carousel-wrap[data-dot-position="left"] { flex-direction: row-reverse; }
+.dvfy-carousel-wrap[data-dot-position="left"] { flex-direction: row; }
 .dvfy-carousel-wrap[data-dot-position="right"] { flex-direction: row; }
 
 .dvfy-carousel-root {
@@ -328,6 +337,7 @@ function prefersReducedMotion() {
  * @attr {number} autoplay - Auto-advance interval in seconds; 0 or omitted = off
  * @attr {boolean} fullscreen - Display carousel in fullscreen mode with dark backdrop
  * @attr {boolean} expandable - Show expand button that enters fullscreen mode on click
+ * @attr {string} images - JSON array of image URLs or objects with src and alt properties
  * @attr {string} aria-label - Accessible label for the carousel region (default: "Carousel")
  */
 class DvfyCarousel extends HTMLElement {
@@ -365,6 +375,11 @@ class DvfyCarousel extends HTMLElement {
     this.setAttribute('tabindex', '0');
     this.addEventListener('keydown', this.#onKey);
 
+    // Generate slides from images attribute if present
+    if (this.hasAttribute('images')) {
+      this.#buildFromImages();
+    }
+
     // JS fallback: inject wrapper + buttons + dots when CSS API unavailable
     if (noScrollMarker()) {
       // Defer so declarative children are in the DOM before we count slides
@@ -400,7 +415,7 @@ class DvfyCarousel extends HTMLElement {
     this._fbWrap = null;
   }
 
-  static get observedAttributes() { return ['autoplay', 'fullscreen', 'dot-position']; }
+  static get observedAttributes() { return ['autoplay', 'fullscreen', 'dot-position', 'images']; }
 
   attributeChangedCallback(name) {
     if (!this.isConnected) return;
@@ -414,6 +429,42 @@ class DvfyCarousel extends HTMLElement {
     }
     if (name === 'dot-position') {
       this.#updateDotPosition();
+    }
+    if (name === 'images') {
+      this.#buildFromImages();
+    }
+  }
+
+  // ── Image data ─────────────────────────────────────────────────────
+
+  #buildFromImages() {
+    const raw = this.getAttribute('images');
+    if (!raw) return;
+
+    let items;
+    try {
+      items = JSON.parse(raw);
+    } catch {
+      return;
+    }
+    if (!Array.isArray(items) || !items.length) return;
+
+    // Clear existing generated slides
+    this.querySelectorAll(':scope > dvfy-slide[data-generated]').forEach(s => s.remove());
+
+    for (const item of items) {
+      const slide = document.createElement('dvfy-slide');
+      slide.setAttribute('data-generated', '');
+      const img = document.createElement('img');
+      if (typeof item === 'string') {
+        img.src = item;
+        img.alt = '';
+      } else {
+        img.src = item.src || '';
+        img.alt = item.alt || '';
+      }
+      slide.appendChild(img);
+      this.appendChild(slide);
     }
   }
 

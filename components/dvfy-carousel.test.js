@@ -75,6 +75,24 @@ describe('dvfy-carousel', () => {
     });
   });
 
+  describe('images attribute', () => {
+    it('generates slides from JSON array of strings', async () => {
+      const images = JSON.stringify(['img1.jpg', 'img2.jpg', 'img3.jpg']);
+      const el = await fixture(html`<dvfy-carousel images=${images}></dvfy-carousel>`);
+      const slides = el.querySelectorAll('dvfy-slide[data-generated]');
+      expect(slides.length).to.equal(3);
+      expect(slides[0].querySelector('img').src).to.contain('img1.jpg');
+    });
+
+    it('generates slides from JSON array of objects', async () => {
+      const images = JSON.stringify([{ src: 'a.jpg', alt: 'Photo A' }, { src: 'b.jpg', alt: 'Photo B' }]);
+      const el = await fixture(html`<dvfy-carousel images=${images}></dvfy-carousel>`);
+      const slides = el.querySelectorAll('dvfy-slide[data-generated]');
+      expect(slides.length).to.equal(2);
+      expect(slides[0].querySelector('img').alt).to.equal('Photo A');
+    });
+  });
+
   describe('keyboard navigation', () => {
     it('responds to ArrowRight key', async () => {
       const el = await fixture(html`

@@ -485,6 +485,11 @@
           "name": "dot-position",
           "description": "Dot placement: bottom | top | left | right (default: \"bottom\")",
           "type": "string"
+        },
+        {
+          "name": "images",
+          "description": "JSON array of image URLs or objects with src and alt properties",
+          "type": "string"
         }
       ]
     },

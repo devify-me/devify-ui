@@ -361,7 +361,7 @@ const DEFAULT_CONTENT = {
   'dvfy-loader': '',
   'dvfy-card': '<h3 style="margin-bottom:0.5rem">Card Title</h3><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Card content goes here.</p>',
   'dvfy-compare-slider': '<img slot="before" src="../catalog/assets/compare-before.png" alt="Before"/><img slot="after" src="../catalog/assets/compare-after.png" alt="After"/>',
-  'dvfy-carousel': '<dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-primary-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-primary-bg)">Slide 1</div></dvfy-slide><dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-accent-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-accent-bg)">Slide 2</div></dvfy-slide><dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-success-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-success-text)">Slide 3</div></dvfy-slide><dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-warning-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-warning-text)">Slide 4</div></dvfy-slide>',
+  'dvfy-carousel': '',
   'dvfy-progress': '',
   'dvfy-tabs': '<dvfy-tab label="Tab 1"><p style="padding:1rem">First tab content</p></dvfy-tab><dvfy-tab label="Tab 2"><p style="padding:1rem">Second tab content</p></dvfy-tab>',
   'dvfy-dropdown': '<dvfy-button variant="outline">Actions</dvfy-button><div class="dvfy-dropdown__item">Edit</div><div class="dvfy-dropdown__item">Delete</div>',
@@ -381,6 +381,22 @@ const DEFAULT_CONTENT = {
   'dvfy-section': '<p>Section content here.</p>',
   'dvfy-theme-switcher': '<option value="devify-cyan">Devify Cyan</option><option value="devify-pink">Devify Pink</option>',
   'dvfy-accordion': '<dvfy-section label="Section One" open><p>First section content.</p></dvfy-section><dvfy-section label="Section Two" collapsed><p>Second section content.</p></dvfy-section><dvfy-section label="Section Three" collapsed><p>Third section content.</p></dvfy-section>',
+};
+
+/**
+ * Default attribute values per component.
+ * Applied when a component is selected in the playground.
+ */
+const DEFAULT_ATTRS = {
+  'dvfy-carousel': {
+    images: JSON.stringify([
+      { src: '../catalog/assets/Grob.png', alt: 'Grob' },
+      { src: '../catalog/assets/Grobette.png', alt: 'Grobette' },
+      { src: '../catalog/assets/Grobby.png', alt: 'Grobby' },
+      { src: '../catalog/assets/Grobma.png', alt: 'Grobma' },
+      { src: '../catalog/assets/Grobpa.png', alt: 'Grobpa' },
+    ]),
+  },
 };
 
 /* ── Utilities ── */
@@ -538,9 +554,12 @@ class DvfyComponentPlayground extends HTMLElement {
     this.#contentValue = tag.name in DEFAULT_CONTENT ? DEFAULT_CONTENT[tag.name] : 'Sample content';
 
     // Init all attributes — booleans respect (default: true) from description
+    const defaults = DEFAULT_ATTRS[tag.name] || {};
     if (tag.attributes) {
       for (const attr of tag.attributes) {
-        if (attr.type === 'boolean') {
+        if (attr.name in defaults) {
+          this.#attrValues[attr.name] = defaults[attr.name];
+        } else if (attr.type === 'boolean') {
           this.#attrValues[attr.name] = parseDefault(attr.description) === 'true';
         } else {
           this.#attrValues[attr.name] = '';
