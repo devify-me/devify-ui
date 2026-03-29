@@ -338,6 +338,13 @@ const DEFAULT_ATTRS = {
   },
 };
 
+/** Placeholder hints for specific attrs — shown as greyed-out text in empty inputs. */
+const PLACEHOLDER_HINTS = {
+  'dvfy-carousel': {
+    images: '[{"src":"img.jpg","alt":"desc"}, ...]',
+  },
+};
+
 /* ── Utilities ── */
 
 /**
@@ -657,7 +664,8 @@ class DvfyComponentPlayground extends HTMLElement {
         // String → dvfy-input
         const inp = document.createElement('dvfy-input');
         inp.setAttribute('label', attr.name);
-        inp.setAttribute('placeholder', parseDefault(attr.description) || '');
+        const hints = PLACEHOLDER_HINTS[this.#currentTag.name] || {};
+        inp.setAttribute('placeholder', hints[attr.name] || parseDefault(attr.description) || '');
         if (attr.description) inp.setAttribute('help', attr.description);
         inp.addEventListener('input', (e) => {
           const val = e.target?.value ?? inp.querySelector('input')?.value ?? '';

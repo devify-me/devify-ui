@@ -518,7 +518,7 @@
         },
         {
           "name": "images",
-          "description": "JSON array of URLs or objects with src/alt",
+          "description": "JSON array of image URLs or objects with src and alt keys",
           "type": "string"
         }
       ]

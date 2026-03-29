@@ -42,7 +42,7 @@
  * @attr {number} autoplay - Seconds between slides. 0 or empty = off. Pauses on hover and focus. Disabled when prefers-reduced-motion is active.
  * @attr {boolean} gap - Add gap between slides
  * @attr {string} dot-position - Dot placement: bottom | top | left | right (default: "bottom")
- * @attr {string} images - JSON array of URLs or src/alt objects, e.g. ["a.jpg"] or [{ src, alt }]
+ * @attr {string} images - JSON array of image URLs or objects with src and alt keys
  * @attr {string} aria-label - Accessible label for the carousel region (default: "Carousel")
  *
  * @slot - <dvfy-slide> elements (ignored when images attr is set)
@@ -270,7 +270,7 @@ function needsFallback() {
  * @attr {number} autoplay - Seconds between slides, 0 = off
  * @attr {boolean} gap - Add gap between slides
  * @attr {string} dot-position - Dot placement: bottom | top | left | right (default: "bottom")
- * @attr {string} images - JSON array of URLs or objects with src/alt
+ * @attr {string} images - JSON array of image URLs or objects with src and alt keys
  */
 class DvfyCarousel extends HTMLElement {
   static #styled = false;
