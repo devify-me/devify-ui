@@ -289,7 +289,7 @@ class DvfyTreeView extends HTMLElement {
     allNodes.forEach(n => n.setAttribute('data-hidden', ''));
 
     // Second pass: find matching nodes and show them + ancestors
-    allNodes.forEach(node => {
+    allNodes.forEach((node) => {
       const label = (node.getAttribute('label') || '').toLowerCase();
       if (label.includes(q)) {
         node.removeAttribute('data-hidden');

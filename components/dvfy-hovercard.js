@@ -180,7 +180,7 @@ class DvfyHovercard extends HTMLElement {
     if (!id) return;
 
     const triggers = document.querySelectorAll(`[interestfor="${CSS.escape(id)}"]`);
-    triggers.forEach(el => {
+    triggers.forEach((el) => {
       const show = () => this.#show(el);
       const hide = () => this.#hide();
       el.addEventListener('mouseenter', show);

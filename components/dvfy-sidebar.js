@@ -166,7 +166,7 @@ class DvfySidebar extends HTMLElement {
 
   #highlightActive() {
     const path = window.location.pathname;
-    this.querySelectorAll('a').forEach(a => {
+    this.querySelectorAll('a').forEach((a) => {
       const href = a.getAttribute('href');
       if (href && (href === path || (href !== '/' && path.startsWith(href)))) {
         a.setAttribute('data-active', '');

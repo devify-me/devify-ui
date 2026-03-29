@@ -893,8 +893,7 @@ class DvfyComponentPlayground extends HTMLElement {
     // Set content — sourced from trusted DEFAULT_CONTENT or local developer input only
     // SECURITY: innerHTML source is hardcoded DEFAULT_CONTENT or local developer textarea only
     if (this.#contentValue) {
-      el.innerHTML = this.#contentValue;  // eslint-disable-line no-unsanitized/property
-    }
+      el.innerHTML = this.#contentValue;    }
 
     // Apply CSS custom property overrides from color picker controls
     for (const [name, value] of Object.entries(this.#cssValues)) {
@@ -1152,8 +1151,7 @@ class DvfyComponentPlayground extends HTMLElement {
       for (const col of cols) {
         const td = document.createElement('td');
         // Content from WCA manifest, escaped via esc() in col.get()
-        td.innerHTML = col.get(item);  // eslint-disable-line no-unsanitized/property
-        row.appendChild(td);
+        td.innerHTML = col.get(item);        row.appendChild(td);
       }
       tbody.appendChild(row);
     }

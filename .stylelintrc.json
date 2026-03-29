@@ -1,0 +1,17 @@
+{
+  "extends": "stylelint-config-standard",
+  "rules": {
+    "custom-property-pattern": null,
+    "selector-type-no-unknown": [true, {
+      "ignoreTypes": ["/^dvfy-/"]
+    }],
+    "no-descending-specificity": null,
+    "color-function-notation": null,
+    "alpha-value-notation": null,
+    "value-keyword-case": null,
+    "color-hex-length": null,
+    "hue-degree-notation": null,
+    "comment-empty-line-before": null,
+    "custom-property-empty-line-before": null
+  }
+}

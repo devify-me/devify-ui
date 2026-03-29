@@ -679,7 +679,7 @@ class DvfyDatePicker extends HTMLElement {
     if (this.#outsideClickHandler) {
       document.removeEventListener('click', this.#outsideClickHandler);
     }
-    this.#outsideClickHandler = e => {
+    this.#outsideClickHandler = (e) => {
       if (this.#isOpen && !this.contains(e.target)) this.#closePopup();
     };
     document.addEventListener('click', this.#outsideClickHandler);
@@ -721,7 +721,7 @@ class DvfyDatePicker extends HTMLElement {
       btn.className = 'dvfy-date-picker__nav';
       btn.setAttribute('aria-label', label);
       btn.textContent = text;
-      btn.addEventListener('click', e => { e.stopPropagation(); handler(); });
+      btn.addEventListener('click', (e) => { e.stopPropagation(); handler(); });
       return btn;
     };
 
@@ -730,7 +730,7 @@ class DvfyDatePicker extends HTMLElement {
     heading.className = 'dvfy-date-picker__heading';
     heading.setAttribute('aria-live', 'polite');
     heading.textContent = this.#getMonthYearLabel();
-    heading.addEventListener('click', e => { e.stopPropagation(); this.#showMonthView(); });
+    heading.addEventListener('click', (e) => { e.stopPropagation(); this.#showMonthView(); });
 
     header.appendChild(makeNav('Previous year', '\u00AB', () => this.#prevYear()));
     header.appendChild(makeNav('Previous month', '\u2039', () => this.#prevMonth()));
@@ -759,7 +759,7 @@ class DvfyDatePicker extends HTMLElement {
         row.appendChild(cell);
       }
     } catch {
-      ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].forEach(s => {
+      ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].forEach((s) => {
         const cell = document.createElement('div');
         cell.className = 'dvfy-date-picker__weekday';
         cell.setAttribute('aria-hidden', 'true');
@@ -820,7 +820,7 @@ class DvfyDatePicker extends HTMLElement {
       }
 
       if (!isDisabled) {
-        btn.addEventListener('click', e => { e.stopPropagation(); this.#handleDayClick(date, type); });
+        btn.addEventListener('click', (e) => { e.stopPropagation(); this.#handleDayClick(date, type); });
         if (isRange) {
           btn.addEventListener('mouseenter', () => {
             if (this.#rangeAwaitingEnd) { this.#hoverDate = date; this.#refreshGrid(); }
@@ -854,7 +854,7 @@ class DvfyDatePicker extends HTMLElement {
     if (this.#startDate) {
       timeInput.value = `${String(this.#startDate.getHours()).padStart(2, '0')}:${String(this.#startDate.getMinutes()).padStart(2, '0')}`;
     }
-    timeInput.addEventListener('change', e => {
+    timeInput.addEventListener('change', (e) => {
       if (!this.#startDate) this.#startDate = new Date();
       const [h, m] = e.target.value.split(':').map(Number);
       this.#startDate.setHours(h, m, 0, 0);
@@ -877,7 +877,7 @@ class DvfyDatePicker extends HTMLElement {
     todayBtn.type = 'button';
     todayBtn.className = 'dvfy-date-picker__footer-btn';
     todayBtn.textContent = 'Today';
-    todayBtn.addEventListener('click', e => {
+    todayBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       const today = new Date();
       this.#year = today.getFullYear();
@@ -893,7 +893,7 @@ class DvfyDatePicker extends HTMLElement {
     clearBtn.type = 'button';
     clearBtn.className = 'dvfy-date-picker__footer-btn';
     clearBtn.textContent = 'Clear';
-    clearBtn.addEventListener('click', e => {
+    clearBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       this.#startDate = null;
       this.#endDate = null;
@@ -930,7 +930,7 @@ class DvfyDatePicker extends HTMLElement {
       btn.className = 'dvfy-date-picker__nav';
       btn.setAttribute('aria-label', label);
       btn.textContent = text;
-      btn.addEventListener('click', e => { e.stopPropagation(); handler(); });
+      btn.addEventListener('click', (e) => { e.stopPropagation(); handler(); });
       return btn;
     };
 
@@ -938,7 +938,7 @@ class DvfyDatePicker extends HTMLElement {
     yearBtn.type = 'button';
     yearBtn.className = 'dvfy-date-picker__heading';
     yearBtn.textContent = String(this.#year);
-    yearBtn.addEventListener('click', e => { e.stopPropagation(); this.#showYearView(); });
+    yearBtn.addEventListener('click', (e) => { e.stopPropagation(); this.#showYearView(); });
 
     header.appendChild(makeNav('Previous year', '\u2039', () => { this.#year--; this.#showMonthView(); }));
     header.appendChild(yearBtn);
@@ -962,7 +962,7 @@ class DvfyDatePicker extends HTMLElement {
       btn.className = 'dvfy-date-picker__month-item';
       if (idx === this.#month) btn.classList.add('dvfy-date-picker__month-item--active');
       btn.textContent = name;
-      btn.addEventListener('click', e => {
+      btn.addEventListener('click', (e) => {
         e.stopPropagation();
         this.#month = idx;
         this.#view = 'days';
@@ -990,7 +990,7 @@ class DvfyDatePicker extends HTMLElement {
     backBtn.type = 'button';
     backBtn.className = 'dvfy-date-picker__heading';
     backBtn.textContent = `${yStart} \u2013 ${yEnd}`;
-    backBtn.addEventListener('click', e => { e.stopPropagation(); this.#showMonthView(); });
+    backBtn.addEventListener('click', (e) => { e.stopPropagation(); this.#showMonthView(); });
     header.appendChild(backBtn);
     popup.appendChild(header);
 
@@ -1003,7 +1003,7 @@ class DvfyDatePicker extends HTMLElement {
       btn.className = 'dvfy-date-picker__year-item';
       if (y === this.#year) btn.classList.add('dvfy-date-picker__year-item--active');
       btn.textContent = String(y);
-      btn.addEventListener('click', e => {
+      btn.addEventListener('click', (e) => {
         e.stopPropagation();
         this.#year = y;
         this.#showMonthView();
