@@ -454,7 +454,44 @@
     {
       "name": "dvfy-carousel",
       "path": "./components/dvfy-carousel.js",
-      "description": "Carousel container. Wraps dvfy-slide elements in a horizontally scrollable\nsnap container. Navigation buttons and pagination dots are rendered entirely\nby CSS pseudo-elements on Chrome 135+; older browsers get equivalent JS-driven\nbuttons and dots injected alongside the element."
+      "description": "Carousel container. Wraps dvfy-slide elements in a horizontally scrollable\nsnap container. Navigation buttons and pagination dots are rendered entirely\nby CSS pseudo-elements on Chrome 135+; older browsers get equivalent JS-driven\nbuttons and dots injected alongside the element.",
+      "attributes": [
+        {
+          "name": "peek",
+          "description": "Show ~12% of adjacent slides to hint scrollability",
+          "type": "boolean"
+        },
+        {
+          "name": "expandable",
+          "description": "Show expand button that enters fullscreen mode on click",
+          "type": "boolean"
+        },
+        {
+          "name": "aria-label",
+          "description": "Accessible label for the carousel region (default: \"Carousel\")",
+          "type": "string"
+        },
+        {
+          "name": "autoplay",
+          "description": "Auto-advance interval in seconds; 0 or omitted = off",
+          "type": "number"
+        },
+        {
+          "name": "fullscreen",
+          "description": "Display carousel in fullscreen mode with dark backdrop",
+          "type": "boolean"
+        },
+        {
+          "name": "dot-position",
+          "description": "Dot placement: bottom | top | left | right (default: \"bottom\")",
+          "type": "string"
+        },
+        {
+          "name": "images",
+          "description": "JSON array of image URLs or objects with src and alt properties",
+          "type": "string"
+        }
+      ]
     },
     {
       "name": "dvfy-slide",
