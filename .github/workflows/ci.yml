@@ -45,6 +45,22 @@ jobs:
       - name: Run tests
         run: npm test
 
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: Build dist bundles
+        run: npm run build
+
   analyze:
     name: Analyze & manifest check
     runs-on: ubuntu-latest
