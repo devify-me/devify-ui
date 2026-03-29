@@ -24,7 +24,8 @@
     "page-transition.css",
     "components/",
     "patterns/",
-    "tokens/"
+    "tokens/",
+    "dist/"
   ],
   "exports": {
     ".": {
@@ -44,6 +45,7 @@
     "@open-wc/testing": "^4.0.0",
     "@web/test-runner": "^0.20.2",
     "@web/test-runner-playwright": "^0.11.1",
+    "esbuild": "^0.27.4",
     "eslint": "^10.1.0",
     "stylelint": "^17.6.0",
     "stylelint-config-standard": "^40.0.0",
@@ -58,6 +60,7 @@
     "lint:js": "eslint components/ patterns/ catalog/ tokens/ scripts/",
     "lint:css": "stylelint 'tokens/**/*.css'",
     "test": "web-test-runner",
-    "test:watch": "web-test-runner --watch"
+    "test:watch": "web-test-runner --watch",
+    "build": "node scripts/build.js"
   }
 }

@@ -14,7 +14,7 @@ export default [
     },
   },
   {
-    files: ['**/*.test.js'],
+    files: ['**/*.test.js', 'scripts/**/*.js'],
     rules: {
       'import-x/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },
