@@ -257,7 +257,17 @@ class DvfyAuth extends HTMLElement {
       document.head.appendChild(s);
       DvfyAuth.#styled = true;
     }
+    this.setAttribute('role', 'form');
+    if (!this.hasAttribute('aria-label')) {
+      this.setAttribute('aria-label', 'Authentication');
+    }
     this.#render();
+  }
+
+  disconnectedCallback() {
+    // DOM cleanup: child elements (form, event listeners) are removed with the tree.
+    // Clear innerHTML to release references.
+    this.textContent = '';
   }
 
   attributeChangedCallback() {

@@ -122,6 +122,8 @@ dvfy-sidebar a:focus-visible {
 class DvfySidebar extends HTMLElement {
   static #styled = false;
 
+  #toggle = null;
+
   connectedCallback() {
     if (!DvfySidebar.#styled) {
       const s = document.createElement('style');
@@ -129,13 +131,23 @@ class DvfySidebar extends HTMLElement {
       document.head.appendChild(s);
       DvfySidebar.#styled = true;
     }
+    this.setAttribute('role', 'navigation');
+    if (!this.hasAttribute('aria-label')) {
+      this.setAttribute('aria-label', 'Sidebar');
+    }
     const w = this.getAttribute('width');
     if (w) this.style.setProperty('--dvfy-sidebar-width', w);
     this.#build();
     this.#highlightActive();
   }
 
-  static get observedAttributes() { return ['collapsed', 'width']; }
+  disconnectedCallback() {
+    if (this.#toggle) {
+      this.#toggle.removeEventListener('click', this.#onToggle);
+    }
+  }
+
+  static get observedAttributes() { return ['collapsed', 'collapsible', 'width']; }
 
   attributeChangedCallback(name, _, val) {
     if (name === 'width' && val) this.style.setProperty('--dvfy-sidebar-width', val);
@@ -145,24 +157,30 @@ class DvfySidebar extends HTMLElement {
     const children = Array.from(this.childNodes);
 
     // Toggle button
-    const toggle = document.createElement('button');
-    toggle.className = 'dvfy-sidebar__toggle';
-    toggle.setAttribute('aria-label', 'Toggle sidebar');
-    toggle.textContent = '\u2261';
-    toggle.addEventListener('click', () => {
-      this.hasAttribute('collapsed')
-        ? this.removeAttribute('collapsed')
-        : this.setAttribute('collapsed', '');
-    });
+    this.#toggle = document.createElement('button');
+    this.#toggle.className = 'dvfy-sidebar__toggle';
+    this.#toggle.setAttribute('aria-label', 'Toggle sidebar');
+    this.#toggle.setAttribute('aria-expanded', String(!this.hasAttribute('collapsed')));
+    this.#toggle.textContent = '\u2261';
+    this.#toggle.addEventListener('click', this.#onToggle);
 
     // Nav wrapper
     const nav = document.createElement('nav');
     nav.className = 'dvfy-sidebar__nav';
     for (const child of children) nav.appendChild(child);
 
-    this.appendChild(toggle);
+    this.appendChild(this.#toggle);
     this.appendChild(nav);
   }
+
+  #onToggle = () => {
+    const collapsed = this.hasAttribute('collapsed');
+    if (collapsed) this.removeAttribute('collapsed');
+    else this.setAttribute('collapsed', '');
+    if (this.#toggle) {
+      this.#toggle.setAttribute('aria-expanded', String(collapsed));
+    }
+  };
 
   #highlightActive() {
     const path = window.location.pathname;

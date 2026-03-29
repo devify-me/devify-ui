@@ -53,6 +53,11 @@ class DvfyAccordion extends HTMLElement {
       DvfyAccordion.#styled = true;
     }
 
+    this.setAttribute('role', 'region');
+    if (!this.hasAttribute('aria-label')) {
+      this.setAttribute('aria-label', 'Accordion');
+    }
+
     this.addEventListener('click', this.#handleToggle);
     this.addEventListener('keydown', this.#handleKeydown);
   }
