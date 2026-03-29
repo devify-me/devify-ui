@@ -317,7 +317,7 @@ const DEFAULT_CONTENT = {
   'dvfy-section': '<p>Section content here.</p>',
   'dvfy-theme-switcher': '<option value="devify-cyan">Cyan</option><option value="devify-pink">Pink</option>',
   'dvfy-accordion': '<dvfy-section label="Section One" open><p>First section content.</p></dvfy-section><dvfy-section label="Section Two" collapsed><p>Second section content.</p></dvfy-section><dvfy-section label="Section Three" collapsed><p>Third section content.</p></dvfy-section>',
-  'dvfy-carousel': '<dvfy-slide style="background:var(--dvfy-primary-bg);color:#fff;border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-8);display:flex;align-items:center;justify-content:center;min-height:160px;font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-semibold)">Slide 1</dvfy-slide><dvfy-slide style="background:var(--dvfy-surface-raised);border:1px solid var(--dvfy-border-default);border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-8);display:flex;align-items:center;justify-content:center;min-height:160px;font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-semibold)">Slide 2</dvfy-slide><dvfy-slide style="background:var(--dvfy-surface-raised);border:1px solid var(--dvfy-border-default);border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-8);display:flex;align-items:center;justify-content:center;min-height:160px;font-size:var(--dvfy-text-xl);font-weight:var(--dvfy-weight-semibold)">Slide 3</dvfy-slide>',
+  'dvfy-carousel': '<dvfy-slide><img src="../catalog/assets/Grob.png" alt="Grob" style="width:100%;border-radius:var(--dvfy-radius-lg);object-fit:cover;height:16rem"></dvfy-slide><dvfy-slide><img src="../catalog/assets/Grobette.png" alt="Grobette" style="width:100%;border-radius:var(--dvfy-radius-lg);object-fit:cover;height:16rem"></dvfy-slide><dvfy-slide><img src="../catalog/assets/Grobby.png" alt="Grobby" style="width:100%;border-radius:var(--dvfy-radius-lg);object-fit:cover;height:16rem"></dvfy-slide><dvfy-slide><img src="../catalog/assets/Grobma.png" alt="Grobma" style="width:100%;border-radius:var(--dvfy-radius-lg);object-fit:cover;height:16rem"></dvfy-slide><dvfy-slide><img src="../catalog/assets/Grobpa.png" alt="Grobpa" style="width:100%;border-radius:var(--dvfy-radius-lg);object-fit:cover;height:16rem"></dvfy-slide>',
   'dvfy-page-transition': '<dvfy-page-transition animation="fade"><dvfy-card padded><h3 style="margin:0 0 0.5rem">Fade Transition</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">MPA: add mpa attr to activate cross-page transitions.</p></dvfy-card></dvfy-page-transition>',
   'dvfy-scroll-reveal': '<div style="height:150px;overflow-y:auto;border:1px solid var(--dvfy-border-default);border-radius:var(--dvfy-radius-lg);padding:var(--dvfy-space-4)"><div style="height:200px;display:flex;align-items:end;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Scroll down</div><dvfy-scroll-reveal animation="fade-up"><dvfy-card padded><h3 style="margin:0 0 0.5rem">Revealed Card</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">This card fades up as you scroll into view.</p></dvfy-card></dvfy-scroll-reveal><div style="height:200px"></div></div>',
   'dvfy-scroll-progress': '<dvfy-scroll-progress></dvfy-scroll-progress><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm);margin:0">Scroll the page to see the progress bar fill at the top of the viewport. Requires a scrollable page and browser support for <code>animation-timeline: scroll()</code>.</p>',
@@ -714,7 +714,7 @@ class DvfyComponentPlayground extends HTMLElement {
 
     // Set content — sourced from trusted DEFAULT_CONTENT or local developer input only
     if (this.#contentValue) {
-      el.innerHTML = this.#contentValue;  // eslint-disable-line no-unsanitized/property
+      el.innerHTML = this.#contentValue;
     }
 
     // Layout components need a container context to demonstrate properly
@@ -914,7 +914,7 @@ class DvfyComponentPlayground extends HTMLElement {
       for (const col of cols) {
         const td = document.createElement('td');
         // Content from WCA manifest, escaped via esc() in col.get()
-        td.innerHTML = col.get(item);  // eslint-disable-line no-unsanitized/property
+        td.innerHTML = col.get(item);
         row.appendChild(td);
       }
       tbody.appendChild(row);

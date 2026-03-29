@@ -1,4 +1,4 @@
-import { fixture, html, expect, waitUntil } from '@open-wc/testing';
+import { fixture, html, expect } from '@open-wc/testing';
 import './dvfy-carousel.js';
 
 describe('dvfy-carousel', () => {
@@ -33,7 +33,6 @@ describe('dvfy-carousel', () => {
           <dvfy-slide>Slide 2</dvfy-slide>
         </dvfy-carousel>
       `);
-      // Wait for microtask label assignment
       await new Promise(r => setTimeout(r, 0));
       const slides = document.querySelectorAll('dvfy-slide');
       expect(slides[0].getAttribute('role')).to.equal('group');
@@ -43,53 +42,46 @@ describe('dvfy-carousel', () => {
     });
   });
 
-  describe('dot-position attribute', () => {
-    it('accepts dot-position attribute', async () => {
+  describe('gap attribute', () => {
+    it('sets CSS custom property from gap attribute', async () => {
       const el = await fixture(html`
-        <dvfy-carousel dot-position="top">
+        <dvfy-carousel gap="2rem">
           <dvfy-slide>Slide 1</dvfy-slide>
         </dvfy-carousel>
       `);
-      expect(el.getAttribute('dot-position')).to.equal('top');
+      expect(el.style.getPropertyValue('--dvfy-carousel-gap')).to.equal('2rem');
     });
 
-    it('accepts left and right positions', async () => {
+    it('removes CSS property when gap is removed', async () => {
       const el = await fixture(html`
-        <dvfy-carousel dot-position="left">
+        <dvfy-carousel gap="2rem">
           <dvfy-slide>Slide 1</dvfy-slide>
         </dvfy-carousel>
       `);
-      expect(el.getAttribute('dot-position')).to.equal('left');
+      el.removeAttribute('gap');
+      expect(el.style.getPropertyValue('--dvfy-carousel-gap')).to.equal('');
     });
   });
 
   describe('autoplay attribute', () => {
     it('accepts autoplay attribute', async () => {
       const el = await fixture(html`
-        <dvfy-carousel autoplay="3">
+        <dvfy-carousel autoplay>
           <dvfy-slide>Slide 1</dvfy-slide>
           <dvfy-slide>Slide 2</dvfy-slide>
         </dvfy-carousel>
       `);
-      expect(el.getAttribute('autoplay')).to.equal('3');
-    });
-  });
-
-  describe('images attribute', () => {
-    it('generates slides from JSON array of strings', async () => {
-      const images = JSON.stringify(['img1.jpg', 'img2.jpg', 'img3.jpg']);
-      const el = await fixture(html`<dvfy-carousel images=${images}></dvfy-carousel>`);
-      const slides = el.querySelectorAll('dvfy-slide[data-generated]');
-      expect(slides.length).to.equal(3);
-      expect(slides[0].querySelector('img').src).to.contain('img1.jpg');
+      expect(el.hasAttribute('autoplay')).to.be.true;
     });
 
-    it('generates slides from JSON array of objects', async () => {
-      const images = JSON.stringify([{ src: 'a.jpg', alt: 'Photo A' }, { src: 'b.jpg', alt: 'Photo B' }]);
-      const el = await fixture(html`<dvfy-carousel images=${images}></dvfy-carousel>`);
-      const slides = el.querySelectorAll('dvfy-slide[data-generated]');
-      expect(slides.length).to.equal(2);
-      expect(slides[0].querySelector('img').alt).to.equal('Photo A');
+    it('accepts autoplay with custom interval', async () => {
+      const el = await fixture(html`
+        <dvfy-carousel autoplay="3000">
+          <dvfy-slide>Slide 1</dvfy-slide>
+          <dvfy-slide>Slide 2</dvfy-slide>
+        </dvfy-carousel>
+      `);
+      expect(el.getAttribute('autoplay')).to.equal('3000');
     });
   });
 
@@ -101,9 +93,7 @@ describe('dvfy-carousel', () => {
           <dvfy-slide>Slide 2</dvfy-slide>
         </dvfy-carousel>
       `);
-      const event = new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true });
-      el.dispatchEvent(event);
-      // Scroll behavior is async — just verify no errors thrown
+      el.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
       expect(el.getAttribute('tabindex')).to.equal('0');
     });
 
@@ -114,65 +104,8 @@ describe('dvfy-carousel', () => {
           <dvfy-slide>Slide 2</dvfy-slide>
         </dvfy-carousel>
       `);
-      const event = new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true });
-      el.dispatchEvent(event);
+      el.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
       expect(el.getAttribute('tabindex')).to.equal('0');
-    });
-  });
-
-  describe('fullscreen', () => {
-    it('creates fullscreen overlay when fullscreen attr is set', async () => {
-      const el = await fixture(html`
-        <dvfy-carousel>
-          <dvfy-slide>Slide 1</dvfy-slide>
-        </dvfy-carousel>
-      `);
-      el.setAttribute('fullscreen', '');
-      await waitUntil(() => document.querySelector('.dvfy-carousel-fullscreen'));
-      const overlay = document.querySelector('.dvfy-carousel-fullscreen');
-      expect(overlay).to.exist;
-      // Clean up
-      el.removeAttribute('fullscreen');
-    });
-
-    it('removes fullscreen overlay when attr is removed', async () => {
-      const el = await fixture(html`
-        <dvfy-carousel>
-          <dvfy-slide>Slide 1</dvfy-slide>
-        </dvfy-carousel>
-      `);
-      el.setAttribute('fullscreen', '');
-      await waitUntil(() => document.querySelector('.dvfy-carousel-fullscreen'));
-      el.removeAttribute('fullscreen');
-      // attributeChangedCallback removes synchronously
-      expect(document.querySelector('.dvfy-carousel-fullscreen')).to.be.null;
-    });
-
-    it('exits on Escape key', async () => {
-      const el = await fixture(html`
-        <dvfy-carousel>
-          <dvfy-slide>Slide 1</dvfy-slide>
-        </dvfy-carousel>
-      `);
-      el.setAttribute('fullscreen', '');
-      await waitUntil(() => document.querySelector('.dvfy-carousel-fullscreen'));
-      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-      expect(el.hasAttribute('fullscreen')).to.be.false;
-      expect(document.querySelector('.dvfy-carousel-fullscreen')).to.be.null;
-    });
-  });
-
-  describe('expandable', () => {
-    it('renders expand button when expandable attr is set', async () => {
-      const el = await fixture(html`
-        <dvfy-carousel expandable>
-          <dvfy-slide>Slide 1</dvfy-slide>
-        </dvfy-carousel>
-      `);
-      await new Promise(r => setTimeout(r, 0));
-      const expandBtn = el.parentElement.querySelector('.dvfy-carousel-expand');
-      expect(expandBtn).to.exist;
-      expect(expandBtn.getAttribute('aria-label')).to.equal('Expand to fullscreen');
     });
   });
 });
