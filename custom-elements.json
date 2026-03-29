@@ -1249,6 +1249,50 @@
       ]
     },
     {
+      "name": "dvfy-invoice-list",
+      "path": "./components/dvfy-invoice-list.js",
+      "description": "Billing history list with status badges and hosted invoice links.",
+      "attributes": [
+        {
+          "name": "api-base",
+          "description": "Base URL for billing API (default: current origin)",
+          "type": "string"
+        },
+        {
+          "name": "data",
+          "description": "JSON array of invoice objects (bypasses fetch)",
+          "type": "string"
+        },
+        {
+          "name": "tenant-id",
+          "description": "Tenant UUID for API calls",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "dvfy-invoices-loaded",
+          "description": "Fires after data loads, detail: invoices array"
+        },
+        {
+          "name": "dvfy-invoices-error",
+          "description": "Fires on fetch failure, detail: error message"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-success-bg-subtle",
+          "description": "Paid status badge background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-warning-bg-subtle",
+          "description": "Open status badge background",
+          "type": "color"
+        }
+      ]
+    },
+    {
       "name": "dvfy-loader",
       "path": "./components/dvfy-loader.js",
       "description": "Loading spinner with spinner and dots variants, optional brand icon overlay.",
@@ -1669,6 +1713,193 @@
         {
           "name": "--dvfy-primary-text",
           "description": "Active page button text",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-payment-methods",
+      "path": "./components/dvfy-payment-methods.js",
+      "description": "Payment method list with gateway-conditional actions.",
+      "attributes": [
+        {
+          "name": "api-base",
+          "description": "Base URL for billing API (default: current origin)",
+          "type": "string"
+        },
+        {
+          "name": "data",
+          "description": "JSON array of payment method objects (bypasses fetch)",
+          "type": "string"
+        },
+        {
+          "name": "tenant-id",
+          "description": "Tenant UUID for API calls",
+          "type": "string"
+        },
+        {
+          "name": "gateway",
+          "description": "Active gateway: stripe | paddle | paypal",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "dvfy-pm-loaded",
+          "description": "Fires after data loads, detail: methods array"
+        },
+        {
+          "name": "dvfy-pm-error",
+          "description": "Fires on fetch failure, detail: error message"
+        },
+        {
+          "name": "dvfy-pm-set-default",
+          "description": "Fires when set-default clicked, detail: method id"
+        },
+        {
+          "name": "dvfy-pm-remove",
+          "description": "Fires when remove clicked, detail: method id"
+        },
+        {
+          "name": "dvfy-pm-add",
+          "description": "Fires when add-new clicked"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Card background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Default payment method border",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-payment-setup",
+      "path": "./components/dvfy-payment-setup.js",
+      "description": "Gateway-specific payment method setup component.",
+      "attributes": [
+        {
+          "name": "api-base",
+          "description": "Base URL for billing API (default: current origin)",
+          "type": "string"
+        },
+        {
+          "name": "stripe-publishable-key",
+          "description": "Stripe publishable key",
+          "type": "string"
+        },
+        {
+          "name": "paddle-client-token",
+          "description": "Paddle client-side token",
+          "type": "string"
+        },
+        {
+          "name": "paypal-client-id",
+          "description": "PayPal client ID",
+          "type": "string"
+        },
+        {
+          "name": "return-url",
+          "description": "Redirect URL after PayPal approval",
+          "type": "string"
+        },
+        {
+          "name": "gateway",
+          "description": "Active gateway: stripe | paddle | paypal",
+          "type": "string"
+        },
+        {
+          "name": "tenant-id",
+          "description": "Tenant UUID for API calls",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "dvfy-payment-method-added",
+          "description": "Fires after successful setup, detail: PaymentMethodInfo"
+        },
+        {
+          "name": "dvfy-payment-setup-error",
+          "description": "Fires on failure, detail: error message"
+        },
+        {
+          "name": "dvfy-payment-setup-cancel",
+          "description": "Fires when user cancels"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Container background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-default",
+          "description": "Container border",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-plan-picker",
+      "path": "./components/dvfy-plan-picker.js",
+      "description": "Plan comparison grid with pricing, features, and selection actions.",
+      "attributes": [
+        {
+          "name": "api-base",
+          "description": "Base URL for billing API (default: current origin)",
+          "type": "string"
+        },
+        {
+          "name": "data",
+          "description": "JSON array of plan objects (bypasses fetch)",
+          "type": "string"
+        },
+        {
+          "name": "tenant-id",
+          "description": "Tenant UUID for API calls",
+          "type": "string"
+        },
+        {
+          "name": "current-plan",
+          "description": "Plan name to highlight as current",
+          "type": "string"
+        },
+        {
+          "name": "columns",
+          "description": "Grid columns: 2 | 3 | 4",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "dvfy-plans-loaded",
+          "description": "Fires after data loads, detail: plans array"
+        },
+        {
+          "name": "dvfy-plans-error",
+          "description": "Fires on fetch failure, detail: error message"
+        },
+        {
+          "name": "dvfy-plan-select",
+          "description": "Fires when a plan is selected, detail: plan object"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Plan card background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Current plan border highlight",
           "type": "color"
         }
       ]
@@ -2341,6 +2572,66 @@
       ]
     },
     {
+      "name": "dvfy-subscription-card",
+      "path": "./components/dvfy-subscription-card.js",
+      "description": "Subscription status card showing plan info, billing state, and actions.",
+      "attributes": [
+        {
+          "name": "api-base",
+          "description": "Base URL for billing API (default: current origin)",
+          "type": "string"
+        },
+        {
+          "name": "data",
+          "description": "JSON subscription object (bypasses fetch)",
+          "type": "string"
+        },
+        {
+          "name": "tenant-id",
+          "description": "Tenant UUID for API calls",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "dvfy-subscription-loaded",
+          "description": "Fires after data loads, detail: subscription"
+        },
+        {
+          "name": "dvfy-subscription-error",
+          "description": "Fires on fetch failure, detail: error message"
+        },
+        {
+          "name": "dvfy-subscription-change-plan",
+          "description": "Fires when \"Change plan\" clicked"
+        },
+        {
+          "name": "dvfy-subscription-cancel",
+          "description": "Fires when \"Cancel\" clicked"
+        },
+        {
+          "name": "dvfy-subscription-reactivate",
+          "description": "Fires when \"Reactivate\" clicked"
+        },
+        {
+          "name": "dvfy-subscription-choose-plan",
+          "description": "Fires when \"Choose a plan\" clicked (no subscription)"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Card background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-default",
+          "description": "Card border",
+          "type": "color"
+        }
+      ]
+    },
+    {
       "name": "dvfy-switch",
       "path": "./components/dvfy-switch.js",
       "description": "Toggle switch with label and description text.",
@@ -3004,6 +3295,55 @@
         {
           "name": "",
           "description": "Child dvfy-tree-node elements for branch nodes"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-usage-meter",
+      "path": "./components/dvfy-usage-meter.js",
+      "description": "Feature usage progress bars for metered billing features.",
+      "attributes": [
+        {
+          "name": "api-base",
+          "description": "Base URL for billing API (default: current origin)",
+          "type": "string"
+        },
+        {
+          "name": "data",
+          "description": "JSON array of usage items (bypasses fetch)",
+          "type": "string"
+        },
+        {
+          "name": "tenant-id",
+          "description": "Tenant UUID for API calls",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "dvfy-usage-loaded",
+          "description": "Fires after usage data loads, detail: items array"
+        },
+        {
+          "name": "dvfy-usage-error",
+          "description": "Fires on fetch failure, detail: error message"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Default progress bar fill",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-warning-bg",
+          "description": "Warning threshold fill",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-danger-bg",
+          "description": "Danger threshold fill",
+          "type": "color"
         }
       ]
     },

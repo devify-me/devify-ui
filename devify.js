@@ -58,6 +58,14 @@ import './components/dvfy-accordion.js';
 import './components/dvfy-carousel.js';
 import './components/dvfy-stepper.js';
 
+// Wave 4: Billing & Payments
+import './components/dvfy-usage-meter.js';
+import './components/dvfy-invoice-list.js';
+import './components/dvfy-subscription-card.js';
+import './components/dvfy-plan-picker.js';
+import './components/dvfy-payment-methods.js';
+import './components/dvfy-payment-setup.js';
+
 // HTMX Integration Patterns
 import './patterns/dvfy-htmx-form.js';
 import './patterns/dvfy-infinite-scroll.js';
