@@ -92,6 +92,7 @@ export const COMPONENT_REGISTRY = {
   // Tier 3 — Organisms
   'dvfy-carousel':  { tier: 3, domain: 'layout',     deps: [] },
   'dvfy-accordion': { tier: 3, domain: 'layout',     deps: ['dvfy-section'] },
+  'dvfy-stepper':   { tier: 3, domain: 'layout',     deps: [] },
   'dvfy-sidebar':   { tier: 3, domain: 'navigation', deps: [] },
   'dvfy-auth':      { tier: 3, domain: 'utility',    deps: ['dvfy-input', 'dvfy-button'] },
 

@@ -56,6 +56,7 @@ import './components/dvfy-section.js';
 import './components/dvfy-component-playground.js';
 import './components/dvfy-accordion.js';
 import './components/dvfy-carousel.js';
+import './components/dvfy-stepper.js';
 
 // HTMX Integration Patterns
 import './patterns/dvfy-htmx-form.js';

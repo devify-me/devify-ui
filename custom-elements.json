@@ -2276,6 +2276,71 @@
       ]
     },
     {
+      "name": "dvfy-stepper",
+      "path": "./components/dvfy-stepper.js",
+      "description": "Multi-step wizard with visual progress, keyboard navigation, and step states.",
+      "attributes": [
+        {
+          "name": "linear",
+          "description": "Must complete steps in order",
+          "type": "boolean"
+        },
+        {
+          "name": "vertical",
+          "description": "Vertical orientation (default: horizontal)",
+          "type": "boolean"
+        },
+        {
+          "name": "active",
+          "description": "Active step (1-based index, default: 1)",
+          "type": "number"
+        }
+      ],
+      "events": [
+        {
+          "name": "change"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-step",
+      "path": "./components/dvfy-stepper.js",
+      "description": "Individual step within a dvfy-stepper.",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "Step header text",
+          "type": "string"
+        },
+        {
+          "name": "description",
+          "description": "Optional subtitle below label",
+          "type": "string"
+        },
+        {
+          "name": "completed",
+          "description": "Step is completed (shows checkmark)",
+          "type": "boolean"
+        },
+        {
+          "name": "error",
+          "description": "Step has an error",
+          "type": "boolean"
+        },
+        {
+          "name": "disabled",
+          "description": "Step cannot be activated",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Step content (forms, text, etc.)"
+        }
+      ]
+    },
+    {
       "name": "dvfy-switch",
       "path": "./components/dvfy-switch.js",
       "description": "Toggle switch with label and description text.",
