@@ -14,6 +14,12 @@ export default [
     },
   },
   {
+    files: ['**/*.test.js'],
+    rules: {
+      'import-x/no-extraneous-dependencies': ['error', { devDependencies: true }],
+    },
+  },
+  {
     ignores: ['node_modules/**', 'custom-elements.json'],
   },
 ];
