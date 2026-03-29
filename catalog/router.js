@@ -2,7 +2,7 @@
  * catalog/router.js — Hash-based routing + view dispatch
  */
 import { HTMX_PATTERNS, TIERS, COMPONENT_REGISTRY, DOMAINS, getComponentsByTier, getServerComponents } from './data.js';
-import { renderOverview } from './overview.js';
+import { renderOverview, renderOverviewGoal, renderOverviewStack, renderOverviewStart, renderOverviewTiers } from './overview.js';
 import { renderTokenView } from './tokens.js';
 import { renderThemes } from './brand.js';
 import { renderColorsPage, renderTypographyPage } from './palette.js';
@@ -53,7 +53,11 @@ function render(mainEl, section, item) {
 
   switch (section) {
     case 'overview':
-      renderOverview(mainEl);
+      if (item === 'goal') renderOverviewGoal(mainEl);
+      else if (item === 'stack') renderOverviewStack(mainEl);
+      else if (item === 'start') renderOverviewStart(mainEl);
+      else if (item === 'tiers') renderOverviewTiers(mainEl);
+      else renderOverview(mainEl);
       break;
 
     case 'tokens':
