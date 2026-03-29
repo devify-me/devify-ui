@@ -507,13 +507,9 @@
           "type": "boolean"
         },
         {
-          "name": "objects",
-          "type": "string} images - JSON array of image URLs or {src, alt"
-        },
-        {
           "name": "autoplay",
-          "description": "Auto-advance interval in ms (default: 5000)",
-          "type": "boolean|number"
+          "description": "Seconds between slides (default: 5)",
+          "type": "number"
         },
         {
           "name": "dot-position",
@@ -521,7 +517,9 @@
           "type": "string"
         },
         {
-          "name": "images"
+          "name": "images",
+          "description": "JSON array of URLs or objects with src/alt",
+          "type": "string"
         }
       ]
     },

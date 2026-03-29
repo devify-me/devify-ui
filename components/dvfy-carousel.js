@@ -12,9 +12,9 @@
  *     <dvfy-slide>Slide 3</dvfy-slide>
  *   </dvfy-carousel>
  *
- * Autoplay (5 s default, or specify ms):
- *   <dvfy-carousel autoplay>...</dvfy-carousel>
- *   <dvfy-carousel autoplay="3000">...</dvfy-carousel>
+ * Autoplay (5 seconds default, or specify seconds):
+ *   <dvfy-carousel autoplay="5">...</dvfy-carousel>
+ *   <dvfy-carousel autoplay="10">...</dvfy-carousel>
  *
  * Gap between slides:
  *   <dvfy-carousel gap>...</dvfy-carousel>
@@ -39,10 +39,10 @@
  * @element dvfy-carousel
  *
  * @attr {boolean} peek - Show ~12% of adjacent slides to hint scrollability
- * @attr {boolean|number} autoplay - Auto-advance interval in ms (default: 5000). Pauses on hover, focus, or user interaction. Disabled when prefers-reduced-motion is active.
+ * @attr {number} autoplay - Seconds between slides (default: 5). Pauses on hover and focus. Disabled when prefers-reduced-motion is active.
  * @attr {boolean} gap - Add gap between slides
  * @attr {string} dot-position - Dot placement: bottom | top | left | right (default: "bottom")
- * @attr {string} images - JSON array of image URLs or objects with src and alt properties
+ * @attr {string} images - JSON array of URLs or src/alt objects, e.g. ["a.jpg"] or [{ src, alt }]
  * @attr {string} aria-label - Accessible label for the carousel region (default: "Carousel")
  *
  * @slot - <dvfy-slide> elements (ignored when images attr is set)
@@ -58,7 +58,7 @@
  * </dvfy-carousel>
  *
  * @example
- * <dvfy-carousel autoplay dot-position="top" gap="1rem">
+ * <dvfy-carousel autoplay="5" dot-position="top" gap>
  *   <dvfy-slide><dvfy-card padded><h3>Auto 1</h3></dvfy-card></dvfy-slide>
  *   <dvfy-slide><dvfy-card padded><h3>Auto 2</h3></dvfy-card></dvfy-slide>
  * </dvfy-carousel>
@@ -242,6 +242,15 @@ dvfy-slide img {
   background: var(--dvfy-primary-bg);
   transform: scale(1.4);
 }
+
+/* ── Autoplay progress bar ──────────────────────────────────────── */
+.dvfy-carousel-progress {
+  height: 2px;
+  background: var(--dvfy-primary-bg);
+  width: 0;
+  transition: none;
+  pointer-events: none;
+}
 `;
 
 /** True when native ::scroll-marker / ::scroll-button() is NOT available. */
@@ -258,10 +267,10 @@ function needsFallback() {
  * @element dvfy-carousel
  *
  * @attr {boolean} peek - Show ~12% of adjacent slides to hint scrollability
- * @attr {boolean|number} autoplay - Auto-advance interval in ms (default: 5000)
+ * @attr {number} autoplay - Seconds between slides (default: 5)
  * @attr {boolean} gap - Add gap between slides
  * @attr {string} dot-position - Dot placement: bottom | top | left | right (default: "bottom")
- * @attr {string} images - JSON array of image URLs or {src, alt} objects
+ * @attr {string} images - JSON array of URLs or objects with src/alt
  */
 class DvfyCarousel extends HTMLElement {
   static #styled = false;
@@ -272,6 +281,10 @@ class DvfyCarousel extends HTMLElement {
 
   #autoplayTimer = null;
   #userPaused = false;
+  #progressEl = null;
+  #progressRaf = null;
+  #progressStart = 0;
+  #autoplayMs = 0;
   #wrap = null;   // outer wrapper (.dvfy-carousel-wrap)
   #nav = null;    // flex row (.dvfy-carousel-nav)
   #dots = null;   // dots container (.dvfy-carousel-dots)
@@ -319,6 +332,8 @@ class DvfyCarousel extends HTMLElement {
     this.removeEventListener('pointerdown', this.#onUserInteract);
     this.#stopAutoplay();
 
+    if (this.#progressEl?.isConnected) this.#progressEl.remove();
+    this.#progressEl = null;
     if (this.#dots?.isConnected) this.#dots.remove();
     if (this.#wrap?.isConnected) {
       const parent = this.#wrap.parentNode;
@@ -374,26 +389,75 @@ class DvfyCarousel extends HTMLElement {
   // ── Autoplay ─────────────────────────────────────────────────────
 
   #startAutoplay() {
-    if (!this.hasAttribute('autoplay')) return;
+    const raw = parseFloat(this.getAttribute('autoplay'));
+    if (!raw || raw <= 0) return;
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-    const raw = this.getAttribute('autoplay');
-    const delay = raw && /^\d+$/.test(raw) ? Number(raw) : 5000;
+    this.#autoplayMs = raw * 1000;
+    this.#ensureProgressBar();
+    this.#resetProgress();
 
     this.#autoplayTimer = setInterval(() => {
       if (this.#userPaused) return;
       this.#advance();
-    }, delay);
+      this.#resetProgress();
+    }, this.#autoplayMs);
   }
 
   #stopAutoplay() {
     clearInterval(this.#autoplayTimer);
     this.#autoplayTimer = null;
+    if (this.#progressRaf) cancelAnimationFrame(this.#progressRaf);
+    this.#progressRaf = null;
+    if (this.#progressEl?.isConnected) this.#progressEl.remove();
+    this.#progressEl = null;
   }
 
-  #pauseAutoplay = () => { this.#userPaused = true; };
-  #resumeAutoplay = () => { this.#userPaused = false; };
-  #onUserInteract = () => { this.#userPaused = true; };
+  #ensureProgressBar() {
+    if (this.#progressEl) return;
+    this.#progressEl = document.createElement('div');
+    this.#progressEl.className = 'dvfy-carousel-progress';
+    // Insert after the carousel (inside nav or wrap)
+    const container = this.#nav || this.parentElement;
+    if (container) container.appendChild(this.#progressEl);
+  }
+
+  #resetProgress() {
+    this.#progressStart = Date.now();
+    if (this.#progressRaf) cancelAnimationFrame(this.#progressRaf);
+    this.#tickProgress();
+  }
+
+  #tickProgress = () => {
+    if (!this.#progressEl || !this.#autoplayMs) return;
+    if (this.#userPaused) {
+      this.#progressRaf = requestAnimationFrame(this.#tickProgress);
+      return;
+    }
+    const elapsed = Date.now() - this.#progressStart;
+    const pct = Math.min(elapsed / this.#autoplayMs, 1) * 100;
+    this.#progressEl.style.width = `${pct}%`;
+    if (pct < 100) this.#progressRaf = requestAnimationFrame(this.#tickProgress);
+  };
+
+  #pauseAutoplay = () => {
+    this.#userPaused = true;
+    // Freeze progress — store remaining time
+    this.#pausedAt = Date.now();
+  };
+
+  #resumeAutoplay = () => {
+    if (this.#userPaused && this.#pausedAt) {
+      // Shift start forward by paused duration so progress resumes
+      this.#progressStart += Date.now() - this.#pausedAt;
+    }
+    this.#userPaused = false;
+    this.#pausedAt = 0;
+    this.#tickProgress();
+  };
+
+  #pausedAt = 0;
+  #onUserInteract = () => { this.#pauseAutoplay(); };
 
   #advance() {
     const slides = Array.from(this.querySelectorAll(':scope > dvfy-slide'));

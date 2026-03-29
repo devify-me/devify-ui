@@ -72,24 +72,24 @@ describe('dvfy-carousel', () => {
   });
 
   describe('autoplay attribute', () => {
-    it('accepts autoplay attribute', async () => {
+    it('accepts autoplay with seconds value', async () => {
       const el = await fixture(html`
-        <dvfy-carousel autoplay>
+        <dvfy-carousel autoplay="5">
           <dvfy-slide>Slide 1</dvfy-slide>
           <dvfy-slide>Slide 2</dvfy-slide>
         </dvfy-carousel>
       `);
-      expect(el.hasAttribute('autoplay')).to.be.true;
+      expect(el.getAttribute('autoplay')).to.equal('5');
     });
 
-    it('accepts autoplay with custom interval', async () => {
+    it('accepts custom interval in seconds', async () => {
       const el = await fixture(html`
-        <dvfy-carousel autoplay="3000">
+        <dvfy-carousel autoplay="10">
           <dvfy-slide>Slide 1</dvfy-slide>
           <dvfy-slide>Slide 2</dvfy-slide>
         </dvfy-carousel>
       `);
-      expect(el.getAttribute('autoplay')).to.equal('3000');
+      expect(el.getAttribute('autoplay')).to.equal('10');
     });
   });
 
