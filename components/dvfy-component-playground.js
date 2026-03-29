@@ -420,6 +420,36 @@ const PLACEHOLDER_HINTS = {
 /* ── Utilities ── */
 
 /**
+ * Lightweight HTML prettifier — adds newlines and indentation.
+ * No external dependencies. Handles nested elements, self-closing tags,
+ * and text nodes. Input is trusted (DEFAULT_CONTENT or local dev input).
+ */
+function prettifyHTML(html) {
+  if (!html || !html.includes('<')) return html;
+
+  const tokens = html.replace(/>\s*</g, '>\n<').split('\n');
+  let indent = 0;
+  const lines = [];
+  const voidTags = /^<(?:br|hr|img|input|meta|link|area|base|col|embed|source|track|wbr)\b/i;
+
+  for (const token of tokens) {
+    const trimmed = token.trim();
+    if (!trimmed) continue;
+
+    const isCloseOnly = trimmed.startsWith('</');
+    const isVoid = voidTags.test(trimmed) || trimmed.endsWith('/>');
+    const isOpenOnly = trimmed.startsWith('<') && !isCloseOnly && !isVoid;
+    // Line has both open and close (e.g. <p>text</p>) — net zero indent
+    const hasBothOpenAndClose = isOpenOnly && trimmed.includes('</');
+
+    if (isCloseOnly) indent = Math.max(0, indent - 1);
+    lines.push('  '.repeat(indent) + trimmed);
+    if (isOpenOnly && !hasBothOpenAndClose) indent += 1;
+  }
+  return lines.join('\n');
+}
+
+/**
  * Parse enum values from a description string like "variant: default | subtle | outline"
  * or "Size: sm | md | lg (default: \"md\")"
  */
@@ -547,7 +577,8 @@ class DvfyComponentPlayground extends HTMLElement {
   #selectComponent(tag) {
     this.#currentTag = tag;
     this.#attrValues = {};
-    this.#contentValue = tag.name in DEFAULT_CONTENT ? DEFAULT_CONTENT[tag.name] : 'Sample content';
+    const rawContent = tag.name in DEFAULT_CONTENT ? DEFAULT_CONTENT[tag.name] : 'Sample content';
+    this.#contentValue = prettifyHTML(rawContent);
 
     // Init all attributes — booleans respect (default: true) from description
     const defaults = DEFAULT_ATTRS[tag.name] || {};
@@ -800,18 +831,32 @@ class DvfyComponentPlayground extends HTMLElement {
 
       const ta = document.createElement('dvfy-textarea');
       ta.setAttribute('label', 'Content (innerHTML)');
-      ta.setAttribute('placeholder', 'Inner text...');
-      ta.setAttribute('rows', '2');
+      ta.setAttribute('placeholder', 'Inner HTML...');
+      ta.setAttribute('rows', '6');
       // Set initial value on the actual textarea after it connects
       requestAnimationFrame(() => {
         const native = ta.querySelector('textarea');
-        if (native) native.value = this.#contentValue;
+        if (native) {
+          native.value = this.#contentValue;
+          native.style.fontFamily = 'var(--dvfy-font-mono)';
+          native.style.fontSize = 'var(--dvfy-text-xs)';
+          native.style.tabSize = '2';
+        }
       });
       ta.addEventListener('input', (e) => {
         const val = e.target?.value ?? ta.querySelector('textarea')?.value ?? '';
         this.#contentValue = val;
         this.#updatePreview();
         this.#updateCode();
+      });
+      // Re-format on blur
+      ta.addEventListener('focusout', () => {
+        const native = ta.querySelector('textarea');
+        if (native && native.value.includes('<')) {
+          const formatted = prettifyHTML(native.value);
+          native.value = formatted;
+          this.#contentValue = formatted;
+        }
       });
       wrap.appendChild(ta);
     }
