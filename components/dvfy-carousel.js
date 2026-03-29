@@ -39,7 +39,7 @@
  * @element dvfy-carousel
  *
  * @attr {boolean} peek - Show ~12% of adjacent slides to hint scrollability
- * @attr {number} autoplay - Seconds between slides (default: 5). Pauses on hover and focus. Disabled when prefers-reduced-motion is active.
+ * @attr {number} autoplay - Seconds between slides. 0 or empty = off. Pauses on hover and focus. Disabled when prefers-reduced-motion is active.
  * @attr {boolean} gap - Add gap between slides
  * @attr {string} dot-position - Dot placement: bottom | top | left | right (default: "bottom")
  * @attr {string} images - JSON array of URLs or src/alt objects, e.g. ["a.jpg"] or [{ src, alt }]
@@ -267,7 +267,7 @@ function needsFallback() {
  * @element dvfy-carousel
  *
  * @attr {boolean} peek - Show ~12% of adjacent slides to hint scrollability
- * @attr {number} autoplay - Seconds between slides (default: 5)
+ * @attr {number} autoplay - Seconds between slides, 0 = off
  * @attr {boolean} gap - Add gap between slides
  * @attr {string} dot-position - Dot placement: bottom | top | left | right (default: "bottom")
  * @attr {string} images - JSON array of URLs or objects with src/alt
@@ -310,7 +310,6 @@ class DvfyCarousel extends HTMLElement {
     this.addEventListener('keydown', this.#onKey);
 
     if (this.hasAttribute('images')) this.#buildFromImages();
-    this.#startAutoplay();
 
     this.addEventListener('mouseenter', this.#pauseAutoplay);
     this.addEventListener('mouseleave', this.#resumeAutoplay);
@@ -319,7 +318,12 @@ class DvfyCarousel extends HTMLElement {
     this.addEventListener('pointerdown', this.#onUserInteract);
 
     if (needsFallback()) {
-      queueMicrotask(() => this.#initFallback());
+      queueMicrotask(() => {
+        this.#initFallback();
+        this.#startAutoplay();
+      });
+    } else {
+      this.#startAutoplay();
     }
   }
 

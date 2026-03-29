@@ -508,7 +508,7 @@
         },
         {
           "name": "autoplay",
-          "description": "Seconds between slides (default: 5)",
+          "description": "Seconds between slides, 0 = off",
           "type": "number"
         },
         {
