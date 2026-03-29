@@ -613,6 +613,111 @@
       ]
     },
     {
+      "name": "dvfy-command-palette",
+      "path": "./components/dvfy-command-palette.js",
+      "description": "Command palette / spotlight search with keyboard navigation.",
+      "attributes": [
+        {
+          "name": "placeholder",
+          "description": "Search input placeholder (default: \"Search commands...\")",
+          "type": "string"
+        },
+        {
+          "name": "shortcut",
+          "description": "Key for keyboard shortcut (default: \"k\")",
+          "type": "string"
+        },
+        {
+          "name": "hotkey-mod",
+          "description": "Modifier: ctrl | meta | alt",
+          "type": "string"
+        },
+        {
+          "name": "open",
+          "description": "Show/hide the palette",
+          "type": "boolean"
+        }
+      ],
+      "events": [
+        {
+          "name": "dvfy-cmd-select",
+          "description": "Fires when an item is selected, detail: value, label"
+        },
+        {
+          "name": "dvfy-cmd-open",
+          "description": "Fires when palette opens"
+        },
+        {
+          "name": "dvfy-cmd-close",
+          "description": "Fires when palette closes"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "dvfy-cmd-group and dvfy-cmd-item children"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Dialog background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-selected-bg",
+          "description": "Active item highlight",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-cmd-group",
+      "path": "./components/dvfy-command-palette.js",
+      "description": "Command group with label.",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "Group heading text",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "dvfy-cmd-item children"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-cmd-item",
+      "path": "./components/dvfy-command-palette.js",
+      "description": "Single command item.",
+      "attributes": [
+        {
+          "name": "value",
+          "description": "Command identifier",
+          "type": "string"
+        },
+        {
+          "name": "icon",
+          "description": "Icon text or emoji",
+          "type": "string"
+        },
+        {
+          "name": "hint",
+          "description": "Right-aligned hint text (e.g., keyboard shortcut)",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Command label text"
+        }
+      ]
+    },
+    {
       "name": "dvfy-compare-slider",
       "path": "./components/dvfy-compare-slider.js",
       "description": "<dvfy-compare-slider> — Clip-path image comparison slider\n\nOverlay two images (before/after) and reveal via drag using clip-path.\nHardware-accelerated — no layout shifts since clip-path doesn't affect layout.\n\nInspired by Emil Kowalski: https://emilkowal.ski/ui/the-magic-of-clip-path\n\nUsage:\n  <dvfy-compare-slider label-before=\"Before\" label-after=\"After\">\n    <img slot=\"before\" src=\"before.jpg\" alt=\"Before\" />\n    <img slot=\"after\"  src=\"after.jpg\"  alt=\"After\"  />\n  </dvfy-compare-slider>\n\nAny block element can be used in the slots (not just images).",
