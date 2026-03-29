@@ -351,7 +351,7 @@ class DvfyThemeSwitcher extends HTMLElement {
     trigger.setAttribute('size', 'xs');
     trigger.setAttribute('aria-label', 'Select theme');
     // PALETTE_SVG is a trusted constant — safe to use innerHTML
-    trigger.innerHTML = PALETTE_SVG; // eslint-disable-line no-unsanitized/property
+    trigger.innerHTML = PALETTE_SVG;
     dd.appendChild(trigger);
 
     for (const theme of this.#themes) {

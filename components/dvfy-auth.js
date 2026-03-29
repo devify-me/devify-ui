@@ -326,7 +326,7 @@ class DvfyAuth extends HTMLElement {
     form.action = this.#attr('action');
     form.method = this.#attr('method') || 'post';
     this.#copyHxAttrs(form);
-    form.addEventListener('submit', (e) => this.#handleSubmit(e, form));
+    form.addEventListener('submit', e => this.#handleSubmit(e, form));
 
     if (isSignUp) {
       form.appendChild(this.#field('Name', 'text', 'name', 'Your name'));

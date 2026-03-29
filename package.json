@@ -40,12 +40,19 @@
   "main": "./devify.js",
   "style": "./devify.css",
   "devDependencies": {
+    "@open-wc/eslint-config": "^13.0.0",
+    "eslint": "^10.1.0",
+    "stylelint": "^17.6.0",
+    "stylelint-config-standard": "^40.0.0",
     "web-component-analyzer": "^2.0.0"
   },
   "scripts": {
     "analyze": "wca analyze components/ patterns/ --format json --outFile custom-elements.json",
     "serve": "python3 -m http.server 8090",
     "contrast": "node scripts/check-contrast.js",
-    "contrast:ci": "node scripts/check-contrast.js --ci"
+    "contrast:ci": "node scripts/check-contrast.js --ci",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:js": "eslint components/ patterns/ catalog/ tokens/ scripts/",
+    "lint:css": "stylelint 'tokens/**/*.css'"
   }
 }

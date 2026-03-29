@@ -161,7 +161,7 @@ class DvfyDropdown extends HTMLElement {
       this.removeAttribute('open');
     } else {
       // Close all other open dropdowns first
-      document.querySelectorAll('dvfy-dropdown[open]').forEach(d => {
+      document.querySelectorAll('dvfy-dropdown[open]').forEach((d) => {
         if (d !== this) d.removeAttribute('open');
       });
       this.setAttribute('open', '');
