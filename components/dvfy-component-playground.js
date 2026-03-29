@@ -360,7 +360,7 @@ const DEFAULT_CONTENT = {
   'dvfy-alert': 'This is an alert message.',
   'dvfy-loader': '',
   'dvfy-card': '<h3 style="margin-bottom:0.5rem">Card Title</h3><p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Card content goes here.</p>',
-  'dvfy-compare-slider': '<img slot="before" src="https://picsum.photos/seed/cityscape/800/500?grayscale" alt="Before"/><img slot="after" src="https://picsum.photos/seed/cityscape/800/500" alt="After"/>',
+  'dvfy-compare-slider': '<img slot="before" src="../catalog/assets/compare-before.png" alt="Before"/><img slot="after" src="../catalog/assets/compare-after.png" alt="After"/>',
   'dvfy-carousel': '<dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-primary-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-primary-bg)">Slide 1</div></dvfy-slide><dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-accent-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-accent-bg)">Slide 2</div></dvfy-slide><dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-success-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-success-text)">Slide 3</div></dvfy-slide><dvfy-slide><div style="display:flex;align-items:center;justify-content:center;height:12rem;background:var(--dvfy-warning-bg-subtle);border-radius:var(--dvfy-radius-lg);font-family:var(--dvfy-font-sans);font-size:var(--dvfy-text-lg);font-weight:var(--dvfy-weight-semibold);color:var(--dvfy-warning-text)">Slide 4</div></dvfy-slide>',
   'dvfy-progress': '',
   'dvfy-tabs': '<dvfy-tab label="Tab 1"><p style="padding:1rem">First tab content</p></dvfy-tab><dvfy-tab label="Tab 2"><p style="padding:1rem">Second tab content</p></dvfy-tab>',
@@ -756,8 +756,8 @@ class DvfyComponentPlayground extends HTMLElement {
       imgLabel.textContent = 'Images';
       wrap.appendChild(imgLabel);
 
-      const defaultBefore = 'https://picsum.photos/seed/cityscape/800/500?grayscale';
-      const defaultAfter = 'https://picsum.photos/seed/cityscape/800/500';
+      const defaultBefore = '../catalog/assets/compare-before.png';
+      const defaultAfter = '../catalog/assets/compare-after.png';
       let beforeUrl = defaultBefore;
       let afterUrl = defaultAfter;
 
