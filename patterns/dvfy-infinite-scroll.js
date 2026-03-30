@@ -94,6 +94,18 @@ dvfy-infinite-scroll .dvfy-infinite-scroll__htmx-target {
  * @cssprop {color} --dvfy-primary-bg - Loading spinner accent color
  * @cssprop {color} --dvfy-text-muted - "No more items" text color
  */
+
+/** Strip inline event handler attributes (onclick, onerror, etc.) from adopted DOM nodes. */
+function stripEventHandlers(node) {
+  if (node.nodeType === 1) {
+    for (const attr of [...node.attributes]) {
+      if (attr.name.startsWith('on')) node.removeAttribute(attr.name);
+    }
+    for (const child of node.children) stripEventHandlers(child);
+  }
+  return node;
+}
+
 class DvfyInfiniteScroll extends HTMLElement {
   static #styled = false;
   #content = null;
@@ -232,7 +244,9 @@ class DvfyInfiniteScroll extends HTMLElement {
 
       for (const node of nodes) {
         // adoptNode transfers ownership to current document safely
-        this.#content.appendChild(document.adoptNode(node));
+        const adopted = document.adoptNode(node);
+        stripEventHandlers(adopted);
+        this.#content.appendChild(adopted);
       }
 
       this.#loading = false;
