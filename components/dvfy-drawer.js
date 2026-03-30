@@ -200,9 +200,12 @@ class DvfyDrawer extends HTMLElement {
 
     this.#applyWidth();
     this.#build();
+    this.#onKeyDown = this.#onKeyDown.bind(this);
+    this.addEventListener('keydown', this.#onKeyDown);
   }
 
   disconnectedCallback() {
+    this.removeEventListener('keydown', this.#onKeyDown);
     // Clean up sibling reopen tab
     if (this.#reopen && this.#reopen.parentNode) {
       this.#reopen.remove();
@@ -326,6 +329,13 @@ class DvfyDrawer extends HTMLElement {
 
       // Insert as sibling, right before the drawer
       this.parentElement.insertBefore(this.#reopen, this);
+    }
+  }
+
+  #onKeyDown(e) {
+    if (e.key === 'Escape' && !this.hasAttribute('collapsed') && !this.hasAttribute('fixed')) {
+      e.stopPropagation();
+      this.#collapse();
     }
   }
 

@@ -149,14 +149,38 @@ class DvfyTag extends HTMLElement {
       DvfyTag.#styled = true;
     }
     this.#render();
+    this.#syncTabindex();
+    this.#onKeyDown = this.#onKeyDown.bind(this);
+    this.addEventListener('keydown', this.#onKeyDown);
   }
 
-  disconnectedCallback() {}
+  disconnectedCallback() {
+    this.removeEventListener('keydown', this.#onKeyDown);
+  }
 
   static get observedAttributes() { return ['removable']; }
 
   attributeChangedCallback() {
-    if (this.isConnected) this.#render();
+    if (this.isConnected) {
+      this.#render();
+      this.#syncTabindex();
+    }
+  }
+
+  #syncTabindex() {
+    if (this.hasAttribute('removable')) {
+      if (!this.hasAttribute('tabindex')) this.setAttribute('tabindex', '0');
+    } else {
+      this.removeAttribute('tabindex');
+    }
+  }
+
+  #onKeyDown(e) {
+    if (!this.hasAttribute('removable')) return;
+    if (e.key === 'Enter' || e.key === 'Backspace' || e.key === 'Delete') {
+      e.preventDefault();
+      this.dispatchEvent(new CustomEvent('remove', { bubbles: true }));
+    }
   }
 
   #render() {

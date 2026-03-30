@@ -94,6 +94,8 @@ class DvfyPagination extends HTMLElement {
     this.setAttribute('role', 'navigation');
     this.setAttribute('aria-label', 'Pagination');
     this.#render();
+    this.#onKeyDown = this.#onKeyDown.bind(this);
+    this.addEventListener('keydown', this.#onKeyDown);
   }
 
   static get observedAttributes() { return ['total', 'current', 'max-visible']; }
@@ -103,12 +105,35 @@ class DvfyPagination extends HTMLElement {
   }
 
   disconnectedCallback() {
+    this.removeEventListener('keydown', this.#onKeyDown);
     this.textContent = '';
   }
 
   get #total() { return Math.max(1, parseInt(this.getAttribute('total') || '1', 10)); }
   get #current() { return Math.max(1, Math.min(this.#total, parseInt(this.getAttribute('current') || '1', 10))); }
   get #maxVisible() { return parseInt(this.getAttribute('max-visible') || '5', 10); }
+
+  #onKeyDown(e) {
+    const btns = [...this.querySelectorAll('.dvfy-pagination__btn:not([disabled])')];
+    const idx = btns.indexOf(document.activeElement);
+    if (idx === -1) return;
+
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      const next = btns[idx + 1];
+      if (next) next.focus();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      const prev = btns[idx - 1];
+      if (prev) prev.focus();
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      btns[0]?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      btns[btns.length - 1]?.focus();
+    }
+  }
 
   #goTo(page) {
     if (page < 1 || page > this.#total || page === this.#current) return;
