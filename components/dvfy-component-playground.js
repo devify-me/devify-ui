@@ -379,6 +379,18 @@ const DEFAULT_CONTENT = {
   'dvfy-popover': '<dvfy-button variant="outline" size="sm">Click me</dvfy-button><div slot="content"><p style="margin:0 0 0.5rem;font-weight:var(--dvfy-weight-medium)">Popover Title</p><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Interactive content with buttons, forms, or links.</p></div>',
   'dvfy-description-list': '<dvfy-dl-item label="Name">Jane Smith</dvfy-dl-item><dvfy-dl-item label="Email">jane@example.com</dvfy-dl-item><dvfy-dl-item label="Role">Administrator</dvfy-dl-item><dvfy-dl-item label="Status">Active since March 2024</dvfy-dl-item>',
   'dvfy-command-palette': '<dvfy-cmd-group label="Navigation"><dvfy-cmd-item value="home" icon="H">Go to Home</dvfy-cmd-item><dvfy-cmd-item value="settings" icon="S">Settings</dvfy-cmd-item><dvfy-cmd-item value="profile" icon="P">Profile</dvfy-cmd-item></dvfy-cmd-group><dvfy-cmd-group label="Actions"><dvfy-cmd-item value="new-project">Create Project</dvfy-cmd-item><dvfy-cmd-item value="invite">Invite Team Member</dvfy-cmd-item></dvfy-cmd-group>',
+  'dvfy-card-glow': '<h3 style="margin:0 0 0.5rem">Glow Card</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Move your cursor over this card to see the radial glow effect.</p>',
+  'dvfy-compare-slider': '<img slot="before" src="https://picsum.photos/id/1015/600/400" alt="Before" /><img slot="after" src="https://picsum.photos/id/1016/600/400" alt="After" />',
+  'dvfy-date-picker': '',
+  'dvfy-file-upload': '',
+  'dvfy-gradient-card': '<h3 style="margin:0 0 0.5rem">Gradient Card</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Hover to see the cursor-tracking radial gradient.</p>',
+  'dvfy-marquee-scroll': '<span>Design Systems</span><span>Web Components</span><span>Zero Build</span><span>HTMX Patterns</span>',
+  'dvfy-nav-bar': '<dvfy-nav-menu><dvfy-nav href="#home">Home</dvfy-nav><dvfy-nav href="#docs">Docs</dvfy-nav><dvfy-nav href="#pricing">Pricing</dvfy-nav></dvfy-nav-menu>',
+  'dvfy-nav-menu': '<dvfy-nav href="#home">Home</dvfy-nav><dvfy-nav href="#docs">Docs</dvfy-nav><dvfy-nav href="#pricing">Pricing</dvfy-nav>',
+  'dvfy-scramble-hover': 'Hover to decode',
+  'dvfy-spotlight-card': '<h3 style="margin:0 0 0.5rem">Spotlight Card</h3><p style="margin:0;color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm)">Dual-layer mouse-tracking spotlight on border and surface.</p>',
+  'dvfy-text-vortex': 'Into the void',
+  'dvfy-transition-root': '<p style="color:var(--dvfy-text-secondary);font-size:var(--dvfy-text-sm);margin:0">Wraps HTMX content regions with View Transitions API. Add <code>dvfy-transition-name</code> to elements for named morphing between pages.</p>',
   'dvfy-usage-meter': '',
   'dvfy-invoice-list': '',
   'dvfy-subscription-card': '',
@@ -444,6 +456,31 @@ const DEFAULT_ATTRS = {
   },
   'dvfy-payment-setup': {
     gateway: 'stripe',
+  },
+  'dvfy-card-glow': {
+    padded: '',
+  },
+  'dvfy-compare-slider': {
+    'label-before': 'Before',
+    'label-after': 'After',
+  },
+  'dvfy-date-picker': {
+    label: 'Select date',
+  },
+  'dvfy-file-upload': {
+    accept: 'image/*,.pdf',
+    'max-size': '5',
+  },
+  'dvfy-gradient-card': {
+    padded: '',
+    elevated: '',
+  },
+  'dvfy-spotlight-card': {
+    padded: '',
+    elevated: '',
+  },
+  'dvfy-nav-bar': {
+    brand: 'Devify',
   },
 };
 

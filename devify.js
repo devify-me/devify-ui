@@ -37,13 +37,21 @@ import './components/dvfy-breadcrumb.js';
 import './components/dvfy-pagination.js';
 import './components/dvfy-progress.js';
 import './components/dvfy-nav.js';
+import './components/dvfy-nav-menu.js';
+import './components/dvfy-nav-bar.js';
 import './components/dvfy-sidebar.js';
 import './components/dvfy-tree-view.js';
 
 // Wave 3: Functional + Interactive
 import './components/dvfy-card.js';
+import './components/dvfy-card-glow.js';
 import './components/dvfy-gradient-card.js';
 import './components/dvfy-spotlight-card.js';
+import './components/dvfy-compare-slider.js';
+import './components/dvfy-date-picker.js';
+import './components/dvfy-file-upload.js';
+import './components/dvfy-marquee-scroll.js';
+import './components/dvfy-transition-root.js';
 import './components/dvfy-table.js';
 import './components/dvfy-toast.js';
 import './components/dvfy-empty.js';
