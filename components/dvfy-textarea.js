@@ -1,3 +1,5 @@
+import { labelPositionCSS } from '../utils/label-position.js';
+
 /**
  * <dvfy-textarea> — Multiline text input with label and auto-resize
  *
@@ -84,21 +86,7 @@ dvfy-textarea[size="lg"] .dvfy-textarea__field { padding: var(--dvfy-space-2-5) 
 dvfy-textarea[size="xl"] .dvfy-textarea__field { padding: var(--dvfy-space-3) var(--dvfy-space-4); font-size: var(--dvfy-text-lg); border-radius: var(--dvfy-radius-xl); }
 dvfy-textarea[size="xl"] .dvfy-textarea__label { font-size: var(--dvfy-text-base); }
 
-/* Label position: bottom */
-dvfy-textarea[label-position="bottom"] .dvfy-textarea__label { order: 1; }
-dvfy-textarea[label-position="bottom"] .dvfy-textarea__footer { order: 2; }
-
-/* Label position: left */
-dvfy-textarea[label-position="left"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
-dvfy-textarea[label-position="left"] .dvfy-textarea__label { flex-shrink: 0; width: var(--dvfy-label-width, auto); }
-dvfy-textarea[label-position="left"] .dvfy-textarea__field { flex: 1; min-width: 0; }
-dvfy-textarea[label-position="left"] .dvfy-textarea__footer { width: 100%; }
-
-/* Label position: right */
-dvfy-textarea[label-position="right"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
-dvfy-textarea[label-position="right"] .dvfy-textarea__label { order: 1; flex-shrink: 0; width: var(--dvfy-label-width, auto); }
-dvfy-textarea[label-position="right"] .dvfy-textarea__field { flex: 1; min-width: 0; }
-dvfy-textarea[label-position="right"] .dvfy-textarea__footer { width: 100%; order: 2; }
+${labelPositionCSS('dvfy-textarea', { layout: 'field', label: '.dvfy-textarea__label', content: ['.dvfy-textarea__field'], messages: ['.dvfy-textarea__footer'] })}
 `;
 
 /**

@@ -1,3 +1,5 @@
+import { labelPositionCSS } from '../utils/label-position.js';
+
 /**
  * <dvfy-switch> — Toggle switch
  *
@@ -121,15 +123,7 @@ dvfy-switch .dvfy-switch__thumb-icon {
   user-select: none;
 }
 
-/* Label position: left */
-dvfy-switch[label-position="left"] .dvfy-switch__text { order: -1; }
-
-/* Label position: top */
-dvfy-switch[label-position="top"] { flex-direction: column; align-items: center; }
-dvfy-switch[label-position="top"] .dvfy-switch__text { order: -1; }
-
-/* Label position: bottom */
-dvfy-switch[label-position="bottom"] { flex-direction: column; align-items: center; }
+${labelPositionCSS('dvfy-switch', { layout: 'inline', label: '.dvfy-switch__text' })}
 `;
 
 /**

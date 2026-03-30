@@ -1,3 +1,5 @@
+import { labelPositionCSS } from '../utils/label-position.js';
+
 /**
  * <dvfy-slider> — Knob-primitive slider with fill bar and range mode
  *
@@ -197,18 +199,7 @@ dvfy-slider[size="xl"] .dvfy-slider__value { font-size: var(--dvfy-text-base); }
 /* ── Variant: oval ──────────────────────────────── */
 dvfy-slider[variant="oval"] { --_track-radius: var(--dvfy-radius-round); }
 
-/* ── Label position: bottom ─────────────────────── */
-dvfy-slider[label-position="bottom"] .dvfy-slider__label { order: 1; }
-
-/* ── Label position: left ───────────────────────── */
-dvfy-slider[label-position="left"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
-dvfy-slider[label-position="left"] .dvfy-slider__label { flex-shrink: 0; width: var(--dvfy-label-width, auto); }
-dvfy-slider[label-position="left"] .dvfy-slider__row { flex: 1; min-width: 0; }
-
-/* ── Label position: right ──────────────────────── */
-dvfy-slider[label-position="right"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
-dvfy-slider[label-position="right"] .dvfy-slider__label { order: 1; flex-shrink: 0; width: var(--dvfy-label-width, auto); }
-dvfy-slider[label-position="right"] .dvfy-slider__row { flex: 1; min-width: 0; }
+${labelPositionCSS('dvfy-slider', { layout: 'field', label: '.dvfy-slider__label', content: ['.dvfy-slider__row'] })}
 
 /* ── Steps / tick marks ─────────────────────────── */
 dvfy-slider .dvfy-slider__steps {

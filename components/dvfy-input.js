@@ -1,3 +1,5 @@
+import { labelPositionCSS } from '../utils/label-position.js';
+
 /**
  * <dvfy-input> — Text input with label, error, and help text
  *
@@ -106,24 +108,7 @@ dvfy-input .dvfy-input__clear { display: none; }
 dvfy-input .dvfy-input__clear--visible { display: block; }
 dvfy-input[clearable] .dvfy-input__field { padding-right: 2.5rem; }
 
-/* Label position: bottom */
-dvfy-input[label-position="bottom"] .dvfy-input__label { order: 1; }
-dvfy-input[label-position="bottom"] .dvfy-input__help,
-dvfy-input[label-position="bottom"] .dvfy-input__error-msg { order: 2; }
-
-/* Label position: left */
-dvfy-input[label-position="left"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
-dvfy-input[label-position="left"] .dvfy-input__label { flex-shrink: 0; width: var(--dvfy-label-width, auto); }
-dvfy-input[label-position="left"] .dvfy-input__wrapper { flex: 1; min-width: 0; }
-dvfy-input[label-position="left"] .dvfy-input__help,
-dvfy-input[label-position="left"] .dvfy-input__error-msg { width: 100%; }
-
-/* Label position: right */
-dvfy-input[label-position="right"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
-dvfy-input[label-position="right"] .dvfy-input__label { order: 1; flex-shrink: 0; width: var(--dvfy-label-width, auto); }
-dvfy-input[label-position="right"] .dvfy-input__wrapper { flex: 1; min-width: 0; }
-dvfy-input[label-position="right"] .dvfy-input__help,
-dvfy-input[label-position="right"] .dvfy-input__error-msg { width: 100%; order: 2; }
+${labelPositionCSS('dvfy-input', { layout: 'field', label: '.dvfy-input__label', content: ['.dvfy-input__wrapper'], messages: ['.dvfy-input__help', '.dvfy-input__error-msg'] })}
 `;
 
 /**
