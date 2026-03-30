@@ -136,6 +136,9 @@ class DvfyToast extends HTMLElement {
   static #styled = false;
   #timer = null;
   #clickHandler = null;
+  #remaining = 0;
+  #startedAt = 0;
+  #progress = null;
 
   static get observedAttributes() { return ['status', 'duration', 'position']; }
 
@@ -202,15 +205,15 @@ class DvfyToast extends HTMLElement {
 
     // Progress countdown bar (only when auto-dismissing)
     if (duration > 0) {
-      const progress = document.createElement('div');
-      progress.className = 'dvfy-toast__progress';
-      progress.style.width = '100%';
-      progress.style.transition = `transform ${duration}ms linear`;
-      this.appendChild(progress);
+      this.#progress = document.createElement('div');
+      this.#progress.className = 'dvfy-toast__progress';
+      this.#progress.style.width = '100%';
+      this.#progress.style.transition = `transform ${duration}ms linear`;
+      this.appendChild(this.#progress);
       // Start the countdown animation after paint
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          progress.style.transform = 'scaleX(0)';
+          if (this.#progress) this.#progress.style.transform = 'scaleX(0)';
         });
       });
     }
@@ -218,6 +221,8 @@ class DvfyToast extends HTMLElement {
     this.setAttribute('role', 'alert');
     this.#clickHandler = () => this.dismiss();
     this.addEventListener('click', this.#clickHandler);
+    this.addEventListener('mouseenter', this.#onPause);
+    this.addEventListener('mouseleave', this.#onResume);
 
     // Animate in
     requestAnimationFrame(() => {
@@ -226,6 +231,8 @@ class DvfyToast extends HTMLElement {
 
     // Auto-dismiss
     if (duration > 0) {
+      this.#remaining = duration;
+      this.#startedAt = Date.now();
       this.#timer = setTimeout(() => this.dismiss(), duration);
     }
   }
@@ -236,7 +243,40 @@ class DvfyToast extends HTMLElement {
       this.removeEventListener('click', this.#clickHandler);
       this.#clickHandler = null;
     }
+    this.removeEventListener('mouseenter', this.#onPause);
+    this.removeEventListener('mouseleave', this.#onResume);
   }
+
+  #onPause = () => {
+    if (!this.#timer) return;
+    clearTimeout(this.#timer);
+    this.#timer = null;
+    this.#remaining -= Date.now() - this.#startedAt;
+    if (this.#remaining < 0) this.#remaining = 0;
+
+    // Freeze the progress bar at its current position
+    if (this.#progress) {
+      const computed = getComputedStyle(this.#progress).transform;
+      this.#progress.style.transition = 'none';
+      this.#progress.style.transform = computed;
+    }
+  };
+
+  #onResume = () => {
+    if (this.#remaining <= 0) return;
+
+    // Resume the progress bar animation for the remaining time
+    if (this.#progress) {
+      requestAnimationFrame(() => {
+        if (!this.#progress) return;
+        this.#progress.style.transition = `transform ${this.#remaining}ms linear`;
+        this.#progress.style.transform = 'scaleX(0)';
+      });
+    }
+
+    this.#startedAt = Date.now();
+    this.#timer = setTimeout(() => this.dismiss(), this.#remaining);
+  };
 
   dismiss() {
     if (this.#timer) clearTimeout(this.#timer);
