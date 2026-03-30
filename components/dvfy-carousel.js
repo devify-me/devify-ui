@@ -1,3 +1,5 @@
+import { sanitizeSrc } from '../utils/url.js';
+
 /**
  * <dvfy-carousel> — Native CSS carousel with JS fallback.
  *
@@ -392,10 +394,10 @@ class DvfyCarousel extends HTMLElement {
       slide.setAttribute('data-generated', '');
       const img = document.createElement('img');
       if (typeof item === 'string') {
-        img.src = item;
+        img.src = sanitizeSrc(item);
         img.alt = '';
       } else {
-        img.src = item.src || '';
+        img.src = sanitizeSrc(item.src || '');
         img.alt = item.alt || '';
       }
       slide.appendChild(img);

@@ -1,3 +1,5 @@
+import { sanitizeHref } from '../utils/url.js';
+
 /**
  * <dvfy-invoice-list> — Billing history
  *
@@ -304,7 +306,7 @@ class DvfyInvoiceList extends HTMLElement {
       if (inv.hosted_url) {
         const link = document.createElement('a');
         link.className = 'dvfy-invoice-list__link';
-        link.href = inv.hosted_url;
+        link.href = sanitizeHref(inv.hosted_url);
         link.target = '_blank';
         link.rel = 'noopener noreferrer';
         link.textContent = 'View';

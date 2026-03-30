@@ -1,3 +1,5 @@
+import { sanitizeHref, sanitizePayPalUrl } from '../utils/url.js';
+
 /**
  * <dvfy-payment-setup> — Add payment method (gateway-specific)
  *
@@ -243,8 +245,8 @@ class DvfyPaymentSetup extends HTMLElement {
         this.setAttribute('gateway', 'paddle');
       } else if (secret.startsWith('http')) {
         this.setAttribute('gateway', 'paypal');
-        // Store approval URL for redirect
-        this.dataset.approvalUrl = secret;
+        // Store approval URL for redirect — validate PayPal domain
+        this.dataset.approvalUrl = sanitizePayPalUrl(secret);
       } else {
         this.#showError('Unable to detect payment gateway');
       }
@@ -499,7 +501,7 @@ class DvfyPaymentSetup extends HTMLElement {
   async #redirectToPayPal() {
     // If we already have the approval URL from detection
     const storedUrl = this.dataset.approvalUrl;
-    if (storedUrl) {
+    if (storedUrl && storedUrl !== '#') {
       window.location.href = storedUrl;
       return;
     }
@@ -523,9 +525,10 @@ class DvfyPaymentSetup extends HTMLElement {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const data = await res.json();
       const approvalUrl = data.client_secret || data.approval_url;
+      const safeUrl = sanitizePayPalUrl(approvalUrl);
 
-      if (approvalUrl && approvalUrl.startsWith('http')) {
-        window.location.href = approvalUrl;
+      if (safeUrl && safeUrl !== '#') {
+        window.location.href = safeUrl;
       } else {
         this.#showError('Invalid PayPal approval URL');
       }

@@ -1,3 +1,5 @@
+import { sanitizeHref } from '../utils/url.js';
+
 /**
  * <dvfy-auth> — Authentication forms (sign-in, sign-up)
  *
@@ -354,7 +356,7 @@ class DvfyAuth extends HTMLElement {
     if (!isSignUp && forgotUrl) {
       const a = document.createElement('a');
       a.className = 'dvfy-auth__link dvfy-auth__forgot';
-      a.href = forgotUrl;
+      a.href = sanitizeHref(forgotUrl);
       a.textContent = 'Forgot password?';
       form.appendChild(a);
     }
@@ -380,8 +382,8 @@ class DvfyAuth extends HTMLElement {
       const oauthGroup = document.createElement('div');
       oauthGroup.className = 'dvfy-auth__oauth';
 
-      if (googleUrl) oauthGroup.appendChild(this.#oauthBtn('Google', googleUrl, 'google'));
-      if (githubUrl) oauthGroup.appendChild(this.#oauthBtn('GitHub', githubUrl, 'github'));
+      if (googleUrl) oauthGroup.appendChild(this.#oauthBtn('Google', sanitizeHref(googleUrl), 'google'));
+      if (githubUrl) oauthGroup.appendChild(this.#oauthBtn('GitHub', sanitizeHref(githubUrl), 'github'));
 
       card.appendChild(oauthGroup);
     }
@@ -396,7 +398,7 @@ class DvfyAuth extends HTMLElement {
         footer.appendChild(document.createTextNode('Already have an account? '));
         const a = document.createElement('a');
         a.className = 'dvfy-auth__link';
-        a.href = url;
+        a.href = sanitizeHref(url);
         a.textContent = 'Sign in';
         footer.appendChild(a);
         card.appendChild(footer);
@@ -407,7 +409,7 @@ class DvfyAuth extends HTMLElement {
         footer.appendChild(document.createTextNode("Don\u2019t have an account? "));
         const a = document.createElement('a');
         a.className = 'dvfy-auth__link';
-        a.href = url;
+        a.href = sanitizeHref(url);
         a.textContent = 'Create account';
         footer.appendChild(a);
         card.appendChild(footer);
