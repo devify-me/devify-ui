@@ -137,6 +137,7 @@ class DvfyTreeView extends HTMLElement {
     }
 
     this.setAttribute('role', 'tree');
+    this.setAttribute('aria-label', this.getAttribute('aria-label') || 'Tree navigation');
     this.setAttribute('tabindex', '0');
 
     this.addEventListener('keydown', this.#onKeydown);
@@ -193,8 +194,12 @@ class DvfyTreeView extends HTMLElement {
   };
 
   #activateNode(node) {
-    this.querySelectorAll('dvfy-tree-node[selected]').forEach(n => n.removeAttribute('selected'));
+    this.querySelectorAll('dvfy-tree-node[selected]').forEach(n => {
+      n.removeAttribute('selected');
+      n.removeAttribute('aria-selected');
+    });
     node.setAttribute('selected', '');
+    node.setAttribute('aria-selected', 'true');
 
     const href = node.getAttribute('href');
     const label = node.getAttribute('label');
@@ -315,11 +320,15 @@ class DvfyTreeView extends HTMLElement {
    * @param {string} href
    */
   selectByHref(href) {
-    this.querySelectorAll('dvfy-tree-node[selected]').forEach(n => n.removeAttribute('selected'));
+    this.querySelectorAll('dvfy-tree-node[selected]').forEach(n => {
+      n.removeAttribute('selected');
+      n.removeAttribute('aria-selected');
+    });
     if (!href) return;
     const node = this.querySelector(`dvfy-tree-node[href="${CSS.escape(href)}"]`);
     if (!node) return;
     node.setAttribute('selected', '');
+    node.setAttribute('aria-selected', 'true');
     let parent = node.parentElement?.closest('dvfy-tree-node');
     while (parent) {
       if (!parent.hasAttribute('expanded')) {
@@ -364,9 +373,19 @@ class DvfyTreeNode extends HTMLElement {
   attributeChangedCallback(name) {
     if (!this.#built) return;
     if (name === 'expanded') {
+      const expanded = this.hasAttribute('expanded');
+      if (this.isBranch) this.setAttribute('aria-expanded', String(expanded));
       const container = this.querySelector(':scope > .dvfy-tree__children');
       if (container) {
-        container.toggleAttribute('data-collapsed', !this.hasAttribute('expanded'));
+        container.toggleAttribute('data-collapsed', !expanded);
+      }
+      return;
+    }
+    if (name === 'selected') {
+      if (this.hasAttribute('selected')) {
+        this.setAttribute('aria-selected', 'true');
+      } else {
+        this.removeAttribute('aria-selected');
       }
       return;
     }
@@ -389,13 +408,15 @@ class DvfyTreeNode extends HTMLElement {
     } else {
       this.setAttribute('expanded', '');
     }
+    const expanded = this.hasAttribute('expanded');
+    this.setAttribute('aria-expanded', String(expanded));
     const container = this.querySelector(':scope > .dvfy-tree__children');
     if (container) {
-      container.toggleAttribute('data-collapsed', !this.hasAttribute('expanded'));
+      container.toggleAttribute('data-collapsed', !expanded);
     }
     this.dispatchEvent(new CustomEvent('toggle', {
       bubbles: true,
-      detail: { expanded: this.hasAttribute('expanded') },
+      detail: { expanded },
     }));
   }
 
@@ -425,6 +446,10 @@ class DvfyTreeNode extends HTMLElement {
       : [];
 
     this.setAttribute('role', 'treeitem');
+    this.setAttribute('aria-level', String(depth + 1));
+    if (hasBranch) {
+      this.setAttribute('aria-expanded', this.hasAttribute('expanded') ? 'true' : 'false');
+    }
 
     // ── Row ──
     const row = document.createElement('div');
@@ -462,6 +487,7 @@ class DvfyTreeNode extends HTMLElement {
     if (hasBranch) {
       const container = document.createElement('div');
       container.className = 'dvfy-tree__children';
+      container.setAttribute('role', 'group');
       container.style.setProperty('--dvfy-tree-indent', depth);
       if (!this.hasAttribute('expanded')) {
         container.setAttribute('data-collapsed', '');
