@@ -1,37 +1,3 @@
-/**
- * <dvfy-hovercard> — Zero-JS hover tooltip via interestfor + popover="hint"
- *
- * Uses the native Interest Invoker API (Chrome 136+) with Popover API fallback
- * for broader browser support. No JavaScript event listeners needed in modern
- * Chrome — hover behavior is handled entirely by the browser.
- *
- * Usage (declarative — Chrome 136+ native):
- *   <button interestfor="my-card">Hover me</button>
- *   <dvfy-hovercard id="my-card">Tooltip content</dvfy-hovercard>
- *
- * Usage (rich content):
- *   <dvfy-button interestfor="user-tip">@alice</dvfy-button>
- *   <dvfy-hovercard id="user-tip">
- *     <strong>Alice Chen</strong>
- *     <p>Senior Engineer · Platform</p>
- *   </dvfy-hovercard>
- *
- * Attributes:
- *   position: top | bottom | left | right (default: "top", used by JS fallback)
- *   delay:    ms before showing (default: 400, used by JS fallback)
- *
- * @element dvfy-hovercard
- *
- * @attr {string} position - Placement hint: top | bottom | left | right (default: "top")
- * @attr {number} delay - Delay in ms before showing (default: 400)
- *
- * @slot - Hovercard content (can be rich HTML)
- *
- * @cssprop {color} --dvfy-surface-raised - Hovercard background
- * @cssprop {color} --dvfy-border-default - Hovercard border color
- * @cssprop {shadow} --dvfy-shadow-lg - Hovercard shadow
- */
-
 // Feature detection
 const SUPPORTS_INTEREST = (() => {
   try { return 'interestTargetElement' in HTMLButtonElement.prototype; }
@@ -137,6 +103,39 @@ dvfy-hovercard p + p {
 }
 `;
 
+/**
+ * <dvfy-hovercard> — Zero-JS hover tooltip via interestfor + popover="hint"
+ *
+ * Uses the native Interest Invoker API (Chrome 136+) with Popover API fallback
+ * for broader browser support. No JavaScript event listeners needed in modern
+ * Chrome — hover behavior is handled entirely by the browser.
+ *
+ * Usage (declarative — Chrome 136+ native):
+ *   <button interestfor="my-card">Hover me</button>
+ *   <dvfy-hovercard id="my-card">Tooltip content</dvfy-hovercard>
+ *
+ * Usage (rich content):
+ *   <dvfy-button interestfor="user-tip">@alice</dvfy-button>
+ *   <dvfy-hovercard id="user-tip">
+ *     <strong>Alice Chen</strong>
+ *     <p>Senior Engineer · Platform</p>
+ *   </dvfy-hovercard>
+ *
+ * Attributes:
+ *   position: top | bottom | left | right (default: "top", used by JS fallback)
+ *   delay:    ms before showing (default: 400, used by JS fallback)
+ *
+ * @element dvfy-hovercard
+ *
+ * @attr {string} position - Placement hint: top | bottom | left | right (default: "top")
+ * @attr {number} delay - Delay in ms before showing (default: 400)
+ *
+ * @slot - Hovercard content (can be rich HTML)
+ *
+ * @cssprop {color} --dvfy-surface-raised - Hovercard background
+ * @cssprop {color} --dvfy-border-default - Hovercard border color
+ * @cssprop {shadow} --dvfy-shadow-lg - Hovercard shadow
+ */
 class DvfyHovercard extends HTMLElement {
   static #styled = false;
   #timer = null;
