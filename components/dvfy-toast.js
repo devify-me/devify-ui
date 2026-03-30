@@ -87,14 +87,24 @@ dvfy-toast .dvfy-toast__icon { flex-shrink: 0; font-size: var(--dvfy-text-lg); f
 dvfy-toast .dvfy-toast__msg { flex: 1; }
 
 /* Progress countdown bar */
+@keyframes dvfy-toast-countdown {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
 dvfy-toast .dvfy-toast__progress {
   position: absolute;
   bottom: 0;
   left: 0;
+  width: 100%;
   height: 3px;
   border-radius: 0 0 var(--dvfy-radius-lg) var(--dvfy-radius-lg);
   transform-origin: left;
-  will-change: transform;
+  animation: dvfy-toast-countdown var(--_duration) linear forwards;
+}
+
+dvfy-toast:hover .dvfy-toast__progress {
+  animation-play-state: paused;
 }
 
 dvfy-toast:not([status]) .dvfy-toast__progress, dvfy-toast[status="info"] .dvfy-toast__progress { background: var(--dvfy-info-bg); }
@@ -205,17 +215,10 @@ class DvfyToast extends HTMLElement {
 
     // Progress countdown bar (only when auto-dismissing)
     if (duration > 0) {
+      this.style.setProperty('--_duration', `${duration}ms`);
       this.#progress = document.createElement('div');
       this.#progress.className = 'dvfy-toast__progress';
-      this.#progress.style.width = '100%';
-      this.#progress.style.transition = `transform ${duration}ms linear`;
       this.appendChild(this.#progress);
-      // Start the countdown animation after paint
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (this.#progress) this.#progress.style.transform = 'scaleX(0)';
-        });
-      });
     }
 
     this.setAttribute('role', 'alert');
@@ -253,26 +256,10 @@ class DvfyToast extends HTMLElement {
     this.#timer = null;
     this.#remaining -= Date.now() - this.#startedAt;
     if (this.#remaining < 0) this.#remaining = 0;
-
-    // Freeze the progress bar at its current position
-    if (this.#progress) {
-      const computed = getComputedStyle(this.#progress).transform;
-      this.#progress.style.transition = 'none';
-      this.#progress.style.transform = computed;
-    }
   };
 
   #onResume = () => {
     if (this.#remaining <= 0) return;
-
-    if (this.#progress) {
-      // Force synchronous reflow to commit the frozen state,
-      // then set new transition + target in the same frame.
-      void this.#progress.offsetWidth;
-      this.#progress.style.transition = `transform ${this.#remaining}ms linear`;
-      this.#progress.style.transform = 'scaleX(0)';
-    }
-
     this.#startedAt = Date.now();
     this.#timer = setTimeout(() => this.dismiss(), this.#remaining);
   };
