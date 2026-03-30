@@ -60,6 +60,7 @@ dvfy-nav[disabled] a.dvfy-nav__link {
  * @attr {boolean} disabled - Disable the link
  * @attr {string} label - Visible text label (alternative to slot content)
  * @attr {string} label-position - Label position: top | right | bottom | left
+ * @attr {string} aria-label - Accessible label for the navigation landmark
  *
  * @slot - Default slot for link text
  *
@@ -75,7 +76,7 @@ class DvfyNav extends HTMLElement {
   #autoActive = false; // tracks whether active was set by auto-detection
 
   static get observedAttributes() {
-    return ['href', 'icon', 'active', 'disabled', 'label', 'label-position'];
+    return ['href', 'icon', 'active', 'disabled', 'label', 'label-position', 'aria-label'];
   }
 
   connectedCallback() {
@@ -85,6 +86,10 @@ class DvfyNav extends HTMLElement {
       s.textContent = STYLES;
       document.head.appendChild(s);
       DvfyNav.#styled = true;
+    }
+    this.setAttribute('role', 'navigation');
+    if (this.hasAttribute('aria-label')) {
+      // aria-label is already set by the user, keep it
     }
     this.#build();
     this.#detectActive();
