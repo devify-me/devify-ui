@@ -123,6 +123,9 @@ class DvfyMarqueeScroll extends HTMLElement {
   /** @type {MediaQueryList} */
   #motionQuery = null;
 
+  /** @type {IntersectionObserver|null} */
+  #observer = null;
+
   connectedCallback() {
     if (!DvfyMarqueeScroll.#styled) {
       const s = document.createElement('style');
@@ -136,12 +139,19 @@ class DvfyMarqueeScroll extends HTMLElement {
     this.#lastScrollY = window.scrollY;
     this.#lastScrollTime = performance.now();
     window.addEventListener('scroll', this.#onScroll, { passive: true });
-    this.#startLoop();
+
+    // Use IntersectionObserver to only run rAF when visible
+    this.#observer = new IntersectionObserver(this.#onIntersect);
+    this.#observer.observe(this);
   }
 
   disconnectedCallback() {
     this.#stopLoop();
     window.removeEventListener('scroll', this.#onScroll);
+    if (this.#observer) {
+      this.#observer.disconnect();
+      this.#observer = null;
+    }
     if (this.#motionQuery) {
       this.#motionQuery.removeEventListener('change', this.#onMotionChange);
     }
@@ -215,6 +225,15 @@ class DvfyMarqueeScroll extends HTMLElement {
 
   #onMotionChange = (e) => {
     this.#reducedMotion = e.matches;
+  };
+
+  #onIntersect = (entries) => {
+    const isVisible = entries[0].isIntersecting;
+    if (isVisible) {
+      this.#startLoop();
+    } else {
+      this.#stopLoop();
+    }
   };
 
   #onScroll = () => {
