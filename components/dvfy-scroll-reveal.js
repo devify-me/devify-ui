@@ -1,27 +1,3 @@
-/**
- * <dvfy-scroll-reveal> — CSS scroll-driven element reveal animation
- *
- * Wraps any content and animates it into view as it enters the viewport using
- * the View Timeline API. Zero JavaScript animation logic — pure CSS
- * `animation-timeline: view()` with configurable direction.
- *
- * Supported in Chromium 115+ and Safari 18+.
- * Graceful fallback: content is fully visible in unsupported browsers.
- *
- * @element dvfy-scroll-reveal
- *
- * @attr {string} animation - Reveal direction: fade-up | fade-down | fade-left | fade-right | clip (default: "fade-up")
- *
- * @cssprop {time} --dvfy-scroll-reveal-duration - Animation duration (default: 0.6s)
- * @cssprop {string} --dvfy-scroll-reveal-easing - Animation easing (default: ease-out)
- * @cssprop {time} --dvfy-scroll-reveal-delay - Animation delay (default: 0s)
- *
- * @example
- * <dvfy-scroll-reveal animation="fade-up">
- *   <dvfy-card padded>Content revealed on scroll</dvfy-card>
- * </dvfy-scroll-reveal>
- */
-
 const STYLES = `
 /* ── scroll-reveal wrapper ── */
 dvfy-scroll-reveal {
@@ -98,6 +74,29 @@ dvfy-scroll-reveal {
 }
 `;
 
+/**
+ * <dvfy-scroll-reveal> — CSS scroll-driven element reveal animation
+ *
+ * Wraps any content and animates it into view as it enters the viewport using
+ * the View Timeline API. Zero JavaScript animation logic — pure CSS
+ * `animation-timeline: view()` with configurable direction.
+ *
+ * Supported in Chromium 115+ and Safari 18+.
+ * Graceful fallback: content is fully visible in unsupported browsers.
+ *
+ * @element dvfy-scroll-reveal
+ *
+ * @attr {string} animation - Reveal direction: fade-up | fade-down | fade-left | fade-right | clip (default: "fade-up")
+ *
+ * @cssprop {time} --dvfy-scroll-reveal-duration - Animation duration (default: 0.6s)
+ * @cssprop {string} --dvfy-scroll-reveal-easing - Animation easing (default: ease-out)
+ * @cssprop {time} --dvfy-scroll-reveal-delay - Animation delay (default: 0s)
+ *
+ * @example
+ * <dvfy-scroll-reveal animation="fade-up">
+ *   <dvfy-card padded>Content revealed on scroll</dvfy-card>
+ * </dvfy-scroll-reveal>
+ */
 class DvfyScrollReveal extends HTMLElement {
   static #styled = false;
 

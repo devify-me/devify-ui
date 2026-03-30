@@ -788,12 +788,40 @@
     {
       "name": "dvfy-component-playground",
       "path": "./components/dvfy-component-playground.js",
+      "description": "<dvfy-component-playground> — Interactive component playground\n\nLoads the WCA custom-elements.json manifest, renders a component picker,\nauto-generates controls from attribute metadata, and provides live Preview,\nCode, and API tabs.",
       "attributes": [
         {
-          "name": "component"
+          "name": "component",
+          "description": "Tag name to showcase (shows picker if omitted)",
+          "type": "string"
         },
         {
-          "name": "src"
+          "name": "src",
+          "description": "Path to custom-elements.json (default: \"../custom-elements.json\")",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Not used"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Card/panel background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-muted",
+          "description": "Panel borders",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-bg",
+          "description": "Active tab accent",
+          "type": "color"
         }
       ]
     },
@@ -1322,7 +1350,43 @@
     },
     {
       "name": "dvfy-hovercard",
-      "path": "./components/dvfy-hovercard.js"
+      "path": "./components/dvfy-hovercard.js",
+      "description": "<dvfy-hovercard> — Zero-JS hover tooltip via interestfor + popover=\"hint\"\n\nUses the native Interest Invoker API (Chrome 136+) with Popover API fallback\nfor broader browser support. No JavaScript event listeners needed in modern\nChrome — hover behavior is handled entirely by the browser.\n\nUsage (declarative — Chrome 136+ native):\n  <button interestfor=\"my-card\">Hover me</button>\n  <dvfy-hovercard id=\"my-card\">Tooltip content</dvfy-hovercard>\n\nUsage (rich content):\n  <dvfy-button interestfor=\"user-tip\">@alice</dvfy-button>\n  <dvfy-hovercard id=\"user-tip\">\n    <strong>Alice Chen</strong>\n    <p>Senior Engineer · Platform</p>\n  </dvfy-hovercard>\n\nAttributes:\n  position: top | bottom | left | right (default: \"top\", used by JS fallback)\n  delay:    ms before showing (default: 400, used by JS fallback)",
+      "attributes": [
+        {
+          "name": "position",
+          "description": "Placement hint: top | bottom | left | right (default: \"top\")",
+          "type": "string"
+        },
+        {
+          "name": "delay",
+          "description": "Delay in ms before showing (default: 400)",
+          "type": "number"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Hovercard content (can be rich HTML)"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-raised",
+          "description": "Hovercard background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-border-default",
+          "description": "Hovercard border color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-shadow-lg",
+          "description": "Hovercard shadow",
+          "type": "shadow"
+        }
+      ]
     },
     {
       "name": "dvfy-input",
@@ -2359,7 +2423,32 @@
     },
     {
       "name": "dvfy-scroll-reveal",
-      "path": "./components/dvfy-scroll-reveal.js"
+      "path": "./components/dvfy-scroll-reveal.js",
+      "description": "<dvfy-scroll-reveal> — CSS scroll-driven element reveal animation\n\nWraps any content and animates it into view as it enters the viewport using\nthe View Timeline API. Zero JavaScript animation logic — pure CSS\n`animation-timeline: view()` with configurable direction.\n\nSupported in Chromium 115+ and Safari 18+.\nGraceful fallback: content is fully visible in unsupported browsers.",
+      "attributes": [
+        {
+          "name": "animation",
+          "description": "Reveal direction: fade-up | fade-down | fade-left | fade-right | clip (default: \"fade-up\")",
+          "type": "string"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-scroll-reveal-duration",
+          "description": "Animation duration (default: 0.6s)",
+          "type": "time"
+        },
+        {
+          "name": "--dvfy-scroll-reveal-easing",
+          "description": "Animation easing (default: ease-out)",
+          "type": "string"
+        },
+        {
+          "name": "--dvfy-scroll-reveal-delay",
+          "description": "Animation delay (default: 0s)",
+          "type": "time"
+        }
+      ]
     },
     {
       "name": "dvfy-section",
