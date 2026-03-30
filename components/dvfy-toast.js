@@ -45,6 +45,7 @@ dvfy-toast {
   line-height: var(--dvfy-leading-normal);
   border: var(--dvfy-border-1) solid transparent;
   box-shadow: var(--dvfy-shadow-lg);
+  background: var(--dvfy-elevation-lg-bg);
   pointer-events: auto;
   cursor: pointer;
   opacity: 0;

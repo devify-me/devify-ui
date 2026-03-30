@@ -24,7 +24,7 @@ dvfy-hovercard {
   line-height: var(--dvfy-leading-relaxed);
   color: var(--dvfy-text-primary);
   /* Surface */
-  background: var(--dvfy-surface-raised);
+  background: var(--dvfy-elevation-lg-bg);
   border: var(--dvfy-border-1) solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-lg);
   box-shadow: var(--dvfy-shadow-lg);

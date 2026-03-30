@@ -46,7 +46,7 @@ const STYLES = `
 .dvfy-auth__card {
   width: 100%;
   max-width: 24rem;
-  background: var(--dvfy-surface-raised);
+  background: var(--dvfy-elevation-lg-bg);
   border: 1px solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-xl);
   padding: var(--dvfy-space-8) var(--dvfy-space-6);

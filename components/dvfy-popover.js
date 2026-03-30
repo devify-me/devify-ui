@@ -39,7 +39,7 @@ dvfy-popover .dvfy-popover__panel {
   font-family: var(--dvfy-font-sans);
   font-size: var(--dvfy-text-sm);
   color: var(--dvfy-text-primary);
-  background: var(--dvfy-surface-raised);
+  background: var(--dvfy-elevation-lg-bg);
   border: var(--dvfy-border-1) solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-lg);
   box-shadow: var(--dvfy-shadow-lg);

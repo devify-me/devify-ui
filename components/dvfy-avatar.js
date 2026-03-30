@@ -52,6 +52,7 @@ dvfy-avatar[interactive] .dvfy-avatar__visual {
 dvfy-avatar[interactive]:hover .dvfy-avatar__visual {
   transform: scale(1.08);
   box-shadow: var(--dvfy-shadow-md);
+  background: var(--dvfy-elevation-md-bg);
 }
 
 dvfy-avatar .dvfy-avatar__label {

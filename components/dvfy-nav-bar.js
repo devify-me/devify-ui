@@ -49,6 +49,7 @@ dvfy-nav-bar[sticky] .dvfy-nav-bar__bar {
 .dvfy-nav-bar__bar--scrolled {
   min-height: 2.75rem;
   box-shadow: var(--dvfy-shadow-md);
+  background: var(--dvfy-elevation-md-bg);
 }
 
 /* ── Brand ── */
@@ -126,6 +127,7 @@ dvfy-nav-bar[sticky] .dvfy-nav-bar__bar {
   width: 100% !important;
   border-left: var(--dvfy-border-1) solid var(--dvfy-nav-border, var(--dvfy-border-default));
   box-shadow: var(--dvfy-shadow-xl);
+  background: var(--dvfy-elevation-xl-bg);
 }
 
 /* ── Drawer header ── */

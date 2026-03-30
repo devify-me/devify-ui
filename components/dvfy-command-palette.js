@@ -53,7 +53,7 @@ dvfy-command-palette .dvfy-cmd__dialog {
   position: relative;
   width: min(90vw, 32rem);
   max-height: 24rem;
-  background: var(--dvfy-surface-raised);
+  background: var(--dvfy-elevation-2xl-bg);
   border: var(--dvfy-border-1) solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-xl);
   box-shadow: var(--dvfy-shadow-2xl);

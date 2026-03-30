@@ -47,7 +47,7 @@ dvfy-switch .dvfy-switch__thumb {
   left: 0.125rem;
   width: 1rem;
   height: 1rem;
-  background: var(--dvfy-surface-page);
+  background: var(--dvfy-elevation-xs-bg);
   border-radius: var(--dvfy-radius-sm);
   box-shadow: var(--dvfy-shadow-xs);
   transition: transform var(--dvfy-duration-fast) var(--dvfy-ease-out);
