@@ -35,6 +35,8 @@ dvfy-toast {
   gap: var(--dvfy-space-3);
   padding: var(--dvfy-space-3) var(--dvfy-space-4);
   border-radius: var(--dvfy-radius-lg);
+  position: relative;
+  overflow: hidden;
   font-family: var(--dvfy-font-sans);
   font-size: var(--dvfy-text-sm);
   line-height: var(--dvfy-leading-normal);
@@ -83,6 +85,22 @@ dvfy-toast[status="danger"] {
 
 dvfy-toast .dvfy-toast__icon { flex-shrink: 0; font-size: var(--dvfy-text-lg); font-weight: var(--dvfy-weight-bold); }
 dvfy-toast .dvfy-toast__msg { flex: 1; }
+
+/* Progress countdown bar */
+dvfy-toast .dvfy-toast__progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  border-radius: 0 0 var(--dvfy-radius-lg) var(--dvfy-radius-lg);
+  transform-origin: left;
+  will-change: transform;
+}
+
+dvfy-toast:not([status]) .dvfy-toast__progress, dvfy-toast[status="info"] .dvfy-toast__progress { background: var(--dvfy-info-bg); }
+dvfy-toast[status="success"] .dvfy-toast__progress { background: var(--dvfy-success-bg); }
+dvfy-toast[status="warning"] .dvfy-toast__progress { background: var(--dvfy-warning-bg); }
+dvfy-toast[status="danger"] .dvfy-toast__progress { background: var(--dvfy-danger-bg); }
 `;
 
 const STATUS_ICONS = { info: '\u2139\uFE0F', success: '\u2705', warning: '\u26A0\uFE0F', danger: '\u274C' };
@@ -127,6 +145,7 @@ class DvfyToast extends HTMLElement {
       const msg = this.querySelector('.dvfy-toast__msg');
       if (msg) {
         const message = msg.textContent;
+        const wasVisible = this.classList.contains('dvfy-toast--visible');
         this.textContent = '';
         const status = this.getAttribute('status') || 'info';
         const icon = document.createElement('span');
@@ -138,6 +157,7 @@ class DvfyToast extends HTMLElement {
         msgEl.className = 'dvfy-toast__msg';
         msgEl.textContent = message;
         this.appendChild(msgEl);
+        if (wasVisible) this.classList.add('dvfy-toast--visible');
       }
     }
   }
@@ -179,6 +199,21 @@ class DvfyToast extends HTMLElement {
     msg.className = 'dvfy-toast__msg';
     msg.textContent = message;
     this.appendChild(msg);
+
+    // Progress countdown bar (only when auto-dismissing)
+    if (duration > 0) {
+      const progress = document.createElement('div');
+      progress.className = 'dvfy-toast__progress';
+      progress.style.width = '100%';
+      progress.style.transition = `transform ${duration}ms linear`;
+      this.appendChild(progress);
+      // Start the countdown animation after paint
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          progress.style.transform = 'scaleX(0)';
+        });
+      });
+    }
 
     this.setAttribute('role', 'alert');
     this.#clickHandler = () => this.dismiss();
