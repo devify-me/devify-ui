@@ -28,6 +28,7 @@ const STYLES = `
 .dvfy-toast-container[data-position="top-left"] { top: var(--dvfy-space-4); left: var(--dvfy-space-4); }
 .dvfy-toast-container[data-position="bottom-right"] { bottom: var(--dvfy-space-4); right: var(--dvfy-space-4); }
 .dvfy-toast-container[data-position="bottom-left"] { bottom: var(--dvfy-space-4); left: var(--dvfy-space-4); }
+.dvfy-toast-container--preview { position: absolute; }
 
 dvfy-toast {
   display: flex;
@@ -116,14 +117,18 @@ dvfy-toast[status="danger"] .dvfy-toast__progress { background: var(--dvfy-dange
 const STATUS_ICONS = { info: '\u2139\uFE0F', success: '\u2705', warning: '\u26A0\uFE0F', danger: '\u274C' };
 const CONTAINERS = new Map();
 
-function getContainer(position) {
-  if (CONTAINERS.has(position)) return CONTAINERS.get(position);
+function getContainer(position, context) {
+  const preview = context?.closest?.('[data-sc-preview]');
+  const root = preview || document.body;
+  const key = preview ? `${position}::preview::${root.id || 'anon'}` : position;
+  if (CONTAINERS.has(key)) return CONTAINERS.get(key);
   const el = document.createElement('div');
   el.className = 'dvfy-toast-container';
+  if (preview) el.classList.add('dvfy-toast-container--preview');
   el.setAttribute('data-position', position);
   el.setAttribute('aria-live', 'polite');
-  document.body.appendChild(el);
-  CONTAINERS.set(position, el);
+  root.appendChild(el);
+  CONTAINERS.set(key, el);
   return el;
 }
 
@@ -175,14 +180,14 @@ class DvfyToast extends HTMLElement {
     }
   }
 
-  static show({ message, status = 'info', duration = 4000, position = 'top-right' } = {}) {
+  static show({ message, status = 'info', duration = 4000, position = 'top-right', context } = {}) {
     const toast = document.createElement('dvfy-toast');
     toast.setAttribute('status', status);
     toast.setAttribute('duration', String(duration));
     toast.setAttribute('position', position);
     toast.textContent = message;
 
-    const container = getContainer(position);
+    const container = getContainer(position, context);
     container.appendChild(toast);
     return toast;
   }
