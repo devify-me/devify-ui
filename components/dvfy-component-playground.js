@@ -339,7 +339,6 @@ const SKIP_TAGS = new Set([
   'dvfy-tab',
   'dvfy-sidebar-section',
   'dvfy-avatar-group',
-  'dvfy-toast',
   'dvfy-component-playground',
 ]);
 
