@@ -265,15 +265,12 @@ class DvfyToast extends HTMLElement {
   #onResume = () => {
     if (this.#remaining <= 0) return;
 
-    // Resume the progress bar — double rAF to flush the frozen state first
     if (this.#progress) {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (!this.#progress) return;
-          this.#progress.style.transition = `transform ${this.#remaining}ms linear`;
-          this.#progress.style.transform = 'scaleX(0)';
-        });
-      });
+      // Force synchronous reflow to commit the frozen state,
+      // then set new transition + target in the same frame.
+      void this.#progress.offsetWidth;
+      this.#progress.style.transition = `transform ${this.#remaining}ms linear`;
+      this.#progress.style.transform = 'scaleX(0)';
     }
 
     this.#startedAt = Date.now();
