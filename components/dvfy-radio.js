@@ -1,3 +1,5 @@
+import { labelPositionCSS } from '../utils/label-position.js';
+
 /**
  * <dvfy-radio> — Radio button with label
  *
@@ -96,15 +98,7 @@ dvfy-radio[size="xl"] .dvfy-radio__input { width: 1.5rem; height: 1.5rem; }
 dvfy-radio[size="xl"] .dvfy-radio__input:checked::after { top: 5px; left: 5px; width: 10px; height: 10px; }
 dvfy-radio[size="xl"] .dvfy-radio__label { font-size: var(--dvfy-text-base); }
 
-/* Label position: left */
-dvfy-radio[label-position="left"] .dvfy-radio__label { order: -1; }
-
-/* Label position: top */
-dvfy-radio[label-position="top"] { flex-direction: column; align-items: center; }
-dvfy-radio[label-position="top"] .dvfy-radio__label { order: -1; }
-
-/* Label position: bottom */
-dvfy-radio[label-position="bottom"] { flex-direction: column; align-items: center; }
+${labelPositionCSS('dvfy-radio', { layout: 'inline', label: '.dvfy-radio__label' })}
 `;
 
 /**

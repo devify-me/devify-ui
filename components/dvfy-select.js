@@ -1,3 +1,5 @@
+import { labelPositionCSS } from '../utils/label-position.js';
+
 /**
  * <dvfy-select> — Enhanced select with search
  *
@@ -223,26 +225,7 @@ dvfy-select[size="xl"] .dvfy-select__trigger { padding: var(--dvfy-space-3) var(
 dvfy-select[size="xl"] .dvfy-select__label { font-size: var(--dvfy-text-base); }
 dvfy-select[size="xl"] .dvfy-select__native { padding: var(--dvfy-space-3) var(--dvfy-space-4); font-size: var(--dvfy-text-lg); border-radius: var(--dvfy-radius-xl); }
 
-/* Label position: bottom */
-dvfy-select[label-position="bottom"] .dvfy-select__label { order: 1; }
-dvfy-select[label-position="bottom"] .dvfy-select__error,
-dvfy-select[label-position="bottom"] .dvfy-select__help { order: 2; }
-
-/* Label position: left */
-dvfy-select[label-position="left"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
-dvfy-select[label-position="left"] .dvfy-select__label { flex-shrink: 0; width: var(--dvfy-label-width, auto); }
-dvfy-select[label-position="left"] .dvfy-select__custom,
-dvfy-select[label-position="left"] .dvfy-select__native { flex: 1; min-width: 0; }
-dvfy-select[label-position="left"] .dvfy-select__error,
-dvfy-select[label-position="left"] .dvfy-select__help { width: 100%; }
-
-/* Label position: right */
-dvfy-select[label-position="right"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
-dvfy-select[label-position="right"] .dvfy-select__label { order: 1; flex-shrink: 0; width: var(--dvfy-label-width, auto); }
-dvfy-select[label-position="right"] .dvfy-select__custom,
-dvfy-select[label-position="right"] .dvfy-select__native { flex: 1; min-width: 0; }
-dvfy-select[label-position="right"] .dvfy-select__error,
-dvfy-select[label-position="right"] .dvfy-select__help { width: 100%; order: 2; }
+${labelPositionCSS('dvfy-select', { layout: 'field', label: '.dvfy-select__label', content: ['.dvfy-select__custom', '.dvfy-select__native'], messages: ['.dvfy-select__error', '.dvfy-select__help'] })}
 `;
 
 /**

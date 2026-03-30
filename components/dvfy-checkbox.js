@@ -1,3 +1,5 @@
+import { labelPositionCSS } from '../utils/label-position.js';
+
 const STYLES = `
 dvfy-checkbox {
   display: inline-flex;
@@ -100,15 +102,7 @@ dvfy-checkbox[size="xl"] .dvfy-checkbox__input:checked::after { left: 5px; top: 
 dvfy-checkbox[size="xl"] .dvfy-checkbox__input:indeterminate::after { left: 3px; top: 8px; width: 12px; height: 3px; }
 dvfy-checkbox[size="xl"] .dvfy-checkbox__label { font-size: var(--dvfy-text-base); }
 
-/* Label position: left */
-dvfy-checkbox[label-position="left"] .dvfy-checkbox__label { order: -1; }
-
-/* Label position: top */
-dvfy-checkbox[label-position="top"] { flex-direction: column; align-items: center; }
-dvfy-checkbox[label-position="top"] .dvfy-checkbox__label { order: -1; }
-
-/* Label position: bottom */
-dvfy-checkbox[label-position="bottom"] { flex-direction: column; align-items: center; }
+${labelPositionCSS('dvfy-checkbox', { layout: 'inline', label: '.dvfy-checkbox__label' })}
 `;
 
 /**

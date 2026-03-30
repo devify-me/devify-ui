@@ -1,3 +1,5 @@
+import { labelPositionCSS } from '../utils/label-position.js';
+
 const STYLES = `
 dvfy-date-picker {
   display: flex;
@@ -337,20 +339,7 @@ dvfy-date-picker .dvfy-date-picker__year-item:focus-visible {
 dvfy-date-picker .dvfy-date-picker__help { font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted); }
 dvfy-date-picker .dvfy-date-picker__error-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-input-error); }
 
-/* ── Label positions ── */
-dvfy-date-picker[label-position="bottom"] .dvfy-date-picker__label { order: 1; }
-dvfy-date-picker[label-position="bottom"] .dvfy-date-picker__help,
-dvfy-date-picker[label-position="bottom"] .dvfy-date-picker__error-msg { order: 2; }
-dvfy-date-picker[label-position="left"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
-dvfy-date-picker[label-position="left"] .dvfy-date-picker__label { flex-shrink: 0; width: var(--dvfy-label-width, auto); }
-dvfy-date-picker[label-position="left"] .dvfy-date-picker__wrapper { flex: 1; min-width: 0; }
-dvfy-date-picker[label-position="left"] .dvfy-date-picker__help,
-dvfy-date-picker[label-position="left"] .dvfy-date-picker__error-msg { width: 100%; }
-dvfy-date-picker[label-position="right"] { flex-direction: row; flex-wrap: wrap; align-items: center; }
-dvfy-date-picker[label-position="right"] .dvfy-date-picker__label { order: 1; flex-shrink: 0; width: var(--dvfy-label-width, auto); }
-dvfy-date-picker[label-position="right"] .dvfy-date-picker__wrapper { flex: 1; min-width: 0; }
-dvfy-date-picker[label-position="right"] .dvfy-date-picker__help,
-dvfy-date-picker[label-position="right"] .dvfy-date-picker__error-msg { width: 100%; order: 2; }
+${labelPositionCSS('dvfy-date-picker', { layout: 'field', label: '.dvfy-date-picker__label', content: ['.dvfy-date-picker__wrapper'], messages: ['.dvfy-date-picker__help', '.dvfy-date-picker__error-msg'] })}
 `;
 
 // Build calendar SVG icon via DOM API (avoids innerHTML with external content)
