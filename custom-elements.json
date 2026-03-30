@@ -3817,171 +3817,20 @@
     },
     {
       "name": "dvfy-htmx-table",
-      "path": "./patterns/dvfy-htmx-table.js",
-      "description": "Server-side sorted, filtered, paginated table via HTMX or fetch fallback.",
-      "attributes": [
-        {
-          "name": "src",
-          "description": "Base URL for table data",
-          "type": "string"
-        },
-        {
-          "name": "page-param",
-          "description": "Pagination query parameter (default: \"page\")",
-          "type": "string"
-        },
-        {
-          "name": "sort-param",
-          "description": "Sort column query parameter (default: \"sort\")",
-          "type": "string"
-        },
-        {
-          "name": "order-param",
-          "description": "Sort order query parameter (default: \"order\")",
-          "type": "string"
-        },
-        {
-          "name": "search-param",
-          "description": "Search query parameter (default: \"q\")",
-          "type": "string"
-        },
-        {
-          "name": "searchable",
-          "description": "Show search input above table",
-          "type": "boolean"
-        },
-        {
-          "name": "page-size",
-          "description": "Items per page (default: 20)",
-          "type": "number"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "A <table> with <thead> defining columns; use <th data-sort=\"col\"> for sortable columns"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-surface-sunken",
-          "description": "Table header background",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-hover-bg",
-          "description": "Row hover background",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-primary-bg",
-          "description": "Active sort indicator and pagination button color",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-input-border",
-          "description": "Search input border color",
-          "type": "color"
-        }
-      ]
+      "path": "./patterns/dvfy-htmx-table.js"
     },
     {
       "name": "dvfy-infinite-scroll",
       "path": "./patterns/dvfy-infinite-scroll.js",
-      "description": "Infinite scroll loader using IntersectionObserver. Loads pages via HTMX or fetch fallback.",
-      "attributes": [
-        {
-          "name": "src",
-          "description": "Base URL for loading more items",
-          "type": "string"
-        },
-        {
-          "name": "page-param",
-          "description": "Query parameter name for page number (default: \"page\")",
-          "type": "string"
-        },
-        {
-          "name": "start-page",
-          "description": "Starting page number (default: 1)",
-          "type": "number"
-        },
-        {
-          "name": "threshold",
-          "description": "Pixels from bottom to trigger load (default: 200)",
-          "type": "number"
-        },
-        {
-          "name": "no-more-text",
-          "description": "Text shown when all items loaded (default: \"No more items\")",
-          "type": "string"
-        }
-      ],
       "events": [
         {
-          "name": "page-loaded",
-          "description": "New page loaded, detail: { page }"
-        }
-      ],
-      "slots": [
-        {
-          "name": "",
-          "description": "Initial content (first page items)"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-primary-bg",
-          "description": "Loading spinner accent color",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-text-muted",
-          "description": "\"No more items\" text color",
-          "type": "color"
+          "name": "page-loaded"
         }
       ]
     },
     {
       "name": "dvfy-live-search",
       "path": "./patterns/dvfy-live-search.js",
-      "description": "Debounced search input that loads results via HTMX or fetch fallback.",
-      "attributes": [
-        {
-          "name": "src",
-          "description": "URL to search against",
-          "type": "string"
-        },
-        {
-          "name": "param",
-          "description": "Query parameter name (default: \"q\")",
-          "type": "string"
-        },
-        {
-          "name": "target",
-          "description": "CSS selector for results container (default: auto-created sibling)",
-          "type": "string"
-        },
-        {
-          "name": "debounce",
-          "description": "Debounce delay in ms (default: 300)",
-          "type": "number"
-        },
-        {
-          "name": "min-chars",
-          "description": "Minimum characters before searching (default: 2)",
-          "type": "number"
-        },
-        {
-          "name": "placeholder",
-          "description": "Input placeholder text (default: \"Search...\")",
-          "type": "string"
-        },
-        {
-          "name": "swap",
-          "description": "HTMX swap strategy (default: \"innerHTML\")",
-          "type": "string"
-        }
-      ],
       "properties": [
         {
           "name": "value",
@@ -3990,25 +3839,7 @@
       ],
       "events": [
         {
-          "name": "search",
-          "description": "Search request dispatched, detail: { query }"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-input-bg",
-          "description": "Search input background",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-input-border",
-          "description": "Search input border color",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-primary-bg",
-          "description": "Loading spinner accent color",
-          "type": "color"
+          "name": "search"
         }
       ]
     }

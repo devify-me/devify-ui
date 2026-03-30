@@ -245,6 +245,18 @@ dvfy-htmx-table .dvfy-htmx-table__page-ellipsis {
  * @cssprop {color} --dvfy-primary-bg - Active sort indicator and pagination button color
  * @cssprop {color} --dvfy-input-border - Search input border color
  */
+
+/** Strip inline event handler attributes (onclick, onerror, etc.) from adopted DOM nodes. */
+function stripEventHandlers(node) {
+  if (node.nodeType === 1) {
+    for (const attr of [...node.attributes]) {
+      if (attr.name.startsWith('on')) node.removeAttribute(attr.name);
+    }
+    for (const child of node.children) stripEventHandlers(child);
+  }
+  return node;
+}
+
 class DvfyHtmxTable extends HTMLElement {
   static #styled = false;
   #table = null;
@@ -483,7 +495,9 @@ class DvfyHtmxTable extends HTMLElement {
         if (newTbody) {
           const rows = Array.from(newTbody.childNodes);
           for (const row of rows) {
-            this.#tbody.appendChild(document.adoptNode(row));
+            const adopted = document.adoptNode(row);
+            stripEventHandlers(adopted);
+            this.#tbody.appendChild(adopted);
           }
         }
       }

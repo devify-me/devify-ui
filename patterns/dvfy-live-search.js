@@ -138,6 +138,18 @@ dvfy-live-search--loading .dvfy-live-search__spinner {
  * @cssprop {color} --dvfy-input-border - Search input border color
  * @cssprop {color} --dvfy-primary-bg - Loading spinner accent color
  */
+
+/** Strip inline event handler attributes (onclick, onerror, etc.) from adopted DOM nodes. */
+function stripEventHandlers(node) {
+  if (node.nodeType === 1) {
+    for (const attr of [...node.attributes]) {
+      if (attr.name.startsWith('on')) node.removeAttribute(attr.name);
+    }
+    for (const child of node.children) stripEventHandlers(child);
+  }
+  return node;
+}
+
 class DvfyLiveSearch extends HTMLElement {
   static #styled = false;
   #input = null;
@@ -316,7 +328,9 @@ class DvfyLiveSearch extends HTMLElement {
         }
 
         for (const node of nodes) {
-          this.#resultsTarget.appendChild(document.adoptNode(node));
+          const adopted = document.adoptNode(node);
+          stripEventHandlers(adopted);
+          this.#resultsTarget.appendChild(adopted);
         }
       } catch (err) {
         if (err.name !== 'AbortError') {
