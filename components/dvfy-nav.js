@@ -1,3 +1,5 @@
+import { sanitizeHref } from '../utils/url.js';
+
 const STYLES = `
 dvfy-nav {
   display: inline-flex;
@@ -107,7 +109,7 @@ class DvfyNav extends HTMLElement {
     const link = this.querySelector('.dvfy-nav__link');
     if (!link) return;
 
-    if (name === 'href') link.href = this.getAttribute('href') || '#';
+    if (name === 'href') link.href = sanitizeHref(this.getAttribute('href'));
     if (name === 'icon') this.#updateIcon(link);
     if (name === 'label') this.#updateLabel(link);
     if (name === 'active' || name === 'href') this.#detectActive();
@@ -126,7 +128,7 @@ class DvfyNav extends HTMLElement {
     const link = document.createElement('a');
     link._dvfyBuilt = true;
     link.className = 'dvfy-nav__link';
-    link.href = this.getAttribute('href') || '#';
+    link.href = sanitizeHref(this.getAttribute('href'));
 
     this.#updateIcon(link);
 

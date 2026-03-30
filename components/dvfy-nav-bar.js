@@ -1,3 +1,5 @@
+import { sanitizeHref } from '../utils/url.js';
+
 let _navBarIdCounter = 0;
 
 const STYLES = `
@@ -270,7 +272,7 @@ class DvfyNavBar extends HTMLElement {
     // Brand
     const brand = document.createElement('a');
     brand.className = 'dvfy-nav-bar__brand';
-    brand.href = this.getAttribute('href') || '/';
+    brand.href = sanitizeHref(this.getAttribute('href') || '/');
     const logoUrl = this.getAttribute('logo');
     if (logoUrl) {
       const img = document.createElement('img');
