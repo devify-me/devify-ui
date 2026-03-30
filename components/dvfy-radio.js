@@ -161,23 +161,7 @@ class DvfyRadio extends HTMLElement {
     if (this.hasAttribute('disabled')) input.disabled = true;
     if (this.hasAttribute('required')) input.required = true;
 
-    input.addEventListener('change', () => {
-      if (input.checked) {
-        // Uncheck siblings in the same name group
-        const name = input.name;
-        if (name) {
-          document.querySelectorAll(`dvfy-radio[name="${name}"]`).forEach((r) => {
-            if (r !== this) {
-              r.removeAttribute('checked');
-              r.setAttribute('aria-checked', 'false');
-            }
-          });
-        }
-        this.setAttribute('checked', '');
-        this.setAttribute('aria-checked', 'true');
-        this.dispatchEvent(new Event('change', { bubbles: true }));
-      }
-    });
+    input.addEventListener('change', () => this.#handleChange(input));
 
     this.appendChild(input);
 
@@ -190,6 +174,26 @@ class DvfyRadio extends HTMLElement {
       this.appendChild(lbl);
     }
     this.setAttribute('aria-checked', this.hasAttribute('checked') ? 'true' : 'false');
+  }
+
+  /** @param {HTMLInputElement} input */
+  #handleChange(input) {
+    if (!input.checked) return;
+    this.#uncheckSiblings(input.name);
+    this.setAttribute('checked', '');
+    this.setAttribute('aria-checked', 'true');
+    this.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+
+  /** Uncheck sibling radios sharing the same name group.
+   *  @param {string} name */
+  #uncheckSiblings(name) {
+    if (!name) return;
+    for (const r of document.querySelectorAll(`dvfy-radio[name="${name}"]`)) {
+      if (r === this) continue;
+      r.removeAttribute('checked');
+      r.setAttribute('aria-checked', 'false');
+    }
   }
 
   get checked() { return this.querySelector('input')?.checked ?? false; }
