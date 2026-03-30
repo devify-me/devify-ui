@@ -275,6 +275,7 @@ class DvfySelect extends HTMLElement {
   #value = '';
   #open = false;
   #focusedIndex = -1;
+  #built = false;
 
   connectedCallback() {
     if (!DvfySelect.#styled) {
@@ -298,33 +299,65 @@ class DvfySelect extends HTMLElement {
     // Clear children and build UI
     this.textContent = '';
     this.#buildUI();
+    this.#built = true;
 
-    // Close on outside click
+    // Bound handler for outside click (added/removed with open/close)
     this._onDocClick = (e) => {
       if (!this.contains(e.target)) this.#close();
     };
-    document.addEventListener('click', this._onDocClick);
   }
 
   disconnectedCallback() {
+    // Clean up in case dropdown is open when removed
     document.removeEventListener('click', this._onDocClick);
+    this.#built = false;
   }
 
-  static get observedAttributes() { return ['error', 'help', 'disabled', 'label', 'placeholder', 'required', 'label-position', 'size', 'searchable']; }
+  static get observedAttributes() { return ['error', 'help', 'disabled', 'label', 'placeholder', 'required', 'label-position', 'size', 'searchable', 'value']; }
 
-  attributeChangedCallback() {
-    if (this.isConnected) {
-      this.textContent = '';
-      this.#buildUI();
+  attributeChangedCallback(name, oldVal, newVal) {
+    if (!this.#built) return;
+
+    switch (name) {
+      case 'error':
+      case 'help':
+        this.#patchMessage();
+        break;
+      case 'disabled':
+        this.#patchDisabled();
+        break;
+      case 'label':
+        this.#patchLabel();
+        break;
+      case 'placeholder':
+        this.#patchPlaceholder();
+        break;
+      case 'required':
+        this.#patchRequired();
+        break;
+      case 'label-position':
+      case 'size':
+        // These are CSS-driven via attribute selectors — no DOM patching needed
+        break;
+      case 'value':
+        if (newVal !== this.#value) {
+          this.#value = newVal || '';
+          this.#patchValue();
+        }
+        break;
+      case 'searchable':
+        // Structural change — rebuild
+        this.textContent = '';
+        this.#buildUI();
+        break;
     }
   }
 
   get value() { return this.#value; }
   set value(v) {
     this.#value = v;
-    if (this.isConnected) {
-      this.textContent = '';
-      this.#buildUI();
+    if (this.#built) {
+      this.#patchValue();
     }
   }
 
@@ -477,6 +510,125 @@ class DvfySelect extends HTMLElement {
     }
   }
 
+  /* ── Granular patch helpers ── */
+
+  #patchMessage() {
+    const error = this.getAttribute('error');
+    const help = this.getAttribute('help');
+
+    // Remove existing message elements
+    this.querySelector('.dvfy-select__error')?.remove();
+    this.querySelector('.dvfy-select__help')?.remove();
+
+    if (error) {
+      const errEl = document.createElement('div');
+      errEl.className = 'dvfy-select__error';
+      errEl.textContent = error;
+      this.appendChild(errEl);
+    } else if (help) {
+      const helpEl = document.createElement('div');
+      helpEl.className = 'dvfy-select__help';
+      helpEl.textContent = help;
+      this.appendChild(helpEl);
+    }
+  }
+
+  #patchDisabled() {
+    const disabled = this.hasAttribute('disabled');
+    const trigger = this.querySelector('.dvfy-select__trigger');
+    const native = this.querySelector('.dvfy-select__native');
+    if (trigger) {
+      trigger.disabled = disabled;
+      trigger.setAttribute('aria-disabled', String(disabled));
+    }
+    if (native) native.disabled = disabled;
+    if (disabled && this.#open) this.#close();
+  }
+
+  #patchLabel() {
+    const label = this.getAttribute('label');
+    const existing = this.querySelector('.dvfy-select__label');
+    if (!label) {
+      existing?.remove();
+      return;
+    }
+    if (existing) {
+      // Preserve req indicator
+      const req = existing.querySelector('.dvfy-select__req');
+      existing.textContent = label;
+      if (req) existing.appendChild(req);
+    } else {
+      const lbl = document.createElement('label');
+      lbl.className = 'dvfy-select__label';
+      lbl.textContent = label;
+      if (this.hasAttribute('required')) {
+        const req = document.createElement('span');
+        req.className = 'dvfy-select__req';
+        req.textContent = '*';
+        req.setAttribute('aria-hidden', 'true');
+        lbl.appendChild(req);
+      }
+      this.prepend(lbl);
+    }
+  }
+
+  #patchPlaceholder() {
+    const placeholder = this.getAttribute('placeholder') || 'Select...';
+    // Update trigger text only if no value is selected
+    if (!this.#value) {
+      const triggerText = this.querySelector('.dvfy-select__trigger > span:first-child');
+      if (triggerText) triggerText.textContent = placeholder;
+    }
+    // Update native placeholder option
+    const nativePlaceholder = this.querySelector('.dvfy-select__native option[disabled]');
+    if (nativePlaceholder) nativePlaceholder.textContent = placeholder;
+  }
+
+  #patchRequired() {
+    const required = this.hasAttribute('required');
+    const native = this.querySelector('.dvfy-select__native');
+    if (native) native.required = required;
+
+    const lbl = this.querySelector('.dvfy-select__label');
+    if (!lbl) return;
+    const existingReq = lbl.querySelector('.dvfy-select__req');
+    if (required && !existingReq) {
+      const req = document.createElement('span');
+      req.className = 'dvfy-select__req';
+      req.textContent = '*';
+      req.setAttribute('aria-hidden', 'true');
+      lbl.appendChild(req);
+    } else if (!required && existingReq) {
+      existingReq.remove();
+    }
+  }
+
+  #patchValue() {
+    const placeholder = this.getAttribute('placeholder') || 'Select...';
+    const selectedOpt = this.#options.find(o => o.value === this.#value);
+
+    // Update trigger text
+    const triggerText = this.querySelector('.dvfy-select__trigger > span:first-child');
+    if (triggerText) {
+      triggerText.textContent = selectedOpt ? selectedOpt.label : placeholder;
+      triggerText.classList.toggle('dvfy-select__trigger--placeholder', !selectedOpt);
+    }
+
+    // Update native select
+    const native = this.querySelector('.dvfy-select__native');
+    if (native) native.value = this.#value || '';
+
+    // Update selected class and aria-selected on option items
+    const items = this.querySelectorAll('.dvfy-select__option');
+    for (const item of items) {
+      const isSelected = item.getAttribute('data-value') === this.#value;
+      item.classList.toggle('dvfy-select--selected', isSelected);
+      item.setAttribute('aria-selected', String(isSelected));
+    }
+  }
+
+  /* ── Dropdown open/close ── */
+
   #openDropdown() {
     this.#open = true;
     const trigger = this.querySelector('.dvfy-select__trigger');
@@ -486,6 +638,9 @@ class DvfySelect extends HTMLElement {
       trigger.setAttribute('aria-expanded', 'true');
     }
     if (dropdown) dropdown.classList.add('dvfy-select__dropdown--open');
+
+    // Attach outside-click listener only while open
+    document.addEventListener('click', this._onDocClick);
 
     const search = this.querySelector('.dvfy-select__search');
     if (search) {
@@ -509,6 +664,9 @@ class DvfySelect extends HTMLElement {
       trigger.setAttribute('aria-expanded', 'false');
     }
     if (dropdown) dropdown.classList.remove('dvfy-select__dropdown--open');
+
+    // Remove outside-click listener when closed
+    document.removeEventListener('click', this._onDocClick);
   }
 
   #select(value) {
