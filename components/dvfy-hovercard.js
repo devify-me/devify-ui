@@ -150,6 +150,12 @@ class DvfyHovercard extends HTMLElement {
       DvfyHovercard.#styled = true;
     }
 
+    // ARIA: tooltip role + link triggers via aria-describedby
+    this.setAttribute('role', 'tooltip');
+    if (this.id) {
+      this.#linkTriggerAria();
+    }
+
     if (SUPPORTS_INTEREST) {
       // Native path: set popover="hint" and let the browser handle hover
       if (!this.hasAttribute('popover')) {
@@ -173,6 +179,21 @@ class DvfyHovercard extends HTMLElement {
       el.removeEventListener('focusout', hide);
     });
     this.#triggers = [];
+  }
+
+  #linkTriggerAria() {
+    const id = this.id;
+    if (!id) return;
+    // Defer to ensure triggers are in the DOM
+    setTimeout(() => {
+      const triggers = document.querySelectorAll(`[interestfor="${CSS.escape(id)}"]`);
+      triggers.forEach((el) => {
+        const existing = el.getAttribute('aria-describedby') || '';
+        if (!existing.split(/\s+/).includes(id)) {
+          el.setAttribute('aria-describedby', existing ? `${existing} ${id}` : id);
+        }
+      });
+    }, 0);
   }
 
   #connectFallback() {

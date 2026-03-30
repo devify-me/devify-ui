@@ -261,6 +261,11 @@
           "name": "dot",
           "description": "Show dot indicator before text",
           "type": "boolean"
+        },
+        {
+          "name": "aria-label",
+          "description": "Accessible label for icon-only badges",
+          "type": "string"
         }
       ],
       "cssProperties": [
@@ -1768,6 +1773,11 @@
         {
           "name": "label-position",
           "description": "Label position: top | right | bottom | left",
+          "type": "string"
+        },
+        {
+          "name": "aria-label",
+          "description": "Accessible label for the navigation landmark",
           "type": "string"
         }
       ],

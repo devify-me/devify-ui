@@ -119,6 +119,7 @@ dvfy-badge[variant="outline"] { background: transparent; }
  * @attr {string} status - Status color: neutral | success | warning | danger | info (default: "neutral")
  * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {boolean} dot - Show dot indicator before text
+ * @attr {string} aria-label - Accessible label for icon-only badges
  *
  * @cssprop {color} --dvfy-success-bg-subtle - Success status background
  * @cssprop {color} --dvfy-warning-bg-subtle - Warning status background
@@ -135,10 +136,11 @@ class DvfyBadge extends HTMLElement {
       document.head.appendChild(s);
       DvfyBadge.#styled = true;
     }
+    this.setAttribute('role', 'status');
     this.#render();
   }
 
-  static get observedAttributes() { return ['dot']; }
+  static get observedAttributes() { return ['dot', 'aria-label']; }
 
   attributeChangedCallback() {
     if (this.isConnected) this.#render();
