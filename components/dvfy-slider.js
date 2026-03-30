@@ -119,12 +119,12 @@ dvfy-slider input[type="range"]::-webkit-slider-thumb {
   height: var(--_thumb-d);
   border-radius: var(--dvfy-radius-round);
   background: conic-gradient(
-    var(--dvfy-neutral-400),
-    var(--dvfy-neutral-200),
-    var(--dvfy-neutral-400),
-    var(--dvfy-neutral-100),
-    var(--dvfy-neutral-400),
-    var(--dvfy-neutral-300)
+    var(--dvfy-text-muted),
+    var(--dvfy-border-default),
+    var(--dvfy-text-muted),
+    var(--dvfy-surface-muted),
+    var(--dvfy-text-muted),
+    var(--dvfy-border-strong)
   );
   box-shadow:
     0 1px 3px hsl(0 0% 0% / 0.3),
@@ -141,12 +141,12 @@ dvfy-slider input[type="range"]::-moz-range-thumb {
   height: var(--_thumb-d);
   border-radius: var(--dvfy-radius-round);
   background: conic-gradient(
-    var(--dvfy-neutral-400),
-    var(--dvfy-neutral-200),
-    var(--dvfy-neutral-400),
-    var(--dvfy-neutral-100),
-    var(--dvfy-neutral-400),
-    var(--dvfy-neutral-300)
+    var(--dvfy-text-muted),
+    var(--dvfy-border-default),
+    var(--dvfy-text-muted),
+    var(--dvfy-surface-muted),
+    var(--dvfy-text-muted),
+    var(--dvfy-border-strong)
   );
   box-shadow:
     0 1px 3px hsl(0 0% 0% / 0.3),

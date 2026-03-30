@@ -94,7 +94,7 @@ dvfy-button[variant="ghost"]:hover:not([disabled]):not([loading]) { background: 
 /* Gradient */
 dvfy-button[variant="gradient"] {
   background: linear-gradient(var(--dvfy-btn-grad-angle), var(--dvfy-btn-grad-from), var(--dvfy-btn-grad-to));
-  color: var(--dvfy-neutral-0);
+  color: var(--dvfy-text-inverse);
   border-color: transparent;
   transition:
     --dvfy-btn-grad-from var(--dvfy-duration-base) var(--dvfy-ease-out),
@@ -112,7 +112,7 @@ dvfy-button[variant="gradient"]:hover:not([disabled]):not([loading]) {
 /* Danger */
 dvfy-button[variant="danger"] {
   background: var(--dvfy-danger-bg);
-  color: var(--dvfy-neutral-0);
+  color: var(--dvfy-text-inverse);
   border-color: var(--dvfy-danger-bg);
 }
 dvfy-button[variant="danger"]:hover:not([disabled]):not([loading]) { opacity: 0.9; }

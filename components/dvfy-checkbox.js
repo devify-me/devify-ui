@@ -40,7 +40,7 @@ dvfy-checkbox .dvfy-checkbox__input:checked::after {
   top: 0px;
   width: 5px;
   height: 9px;
-  border: solid var(--dvfy-neutral-0);
+  border: solid var(--dvfy-text-inverse);
   border-width: 0 2px 2px 0;
   transform: rotate(45deg);
 }
@@ -55,7 +55,7 @@ dvfy-checkbox .dvfy-checkbox__input:indeterminate::after {
   top: 5px;
   width: 8px;
   height: 2px;
-  background: var(--dvfy-neutral-0);
+  background: var(--dvfy-text-inverse);
 }
 dvfy-checkbox .dvfy-checkbox__input:disabled {
   background: var(--dvfy-disabled-bg);

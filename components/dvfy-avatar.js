@@ -74,8 +74,8 @@ dvfy-avatar .dvfy-avatar__initials {
   justify-content: center;
   font-family: var(--dvfy-font-sans);
   font-weight: var(--dvfy-weight-semibold);
-  color: var(--dvfy-neutral-0);
-  background: var(--dvfy-neutral-400);
+  color: var(--dvfy-text-inverse);
+  background: var(--dvfy-text-muted);
 }
 
 /* Size: xs */
@@ -111,7 +111,7 @@ dvfy-avatar[size="lg"] .dvfy-avatar__status { width: 0.75rem; height: 0.75rem; }
 dvfy-avatar[size="xl"] .dvfy-avatar__status { width: 0.875rem; height: 0.875rem; }
 
 dvfy-avatar .dvfy-avatar__status[data-status="online"] { background: var(--dvfy-success-text); }
-dvfy-avatar .dvfy-avatar__status[data-status="offline"] { background: var(--dvfy-neutral-400); }
+dvfy-avatar .dvfy-avatar__status[data-status="offline"] { background: var(--dvfy-text-muted); }
 dvfy-avatar .dvfy-avatar__status[data-status="busy"] { background: var(--dvfy-danger-text); }
 
 /* Avatar group */
@@ -138,8 +138,8 @@ dvfy-avatar-group .dvfy-avatar-group__overflow {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: var(--dvfy-radius-round);
-  background: var(--dvfy-neutral-400);
-  color: var(--dvfy-neutral-0);
+  background: var(--dvfy-text-muted);
+  color: var(--dvfy-text-inverse);
   font-family: var(--dvfy-font-sans);
   font-size: var(--dvfy-text-xs);
   font-weight: var(--dvfy-weight-semibold);
