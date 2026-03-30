@@ -17,7 +17,7 @@
  * @cssprop {color} --dvfy-primary-bg - Active tab accent
  */
 
-const PLAYGROUND_STYLES = `
+const STYLES = `
 dvfy-component-playground {
   display: block;
   font-family: var(--dvfy-font-sans);
@@ -548,7 +548,7 @@ class DvfyComponentPlayground extends HTMLElement {
   connectedCallback() {
     if (!DvfyComponentPlayground.#styled) {
       const s = document.createElement('style');
-      s.textContent = PLAYGROUND_STYLES;
+      s.textContent = STYLES;
       document.head.appendChild(s);
       DvfyComponentPlayground.#styled = true;
     }

@@ -1,4 +1,4 @@
-const HAMBURGER_STYLES = `
+const STYLES = `
 /* ── Host ── */
 dvfy-hamburger {
   display: inline-flex;
@@ -230,7 +230,7 @@ class DvfyHamburger extends HTMLElement {
     if (!DvfyHamburger.#styled) {
       const s = document.createElement('style');
       s.id = 'dvfy-hb-style';
-      s.textContent = HAMBURGER_STYLES;
+      s.textContent = STYLES;
       document.head.appendChild(s);
       DvfyHamburger.#styled = true;
     }
