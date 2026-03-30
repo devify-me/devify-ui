@@ -99,6 +99,13 @@ dvfy-scroll-reveal {
  */
 class DvfyScrollReveal extends HTMLElement {
   static #styled = false;
+  static get observedAttributes() { return ['animation']; }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === newValue) return;
+    // animation: CSS attribute selectors map the value to the correct
+    // @keyframes name. The browser picks up the change automatically.
+  }
 
   connectedCallback() {
     if (!DvfyScrollReveal.#styled) {

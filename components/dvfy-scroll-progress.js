@@ -87,6 +87,12 @@ dvfy-scroll-progress[position="bottom"] {
  */
 class DvfyScrollProgress extends HTMLElement {
   static #styled = false;
+  static get observedAttributes() { return ['position']; }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === newValue) return;
+    // position: CSS attribute selectors handle top/bottom placement reactively.
+  }
 
   connectedCallback() {
     if (!DvfyScrollProgress.#styled) {

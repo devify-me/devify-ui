@@ -332,6 +332,14 @@ dvfy-table[hoverable] tbody tr:hover {
  */
 class DvfyTable extends HTMLElement {
   static #styled = false;
+  static get observedAttributes() {
+    return ['striped', 'hoverable', 'compact', 'responsive', 'selectable', 'filterable', 'searchable'];
+  }
+
+  /** @type {boolean} prevents rebuild during initial connectedCallback */
+  #connected = false;
+  /** @type {boolean} guards against re-entrant rebuilds */
+  #rebuilding = false;
 
   /** @type {Map<number, boolean>} original row index -> selected */
   #selection = new Map();
@@ -355,6 +363,16 @@ class DvfyTable extends HTMLElement {
   #boundOutsideClick = null;
   #boundEscapeKey = null;
 
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === newValue) return;
+    if (!this.#connected) return;
+    // striped, hoverable, compact, responsive: CSS attribute selectors — no JS needed.
+    // selectable, filterable, searchable: JS-driven DOM — requires rebuild.
+    if (['selectable', 'filterable', 'searchable'].includes(name)) {
+      this.#rebuild();
+    }
+  }
+
   connectedCallback() {
     if (!DvfyTable.#styled) {
       const s = document.createElement('style');
@@ -363,9 +381,11 @@ class DvfyTable extends HTMLElement {
       DvfyTable.#styled = true;
     }
     this.#enhance();
+    this.#connected = true;
   }
 
   disconnectedCallback() {
+    this.#connected = false;
     this.#closeFilterPanel();
     if (this.#boundOutsideClick) {
       document.removeEventListener('mousedown', this.#boundOutsideClick);
@@ -373,6 +393,82 @@ class DvfyTable extends HTMLElement {
     if (this.#boundEscapeKey) {
       document.removeEventListener('keydown', this.#boundEscapeKey);
     }
+  }
+
+  /** Tear down JS-enhanced DOM and re-run #enhance from the original table. */
+  #rebuild() {
+    if (this.#rebuilding) return;
+    this.#rebuilding = true;
+
+    // Clean up global listeners
+    this.#closeFilterPanel();
+    if (this.#boundOutsideClick) {
+      document.removeEventListener('mousedown', this.#boundOutsideClick);
+    }
+    if (this.#boundEscapeKey) {
+      document.removeEventListener('keydown', this.#boundEscapeKey);
+    }
+
+    // Remove search input
+    const searchDiv = this.querySelector('.dvfy-table__search');
+    if (searchDiv) searchDiv.remove();
+    this.#searchInput = null;
+
+    // Unwrap the table from .dvfy-table__wrapper
+    const wrapper = this.querySelector('.dvfy-table__wrapper');
+    const table = wrapper ? wrapper.querySelector('table') : this.querySelector('table');
+    if (wrapper && table) {
+      this.insertBefore(table, wrapper);
+      wrapper.remove();
+    }
+
+    // Remove injected checkbox columns
+    if (table) {
+      const selectAllTh = table.querySelector('thead th.dvfy-table__checkbox');
+      if (selectAllTh) selectAllTh.remove();
+      for (const td of table.querySelectorAll('tbody td.dvfy-table__checkbox')) {
+        td.remove();
+      }
+    }
+
+    // Remove filter icons and th-content wrappers (restore original th content)
+    if (table) {
+      for (const th of table.querySelectorAll('th')) {
+        const contentWrap = th.querySelector('.dvfy-table__th-content');
+        if (contentWrap) {
+          const textWrap = contentWrap.querySelector('.dvfy-table__th-text');
+          // Remove sort indicator
+          const sortInd = textWrap ? textWrap.querySelector('.dvfy-table__sort') : null;
+          if (sortInd) sortInd.remove();
+          // Move text content back to th
+          if (textWrap) {
+            while (textWrap.firstChild) {
+              th.appendChild(textWrap.firstChild);
+            }
+          }
+          contentWrap.remove();
+        } else {
+          // Remove sort indicator added directly
+          const sortInd = th.querySelector('.dvfy-table__sort');
+          if (sortInd) sortInd.remove();
+        }
+      }
+    }
+
+    // Reset state
+    this.#selection = new Map();
+    this.#selectAllCb = null;
+    this.#originalRows = [];
+    this.#rowIndexMap = new Map();
+    this.#columnFilters = new Map();
+    this.#openPanel = null;
+    this.#openCol = null;
+    this.#boundOutsideClick = null;
+    this.#boundEscapeKey = null;
+
+    // Re-enhance
+    this.#enhance();
+    this.#rebuilding = false;
   }
 
   #enhance() {
