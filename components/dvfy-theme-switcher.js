@@ -107,7 +107,7 @@ dvfy-theme-switcher .dvfy-ts__thumb {
   width: 1.1rem;
   height: 1.1rem;
   border-radius: var(--dvfy-radius-sm);
-  background: var(--dvfy-surface-raised);
+  background: var(--dvfy-elevation-xs-bg);
   box-shadow: var(--dvfy-shadow-xs);
   transition: transform var(--dvfy-duration-fast) var(--dvfy-ease-out);
   display: flex;

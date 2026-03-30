@@ -310,6 +310,59 @@ function renderElevation(mainEl, meta) {
   colorRow.appendChild(colorInfo);
   mainEl.appendChild(colorRow);
 
+  // Elevation surface backgrounds
+  const surfaceHeading = document.createElement('h3');
+  surfaceHeading.textContent = 'Elevation Surfaces';
+  surfaceHeading.style.cssText = 'margin: var(--dvfy-space-4) 0 var(--dvfy-space-2); font-size: var(--dvfy-text-base); font-weight: 600;';
+  mainEl.appendChild(surfaceHeading);
+
+  const surfaceDesc = document.createElement('p');
+  surfaceDesc.textContent = 'Progressively lighter backgrounds per elevation level. Uniform in light mode, differentiated in dark mode.';
+  surfaceDesc.style.cssText = 'font-size: var(--dvfy-text-sm); color: var(--dvfy-text-muted); margin-bottom: var(--dvfy-space-4);';
+  mainEl.appendChild(surfaceDesc);
+
+  const surfaceGrid = document.createElement('div');
+  surfaceGrid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); gap: var(--dvfy-space-3); margin-bottom: var(--dvfy-space-8);';
+
+  const levels = ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl'];
+  const levelUse = { '2xs': 'Page base', 'xs': 'Subtle UI', 'sm': 'Cards', 'md': 'Raised cards', 'lg': 'Dropdowns', 'xl': 'Modals', '2xl': 'Top layer' };
+  for (const lvl of levels) {
+    const tile = document.createElement('div');
+    const tokenName = `--dvfy-elevation-${lvl}-bg`;
+    tile.style.cssText = `
+      background: var(${tokenName});
+      border: var(--dvfy-border-1) solid var(--dvfy-border-muted);
+      border-radius: var(--dvfy-radius-md);
+      padding: var(--dvfy-space-4);
+      text-align: center;
+      min-height: 5rem;
+      display: flex; flex-direction: column; justify-content: center; gap: var(--dvfy-space-1);
+    `;
+    const label = document.createElement('code');
+    label.textContent = lvl;
+    label.style.cssText = 'font-size: var(--dvfy-text-sm); color: var(--dvfy-text-link); cursor: pointer;';
+    label.addEventListener('click', () => {
+      copyToClipboard(`var(${tokenName})`);
+      label.textContent = 'Copied!';
+      setTimeout(() => { label.textContent = lvl; }, 1500);
+    });
+    tile.appendChild(label);
+
+    const use = document.createElement('div');
+    use.textContent = levelUse[lvl];
+    use.style.cssText = 'font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted);';
+    tile.appendChild(use);
+
+    surfaceGrid.appendChild(tile);
+  }
+  mainEl.appendChild(surfaceGrid);
+
+  // Shadow scale heading
+  const shadowHeading = document.createElement('h3');
+  shadowHeading.textContent = 'Glow Shadows';
+  shadowHeading.style.cssText = 'margin: var(--dvfy-space-4) 0 var(--dvfy-space-2); font-size: var(--dvfy-text-base); font-weight: 600;';
+  mainEl.appendChild(shadowHeading);
+
   const grid = document.createElement('div');
   grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr)); gap: var(--dvfy-space-6);';
 

@@ -1,11 +1,25 @@
 /*
  * @devify/ui — Elevation Tokens
  *
- * Shadows use --dvfy-shadow-color (defaults to --dvfy-primary-bg) for
- * themed LED-glow effect. 7 levels from subtle (2xs) to dramatic (2xl).
+ * Two-layer elevation system:
+ *   1. Surface lightening — progressively lighter backgrounds per level
+ *   2. LED-glow shadows — themed box-shadows using --dvfy-shadow-color
+ *
+ * In light mode, surfaces are uniform (shadows do the work).
+ * In dark mode, surfaces lighten per level (shadows are supplementary).
+ * 7 levels from subtle (2xs) to dramatic (2xl).
  */
 
 :root {
+  /* ─── Elevation Surface Backgrounds ─── */
+  --dvfy-elevation-2xs-bg: var(--dvfy-surface-page);
+  --dvfy-elevation-xs-bg:  var(--dvfy-surface-page);
+  --dvfy-elevation-sm-bg:  var(--dvfy-surface-page);
+  --dvfy-elevation-md-bg:  var(--dvfy-surface-page);
+  --dvfy-elevation-lg-bg:  var(--dvfy-surface-page);
+  --dvfy-elevation-xl-bg:  var(--dvfy-surface-page);
+  --dvfy-elevation-2xl-bg: var(--dvfy-surface-page);
+
   /* ─── Shadow Color — inherits from theme primary ─── */
   --dvfy-shadow-color: var(--dvfy-primary-bg);
 

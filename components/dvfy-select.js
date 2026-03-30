@@ -102,7 +102,7 @@ dvfy-select .dvfy-select__dropdown {
   right: 0;
   z-index: var(--dvfy-z-dropdown, 100);
   margin-top: var(--dvfy-space-1);
-  background: var(--dvfy-surface-raised);
+  background: var(--dvfy-elevation-lg-bg);
   border: var(--dvfy-border-1) solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-lg);
   box-shadow: var(--dvfy-shadow-lg);

@@ -39,7 +39,7 @@ dvfy-modal .dvfy-modal__backdrop {
   padding: var(--dvfy-space-4);
 }
 dvfy-modal .dvfy-modal__dialog {
-  background: var(--dvfy-surface-raised);
+  background: var(--dvfy-elevation-xl-bg);
   border-radius: var(--dvfy-radius-xl);
   box-shadow: var(--dvfy-shadow-xl);
   display: flex;

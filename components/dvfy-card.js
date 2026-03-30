@@ -44,6 +44,7 @@ dvfy-card[padded] {
 /* Elevated */
 dvfy-card[elevated] {
   box-shadow: var(--dvfy-shadow-md);
+  background: var(--dvfy-elevation-md-bg);
   border-color: transparent;
 }
 

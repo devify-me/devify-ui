@@ -188,7 +188,7 @@ dvfy-table th[data-sort] .dvfy-table__sort {
   left: 0;
   min-width: 12rem;
   max-width: 18rem;
-  background: var(--dvfy-surface-raised);
+  background: var(--dvfy-elevation-lg-bg);
   border: 1px solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-lg);
   box-shadow: var(--dvfy-shadow-lg);

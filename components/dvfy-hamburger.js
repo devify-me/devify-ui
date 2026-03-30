@@ -90,7 +90,7 @@ dvfy-hamburger[float] {
   z-index: var(--dvfy-z-sticky);
 }
 dvfy-hamburger[float] .dvfy-hb__btn {
-  background: var(--dvfy-hamburger-bg, var(--dvfy-surface-raised));
+  background: var(--dvfy-hamburger-bg, var(--dvfy-elevation-lg-bg));
   border-radius: var(--dvfy-radius-round);
   box-shadow: var(--dvfy-shadow-lg);
 }

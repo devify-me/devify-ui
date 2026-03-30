@@ -56,6 +56,7 @@ dvfy-card-glow[padded] {
 /* Elevated */
 dvfy-card-glow[elevated] {
   box-shadow: var(--dvfy-shadow-md);
+  background: var(--dvfy-elevation-md-bg);
 }
 
 /* Interactive */

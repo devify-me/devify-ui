@@ -12,6 +12,29 @@
   --dvfy-surface-sunken:    var(--dvfy-neutral-1000);
   --dvfy-surface-muted:     var(--dvfy-neutral-800);
 
+  /* ─── Elevation Surfaces (progressive lightening) ─── */
+  --dvfy-elevation-2xs-bg:  var(--dvfy-neutral-950);
+  --dvfy-elevation-xs-bg:   color-mix(in oklch, var(--dvfy-neutral-900) 70%, var(--dvfy-neutral-800));
+  --dvfy-elevation-sm-bg:   var(--dvfy-neutral-900);
+  --dvfy-elevation-md-bg:   color-mix(in oklch, var(--dvfy-neutral-900) 40%, var(--dvfy-neutral-800));
+  --dvfy-elevation-lg-bg:   var(--dvfy-neutral-800);
+  --dvfy-elevation-xl-bg:   color-mix(in oklch, var(--dvfy-neutral-800) 50%, var(--dvfy-neutral-700));
+  --dvfy-elevation-2xl-bg:  var(--dvfy-neutral-700);
+
+  /* ─── Elevation Shadows (boosted for dark backgrounds) ─── */
+  --dvfy-shadow-2xs: 0 1px 2px 0 color-mix(in srgb, var(--dvfy-shadow-color) 10%, transparent);
+  --dvfy-shadow-xs:  0 1px 3px 0 color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent),
+                     0 1px 2px -1px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+  --dvfy-shadow-sm:  0 2px 4px -1px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent),
+                     0 1px 3px -1px color-mix(in srgb, var(--dvfy-shadow-color) 12%, transparent);
+  --dvfy-shadow-md:  0 4px 6px -1px color-mix(in srgb, var(--dvfy-shadow-color) 20%, transparent),
+                     0 2px 4px -2px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+  --dvfy-shadow-lg:  0 10px 15px -3px color-mix(in srgb, var(--dvfy-shadow-color) 20%, transparent),
+                     0 4px 6px -4px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+  --dvfy-shadow-xl:  0 20px 25px -5px color-mix(in srgb, var(--dvfy-shadow-color) 20%, transparent),
+                     0 8px 10px -6px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+  --dvfy-shadow-2xl: 0 25px 35px -10px color-mix(in srgb, var(--dvfy-shadow-color) 30%, transparent);
+
   /* ─── Text ─── */
   --dvfy-text-primary:      var(--dvfy-neutral-50);
   --dvfy-text-secondary:    var(--dvfy-neutral-300);
@@ -103,6 +126,25 @@
     --dvfy-surface-overlay:   var(--dvfy-neutral-800);
     --dvfy-surface-sunken:    var(--dvfy-neutral-1000);
     --dvfy-surface-muted:     var(--dvfy-neutral-800);
+    --dvfy-elevation-2xs-bg:  var(--dvfy-neutral-950);
+    --dvfy-elevation-xs-bg:   color-mix(in oklch, var(--dvfy-neutral-900) 70%, var(--dvfy-neutral-800));
+    --dvfy-elevation-sm-bg:   var(--dvfy-neutral-900);
+    --dvfy-elevation-md-bg:   color-mix(in oklch, var(--dvfy-neutral-900) 40%, var(--dvfy-neutral-800));
+    --dvfy-elevation-lg-bg:   var(--dvfy-neutral-800);
+    --dvfy-elevation-xl-bg:   color-mix(in oklch, var(--dvfy-neutral-800) 50%, var(--dvfy-neutral-700));
+    --dvfy-elevation-2xl-bg:  var(--dvfy-neutral-700);
+    --dvfy-shadow-2xs: 0 1px 2px 0 color-mix(in srgb, var(--dvfy-shadow-color) 10%, transparent);
+    --dvfy-shadow-xs:  0 1px 3px 0 color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent),
+                       0 1px 2px -1px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+    --dvfy-shadow-sm:  0 2px 4px -1px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent),
+                       0 1px 3px -1px color-mix(in srgb, var(--dvfy-shadow-color) 12%, transparent);
+    --dvfy-shadow-md:  0 4px 6px -1px color-mix(in srgb, var(--dvfy-shadow-color) 20%, transparent),
+                       0 2px 4px -2px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+    --dvfy-shadow-lg:  0 10px 15px -3px color-mix(in srgb, var(--dvfy-shadow-color) 20%, transparent),
+                       0 4px 6px -4px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+    --dvfy-shadow-xl:  0 20px 25px -5px color-mix(in srgb, var(--dvfy-shadow-color) 20%, transparent),
+                       0 8px 10px -6px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+    --dvfy-shadow-2xl: 0 25px 35px -10px color-mix(in srgb, var(--dvfy-shadow-color) 30%, transparent);
     --dvfy-text-primary:      var(--dvfy-neutral-50);
     --dvfy-text-secondary:    var(--dvfy-neutral-300);
     --dvfy-text-muted:        var(--dvfy-neutral-500);

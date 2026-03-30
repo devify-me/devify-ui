@@ -83,7 +83,7 @@ dvfy-date-picker .dvfy-date-picker__popup {
   top: 100%;
   left: 0;
   margin-top: var(--dvfy-space-1);
-  background: var(--dvfy-surface-overlay);
+  background: var(--dvfy-elevation-lg-bg);
   border: var(--dvfy-border-1) solid var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-xl);
   box-shadow: var(--dvfy-shadow-lg);
