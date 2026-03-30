@@ -144,14 +144,25 @@ dvfy-spotlight-card[interactive]:focus-visible {
  */
 class DvfySpotlightCard extends HTMLElement {
   static #styled = false;
+  #rafId = 0;
+  #lastX = 0;
+  #lastY = 0;
 
   #onMouseMove = (e) => {
-    const rect = this.getBoundingClientRect();
-    this.style.setProperty('--x', `${e.clientX - rect.left}px`);
-    this.style.setProperty('--y', `${e.clientY - rect.top}px`);
+    this.#lastX = e.clientX;
+    this.#lastY = e.clientY;
+    if (!this.#rafId) {
+      this.#rafId = requestAnimationFrame(() => {
+        const rect = this.getBoundingClientRect();
+        this.style.setProperty('--x', `${this.#lastX - rect.left}px`);
+        this.style.setProperty('--y', `${this.#lastY - rect.top}px`);
+        this.#rafId = 0;
+      });
+    }
   };
 
   #onMouseLeave = () => {
+    if (this.#rafId) { cancelAnimationFrame(this.#rafId); this.#rafId = 0; }
     this.style.setProperty('--x', '-999px');
     this.style.setProperty('--y', '-999px');
   };
@@ -174,6 +185,7 @@ class DvfySpotlightCard extends HTMLElement {
   }
 
   disconnectedCallback() {
+    if (this.#rafId) { cancelAnimationFrame(this.#rafId); this.#rafId = 0; }
     this.removeEventListener('mousemove', this.#onMouseMove);
     this.removeEventListener('mouseleave', this.#onMouseLeave);
   }
