@@ -39,6 +39,9 @@
  * </dvfy-table>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-table {
   display: block;
@@ -331,8 +334,6 @@ dvfy-table[hoverable] tbody tr:hover {
  * @cssprop {color} --dvfy-selected-bg - Selected row background
  */
 class DvfyTable extends HTMLElement {
-  static #styled = false;
-
   /** @type {Map<number, boolean>} original row index -> selected */
   #selection = new Map();
   /** @type {HTMLInputElement|null} */
@@ -356,12 +357,7 @@ class DvfyTable extends HTMLElement {
   #boundEscapeKey = null;
 
   connectedCallback() {
-    if (!DvfyTable.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyTable.#styled = true;
-    }
+    injectStyles('dvfy-table', STYLES);
     this.#enhance();
   }
 

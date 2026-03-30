@@ -11,6 +11,9 @@
  *   </dvfy-tabs>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const TABS_STYLES = `
 dvfy-tabs {
   display: flex;
@@ -75,16 +78,10 @@ dvfy-tab[active] { display: block; }
  * </dvfy-tabs>
  */
 class DvfyTabs extends HTMLElement {
-  static #styled = false;
   #list = null;
 
   connectedCallback() {
-    if (!DvfyTabs.#styled) {
-      const s = document.createElement('style');
-      s.textContent = TABS_STYLES;
-      document.head.appendChild(s);
-      DvfyTabs.#styled = true;
-    }
+    injectStyles('dvfy-tabs', TABS_STYLES);
     this.#build();
   }
 

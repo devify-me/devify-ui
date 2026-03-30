@@ -13,6 +13,9 @@
  *   <dvfy-progress value="40" variant="circle" size="lg"></dvfy-progress>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-progress {
   display: inline-flex;
@@ -117,15 +120,8 @@ const SIZES = { xs: { dim: 32, stroke: 3, font: 8 }, sm: { dim: 48, stroke: 4, f
  * @cssprop {color} --dvfy-danger-bg - Danger progress fill color
  */
 class DvfyProgress extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyProgress.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyProgress.#styled = true;
-    }
+    injectStyles('dvfy-progress', STYLES);
     this.setAttribute('role', 'progressbar');
     this.#render();
   }

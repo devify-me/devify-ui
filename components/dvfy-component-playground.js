@@ -17,6 +17,9 @@
  * @cssprop {color} --dvfy-primary-bg - Active tab accent
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const PLAYGROUND_STYLES = `
 dvfy-component-playground {
   display: block;
@@ -534,8 +537,6 @@ function esc(s) {
 }
 
 class DvfyComponentPlayground extends HTMLElement {
-  static #styled = false;
-
   #manifest = null;
   #tags = [];
   #currentTag = null;
@@ -546,12 +547,7 @@ class DvfyComponentPlayground extends HTMLElement {
   #widthReadout = null;
 
   connectedCallback() {
-    if (!DvfyComponentPlayground.#styled) {
-      const s = document.createElement('style');
-      s.textContent = PLAYGROUND_STYLES;
-      document.head.appendChild(s);
-      DvfyComponentPlayground.#styled = true;
-    }
+    injectStyles('dvfy-component-playground', PLAYGROUND_STYLES);
     this.#loadManifest();
   }
 

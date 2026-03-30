@@ -27,6 +27,9 @@
  *   </dvfy-avatar-group>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-avatar {
   display: inline-flex;
@@ -169,15 +172,8 @@ dvfy-avatar-group .dvfy-avatar-group__overflow {
  * @cssprop {color} --dvfy-danger-text - Busy status dot color
  */
 class DvfyAvatar extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyAvatar.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyAvatar.#styled = true;
-    }
+    injectStyles('dvfy-avatar', STYLES);
     this.#build();
   }
 

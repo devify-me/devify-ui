@@ -10,6 +10,9 @@
  *   <dvfy-textarea label="Notes" rows="5" error="Required field"></dvfy-textarea>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-textarea {
   display: flex;
@@ -124,16 +127,10 @@ dvfy-textarea[label-position="right"] .dvfy-textarea__footer { width: 100%; orde
  * @cssprop {color} --dvfy-input-error - Error border and message color
  */
 class DvfyTextarea extends HTMLElement {
-  static #styled = false;
   #id = null;
 
   connectedCallback() {
-    if (!DvfyTextarea.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyTextarea.#styled = true;
-    }
+    injectStyles('dvfy-textarea', STYLES);
     this.#id = this.getAttribute('name') || `dvfy-ta-${Math.random().toString(36).slice(2, 8)}`;
     this.#build();
   }

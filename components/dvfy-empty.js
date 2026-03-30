@@ -14,6 +14,9 @@
  *   </dvfy-empty>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-empty {
   display: flex;
@@ -68,15 +71,8 @@ dvfy-empty .dvfy-empty__actions {
  * @cssprop {color} --dvfy-text-secondary - Title color
  */
 class DvfyEmpty extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyEmpty.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyEmpty.#styled = true;
-    }
+    injectStyles('dvfy-empty', STYLES);
     this.setAttribute('role', 'status');
     this.#render();
   }

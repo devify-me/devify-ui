@@ -30,6 +30,9 @@
  *   </dvfy-scramble-hover>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const DEFAULT_CHARSET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&!?';
 
 const STYLES = `
@@ -68,8 +71,6 @@ dvfy-scramble-hover .dvfy-scramble-char {
  * @cssprop {color} --dvfy-scramble-resolve-color - Color of resolved characters
  */
 class DvfyScrambleHover extends HTMLElement {
-  static #styled = false;
-
   /** @type {string} Original text extracted from slot */
   #originalText = '';
   /** @type {HTMLSpanElement[]} One span per character */
@@ -86,12 +87,7 @@ class DvfyScrambleHover extends HTMLElement {
   #done = false;
 
   connectedCallback() {
-    if (!DvfyScrambleHover.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyScrambleHover.#styled = true;
-    }
+    injectStyles('dvfy-scramble-hover', STYLES);
 
     this.#originalText = this.textContent.trim();
     if (!this.#originalText) return;

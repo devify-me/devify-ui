@@ -29,6 +29,9 @@
  * </dvfy-select>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-select {
   display: flex;
@@ -270,19 +273,13 @@ dvfy-select[label-position="right"] .dvfy-select__help { width: 100%; order: 2; 
  * @cssprop {color} --dvfy-active-bg - Selected option background
  */
 class DvfySelect extends HTMLElement {
-  static #styled = false;
   #options = [];
   #value = '';
   #open = false;
   #focusedIndex = -1;
 
   connectedCallback() {
-    if (!DvfySelect.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfySelect.#styled = true;
-    }
+    injectStyles('dvfy-select', STYLES);
 
     // Read options from child <option> elements
     this.#options = Array.from(this.querySelectorAll('option')).map(o => ({

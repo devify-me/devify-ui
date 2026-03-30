@@ -17,6 +17,9 @@
  *   </dvfy-section>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-section {
   display: block;
@@ -89,19 +92,13 @@ dvfy-section[open] .dvfy-section__body {
  * @cssprop {color} --dvfy-border-muted - Section border color
  */
 class DvfySection extends HTMLElement {
-  static #styled = false;
   #summary = null;
   #body = null;
   #onClick = () => this.toggle();
   #onKey = (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); this.toggle(); } };
 
   connectedCallback() {
-    if (!DvfySection.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfySection.#styled = true;
-    }
+    injectStyles('dvfy-section', STYLES);
     this.#build();
   }
 

@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const STYLES = `
 dvfy-date-picker {
   display: flex;
@@ -431,8 +433,6 @@ function buildCalendarIcon() {
  * <dvfy-date-picker label="Meeting" type="datetime" value="2026-03-22T14:30"></dvfy-date-picker>
  */
 class DvfyDatePicker extends HTMLElement {
-  static #styled = false;
-
   // Viewed month/year in the calendar
   #year = new Date().getFullYear();
   #month = new Date().getMonth();
@@ -451,12 +451,7 @@ class DvfyDatePicker extends HTMLElement {
   #outsideClickHandler = null;
 
   connectedCallback() {
-    if (!DvfyDatePicker.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyDatePicker.#styled = true;
-    }
+    injectStyles('dvfy-date-picker', STYLES);
     this.#id = this.getAttribute('name') || `dvfy-dp-${Math.random().toString(36).slice(2, 8)}`;
     this.#parseAttrs();
     this.#build();

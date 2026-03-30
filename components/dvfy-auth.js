@@ -29,6 +29,9 @@
  *   </dvfy-auth>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 .dvfy-auth {
   display: flex;
@@ -243,20 +246,13 @@ const STYLES = `
  * @cssprop {color} --dvfy-surface-raised - Card background
  */
 class DvfyAuth extends HTMLElement {
-  static #styled = false;
-
   static get observedAttributes() {
     return ['mode', 'action', 'method', 'brand', 'logo', 'modal', 'forgot-url',
             'signup-url', 'signin-url', 'oauth-google', 'oauth-github'];
   }
 
   connectedCallback() {
-    if (!DvfyAuth.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyAuth.#styled = true;
-    }
+    injectStyles('dvfy-auth', STYLES);
     this.setAttribute('role', 'form');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Authentication');

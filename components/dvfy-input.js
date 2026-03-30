@@ -12,6 +12,9 @@
  *   <dvfy-input label="Password" type="password" error="Too short"></dvfy-input>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-input {
   display: flex;
@@ -150,18 +153,12 @@ dvfy-input[label-position="right"] .dvfy-input__error-msg { width: 100%; order: 
  * @cssprop {color} --dvfy-input-error - Error border and message color
  */
 class DvfyInput extends HTMLElement {
-  static #styled = false;
   /** @type {boolean} tracks password visibility state */
   #passwordVisible = false;
   #id = null;
 
   connectedCallback() {
-    if (!DvfyInput.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyInput.#styled = true;
-    }
+    injectStyles('dvfy-input', STYLES);
     this.#id = this.getAttribute('name') || `dvfy-input-${Math.random().toString(36).slice(2, 8)}`;
     this.#build();
   }

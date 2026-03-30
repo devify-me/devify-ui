@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const STYLES = `
 dvfy-accordion {
   display: block;
@@ -43,15 +45,8 @@ dvfy-accordion > dvfy-section[open] .dvfy-section__body {
  * @cssprop {length} --dvfy-radius-xl - Corner radius of first/last sections
  */
 class DvfyAccordion extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyAccordion.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyAccordion.#styled = true;
-    }
+    injectStyles('dvfy-accordion', STYLES);
 
     this.setAttribute('role', 'region');
     if (!this.hasAttribute('aria-label')) {

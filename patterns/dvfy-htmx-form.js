@@ -50,6 +50,9 @@
  *   <meta name="csrf-token" content="{{.CSRFToken}}">
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-htmx-form {
   display: block;
@@ -123,7 +126,6 @@ dvfy-htmx-form .dvfy-htmx-form__field-error {
  * @cssprop {color} --dvfy-danger-text - Field error text color
  */
 class DvfyHtmxForm extends HTMLElement {
-  static #styled = false;
   #form = null;
   #overlay = null;
   #submitBtn = null;
@@ -131,12 +133,7 @@ class DvfyHtmxForm extends HTMLElement {
   #confirmModal = null;
 
   connectedCallback() {
-    if (!DvfyHtmxForm.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyHtmxForm.#styled = true;
-    }
+    injectStyles('dvfy-htmx-form', STYLES);
     this.setAttribute('role', 'form');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Form');

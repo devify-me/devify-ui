@@ -13,6 +13,9 @@
  *   <dvfy-slider label="Rating" min="0" max="10" steps="10" value="5"></dvfy-slider>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-slider {
   display: flex;
@@ -292,15 +295,8 @@ dvfy-slider[range] input[type="range"]::-moz-range-thumb {
  * <dvfy-slider label="Rating" min="0" max="10" steps="10" value="5" show-value></dvfy-slider>
  */
 class DvfySlider extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfySlider.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfySlider.#styled = true;
-    }
+    injectStyles('dvfy-slider', STYLES);
     this.#render();
   }
 

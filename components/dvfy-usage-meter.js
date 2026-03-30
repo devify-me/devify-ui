@@ -17,6 +17,9 @@
  *   <dvfy-usage-meter data='[{"feature":"Storage","used":3,"limit":10,"unit":"GB"}]'></dvfy-usage-meter>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-usage-meter {
   display: block;
@@ -124,16 +127,10 @@ dvfy-usage-meter .dvfy-usage-meter__empty {
  * @cssprop {color} --dvfy-danger-bg - Danger threshold fill
  */
 class DvfyUsageMeter extends HTMLElement {
-  static #styled = false;
   #abortController = null;
 
   connectedCallback() {
-    if (!DvfyUsageMeter.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyUsageMeter.#styled = true;
-    }
+    injectStyles('dvfy-usage-meter', STYLES);
     this.setAttribute('role', 'region');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Feature usage');

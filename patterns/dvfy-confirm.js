@@ -60,6 +60,9 @@
  *   </dvfy-confirm>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-confirm {
   display: inline-block;
@@ -151,18 +154,12 @@ const HX_ATTRS = [
  * @cssprop {color} --dvfy-danger-bg - Confirm button background (danger variant)
  */
 class DvfyConfirm extends HTMLElement {
-  static #styled = false;
   #triggerEl = null;
   #modal = null;
   #interceptedAttrs = new Map();
 
   connectedCallback() {
-    if (!DvfyConfirm.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyConfirm.#styled = true;
-    }
+    injectStyles('dvfy-confirm', STYLES);
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Confirmation action');
     }

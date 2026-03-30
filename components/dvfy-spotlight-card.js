@@ -24,6 +24,9 @@
  *   <dvfy-spotlight-card interactive padded>Clickable card</dvfy-spotlight-card>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-spotlight-card {
   display: block;
@@ -143,8 +146,6 @@ dvfy-spotlight-card[interactive]:focus-visible {
  * @cssprop {color} --dvfy-spotlight-card-border-color - Border glow color
  */
 class DvfySpotlightCard extends HTMLElement {
-  static #styled = false;
-
   #onMouseMove = (e) => {
     const rect = this.getBoundingClientRect();
     this.style.setProperty('--x', `${e.clientX - rect.left}px`);
@@ -157,12 +158,7 @@ class DvfySpotlightCard extends HTMLElement {
   };
 
   connectedCallback() {
-    if (!DvfySpotlightCard.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfySpotlightCard.#styled = true;
-    }
+    injectStyles('dvfy-spotlight-card', STYLES);
 
     this.addEventListener('mousemove', this.#onMouseMove);
     this.addEventListener('mouseleave', this.#onMouseLeave);

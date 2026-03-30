@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const NAV_MENU_STYLES = `
 dvfy-nav-menu {
   display: flex;
@@ -61,20 +63,12 @@ dvfy-nav-menu[orientation="vertical"] dvfy-nav a.dvfy-nav__link:hover {
  * </dvfy-nav-menu>
  */
 class DvfyNavMenu extends HTMLElement {
-  static #styled = false;
-
   static get observedAttributes() {
     return ['orientation', 'label', 'label-position'];
   }
 
   connectedCallback() {
-    if (!DvfyNavMenu.#styled) {
-      const s = document.createElement('style');
-      s.id = 'dvfy-nav-menu-style';
-      s.textContent = NAV_MENU_STYLES;
-      document.head.appendChild(s);
-      DvfyNavMenu.#styled = true;
-    }
+    injectStyles('dvfy-nav-menu', NAV_MENU_STYLES);
 
     if (!this.getAttribute('role')) {
       this.setAttribute('role', 'navigation');

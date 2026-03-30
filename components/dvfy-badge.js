@@ -12,6 +12,9 @@
  *   <dvfy-badge status="danger" variant="outline" dot>Error</dvfy-badge>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-badge {
   display: inline-flex;
@@ -126,15 +129,8 @@ dvfy-badge[variant="outline"] { background: transparent; }
  * @cssprop {color} --dvfy-info-bg-subtle - Info status background
  */
 class DvfyBadge extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyBadge.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyBadge.#styled = true;
-    }
+    injectStyles('dvfy-badge', STYLES);
     this.#render();
   }
 

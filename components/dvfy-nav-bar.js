@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 let _navBarIdCounter = 0;
 
 const NAV_BAR_STYLES = `
@@ -192,7 +194,6 @@ const NAV_BAR_RESPONSIVE_FN = (id, bp) => `
  * </dvfy-nav-bar>
  */
 class DvfyNavBar extends HTMLElement {
-  static #baseStyled = false;
   #barId = null;
   #bar = null;
   #drawer = null;
@@ -204,13 +205,7 @@ class DvfyNavBar extends HTMLElement {
   static get observedAttributes() { return ['brand', 'logo']; }
 
   connectedCallback() {
-    if (!DvfyNavBar.#baseStyled) {
-      const s = document.createElement('style');
-      s.id = 'dvfy-nav-bar-base-style';
-      s.textContent = NAV_BAR_STYLES;
-      document.head.appendChild(s);
-      DvfyNavBar.#baseStyled = true;
-    }
+    injectStyles('dvfy-nav-bar', NAV_BAR_STYLES);
 
     this.#barId = String(++_navBarIdCounter);
     this.setAttribute('data-nav-bar-id', this.#barId);

@@ -13,6 +13,9 @@
  *   <dvfy-pagination total="20" current="3" max-visible="7"></dvfy-pagination>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-pagination {
   display: flex;
@@ -82,15 +85,8 @@ dvfy-pagination .dvfy-pagination__ellipsis {
  * <dvfy-pagination total="20" current="3" max-visible="7"></dvfy-pagination>
  */
 class DvfyPagination extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyPagination.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyPagination.#styled = true;
-    }
+    injectStyles('dvfy-pagination', STYLES);
     this.setAttribute('role', 'navigation');
     this.setAttribute('aria-label', 'Pagination');
     this.#render();

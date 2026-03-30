@@ -44,6 +44,9 @@
  *   ></dvfy-live-search>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-live-search {
   display: block;
@@ -139,7 +142,6 @@ dvfy-live-search--loading .dvfy-live-search__spinner {
  * @cssprop {color} --dvfy-primary-bg - Loading spinner accent color
  */
 class DvfyLiveSearch extends HTMLElement {
-  static #styled = false;
   #input = null;
   #spinner = null;
   #resultsTarget = null;
@@ -147,12 +149,7 @@ class DvfyLiveSearch extends HTMLElement {
   #abortController = null;
 
   connectedCallback() {
-    if (!DvfyLiveSearch.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyLiveSearch.#styled = true;
-    }
+    injectStyles('dvfy-live-search', STYLES);
     this.setAttribute('role', 'search');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Live search');

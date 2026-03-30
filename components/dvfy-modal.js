@@ -18,6 +18,9 @@
  * </dvfy-modal>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-modal {
   display: none;
@@ -107,18 +110,12 @@ dvfy-modal .dvfy-modal__body {
  * @cssprop {color} --dvfy-shadow-xl - Dialog shadow
  */
 class DvfyModal extends HTMLElement {
-  static #styled = false;
   #backdrop = null;
   #dialog = null;
   #prevFocus = null;
 
   connectedCallback() {
-    if (!DvfyModal.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyModal.#styled = true;
-    }
+    injectStyles('dvfy-modal', STYLES);
     if (this.hasAttribute('open')) this.#build();
   }
 

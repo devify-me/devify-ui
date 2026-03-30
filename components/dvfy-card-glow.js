@@ -22,6 +22,9 @@
  *   <dvfy-card-glow interactive padded style="--glow-color: rgba(99,102,241,0.25)">...</dvfy-card-glow>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-card-glow {
   display: block;
@@ -119,8 +122,6 @@ dvfy-card-glow[interactive]:focus-visible {
  * @cssprop {length|percentage} --glow-size - Gradient radius (default: 60%)
  */
 class DvfyCardGlow extends HTMLElement {
-  static #styled = false;
-
   #onMouseMove = (e) => {
     const rect = this.getBoundingClientRect();
     this.style.setProperty('--x', `${e.clientX - rect.left}px`);
@@ -133,12 +134,7 @@ class DvfyCardGlow extends HTMLElement {
   };
 
   connectedCallback() {
-    if (!DvfyCardGlow.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyCardGlow.#styled = true;
-    }
+    injectStyles('dvfy-card-glow', STYLES);
 
     this.addEventListener('mousemove', this.#onMouseMove);
     this.addEventListener('mouseleave', this.#onMouseLeave);

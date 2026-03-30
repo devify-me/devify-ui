@@ -43,6 +43,9 @@
  * </dvfy-stagger-enter>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 /* ── dvfy-stagger-enter host ── */
 dvfy-stagger-enter {
@@ -110,19 +113,12 @@ dvfy-stagger-enter[data-direction="right"] > * {
  * using @starting-style + sibling-index() — no JS timers.
  */
 class DvfyStaggerEnter extends HTMLElement {
-  static #styled = false;
-
   static get observedAttributes() {
     return ['direction', 'delay', 'duration', 'easing', 'distance'];
   }
 
   connectedCallback() {
-    if (!DvfyStaggerEnter.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyStaggerEnter.#styled = true;
-    }
+    injectStyles('dvfy-stagger-enter', STYLES);
     this.#applyTokens();
     this.#applyDirection();
   }

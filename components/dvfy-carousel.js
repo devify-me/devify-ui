@@ -64,6 +64,9 @@
  * </dvfy-carousel>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const CAROUSEL_STYLES = `
 dvfy-carousel {
   display: flex;
@@ -273,7 +276,6 @@ function needsFallback() {
  * @attr {string} images - JSON array of image URLs or objects with src and alt keys
  */
 class DvfyCarousel extends HTMLElement {
-  static #styled = false;
   /** Guard against re-init when the DOM wrapper triggers reconnect. */
   static #wrapping = new WeakSet();
 
@@ -290,12 +292,7 @@ class DvfyCarousel extends HTMLElement {
   #dots = null;   // dots container (.dvfy-carousel-dots)
 
   connectedCallback() {
-    if (!DvfyCarousel.#styled) {
-      const s = document.createElement('style');
-      s.textContent = CAROUSEL_STYLES;
-      document.head.appendChild(s);
-      DvfyCarousel.#styled = true;
-    }
+    injectStyles('dvfy-carousel', CAROUSEL_STYLES);
 
     if (DvfyCarousel.#wrapping.has(this)) {
       DvfyCarousel.#wrapping.delete(this);

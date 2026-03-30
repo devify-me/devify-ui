@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const STYLES = `
 dvfy-checkbox {
   display: inline-flex;
@@ -140,17 +142,11 @@ dvfy-checkbox[label-position="bottom"] { flex-direction: column; align-items: ce
  * <dvfy-checkbox label="Large option" size="lg" checked></dvfy-checkbox>
  */
 class DvfyCheckbox extends HTMLElement {
-  static #styled = false;
   #tristate = false;
   #state = 'unchecked'; // 'unchecked' | 'checked' | 'indeterminate'
 
   connectedCallback() {
-    if (!DvfyCheckbox.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyCheckbox.#styled = true;
-    }
+    injectStyles('dvfy-checkbox', STYLES);
     // Determine tri-state mode before first build
     this.#tristate = this.hasAttribute('indeterminate');
     if (this.hasAttribute('indeterminate')) {

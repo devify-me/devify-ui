@@ -29,6 +29,9 @@
  *   "></dvfy-scroll-progress>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 /* ── scroll-progress bar (no JS; CSS drives everything) ── */
 dvfy-scroll-progress {
@@ -86,15 +89,8 @@ dvfy-scroll-progress[position="bottom"] {
  * @cssprop {integer} --dvfy-scroll-progress-z - z-index (default: 1000)
  */
 class DvfyScrollProgress extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyScrollProgress.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyScrollProgress.#styled = true;
-    }
+    injectStyles('dvfy-scroll-progress', STYLES);
   }
 }
 

@@ -32,6 +32,9 @@
  * @cssprop {shadow} --dvfy-shadow-lg - Hovercard shadow
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 // Feature detection
 const SUPPORTS_INTEREST = (() => {
   try { return 'interestTargetElement' in HTMLButtonElement.prototype; }
@@ -138,17 +141,11 @@ dvfy-hovercard p + p {
 `;
 
 class DvfyHovercard extends HTMLElement {
-  static #styled = false;
   #timer = null;
   #triggers = [];
 
   connectedCallback() {
-    if (!DvfyHovercard.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyHovercard.#styled = true;
-    }
+    injectStyles('dvfy-hovercard', STYLES);
 
     if (SUPPORTS_INTEREST) {
       // Native path: set popover="hint" and let the browser handle hover

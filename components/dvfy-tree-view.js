@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const TREE_STYLES = `
 dvfy-tree-view {
   display: block;
@@ -124,17 +126,10 @@ dvfy-tree-node[data-hidden] {
  * </dvfy-tree-view>
  */
 class DvfyTreeView extends HTMLElement {
-  static #styled = false;
-
   #focusedNode = null;
 
   connectedCallback() {
-    if (!DvfyTreeView.#styled) {
-      const s = document.createElement('style');
-      s.textContent = TREE_STYLES;
-      document.head.appendChild(s);
-      DvfyTreeView.#styled = true;
-    }
+    injectStyles('dvfy-tree-view', TREE_STYLES);
 
     this.setAttribute('role', 'tree');
     this.setAttribute('tabindex', '0');

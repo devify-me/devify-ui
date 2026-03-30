@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const STYLES = `
 dvfy-file-upload {
   display: flex;
@@ -238,18 +240,11 @@ dvfy-file-upload[disabled] .dvfy-fu__file-remove {
  * <dvfy-file-upload accept="image/*" multiple max-size="5"></dvfy-file-upload>
  */
 class DvfyFileUpload extends HTMLElement {
-  static #styled = false;
-
   /** @type {File[]} */
   #files = [];
 
   connectedCallback() {
-    if (!DvfyFileUpload.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyFileUpload.#styled = true;
-    }
+    injectStyles('dvfy-file-upload', STYLES);
     if (!this.hasAttribute('state')) this.setAttribute('state', 'idle');
     this.#build();
   }

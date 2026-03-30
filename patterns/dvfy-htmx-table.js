@@ -60,6 +60,9 @@
  *   </dvfy-htmx-table>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-htmx-table {
   display: block;
@@ -246,7 +249,6 @@ dvfy-htmx-table .dvfy-htmx-table__page-ellipsis {
  * @cssprop {color} --dvfy-input-border - Search input border color
  */
 class DvfyHtmxTable extends HTMLElement {
-  static #styled = false;
   #table = null;
   #tbody = null;
   #wrapper = null;
@@ -260,12 +262,7 @@ class DvfyHtmxTable extends HTMLElement {
   #searchQuery = '';
 
   connectedCallback() {
-    if (!DvfyHtmxTable.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyHtmxTable.#styled = true;
-    }
+    injectStyles('dvfy-htmx-table', STYLES);
     this.setAttribute('role', 'region');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Data table');

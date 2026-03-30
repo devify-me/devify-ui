@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const HAMBURGER_STYLES = `
 /* ── Host ── */
 dvfy-hamburger {
@@ -217,8 +219,6 @@ dvfy-hamburger[animation="minus"][open] .dvfy-hb__bar--bot {
  * <dvfy-hamburger animation="x" size="md" bordered></dvfy-hamburger>
  */
 class DvfyHamburger extends HTMLElement {
-  static #styled = false;
-
   static get observedAttributes() { return ['label', 'label-position', 'animation', 'size', 'open', 'disabled', 'bordered', 'float']; }
 
   /** @type {HTMLButtonElement} */
@@ -227,13 +227,7 @@ class DvfyHamburger extends HTMLElement {
   #keyHandler = null;
 
   connectedCallback() {
-    if (!DvfyHamburger.#styled) {
-      const s = document.createElement('style');
-      s.id = 'dvfy-hb-style';
-      s.textContent = HAMBURGER_STYLES;
-      document.head.appendChild(s);
-      DvfyHamburger.#styled = true;
-    }
+    injectStyles('dvfy-hamburger', HAMBURGER_STYLES);
     this.#build();
 
     this.#clickHandler = () => this.#toggle();

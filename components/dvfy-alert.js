@@ -11,6 +11,9 @@
  *   <dvfy-alert status="danger" dismissible title="Error">Something went wrong.</dvfy-alert>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-alert {
   display: flex;
@@ -111,15 +114,8 @@ const STATUS_ICONS = {
  * @cssprop {color} --dvfy-danger-bg-subtle - Danger status background
  */
 class DvfyAlert extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyAlert.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyAlert.#styled = true;
-    }
+    injectStyles('dvfy-alert', STYLES);
     this.setAttribute('role', 'alert');
     this.#build();
   }

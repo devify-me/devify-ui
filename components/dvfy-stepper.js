@@ -35,6 +35,9 @@
  * </dvfy-stepper>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STEPPER_STYLES = `
 dvfy-stepper {
   display: block;
@@ -185,16 +188,10 @@ dvfy-stepper[vertical] dvfy-step[active] {
  * @event {CustomEvent} change - Fires when active step changes, detail: { step, index }
  */
 class DvfyStepper extends HTMLElement {
-  static #styled = false;
   #nav = null;
 
   connectedCallback() {
-    if (!DvfyStepper.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STEPPER_STYLES;
-      document.head.appendChild(s);
-      DvfyStepper.#styled = true;
-    }
+    injectStyles('dvfy-stepper', STEPPER_STYLES);
     this.setAttribute('role', 'navigation');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Progress steps');

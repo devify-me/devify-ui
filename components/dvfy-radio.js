@@ -13,6 +13,9 @@
  *   <dvfy-radio name="plan" value="pro" label="Pro"></dvfy-radio>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-radio {
   display: inline-flex;
@@ -126,15 +129,8 @@ dvfy-radio[label-position="bottom"] { flex-direction: column; align-items: cente
  * @cssprop {color} --dvfy-input-border - Unselected border color
  */
 class DvfyRadio extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyRadio.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyRadio.#styled = true;
-    }
+    injectStyles('dvfy-radio', STYLES);
     this.setAttribute('role', 'radio');
     this.#build();
   }

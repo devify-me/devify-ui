@@ -13,6 +13,9 @@
  *   DvfyToast.show({ message: 'Saved!', status: 'success' })
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 .dvfy-toast-container {
   position: fixed;
@@ -143,7 +146,6 @@ function getContainer(position) {
  * @cssprop {color} --dvfy-danger-bg-subtle - Danger toast background
  */
 class DvfyToast extends HTMLElement {
-  static #styled = false;
   #timer = null;
   #clickHandler = null;
   #remaining = 0;
@@ -188,12 +190,7 @@ class DvfyToast extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!DvfyToast.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyToast.#styled = true;
-    }
+    injectStyles('dvfy-toast', STYLES);
 
     const message = this.textContent.trim();
     const status = this.getAttribute('status') || 'info';

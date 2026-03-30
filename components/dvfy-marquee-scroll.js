@@ -28,6 +28,9 @@
  *   </dvfy-marquee-scroll>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-marquee-scroll {
   display: block;
@@ -94,8 +97,6 @@ dvfy-marquee-scroll .dvfy-marquee-item {
  * @cssprop {length} --dvfy-marquee-fade - Edge fade overlay width (default: 4rem)
  */
 class DvfyMarqueeScroll extends HTMLElement {
-  static #styled = false;
-
   /** @type {HTMLElement|null} */
   #track = null;
 
@@ -124,12 +125,7 @@ class DvfyMarqueeScroll extends HTMLElement {
   #motionQuery = null;
 
   connectedCallback() {
-    if (!DvfyMarqueeScroll.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyMarqueeScroll.#styled = true;
-    }
+    injectStyles('dvfy-marquee-scroll', STYLES);
 
     this.#render();
     this.#setupMotionQuery();

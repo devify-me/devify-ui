@@ -25,6 +25,9 @@
  *   <dvfy-plan-picker tenant-id="abc-123" current-plan="starter"></dvfy-plan-picker>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-plan-picker {
   display: block;
@@ -192,16 +195,10 @@ dvfy-plan-picker .dvfy-plan-picker__empty {
  * @cssprop {color} --dvfy-primary-bg - Current plan border highlight
  */
 class DvfyPlanPicker extends HTMLElement {
-  static #styled = false;
   #abortController = null;
 
   connectedCallback() {
-    if (!DvfyPlanPicker.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyPlanPicker.#styled = true;
-    }
+    injectStyles('dvfy-plan-picker', STYLES);
     this.setAttribute('role', 'region');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Choose a plan');

@@ -22,6 +22,9 @@
  * </dvfy-scroll-reveal>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 /* ── scroll-reveal wrapper ── */
 dvfy-scroll-reveal {
@@ -99,15 +102,8 @@ dvfy-scroll-reveal {
 `;
 
 class DvfyScrollReveal extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyScrollReveal.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyScrollReveal.#styled = true;
-    }
+    injectStyles('dvfy-scroll-reveal', STYLES);
   }
 }
 

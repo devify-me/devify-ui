@@ -26,6 +26,9 @@
  *   <dvfy-payment-methods tenant-id="abc-123" gateway="stripe"></dvfy-payment-methods>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-payment-methods {
   display: block;
@@ -181,16 +184,10 @@ const BRAND_COLORS = {
  * @cssprop {color} --dvfy-primary-bg - Default payment method border
  */
 class DvfyPaymentMethods extends HTMLElement {
-  static #styled = false;
   #abortController = null;
 
   connectedCallback() {
-    if (!DvfyPaymentMethods.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyPaymentMethods.#styled = true;
-    }
+    injectStyles('dvfy-payment-methods', STYLES);
     this.setAttribute('role', 'region');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Payment methods');

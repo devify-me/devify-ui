@@ -24,6 +24,9 @@
  *   </dvfy-command-palette>
  */
 
+import { injectStyles } from '../utils/styles.js';
+
+
 const STYLES = `
 dvfy-command-palette {
   display: none;
@@ -235,19 +238,13 @@ const MAX_RECENT = 5;
  * @cssprop {color} --dvfy-selected-bg - Active item highlight
  */
 class DvfyCommandPalette extends HTMLElement {
-  static #styled = false;
   #input = null;
   #list = null;
   #items = [];
   #activeIdx = -1;
 
   connectedCallback() {
-    if (!DvfyCommandPalette.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyCommandPalette.#styled = true;
-    }
+    injectStyles('dvfy-command-palette', STYLES);
 
     this.setAttribute('role', 'dialog');
     this.setAttribute('aria-modal', 'true');

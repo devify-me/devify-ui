@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const DURATION_MAP = {
   fastest: 'var(--dvfy-duration-fastest)',
   fast:    'var(--dvfy-duration-fast)',
@@ -127,7 +129,6 @@ function buildAnimationCSS(animation, duration) {
  * </script>
  */
 class DvfyPageTransition extends HTMLElement {
-  static #baseStyled = false;
   /** @type {HTMLStyleElement|null} */
   #animStyle = null;
   /** @type {HTMLStyleElement|null} */
@@ -214,12 +215,7 @@ class DvfyPageTransition extends HTMLElement {
 
   /** Inject base keyframe CSS once per document */
   #injectBaseStyles() {
-    if (DvfyPageTransition.#baseStyled) return;
-    const s = document.createElement('style');
-    s.setAttribute('data-dvfy-pt-base', '');
-    s.textContent = BASE_STYLES;
-    document.head.appendChild(s);
-    DvfyPageTransition.#baseStyled = true;
+    injectStyles('dvfy-page-transition', BASE_STYLES);
   }
 
   /**
