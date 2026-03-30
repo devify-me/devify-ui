@@ -89,7 +89,6 @@ class DvfyPagination extends HTMLElement {
     this.setAttribute('role', 'navigation');
     this.setAttribute('aria-label', 'Pagination');
     this.#render();
-    this.#onKeyDown = this.#onKeyDown.bind(this);
     this.addEventListener('keydown', this.#onKeyDown);
   }
 
@@ -108,7 +107,7 @@ class DvfyPagination extends HTMLElement {
   get #current() { return Math.max(1, Math.min(this.#total, parseInt(this.getAttribute('current') || '1', 10))); }
   get #maxVisible() { return parseInt(this.getAttribute('max-visible') || '5', 10); }
 
-  #onKeyDown(e) {
+  #onKeyDown = (e) => {
     const btns = [...this.querySelectorAll('.dvfy-pagination__btn:not([disabled])')];
     const idx = btns.indexOf(document.activeElement);
     if (idx === -1) return;
@@ -128,7 +127,7 @@ class DvfyPagination extends HTMLElement {
       e.preventDefault();
       btns[btns.length - 1]?.focus();
     }
-  }
+  };
 
   #goTo(page) {
     if (page < 1 || page > this.#total || page === this.#current) return;

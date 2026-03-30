@@ -67,6 +67,7 @@ describe('dvfy-card', () => {
         clientY: rect.top + 30,
         bubbles: true,
       }));
+      await new Promise(resolve => requestAnimationFrame(resolve));
       expect(el.style.getPropertyValue('--x')).to.equal('50px');
       expect(el.style.getPropertyValue('--y')).to.equal('30px');
     });
@@ -79,6 +80,7 @@ describe('dvfy-card', () => {
         clientY: rect.top + 30,
         bubbles: true,
       }));
+      await new Promise(resolve => requestAnimationFrame(resolve));
       el.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
       expect(el.style.getPropertyValue('--x')).to.equal('-999px');
       expect(el.style.getPropertyValue('--y')).to.equal('-999px');
