@@ -30,7 +30,7 @@ dvfy-switch .dvfy-switch__track {
   flex-shrink: 0;
   width: 2.25rem;
   height: 1.25rem;
-  background: var(--dvfy-neutral-300);
+  background: var(--dvfy-border-strong);
   border-radius: var(--dvfy-radius-md);
   transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
 }
@@ -44,7 +44,7 @@ dvfy-switch .dvfy-switch__thumb {
   left: 0.125rem;
   width: 1rem;
   height: 1rem;
-  background: var(--dvfy-neutral-0);
+  background: var(--dvfy-surface-page);
   border-radius: var(--dvfy-radius-sm);
   box-shadow: var(--dvfy-shadow-xs);
   transition: transform var(--dvfy-duration-fast) var(--dvfy-ease-out);
