@@ -127,6 +127,13 @@ class DvfyTreeView extends HTMLElement {
   static #styled = false;
 
   #focusedNode = null;
+  /** @type {Map<string, Set<Element>>} lowercase label → matching nodes */
+  #nodeMap = new Map();
+  /** @type {Map<string, Element>} href → node */
+  #hrefMap = new Map();
+  /** @type {Set<Element>} all tree-node elements */
+  #allNodes = new Set();
+  #observer = null;
 
   connectedCallback() {
     if (!DvfyTreeView.#styled) {
@@ -142,11 +149,54 @@ class DvfyTreeView extends HTMLElement {
 
     this.addEventListener('keydown', this.#onKeydown);
     this.addEventListener('click', this.#onClick);
+
+    // Build initial cache after child nodes are ready
+    requestAnimationFrame(() => this.#buildNodeCache());
+
+    // Invalidate cache on subtree changes (nodes added/removed)
+    this.#observer = new MutationObserver(() => this.#invalidateCache());
+    this.#observer.observe(this, { childList: true, subtree: true });
   }
 
   disconnectedCallback() {
     this.removeEventListener('keydown', this.#onKeydown);
     this.removeEventListener('click', this.#onClick);
+    if (this.#observer) {
+      this.#observer.disconnect();
+      this.#observer = null;
+    }
+  }
+
+  /** Build lookup caches from current tree nodes */
+  #buildNodeCache() {
+    this.#nodeMap.clear();
+    this.#hrefMap.clear();
+    this.#allNodes.clear();
+
+    const nodes = this.querySelectorAll('dvfy-tree-node');
+    for (const node of nodes) {
+      this.#allNodes.add(node);
+
+      const label = (node.getAttribute('label') || '').toLowerCase();
+      if (label) {
+        let set = this.#nodeMap.get(label);
+        if (!set) {
+          set = new Set();
+          this.#nodeMap.set(label, set);
+        }
+        set.add(node);
+      }
+
+      const href = node.getAttribute('href');
+      if (href) {
+        this.#hrefMap.set(href, node);
+      }
+    }
+  }
+
+  /** Mark caches dirty and rebuild */
+  #invalidateCache() {
+    this.#buildNodeCache();
   }
 
   /** Get all visible tree-node elements in DOM order */
@@ -283,20 +333,21 @@ class DvfyTreeView extends HTMLElement {
    */
   filter(query) {
     const q = (query || '').toLowerCase().trim();
-    const allNodes = this.querySelectorAll('dvfy-tree-node');
 
     if (!q) {
       this.clearFilter();
       return;
     }
 
-    // First pass: mark all hidden
-    allNodes.forEach(n => n.setAttribute('data-hidden', ''));
+    // First pass: mark all cached nodes hidden
+    for (const node of this.#allNodes) {
+      node.setAttribute('data-hidden', '');
+    }
 
-    // Second pass: find matching nodes and show them + ancestors
-    allNodes.forEach((node) => {
-      const label = (node.getAttribute('label') || '').toLowerCase();
-      if (label.includes(q)) {
+    // Second pass: find matching nodes via cached map and show them + ancestors
+    for (const [label, nodes] of this.#nodeMap) {
+      if (!label.includes(q)) continue;
+      for (const node of nodes) {
         node.removeAttribute('data-hidden');
         let parent = node.parentElement?.closest('dvfy-tree-node');
         while (parent) {
@@ -307,12 +358,14 @@ class DvfyTreeView extends HTMLElement {
           parent = parent.parentElement?.closest('dvfy-tree-node');
         }
       }
-    });
+    }
   }
 
   /** Clear filter and restore all nodes */
   clearFilter() {
-    this.querySelectorAll('dvfy-tree-node[data-hidden]').forEach(n => n.removeAttribute('data-hidden'));
+    for (const node of this.#allNodes) {
+      node.removeAttribute('data-hidden');
+    }
   }
 
   /**
@@ -320,12 +373,12 @@ class DvfyTreeView extends HTMLElement {
    * @param {string} href
    */
   selectByHref(href) {
-    this.querySelectorAll('dvfy-tree-node[selected]').forEach(n => {
-      n.removeAttribute('selected');
-      n.removeAttribute('aria-selected');
-    });
+    for (const node of this.#allNodes) {
+      node.removeAttribute('selected');
+      node.removeAttribute('aria-selected');
+    }
     if (!href) return;
-    const node = this.querySelector(`dvfy-tree-node[href="${CSS.escape(href)}"]`);
+    const node = this.#hrefMap.get(href);
     if (!node) return;
     node.setAttribute('selected', '');
     node.setAttribute('aria-selected', 'true');
