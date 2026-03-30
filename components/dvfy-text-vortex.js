@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-text-vortex> — Spiral scroll text vortex animation
  *
@@ -166,15 +168,8 @@ dvfy-text-vortex .dvfy-vortex-chars {
  * @cssprop {color} --dvfy-vortex-color - Override text color
  */
 class DvfyTextVortex extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyTextVortex.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyTextVortex.#styled = true;
-    }
+    injectStyles('dvfy-text-vortex', STYLES);
     this.#applyTokens();
     this.#render();
     this.#detectScrollSupport();

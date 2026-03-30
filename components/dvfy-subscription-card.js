@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-subscription-card> — Current subscription status
  *
@@ -171,16 +173,10 @@ const STATE_BADGE = {
  * @cssprop {color} --dvfy-border-default - Card border
  */
 class DvfySubscriptionCard extends HTMLElement {
-  static #styled = false;
   #abortController = null;
 
   connectedCallback() {
-    if (!DvfySubscriptionCard.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfySubscriptionCard.#styled = true;
-    }
+    injectStyles('dvfy-subscription-card', STYLES);
     this.setAttribute('role', 'region');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Subscription status');

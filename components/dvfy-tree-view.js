@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const STYLES = `
 dvfy-tree-view {
   display: block;
@@ -124,8 +126,6 @@ dvfy-tree-node[data-hidden] {
  * </dvfy-tree-view>
  */
 class DvfyTreeView extends HTMLElement {
-  static #styled = false;
-
   #focusedNode = null;
   /** @type {Map<string, Set<Element>>} lowercase label → matching nodes */
   #nodeMap = new Map();
@@ -136,12 +136,7 @@ class DvfyTreeView extends HTMLElement {
   #observer = null;
 
   connectedCallback() {
-    if (!DvfyTreeView.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyTreeView.#styled = true;
-    }
+    injectStyles('dvfy-tree-view', STYLES);
 
     this.setAttribute('role', 'tree');
     this.setAttribute('aria-label', this.getAttribute('aria-label') || 'Tree navigation');

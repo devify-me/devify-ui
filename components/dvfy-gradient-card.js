@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-gradient-card> — Card with cursor-tracking radial gradient hover
  *
@@ -102,8 +104,6 @@ dvfy-gradient-card[interactive]:focus-visible {
  * @cssprop {length} --dvfy-gradient-card-size - Gradient radius (default: 250px)
  */
 class DvfyGradientCard extends HTMLElement {
-  static #styled = false;
-
   #onMouseMove = (e) => {
     const rect = this.getBoundingClientRect();
     this.style.setProperty('--x', `${e.clientX - rect.left}px`);
@@ -111,12 +111,7 @@ class DvfyGradientCard extends HTMLElement {
   };
 
   connectedCallback() {
-    if (!DvfyGradientCard.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyGradientCard.#styled = true;
-    }
+    injectStyles('dvfy-gradient-card', STYLES);
 
     this.addEventListener('mousemove', this.#onMouseMove);
 

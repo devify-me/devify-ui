@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const STYLES = `
 dvfy-component-playground {
   display: block;
@@ -570,8 +572,6 @@ function esc(s) {
  * @cssprop {color} --dvfy-primary-bg - Active tab accent
  */
 class DvfyComponentPlayground extends HTMLElement {
-  static #styled = false;
-
   #manifest = null;
   #tags = [];
   #currentTag = null;
@@ -583,12 +583,7 @@ class DvfyComponentPlayground extends HTMLElement {
   #resizeObserver = null;
 
   connectedCallback() {
-    if (!DvfyComponentPlayground.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyComponentPlayground.#styled = true;
-    }
+    injectStyles('dvfy-component-playground', STYLES);
     this.#loadManifest();
   }
 

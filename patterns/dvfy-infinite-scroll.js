@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-infinite-scroll> — Loads more content when scrolling near bottom.
  *
@@ -107,7 +109,6 @@ function stripEventHandlers(node) {
 }
 
 class DvfyInfiniteScroll extends HTMLElement {
-  static #styled = false;
   #content = null;
   #loader = null;
   #sentinel = null;
@@ -118,12 +119,7 @@ class DvfyInfiniteScroll extends HTMLElement {
   #exhausted = false;
 
   connectedCallback() {
-    if (!DvfyInfiniteScroll.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyInfiniteScroll.#styled = true;
-    }
+    injectStyles('dvfy-infinite-scroll', STYLES);
     this.setAttribute('role', 'feed');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Infinite scroll content');

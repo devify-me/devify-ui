@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-sidebar> — Side navigation
  *
@@ -120,17 +122,10 @@ dvfy-sidebar a:focus-visible {
  * @cssprop {color} --dvfy-hover-bg - Link hover background
  */
 class DvfySidebar extends HTMLElement {
-  static #styled = false;
-
   #toggle = null;
 
   connectedCallback() {
-    if (!DvfySidebar.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfySidebar.#styled = true;
-    }
+    injectStyles('dvfy-sidebar', STYLES);
     this.setAttribute('role', 'navigation');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Sidebar');

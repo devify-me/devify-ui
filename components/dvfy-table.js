@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-table> — Enhanced data table wrapper
  *
@@ -331,7 +333,6 @@ dvfy-table[hoverable] tbody tr:hover {
  * @cssprop {color} --dvfy-selected-bg - Selected row background
  */
 class DvfyTable extends HTMLElement {
-  static #styled = false;
   static get observedAttributes() {
     return ['striped', 'hoverable', 'compact', 'responsive', 'selectable', 'filterable', 'searchable'];
   }
@@ -374,12 +375,7 @@ class DvfyTable extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!DvfyTable.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyTable.#styled = true;
-    }
+    injectStyles('dvfy-table', STYLES);
     this.#enhance();
     this.#connected = true;
   }

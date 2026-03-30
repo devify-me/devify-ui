@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const SUPPORTS_VIEW_TRANSITIONS = typeof document !== 'undefined' &&
   typeof document.startViewTransition === 'function';
 
@@ -76,8 +78,6 @@ dvfy-transition-root {
  * </dvfy-transition-root>
  */
 class DvfyTransitionRoot extends HTMLElement {
-  static #baseStyled = false;
-
   /** @type {HTMLStyleElement|null} Injected for MPA @view-transition rule */
   #mpaStyle = null;
   /** @type {HTMLStyleElement|null} Injected for duration/easing overrides */
@@ -366,15 +366,7 @@ class DvfyTransitionRoot extends HTMLElement {
     }
   }
 
-  /** Inject base CSS once per document */
-  #injectBaseStyles() {
-    if (DvfyTransitionRoot.#baseStyled) return;
-    const s = document.createElement('style');
-    s.setAttribute('data-dvfy-tr-base', '');
-    s.textContent = STYLES;
-    document.head.appendChild(s);
-    DvfyTransitionRoot.#baseStyled = true;
-  }
+  #injectBaseStyles() { injectStyles('dvfy-transition-root', STYLES); }
 }
 
 customElements.define('dvfy-transition-root', DvfyTransitionRoot);

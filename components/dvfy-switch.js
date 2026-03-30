@@ -1,4 +1,5 @@
 import { labelPositionCSS } from '../utils/label-position.js';
+import { injectStyles } from '../utils/styles.js';
 
 /**
  * <dvfy-switch> — Toggle switch
@@ -150,15 +151,8 @@ ${labelPositionCSS('dvfy-switch', { layout: 'inline', label: '.dvfy-switch__text
  * @cssprop {color} --dvfy-neutral-0 - Thumb color
  */
 class DvfySwitch extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfySwitch.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfySwitch.#styled = true;
-    }
+    injectStyles('dvfy-switch', STYLES);
 
     this.setAttribute('role', 'switch');
     this.setAttribute('aria-checked', this.hasAttribute('checked') ? 'true' : 'false');

@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-theme-switcher> — Theme dropdown + dark/light toggle
  *
@@ -142,7 +144,6 @@ const PALETTE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="
  * @cssprop {color} --dvfy-surface-raised - Toggle thumb color / track background (dark mode)
  */
 class DvfyThemeSwitcher extends HTMLElement {
-  static #styled = false;
   #themes = [];
   #currentTheme = '';
   #currentMode = 'light';
@@ -175,12 +176,7 @@ class DvfyThemeSwitcher extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!DvfyThemeSwitcher.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyThemeSwitcher.#styled = true;
-    }
+    injectStyles('dvfy-theme-switcher', STYLES);
 
     // Parse theme options from children
     const options = Array.from(this.querySelectorAll('option'));

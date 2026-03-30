@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-spotlight-card> — Premium card with dual-layer mouse-tracking spotlight
  *
@@ -143,7 +145,6 @@ dvfy-spotlight-card[interactive]:focus-visible {
  * @cssprop {color} --dvfy-spotlight-card-border-color - Border glow color
  */
 class DvfySpotlightCard extends HTMLElement {
-  static #styled = false;
   #rafId = 0;
   #lastX = 0;
   #lastY = 0;
@@ -168,12 +169,7 @@ class DvfySpotlightCard extends HTMLElement {
   };
 
   connectedCallback() {
-    if (!DvfySpotlightCard.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfySpotlightCard.#styled = true;
-    }
+    injectStyles('dvfy-spotlight-card', STYLES);
 
     this.addEventListener('mousemove', this.#onMouseMove);
     this.addEventListener('mouseleave', this.#onMouseLeave);

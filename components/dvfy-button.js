@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /* <dvfy-button> — Button component */
 
 const STYLES = `
@@ -169,15 +171,8 @@ dvfy-button[loading]::after {
  * @cssprop {color} --dvfy-danger-bg - Danger variant background
  */
 class DvfyButton extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyButton.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyButton.#styled = true;
-    }
+    injectStyles('dvfy-button', STYLES);
 
     if (this.hasAttribute('from')) this.style.setProperty('--dvfy-btn-grad-from', this.getAttribute('from'));
     if (this.hasAttribute('to')) this.style.setProperty('--dvfy-btn-grad-to', this.getAttribute('to'));

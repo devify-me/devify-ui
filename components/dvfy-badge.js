@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-badge> — Status badge
  *
@@ -127,15 +129,8 @@ dvfy-badge[variant="outline"] { background: transparent; }
  * @cssprop {color} --dvfy-info-bg-subtle - Info status background
  */
 class DvfyBadge extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyBadge.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyBadge.#styled = true;
-    }
+    injectStyles('dvfy-badge', STYLES);
     this.setAttribute('role', 'status');
     this.#render();
   }

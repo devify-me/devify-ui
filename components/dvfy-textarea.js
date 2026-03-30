@@ -1,4 +1,5 @@
 import { labelPositionCSS } from '../utils/label-position.js';
+import { injectStyles } from '../utils/styles.js';
 
 /**
  * <dvfy-textarea> — Multiline text input with label and auto-resize
@@ -112,16 +113,10 @@ ${labelPositionCSS('dvfy-textarea', { layout: 'field', label: '.dvfy-textarea__l
  * @cssprop {color} --dvfy-input-error - Error border and message color
  */
 class DvfyTextarea extends HTMLElement {
-  static #styled = false;
   #id = null;
 
   connectedCallback() {
-    if (!DvfyTextarea.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyTextarea.#styled = true;
-    }
+    injectStyles('dvfy-textarea', STYLES);
     this.#id = this.getAttribute('name') || `dvfy-ta-${Math.random().toString(36).slice(2, 8)}`;
     this.#build();
   }

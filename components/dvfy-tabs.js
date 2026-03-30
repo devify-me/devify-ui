@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-tabs> — Tabbed content
  *
@@ -75,16 +77,10 @@ dvfy-tab[active] { display: block; }
  * </dvfy-tabs>
  */
 class DvfyTabs extends HTMLElement {
-  static #styled = false;
   #list = null;
 
   connectedCallback() {
-    if (!DvfyTabs.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyTabs.#styled = true;
-    }
+    injectStyles('dvfy-tabs', STYLES);
     this.#build();
   }
 

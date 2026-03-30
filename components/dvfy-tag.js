@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-tag> — Interactive tag/chip
  *
@@ -139,15 +141,8 @@ dvfy-tag .dvfy-tag__remove:focus-visible {
  * @cssprop {color} --dvfy-info-bg-subtle - Info tag background
  */
 class DvfyTag extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyTag.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyTag.#styled = true;
-    }
+    injectStyles('dvfy-tag', STYLES);
     this.#render();
     this.#syncTabindex();
     this.#onKeyDown = this.#onKeyDown.bind(this);

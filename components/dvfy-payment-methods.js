@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-payment-methods> — List and manage payment methods
  *
@@ -181,16 +183,10 @@ const BRAND_COLORS = {
  * @cssprop {color} --dvfy-primary-bg - Default payment method border
  */
 class DvfyPaymentMethods extends HTMLElement {
-  static #styled = false;
   #abortController = null;
 
   connectedCallback() {
-    if (!DvfyPaymentMethods.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyPaymentMethods.#styled = true;
-    }
+    injectStyles('dvfy-payment-methods', STYLES);
     this.setAttribute('role', 'region');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Payment methods');

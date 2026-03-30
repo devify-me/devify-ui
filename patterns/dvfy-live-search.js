@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-live-search> — Debounced search input that loads results via HTMX.
  *
@@ -151,7 +153,6 @@ function stripEventHandlers(node) {
 }
 
 class DvfyLiveSearch extends HTMLElement {
-  static #styled = false;
   #input = null;
   #spinner = null;
   #resultsTarget = null;
@@ -159,12 +160,7 @@ class DvfyLiveSearch extends HTMLElement {
   #abortController = null;
 
   connectedCallback() {
-    if (!DvfyLiveSearch.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyLiveSearch.#styled = true;
-    }
+    injectStyles('dvfy-live-search', STYLES);
     this.setAttribute('role', 'search');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Live search');

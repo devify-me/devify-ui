@@ -1,4 +1,5 @@
 import { sanitizeSrc } from '../utils/url.js';
+import { injectStyles } from '../utils/styles.js';
 
 /**
  * <dvfy-carousel> — Native CSS carousel with JS fallback.
@@ -275,7 +276,6 @@ function needsFallback() {
  * @attr {string} images - JSON array of image URLs or objects with src and alt keys
  */
 class DvfyCarousel extends HTMLElement {
-  static #styled = false;
   /** Guard against re-init when the DOM wrapper triggers reconnect. */
   static #wrapping = new WeakSet();
 
@@ -297,12 +297,7 @@ class DvfyCarousel extends HTMLElement {
   #dots = null;   // dots container (.dvfy-carousel-dots)
 
   connectedCallback() {
-    if (!DvfyCarousel.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyCarousel.#styled = true;
-    }
+    injectStyles('dvfy-carousel', STYLES);
 
     this.#mql = window.matchMedia('(prefers-reduced-motion: reduce)');
     this.#reducedMotion = this.#mql.matches;

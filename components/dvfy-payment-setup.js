@@ -1,4 +1,5 @@
 import { sanitizeHref, sanitizePayPalUrl } from '../utils/url.js';
+import { injectStyles } from '../utils/styles.js';
 
 /**
  * <dvfy-payment-setup> — Add payment method (gateway-specific)
@@ -154,7 +155,6 @@ dvfy-payment-setup .dvfy-payment-setup__gateway-text {
  * @cssprop {color} --dvfy-border-default - Container border
  */
 class DvfyPaymentSetup extends HTMLElement {
-  static #styled = false;
   #abortController = null;
   #stripeInstance = null;
   #stripeElements = null;
@@ -162,12 +162,7 @@ class DvfyPaymentSetup extends HTMLElement {
   #clientSecret = null;
 
   connectedCallback() {
-    if (!DvfyPaymentSetup.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyPaymentSetup.#styled = true;
-    }
+    injectStyles('dvfy-payment-setup', STYLES);
     this.setAttribute('role', 'form');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Add payment method');

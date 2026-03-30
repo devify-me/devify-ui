@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-popover> — Interactive popover
  *
@@ -152,19 +154,13 @@ dvfy-popover[data-pos="right"] .dvfy-popover__arrow {
  * @cssprop {length} --dvfy-shadow-lg - Panel shadow
  */
 class DvfyPopover extends HTMLElement {
-  static #styled = false;
   #panel = null;
   #arrow = null;
   #timer = null;
   #isOpen = false;
 
   connectedCallback() {
-    if (!DvfyPopover.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyPopover.#styled = true;
-    }
+    injectStyles('dvfy-popover', STYLES);
 
     this.#buildPanel();
     this.#bindTrigger();

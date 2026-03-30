@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 // Feature detection
 const SUPPORTS_INTEREST = (() => {
   try { return 'interestTargetElement' in HTMLButtonElement.prototype; }
@@ -137,18 +139,12 @@ dvfy-hovercard p + p {
  * @cssprop {shadow} --dvfy-shadow-lg - Hovercard shadow
  */
 class DvfyHovercard extends HTMLElement {
-  static #styled = false;
   static get observedAttributes() { return ['position', 'delay']; }
   #timer = null;
   #triggers = [];
 
   connectedCallback() {
-    if (!DvfyHovercard.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyHovercard.#styled = true;
-    }
+    injectStyles('dvfy-hovercard', STYLES);
 
     // ARIA: tooltip role + link triggers via aria-describedby
     this.setAttribute('role', 'tooltip');

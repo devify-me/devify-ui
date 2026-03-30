@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-card-glow> — Card with mouse-tracked radial gradient glow
  *
@@ -119,7 +121,6 @@ dvfy-card-glow[interactive]:focus-visible {
  * @cssprop {length|percentage} --glow-size - Gradient radius (default: 60%)
  */
 class DvfyCardGlow extends HTMLElement {
-  static #styled = false;
   #rafId = 0;
   #lastX = 0;
   #lastY = 0;
@@ -144,12 +145,7 @@ class DvfyCardGlow extends HTMLElement {
   };
 
   connectedCallback() {
-    if (!DvfyCardGlow.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyCardGlow.#styled = true;
-    }
+    injectStyles('dvfy-card-glow', STYLES);
 
     this.addEventListener('mousemove', this.#onMouseMove);
     this.addEventListener('mouseleave', this.#onMouseLeave);

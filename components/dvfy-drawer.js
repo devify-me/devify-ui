@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const STYLES = `
 dvfy-drawer {
   display: flex;
@@ -186,17 +188,10 @@ dvfy-drawer[position="bottom"][collapsed] {
  * @cssprop {length} --dvfy-drawer-width - Override panel width via CSS
  */
 class DvfyDrawer extends HTMLElement {
-  static #styled = false;
-
   #reopen = null;
 
   connectedCallback() {
-    if (!DvfyDrawer.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyDrawer.#styled = true;
-    }
+    injectStyles('dvfy-drawer', STYLES);
 
     this.#applyWidth();
     this.#build();

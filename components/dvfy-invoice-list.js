@@ -1,4 +1,5 @@
 import { sanitizeHref } from '../utils/url.js';
+import { injectStyles } from '../utils/styles.js';
 
 /**
  * <dvfy-invoice-list> — Billing history
@@ -165,16 +166,10 @@ const STATUS_MAP = {
  * @cssprop {color} --dvfy-warning-bg-subtle - Open status badge background
  */
 class DvfyInvoiceList extends HTMLElement {
-  static #styled = false;
   #abortController = null;
 
   connectedCallback() {
-    if (!DvfyInvoiceList.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyInvoiceList.#styled = true;
-    }
+    injectStyles('dvfy-invoice-list', STYLES);
     this.style.containerType = 'inline-size';
     this.setAttribute('role', 'region');
     if (!this.hasAttribute('aria-label')) {
