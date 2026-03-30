@@ -1,20 +1,17 @@
-# /next session — 2026-03-29
+# Issue #232: fix(select): narrow preview, broken searchable, unstyled options, wrong label-position
 
-All open issues resolved. Board is clear.
+**Type:** fix
+**Branch:** fix/232-select-bugs
+**Labels:** bug
 
-## Completed
+## Plan
 
-- [x] #211 — Payment component suite (6 components) → PR #224
-- [x] #19 — dvfy-popover interactive popover → PR #225
-- [x] #15 — dvfy-description-list key-value display → PR #226
-- [x] #20 — dvfy-command-palette spotlight search → PR #227
-- [x] #196 — dvfy-tree-view deps verification → PR #228
-- [x] #33 — Tier 3 component audit (sidebar, accordion, auth) → PR #229
-- [x] #34 — Tier 4 HTMX patterns audit → PR #230
-- [x] #206 — Hamburger animation convention → PR #231
+- [ ] Fix 1: Narrow preview — add width: 100% to .dvfy-select__custom
+- [ ] Fix 2: Broken searchable toggle — cache #options across rebuilds
+- [ ] Fix 3: Unstyled native options — add appearance: none + token-based styling
+- [ ] Fix 4: label-position left/right — fix flex layout rules
+- [ ] Verify: npm run lint
+- [ ] Verify: npm test
+- [ ] Verify: npm run analyze
 
-## Closed (evaluation only)
-
-- #18 — Already implemented (dvfy-slider exists)
-- #190, #189, #188, #187, #185, #192, #195, #197 — Decomposition evaluated: keep as-is
-- #184, #183, #186, #193, #194, #191 — Decomposition deferred: not cost-effective now
+## Future
