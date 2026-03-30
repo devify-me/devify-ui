@@ -543,6 +543,7 @@ class DvfyComponentPlayground extends HTMLElement {
   #cssValues = {};        // { cssPropertyName: currentValue }
   #previewArea = null;
   #widthReadout = null;
+  #resizeObserver = null;
 
   connectedCallback() {
     if (!DvfyComponentPlayground.#styled) {
@@ -552,6 +553,14 @@ class DvfyComponentPlayground extends HTMLElement {
       DvfyComponentPlayground.#styled = true;
     }
     this.#loadManifest();
+  }
+
+  disconnectedCallback() {
+    if (this.#resizeObserver) {
+      this.#resizeObserver.disconnect();
+      this.#resizeObserver = null;
+    }
+    this.textContent = '';
   }
 
   static get observedAttributes() { return ['component', 'src']; }
@@ -967,8 +976,9 @@ class DvfyComponentPlayground extends HTMLElement {
     });
 
     // Update readout when tab becomes visible or layout changes
-    const ro = new ResizeObserver(() => this.#updateWidthReadout());
-    ro.observe(area);
+    if (this.#resizeObserver) this.#resizeObserver.disconnect();
+    this.#resizeObserver = new ResizeObserver(() => this.#updateWidthReadout());
+    this.#resizeObserver.observe(area);
   }
 
   /**

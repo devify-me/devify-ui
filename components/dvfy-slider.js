@@ -304,6 +304,10 @@ class DvfySlider extends HTMLElement {
     this.#render();
   }
 
+  disconnectedCallback() {
+    this.textContent = '';
+  }
+
   static get observedAttributes() {
     return ['label', 'label-position', 'min', 'max', 'step', 'value', 'value-end', 'name', 'disabled', 'size', 'show-value', 'variant', 'no-fill', 'range', 'steps'];
   }
