@@ -64,7 +64,7 @@
  * </dvfy-carousel>
  */
 
-const CAROUSEL_STYLES = `
+const STYLES = `
 dvfy-carousel {
   display: flex;
   overflow-x: scroll;
@@ -292,7 +292,7 @@ class DvfyCarousel extends HTMLElement {
   connectedCallback() {
     if (!DvfyCarousel.#styled) {
       const s = document.createElement('style');
-      s.textContent = CAROUSEL_STYLES;
+      s.textContent = STYLES;
       document.head.appendChild(s);
       DvfyCarousel.#styled = true;
     }

@@ -1,6 +1,6 @@
 let _navBarIdCounter = 0;
 
-const NAV_BAR_STYLES = `
+const STYLES = `
 /* ── Container query context ── */
 dvfy-nav-bar {
   container-type: inline-size;
@@ -207,7 +207,7 @@ class DvfyNavBar extends HTMLElement {
     if (!DvfyNavBar.#baseStyled) {
       const s = document.createElement('style');
       s.id = 'dvfy-nav-bar-base-style';
-      s.textContent = NAV_BAR_STYLES;
+      s.textContent = STYLES;
       document.head.appendChild(s);
       DvfyNavBar.#baseStyled = true;
     }

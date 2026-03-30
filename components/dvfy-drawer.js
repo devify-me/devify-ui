@@ -1,4 +1,4 @@
-const DRAWER_STYLES = `
+const STYLES = `
 dvfy-drawer {
   display: flex;
   flex-direction: column;
@@ -193,7 +193,7 @@ class DvfyDrawer extends HTMLElement {
   connectedCallback() {
     if (!DvfyDrawer.#styled) {
       const s = document.createElement('style');
-      s.textContent = DRAWER_STYLES;
+      s.textContent = STYLES;
       document.head.appendChild(s);
       DvfyDrawer.#styled = true;
     }

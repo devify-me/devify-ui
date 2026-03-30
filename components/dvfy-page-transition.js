@@ -7,7 +7,7 @@ const DURATION_MAP = {
 };
 
 /** CSS injected once into <head> — keyframes and pseudo-element reset */
-const BASE_STYLES = `
+const STYLES = `
 /* ── dvfy-page-transition: display ── */
 dvfy-page-transition {
   display: contents;
@@ -217,7 +217,7 @@ class DvfyPageTransition extends HTMLElement {
     if (DvfyPageTransition.#baseStyled) return;
     const s = document.createElement('style');
     s.setAttribute('data-dvfy-pt-base', '');
-    s.textContent = BASE_STYLES;
+    s.textContent = STYLES;
     document.head.appendChild(s);
     DvfyPageTransition.#baseStyled = true;
   }

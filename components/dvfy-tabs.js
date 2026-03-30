@@ -11,7 +11,7 @@
  *   </dvfy-tabs>
  */
 
-const TABS_STYLES = `
+const STYLES = `
 dvfy-tabs {
   display: flex;
   flex-direction: column;
@@ -81,7 +81,7 @@ class DvfyTabs extends HTMLElement {
   connectedCallback() {
     if (!DvfyTabs.#styled) {
       const s = document.createElement('style');
-      s.textContent = TABS_STYLES;
+      s.textContent = STYLES;
       document.head.appendChild(s);
       DvfyTabs.#styled = true;
     }

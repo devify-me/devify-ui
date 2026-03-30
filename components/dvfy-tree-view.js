@@ -1,4 +1,4 @@
-const TREE_STYLES = `
+const STYLES = `
 dvfy-tree-view {
   display: block;
   font-family: var(--dvfy-font-sans);
@@ -131,7 +131,7 @@ class DvfyTreeView extends HTMLElement {
   connectedCallback() {
     if (!DvfyTreeView.#styled) {
       const s = document.createElement('style');
-      s.textContent = TREE_STYLES;
+      s.textContent = STYLES;
       document.head.appendChild(s);
       DvfyTreeView.#styled = true;
     }

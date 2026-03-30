@@ -35,7 +35,7 @@
  * </dvfy-stepper>
  */
 
-const STEPPER_STYLES = `
+const STYLES = `
 dvfy-stepper {
   display: block;
   font-family: var(--dvfy-font-sans);
@@ -191,7 +191,7 @@ class DvfyStepper extends HTMLElement {
   connectedCallback() {
     if (!DvfyStepper.#styled) {
       const s = document.createElement('style');
-      s.textContent = STEPPER_STYLES;
+      s.textContent = STYLES;
       document.head.appendChild(s);
       DvfyStepper.#styled = true;
     }

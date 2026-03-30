@@ -1,7 +1,7 @@
 const SUPPORTS_VIEW_TRANSITIONS = typeof document !== 'undefined' &&
   typeof document.startViewTransition === 'function';
 
-const BASE_STYLES = `
+const STYLES = `
 /* ── dvfy-transition-root: display ── */
 dvfy-transition-root {
   display: contents;
@@ -348,7 +348,7 @@ class DvfyTransitionRoot extends HTMLElement {
     if (DvfyTransitionRoot.#baseStyled) return;
     const s = document.createElement('style');
     s.setAttribute('data-dvfy-tr-base', '');
-    s.textContent = BASE_STYLES;
+    s.textContent = STYLES;
     document.head.appendChild(s);
     DvfyTransitionRoot.#baseStyled = true;
   }

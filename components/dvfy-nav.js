@@ -1,4 +1,4 @@
-const NAV_STYLES = `
+const STYLES = `
 dvfy-nav {
   display: inline-flex;
   align-items: center;
@@ -82,7 +82,7 @@ class DvfyNav extends HTMLElement {
     if (!DvfyNav.#styled) {
       const s = document.createElement('style');
       s.id = 'dvfy-nav-style';
-      s.textContent = NAV_STYLES;
+      s.textContent = STYLES;
       document.head.appendChild(s);
       DvfyNav.#styled = true;
     }

@@ -1,4 +1,4 @@
-const NAV_MENU_STYLES = `
+const STYLES = `
 dvfy-nav-menu {
   display: flex;
   align-items: stretch;
@@ -71,7 +71,7 @@ class DvfyNavMenu extends HTMLElement {
     if (!DvfyNavMenu.#styled) {
       const s = document.createElement('style');
       s.id = 'dvfy-nav-menu-style';
-      s.textContent = NAV_MENU_STYLES;
+      s.textContent = STYLES;
       document.head.appendChild(s);
       DvfyNavMenu.#styled = true;
     }
