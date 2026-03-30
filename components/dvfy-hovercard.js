@@ -138,6 +138,7 @@ dvfy-hovercard p + p {
  */
 class DvfyHovercard extends HTMLElement {
   static #styled = false;
+  static get observedAttributes() { return ['position', 'delay']; }
   #timer = null;
   #triggers = [];
 
@@ -167,6 +168,14 @@ class DvfyHovercard extends HTMLElement {
       // Defer so the full document is available
       setTimeout(() => this.#connectFallback(), 0);
     }
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === newValue) return;
+    // position: CSS attribute selectors handle native-path placement;
+    //           JS fallback reads it dynamically in #applyPosition.
+    // delay:   read dynamically in #show — no rebuild needed.
+    // Both attributes are inherently reactive — no action required.
   }
 
   disconnectedCallback() {
