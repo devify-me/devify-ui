@@ -269,7 +269,54 @@ class DvfyNavBar extends HTMLElement {
     this.#bar.setAttribute('role', 'navigation');
     this.#bar.setAttribute('aria-label', 'Main navigation');
 
-    // Brand
+    this.#bar.appendChild(this.#buildBrand());
+
+    for (const menu of menus) {
+      this.#bar.appendChild(menu);
+    }
+
+    if (actionItems.length) {
+      const actions = document.createElement('div');
+      actions.className = 'dvfy-nav-bar__actions';
+      for (const item of actionItems) actions.appendChild(item);
+      this.#bar.appendChild(actions);
+    }
+
+    this.#buildHamburger();
+    this.#bar.appendChild(this.#hamburger);
+    this.appendChild(this.#bar);
+
+    // Mobile overlay
+    this.#overlay = document.createElement('div');
+    this.#overlay.className = 'dvfy-nav-bar__overlay';
+    this.#overlay.addEventListener('click', () => this.#closeMenu());
+    this.appendChild(this.#overlay);
+
+    // Mobile drawer
+    this.appendChild(this.#buildMobileDrawer(menus, actionItems));
+
+    // Escape key
+    this.#onKey = (e) => {
+      if (e.key === 'Escape' && this.#hamburger.open) {
+        this.#closeMenu();
+      }
+    };
+    document.addEventListener('keydown', this.#onKey);
+
+    // Scroll shrink
+    if (this.hasAttribute('scroll-shrink')) {
+      this.#scrollHandler = () => {
+        if (window.scrollY > 10) {
+          this.#bar.classList.add('dvfy-nav-bar__bar--scrolled');
+        } else {
+          this.#bar.classList.remove('dvfy-nav-bar__bar--scrolled');
+        }
+      };
+      window.addEventListener('scroll', this.#scrollHandler, { passive: true });
+    }
+  }
+
+  #buildBrand() {
     const brand = document.createElement('a');
     brand.className = 'dvfy-nav-bar__brand';
     brand.href = sanitizeHref(this.getAttribute('href') || '/');
@@ -297,29 +344,14 @@ class DvfyNavBar extends HTMLElement {
       }
       brand.appendChild(brandWrap);
     }
-    this.#bar.appendChild(brand);
+    return brand;
+  }
 
-    // Desktop nav menus (re-attach originals)
-    for (const menu of menus) {
-      this.#bar.appendChild(menu);
-    }
-
-    // Actions
-    if (actionItems.length) {
-      const actions = document.createElement('div');
-      actions.className = 'dvfy-nav-bar__actions';
-      for (const item of actionItems) actions.appendChild(item);
-      this.#bar.appendChild(actions);
-    }
-
-    // Hamburger
+  #buildHamburger() {
     this.#hamburger = document.createElement('dvfy-hamburger');
     this.#hamburger.className = 'dvfy-nav-bar__hamburger';
     this.#hamburger.setAttribute('size', 'sm');
     this.#hamburger.setAttribute('aria-label', 'Open menu');
-    // Hamburger animation convention: match visual flow to drawer position.
-    // right/top → x-rotate-l (spin toward closing direction)
-    // left/bottom → x-rotate-r
     const animation = this.getAttribute('animation');
     if (animation) {
       this.#hamburger.setAttribute('animation', animation);
@@ -332,17 +364,12 @@ class DvfyNavBar extends HTMLElement {
       if (e.detail.open) this.#openMenu();
       else this.#closeMenu();
     });
-    this.#bar.appendChild(this.#hamburger);
+  }
 
-    this.appendChild(this.#bar);
+  #buildMobileDrawer(menus, actionItems) {
+    const brandName = this.getAttribute('brand');
+    const animation = this.getAttribute('animation');
 
-    // ── Mobile overlay ──
-    this.#overlay = document.createElement('div');
-    this.#overlay.className = 'dvfy-nav-bar__overlay';
-    this.#overlay.addEventListener('click', () => this.#closeMenu());
-    this.appendChild(this.#overlay);
-
-    // ── Mobile drawer (dvfy-drawer wrapped in fixed container) ──
     const drawerWrap = document.createElement('div');
     drawerWrap.className = 'dvfy-nav-bar__mobile-drawer';
 
@@ -395,27 +422,7 @@ class DvfyNavBar extends HTMLElement {
 
     this.#drawer.appendChild(drawerContent);
     drawerWrap.appendChild(this.#drawer);
-    this.appendChild(drawerWrap);
-
-    // Escape key
-    this.#onKey = (e) => {
-      if (e.key === 'Escape' && this.#hamburger.open) {
-        this.#closeMenu();
-      }
-    };
-    document.addEventListener('keydown', this.#onKey);
-
-    // Scroll shrink
-    if (this.hasAttribute('scroll-shrink')) {
-      this.#scrollHandler = () => {
-        if (window.scrollY > 10) {
-          this.#bar.classList.add('dvfy-nav-bar__bar--scrolled');
-        } else {
-          this.#bar.classList.remove('dvfy-nav-bar__bar--scrolled');
-        }
-      };
-      window.addEventListener('scroll', this.#scrollHandler, { passive: true });
-    }
+    return drawerWrap;
   }
 
   #openMenu() {

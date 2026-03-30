@@ -293,89 +293,90 @@ class DvfyPlanPicker extends HTMLElement {
     grid.dataset.cols = cols;
 
     for (const plan of plans) {
-      const isCurrent = currentPlan && (plan.name === currentPlan || plan.display_name === currentPlan);
-
-      const card = document.createElement('div');
-      card.className = 'dvfy-plan-picker__plan';
-      if (isCurrent) card.classList.add('dvfy-plan-picker__plan--current');
-
-      // Header
-      const header = document.createElement('div');
-      header.className = 'dvfy-plan-picker__plan-header';
-
-      const name = document.createElement('span');
-      name.className = 'dvfy-plan-picker__plan-name';
-      name.textContent = plan.display_name || plan.name;
-      header.appendChild(name);
-
-      if (isCurrent) {
-        const badge = document.createElement('dvfy-badge');
-        badge.setAttribute('status', 'success');
-        badge.setAttribute('size', 'xs');
-        badge.textContent = 'Current';
-        header.appendChild(badge);
-      }
-
-      card.appendChild(header);
-
-      // Price
-      const priceEl = document.createElement('div');
-      priceEl.className = 'dvfy-plan-picker__price';
-
-      const amountSpan = document.createElement('span');
-      amountSpan.className = 'dvfy-plan-picker__amount';
-      amountSpan.textContent = plan.price_cents === 0 ? 'Free' : this.#formatAmount(plan.price_cents, plan.currency);
-      priceEl.appendChild(amountSpan);
-
-      if (plan.price_cents > 0) {
-        const intervalSpan = document.createElement('span');
-        intervalSpan.className = 'dvfy-plan-picker__interval';
-        intervalSpan.textContent = ` / ${plan.interval || 'month'}`;
-        priceEl.appendChild(intervalSpan);
-      }
-
-      card.appendChild(priceEl);
-
-      // Features
-      if (plan.features && Object.keys(plan.features).length > 0) {
-        const featureList = document.createElement('ul');
-        featureList.className = 'dvfy-plan-picker__features';
-
-        for (const [key, value] of Object.entries(plan.features)) {
-          const li = document.createElement('li');
-          li.className = 'dvfy-plan-picker__feature';
-
-          const featureValue = document.createElement('span');
-          featureValue.className = 'dvfy-plan-picker__feature-value';
-          featureValue.textContent = value;
-
-          li.appendChild(featureValue);
-          li.appendChild(document.createTextNode(` ${key}`));
-          featureList.appendChild(li);
-        }
-
-        card.appendChild(featureList);
-      }
-
-      // CTA
-      const cta = document.createElement('dvfy-button');
-      if (isCurrent) {
-        cta.setAttribute('variant', 'outline');
-        cta.setAttribute('disabled', '');
-        cta.textContent = 'Current plan';
-      } else {
-        cta.textContent = currentPlan ? 'Switch to this plan' : 'Get started';
-        cta.addEventListener('click', () => {
-          this.dispatchEvent(new CustomEvent('dvfy-plan-select', { bubbles: true, detail: plan }));
-        });
-      }
-      cta.style.width = '100%';
-      card.appendChild(cta);
-
-      grid.appendChild(card);
+      grid.appendChild(this.#buildPlanCard(plan, currentPlan));
     }
 
     this.appendChild(grid);
+  }
+
+  #buildPlanCard(plan, currentPlan) {
+    const isCurrent = currentPlan && (plan.name === currentPlan || plan.display_name === currentPlan);
+
+    const card = document.createElement('div');
+    card.className = 'dvfy-plan-picker__plan';
+    if (isCurrent) card.classList.add('dvfy-plan-picker__plan--current');
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'dvfy-plan-picker__plan-header';
+
+    const name = document.createElement('span');
+    name.className = 'dvfy-plan-picker__plan-name';
+    name.textContent = plan.display_name || plan.name;
+    header.appendChild(name);
+
+    if (isCurrent) {
+      const badge = document.createElement('dvfy-badge');
+      badge.setAttribute('status', 'success');
+      badge.setAttribute('size', 'xs');
+      badge.textContent = 'Current';
+      header.appendChild(badge);
+    }
+    card.appendChild(header);
+
+    // Price
+    const priceEl = document.createElement('div');
+    priceEl.className = 'dvfy-plan-picker__price';
+
+    const amountSpan = document.createElement('span');
+    amountSpan.className = 'dvfy-plan-picker__amount';
+    amountSpan.textContent = plan.price_cents === 0 ? 'Free' : this.#formatAmount(plan.price_cents, plan.currency);
+    priceEl.appendChild(amountSpan);
+
+    if (plan.price_cents > 0) {
+      const intervalSpan = document.createElement('span');
+      intervalSpan.className = 'dvfy-plan-picker__interval';
+      intervalSpan.textContent = ` / ${plan.interval || 'month'}`;
+      priceEl.appendChild(intervalSpan);
+    }
+    card.appendChild(priceEl);
+
+    // Features
+    if (plan.features && Object.keys(plan.features).length > 0) {
+      const featureList = document.createElement('ul');
+      featureList.className = 'dvfy-plan-picker__features';
+
+      for (const [key, value] of Object.entries(plan.features)) {
+        const li = document.createElement('li');
+        li.className = 'dvfy-plan-picker__feature';
+
+        const featureValue = document.createElement('span');
+        featureValue.className = 'dvfy-plan-picker__feature-value';
+        featureValue.textContent = value;
+
+        li.appendChild(featureValue);
+        li.appendChild(document.createTextNode(` ${key}`));
+        featureList.appendChild(li);
+      }
+      card.appendChild(featureList);
+    }
+
+    // CTA
+    const cta = document.createElement('dvfy-button');
+    if (isCurrent) {
+      cta.setAttribute('variant', 'outline');
+      cta.setAttribute('disabled', '');
+      cta.textContent = 'Current plan';
+    } else {
+      cta.textContent = currentPlan ? 'Switch to this plan' : 'Get started';
+      cta.addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('dvfy-plan-select', { bubbles: true, detail: plan }));
+      });
+    }
+    cta.style.width = '100%';
+    card.appendChild(cta);
+
+    return card;
   }
 
   #renderSkeleton() {

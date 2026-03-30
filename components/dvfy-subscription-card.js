@@ -277,9 +277,37 @@ class DvfySubscriptionCard extends HTMLElement {
     }
 
     const state = sub.status;
+
+    this.appendChild(this.#buildHeader(sub, state));
+
+    if (sub.price_cents || sub.amount_cents) {
+      this.appendChild(this.#buildAmount(sub));
+    }
+
+    this.appendChild(this.#buildDetails(sub, state));
+
+    // Status notices
+    if (state === 'canceling') {
+      this.appendChild(this.#buildNotice(
+        `Your subscription will end on ${this.#formatDate(sub.cancel_at || sub.current_period_end)}`,
+      ));
+    }
+    if (state === 'canceled') {
+      this.appendChild(this.#buildNotice(
+        `Subscription ended on ${this.#formatDate(sub.canceled_at || sub.current_period_end)}`,
+        true,
+      ));
+    }
+
+    const actions = this.#buildActions(state);
+    if (actions.children.length > 0) {
+      this.appendChild(actions);
+    }
+  }
+
+  #buildHeader(sub, state) {
     const badgeInfo = STATE_BADGE[state] || STATE_BADGE.active;
 
-    // Header: plan name + status badge
     const header = document.createElement('div');
     header.className = 'dvfy-subscription-card__header';
 
@@ -295,25 +323,25 @@ class DvfySubscriptionCard extends HTMLElement {
     badge.textContent = badgeInfo.label;
     header.appendChild(badge);
 
-    this.appendChild(header);
+    return header;
+  }
 
-    // Amount
-    if (sub.price_cents || sub.amount_cents) {
-      const amountEl = document.createElement('div');
-      const amountSpan = document.createElement('span');
-      amountSpan.className = 'dvfy-subscription-card__amount';
-      amountSpan.textContent = this.#formatAmount(sub.price_cents || sub.amount_cents, sub.currency);
+  #buildAmount(sub) {
+    const amountEl = document.createElement('div');
+    const amountSpan = document.createElement('span');
+    amountSpan.className = 'dvfy-subscription-card__amount';
+    amountSpan.textContent = this.#formatAmount(sub.price_cents || sub.amount_cents, sub.currency);
 
-      const periodSpan = document.createElement('span');
-      periodSpan.className = 'dvfy-subscription-card__period';
-      periodSpan.textContent = ` / ${sub.interval || 'month'}`;
+    const periodSpan = document.createElement('span');
+    periodSpan.className = 'dvfy-subscription-card__period';
+    periodSpan.textContent = ` / ${sub.interval || 'month'}`;
 
-      amountEl.appendChild(amountSpan);
-      amountEl.appendChild(periodSpan);
-      this.appendChild(amountEl);
-    }
+    amountEl.appendChild(amountSpan);
+    amountEl.appendChild(periodSpan);
+    return amountEl;
+  }
 
-    // Details
+  #buildDetails(sub, state) {
     const details = document.createElement('div');
     details.className = 'dvfy-subscription-card__details';
     details.style.marginTop = `var(--dvfy-space-3)`;
@@ -321,36 +349,27 @@ class DvfySubscriptionCard extends HTMLElement {
     if (state === 'trialing' && sub.trial_end) {
       this.#addRow(details, 'Trial ends', this.#formatDate(sub.trial_end));
     }
-
     if (state === 'active' && sub.current_period_end) {
       this.#addRow(details, 'Next billing', this.#formatDate(sub.current_period_end));
     }
-
     if (sub.current_period_start) {
       this.#addRow(details, 'Period started', this.#formatDate(sub.current_period_start));
     }
+    return details;
+  }
 
-    this.appendChild(details);
-
-    // Canceling notice
-    if (state === 'canceling') {
-      const notice = document.createElement('div');
-      notice.className = 'dvfy-subscription-card__cancel-notice';
-      notice.textContent = `Your subscription will end on ${this.#formatDate(sub.cancel_at || sub.current_period_end)}`;
-      this.appendChild(notice);
-    }
-
-    // Canceled notice
-    if (state === 'canceled') {
-      const notice = document.createElement('div');
-      notice.className = 'dvfy-subscription-card__cancel-notice';
+  #buildNotice(text, isDanger = false) {
+    const notice = document.createElement('div');
+    notice.className = 'dvfy-subscription-card__cancel-notice';
+    if (isDanger) {
       notice.style.background = 'var(--dvfy-danger-bg-subtle)';
       notice.style.color = 'var(--dvfy-danger-text)';
-      notice.textContent = `Subscription ended on ${this.#formatDate(sub.canceled_at || sub.current_period_end)}`;
-      this.appendChild(notice);
     }
+    notice.textContent = text;
+    return notice;
+  }
 
-    // Actions
+  #buildActions(state) {
     const actions = document.createElement('div');
     actions.className = 'dvfy-subscription-card__actions';
 
@@ -394,9 +413,7 @@ class DvfySubscriptionCard extends HTMLElement {
       actions.appendChild(newPlanBtn);
     }
 
-    if (actions.children.length > 0) {
-      this.appendChild(actions);
-    }
+    return actions;
   }
 
   #addRow(container, label, value) {

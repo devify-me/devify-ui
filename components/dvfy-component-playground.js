@@ -699,11 +699,41 @@ class DvfyComponentPlayground extends HTMLElement {
     if (!body) return;
     body.textContent = '';
 
-    // ── Left: tabs (Preview / Code / API) — fills remaining space ──
+    // Left: tabs (Preview / Code / API)
+    body.appendChild(this.#buildPreviewColumn());
+
+    // Right: collapsible drawer with scrollable controls
+    const { drawer, reopen } = this.#buildControlsDrawer();
+    body.appendChild(reopen);
+    body.appendChild(drawer);
+
+    // Populate
+    this.#buildControls();
+    this.#updatePreview();
+    this.#updateCode();
+    this.#updateAPI();
+  }
+
+  #buildPreviewColumn() {
     const left = document.createElement('div');
     left.className = 'sc__preview-col';
 
     const tabs = document.createElement('dvfy-tabs');
+    tabs.appendChild(this.#buildPreviewTab());
+    tabs.appendChild(this.#buildCodeTab());
+
+    const apiTab = document.createElement('dvfy-tab');
+    apiTab.setAttribute('label', 'API');
+    const apiContent = document.createElement('div');
+    apiContent.setAttribute('data-sc-api', '');
+    apiTab.appendChild(apiContent);
+    tabs.appendChild(apiTab);
+
+    left.appendChild(tabs);
+    return left;
+  }
+
+  #buildPreviewTab() {
     const previewTab = document.createElement('dvfy-tab');
     previewTab.setAttribute('label', 'Preview');
 
@@ -749,8 +779,10 @@ class DvfyComponentPlayground extends HTMLElement {
 
     previewWrap.append(previewArea, handle);
     previewTab.appendChild(previewWrap);
-    tabs.appendChild(previewTab);
+    return previewTab;
+  }
 
+  #buildCodeTab() {
     const codeTab = document.createElement('dvfy-tab');
     codeTab.setAttribute('label', 'Code');
     const codeWrap = document.createElement('div');
@@ -775,19 +807,10 @@ class DvfyComponentPlayground extends HTMLElement {
     codeBlock.setAttribute('data-sc-code', '');
     codeWrap.appendChild(codeBlock);
     codeTab.appendChild(codeWrap);
-    tabs.appendChild(codeTab);
+    return codeTab;
+  }
 
-    const apiTab = document.createElement('dvfy-tab');
-    apiTab.setAttribute('label', 'API');
-    const apiContent = document.createElement('div');
-    apiContent.setAttribute('data-sc-api', '');
-    apiTab.appendChild(apiContent);
-    tabs.appendChild(apiTab);
-
-    left.appendChild(tabs);
-    body.appendChild(left);
-
-    // ── Right: collapsible drawer with scrollable controls ──
+  #buildControlsDrawer() {
     const drawer = document.createElement('div');
     drawer.className = 'sc__drawer';
     drawer.setAttribute('data-sc-drawer', '');
@@ -801,7 +824,6 @@ class DvfyComponentPlayground extends HTMLElement {
       drawer.removeAttribute('data-collapsed');
       reopen.removeAttribute('data-visible');
     });
-    body.appendChild(reopen);
 
     // Drawer header with title + collapse button
     const drawerHeader = document.createElement('div');
@@ -832,13 +854,7 @@ class DvfyComponentPlayground extends HTMLElement {
     drawerBody.appendChild(controlsWrap);
     drawer.appendChild(drawerBody);
 
-    body.appendChild(drawer);
-
-    // Populate
-    this.#buildControls();
-    this.#updatePreview();
-    this.#updateCode();
-    this.#updateAPI();
+    return { drawer, reopen };
   }
 
   #buildControls() {
@@ -847,120 +863,126 @@ class DvfyComponentPlayground extends HTMLElement {
     wrap.textContent = '';
 
     const attrs = this.#currentTag.attributes || [];
-
     for (const attr of attrs) {
-      const enumVals = parseEnumValues(attr.description);
-      const isBool = attr.type === 'boolean';
-
-      if (isBool) {
-        // Boolean → dvfy-switch
-        const sw = document.createElement('dvfy-switch');
-        sw.setAttribute('label', attr.name);
-        if (attr.description) sw.setAttribute('description', attr.description);
-        if (this.#attrValues[attr.name]) sw.setAttribute('checked', '');
-        sw.addEventListener('change', () => {
-          this.#attrValues[attr.name] = sw.hasAttribute('checked');
-          this.#updatePreview();
-          this.#updateCode();
-        });
-        wrap.appendChild(sw);
-
-      } else if (enumVals) {
-        // Enum → dvfy-select
-        const sel = document.createElement('dvfy-select');
-        sel.setAttribute('label', attr.name);
-        const def = parseDefault(attr.description);
-        if (def) sel.setAttribute('placeholder', def);
-
-        // Add empty option for "unset"
-        const emptyOpt = document.createElement('option');
-        emptyOpt.value = '';
-        emptyOpt.textContent = '(default)';
-        sel.appendChild(emptyOpt);
-
-        for (const v of enumVals) {
-          const opt = document.createElement('option');
-          opt.value = v;
-          opt.textContent = v;
-          sel.appendChild(opt);
-        }
-        sel.addEventListener('change', (e) => {
-          this.#attrValues[attr.name] = e.detail?.value || '';
-          this.#updatePreview();
-          this.#updateCode();
-        });
-        wrap.appendChild(sel);
-
-      } else if (attr.type === 'number') {
-        // Number → dvfy-input[type=number]
-        const inp = document.createElement('dvfy-input');
-        inp.setAttribute('label', attr.name);
-        inp.setAttribute('type', 'number');
-        inp.setAttribute('placeholder', parseDefault(attr.description) || '');
-        if (attr.description) inp.setAttribute('help', attr.description);
-        inp.addEventListener('input', (e) => {
-          const val = e.target?.value ?? inp.querySelector('input')?.value ?? '';
-          this.#attrValues[attr.name] = val;
-          this.#updatePreview();
-          this.#updateCode();
-        });
-        wrap.appendChild(inp);
-
-      } else {
-        // String → dvfy-input
-        const inp = document.createElement('dvfy-input');
-        inp.setAttribute('label', attr.name);
-        const hints = PLACEHOLDER_HINTS[this.#currentTag.name] || {};
-        inp.setAttribute('placeholder', hints[attr.name] || parseDefault(attr.description) || '');
-        if (attr.description) inp.setAttribute('help', attr.description);
-        inp.addEventListener('input', (e) => {
-          const val = e.target?.value ?? inp.querySelector('input')?.value ?? '';
-          this.#attrValues[attr.name] = val;
-          this.#updatePreview();
-          this.#updateCode();
-        });
-        wrap.appendChild(inp);
-      }
+      wrap.appendChild(this.#buildAttrControl(attr));
     }
 
     // Content control (innerHTML) — only if component uses content
     const content = DEFAULT_CONTENT[this.#currentTag.name];
     if (content !== undefined && content !== '') {
-      const sep = document.createElement('hr');
-      sep.style.cssText = 'border:none;border-top:var(--dvfy-border-1) solid var(--dvfy-border-muted);margin:var(--dvfy-space-2) 0';
-      wrap.appendChild(sep);
+      wrap.appendChild(this.#buildContentControl());
+    }
+  }
 
-      const ta = document.createElement('dvfy-textarea');
-      ta.setAttribute('label', 'Content (innerHTML)');
-      ta.setAttribute('placeholder', 'Inner HTML...');
-      ta.setAttribute('rows', '6');
-      // Set initial value on the actual textarea after it connects
-      requestAnimationFrame(() => {
-        const native = ta.querySelector('textarea');
-        if (native) {
-          native.value = this.#contentValue;
-          native.style.fontFamily = 'var(--dvfy-font-mono)';
-          native.style.fontSize = 'var(--dvfy-text-xs)';
-          native.style.tabSize = '2';
-        }
-      });
-      ta.addEventListener('input', (e) => {
-        const val = e.target?.value ?? ta.querySelector('textarea')?.value ?? '';
-        this.#contentValue = val;
+  #buildAttrControl(attr) {
+    const enumVals = parseEnumValues(attr.description);
+    const isBool = attr.type === 'boolean';
+
+    if (isBool) {
+      const sw = document.createElement('dvfy-switch');
+      sw.setAttribute('label', attr.name);
+      if (attr.description) sw.setAttribute('description', attr.description);
+      if (this.#attrValues[attr.name]) sw.setAttribute('checked', '');
+      sw.addEventListener('change', () => {
+        this.#attrValues[attr.name] = sw.hasAttribute('checked');
         this.#updatePreview();
         this.#updateCode();
       });
-      // Re-format on blur
-      ta.addEventListener('focusout', () => {
-        const native = ta.querySelector('textarea');
-        if (native && native.value.includes('<')) {
-          const formatted = prettifyHTML(native.value);
-          native.value = formatted;
-          this.#contentValue = formatted;
-        }
-      });
-      wrap.appendChild(ta);
+      return sw;
     }
+
+    if (enumVals) {
+      const sel = document.createElement('dvfy-select');
+      sel.setAttribute('label', attr.name);
+      const def = parseDefault(attr.description);
+      if (def) sel.setAttribute('placeholder', def);
+
+      const emptyOpt = document.createElement('option');
+      emptyOpt.value = '';
+      emptyOpt.textContent = '(default)';
+      sel.appendChild(emptyOpt);
+
+      for (const v of enumVals) {
+        const opt = document.createElement('option');
+        opt.value = v;
+        opt.textContent = v;
+        sel.appendChild(opt);
+      }
+      sel.addEventListener('change', (e) => {
+        this.#attrValues[attr.name] = e.detail?.value || '';
+        this.#updatePreview();
+        this.#updateCode();
+      });
+      return sel;
+    }
+
+    if (attr.type === 'number') {
+      const inp = document.createElement('dvfy-input');
+      inp.setAttribute('label', attr.name);
+      inp.setAttribute('type', 'number');
+      inp.setAttribute('placeholder', parseDefault(attr.description) || '');
+      if (attr.description) inp.setAttribute('help', attr.description);
+      inp.addEventListener('input', (e) => {
+        const val = e.target?.value ?? inp.querySelector('input')?.value ?? '';
+        this.#attrValues[attr.name] = val;
+        this.#updatePreview();
+        this.#updateCode();
+      });
+      return inp;
+    }
+
+    // String → dvfy-input
+    const inp = document.createElement('dvfy-input');
+    inp.setAttribute('label', attr.name);
+    const hints = PLACEHOLDER_HINTS[this.#currentTag.name] || {};
+    inp.setAttribute('placeholder', hints[attr.name] || parseDefault(attr.description) || '');
+    if (attr.description) inp.setAttribute('help', attr.description);
+    inp.addEventListener('input', (e) => {
+      const val = e.target?.value ?? inp.querySelector('input')?.value ?? '';
+      this.#attrValues[attr.name] = val;
+      this.#updatePreview();
+      this.#updateCode();
+    });
+    return inp;
+  }
+
+  #buildContentControl() {
+    const frag = document.createDocumentFragment();
+
+    const sep = document.createElement('hr');
+    sep.style.cssText = 'border:none;border-top:var(--dvfy-border-1) solid var(--dvfy-border-muted);margin:var(--dvfy-space-2) 0';
+    frag.appendChild(sep);
+
+    const ta = document.createElement('dvfy-textarea');
+    ta.setAttribute('label', 'Content (innerHTML)');
+    ta.setAttribute('placeholder', 'Inner HTML...');
+    ta.setAttribute('rows', '6');
+    requestAnimationFrame(() => {
+      const native = ta.querySelector('textarea');
+      if (native) {
+        native.value = this.#contentValue;
+        native.style.fontFamily = 'var(--dvfy-font-mono)';
+        native.style.fontSize = 'var(--dvfy-text-xs)';
+        native.style.tabSize = '2';
+      }
+    });
+    ta.addEventListener('input', (e) => {
+      const val = e.target?.value ?? ta.querySelector('textarea')?.value ?? '';
+      this.#contentValue = val;
+      this.#updatePreview();
+      this.#updateCode();
+    });
+    ta.addEventListener('focusout', () => {
+      const native = ta.querySelector('textarea');
+      if (native && native.value.includes('<')) {
+        const formatted = prettifyHTML(native.value);
+        native.value = formatted;
+        this.#contentValue = formatted;
+      }
+    });
+    frag.appendChild(ta);
+
+    return frag;
   }
 
   // ── Resize ─────────────────────────────────────────────────────────
