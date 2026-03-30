@@ -145,7 +145,6 @@ class DvfyTag extends HTMLElement {
     injectStyles('dvfy-tag', STYLES);
     this.#render();
     this.#syncTabindex();
-    this.#onKeyDown = this.#onKeyDown.bind(this);
     this.addEventListener('keydown', this.#onKeyDown);
   }
 
@@ -170,13 +169,13 @@ class DvfyTag extends HTMLElement {
     }
   }
 
-  #onKeyDown(e) {
+  #onKeyDown = (e) => {
     if (!this.hasAttribute('removable')) return;
     if (e.key === 'Enter' || e.key === 'Backspace' || e.key === 'Delete') {
       e.preventDefault();
       this.dispatchEvent(new CustomEvent('remove', { bubbles: true }));
     }
-  }
+  };
 
   #render() {
     // Remove existing remove button if any

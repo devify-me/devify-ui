@@ -195,7 +195,6 @@ class DvfyDrawer extends HTMLElement {
 
     this.#applyWidth();
     this.#build();
-    this.#onKeyDown = this.#onKeyDown.bind(this);
     this.addEventListener('keydown', this.#onKeyDown);
   }
 
@@ -327,12 +326,12 @@ class DvfyDrawer extends HTMLElement {
     }
   }
 
-  #onKeyDown(e) {
+  #onKeyDown = (e) => {
     if (e.key === 'Escape' && !this.hasAttribute('collapsed') && !this.hasAttribute('fixed')) {
       e.stopPropagation();
       this.#collapse();
     }
-  }
+  };
 
   #collapse() {
     this.setAttribute('collapsed', '');

@@ -298,9 +298,6 @@ class DvfySlider extends HTMLElement {
 
   disconnectedCallback() {
     this.#initialized = false;
-  }
-
-  disconnectedCallback() {
     this.textContent = '';
   }
 
