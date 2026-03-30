@@ -35,7 +35,7 @@ dvfy-select {
   flex-direction: column;
   gap: var(--dvfy-space-1-5);
   font-family: var(--dvfy-font-sans);
-  position: relative;
+  width: 100%;
   container-type: inline-size;
   container-name: dvfy-select;
 }
@@ -50,6 +50,11 @@ dvfy-select .dvfy-select__label {
 dvfy-select .dvfy-select__label .dvfy-select__req {
   color: var(--dvfy-danger-text);
   margin-left: var(--dvfy-space-0-5);
+}
+
+dvfy-select .dvfy-select__custom {
+  position: relative;
+  width: 100%;
 }
 
 dvfy-select .dvfy-select__trigger {
@@ -166,29 +171,39 @@ dvfy-select[disabled] .dvfy-select__trigger {
   pointer-events: none;
 }
 
-/* Native fallback (hidden by default, shown on narrow containers) */
+/* Native fallback (hidden by default, shown on very narrow containers) */
 dvfy-select .dvfy-select__native {
   display: none;
+  appearance: none;
+  width: 100%;
+  padding: var(--dvfy-space-2) var(--dvfy-space-3);
+  font-size: var(--dvfy-text-sm);
+  font-family: inherit;
+  background: var(--dvfy-surface-raised);
+  border: var(--dvfy-border-1) solid var(--dvfy-border-default);
+  border-radius: var(--dvfy-radius-lg);
+  color: var(--dvfy-text-primary);
+  box-sizing: border-box;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--dvfy-space-3) center;
+  padding-right: var(--dvfy-space-8);
 }
-@container dvfy-select (max-width: 319px) {
+dvfy-select .dvfy-select__native option {
+  background: var(--dvfy-surface-raised);
+  color: var(--dvfy-text-primary);
+}
+dvfy-select[error] .dvfy-select__native { border-color: var(--dvfy-danger-border); }
+dvfy-select[disabled] .dvfy-select__native {
+  background: var(--dvfy-disabled-bg);
+  color: var(--dvfy-disabled-text);
+  cursor: not-allowed;
+}
+
+@container dvfy-select (max-width: 199px) {
   dvfy-select .dvfy-select__custom { display: none !important; }
-  dvfy-select .dvfy-select__native {
-    display: block;
-    width: 100%;
-    padding: var(--dvfy-space-2) var(--dvfy-space-3);
-    font-size: var(--dvfy-text-sm);
-    font-family: inherit;
-    background: var(--dvfy-surface-raised);
-    border: var(--dvfy-border-1) solid var(--dvfy-border-default);
-    border-radius: var(--dvfy-radius-lg);
-    color: var(--dvfy-text-primary);
-    box-sizing: border-box;
-  }
-  dvfy-select[error] .dvfy-select__native { border-color: var(--dvfy-danger-border); }
-  dvfy-select[disabled] .dvfy-select__native {
-    background: var(--dvfy-disabled-bg);
-    color: var(--dvfy-disabled-text);
-  }
+  dvfy-select .dvfy-select__native { display: block; }
 }
 
 /* Size: xs */
