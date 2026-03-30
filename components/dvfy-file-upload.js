@@ -294,7 +294,30 @@ class DvfyFileUpload extends HTMLElement {
   #build() {
     this.textContent = '';
 
-    // Hidden file input
+    const input = this.#buildFileInput();
+    this.appendChild(input);
+    this.appendChild(this.#buildDropZone(input));
+
+    // Error message
+    const err = document.createElement('p');
+    err.className = 'dvfy-fu__error';
+    err.setAttribute('role', 'alert');
+    err.setAttribute('aria-live', 'polite');
+    this.appendChild(err);
+
+    this.appendChild(this.#buildProgressBar());
+
+    // File list
+    const list = document.createElement('ul');
+    list.className = 'dvfy-fu__list';
+    list.setAttribute('aria-label', 'Selected files');
+    this.appendChild(list);
+
+    // Re-render any pre-existing files
+    this.#files.forEach((f, i) => this.#appendFileItem(list, f, i));
+  }
+
+  #buildFileInput() {
     const input = document.createElement('input');
     input.type = 'file';
     input.className = 'dvfy-fu__input';
@@ -307,9 +330,10 @@ class DvfyFileUpload extends HTMLElement {
       if (input.files?.length) this.#handleFiles(Array.from(input.files));
       input.value = '';
     });
-    this.appendChild(input);
+    return input;
+  }
 
-    // Drop zone
+  #buildDropZone(input) {
     const zone = document.createElement('div');
     zone.className = 'dvfy-fu__zone';
     zone.setAttribute('role', 'button');
@@ -317,8 +341,7 @@ class DvfyFileUpload extends HTMLElement {
     zone.setAttribute('aria-label', this.getAttribute('label') || 'Upload files: drag and drop or click to browse');
     zone.setAttribute('aria-disabled', this.hasAttribute('disabled') ? 'true' : 'false');
 
-    const zoneIcon = this.#buildUploadIcon();
-    zone.appendChild(zoneIcon);
+    zone.appendChild(this.#buildUploadIcon());
 
     const heading = document.createElement('p');
     heading.className = 'dvfy-fu__heading';
@@ -364,16 +387,10 @@ class DvfyFileUpload extends HTMLElement {
       }
     });
 
-    this.appendChild(zone);
+    return zone;
+  }
 
-    // Error message
-    const err = document.createElement('p');
-    err.className = 'dvfy-fu__error';
-    err.setAttribute('role', 'alert');
-    err.setAttribute('aria-live', 'polite');
-    this.appendChild(err);
-
-    // Progress bar
+  #buildProgressBar() {
     const progressWrap = document.createElement('div');
     progressWrap.className = 'dvfy-fu__progress';
     progressWrap.setAttribute('aria-hidden', 'true');
@@ -400,16 +417,7 @@ class DvfyFileUpload extends HTMLElement {
 
     progressWrap.appendChild(progressLabel);
     progressWrap.appendChild(track);
-    this.appendChild(progressWrap);
-
-    // File list
-    const list = document.createElement('ul');
-    list.className = 'dvfy-fu__list';
-    list.setAttribute('aria-label', 'Selected files');
-    this.appendChild(list);
-
-    // Re-render any pre-existing files
-    this.#files.forEach((f, i) => this.#appendFileItem(list, f, i));
+    return progressWrap;
   }
 
   // ── File handling ─────────────────────────────────────────────────────────

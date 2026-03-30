@@ -610,15 +610,44 @@ class DvfyTable extends HTMLElement {
     const panel = document.createElement('div');
     panel.className = 'dvfy-table__filter-panel';
 
-    // Search input
+    const searchInput = this.#buildFilterSearch();
+    panel.appendChild(searchInput);
+
+    const checkboxes = [];
+    panel.appendChild(this.#buildFilterActions(colIndex, checkboxes));
+    panel.appendChild(this.#buildFilterValueList(filterState, colIndex, checkboxes));
+
+    filterState.checkboxes = checkboxes;
+
+    // Search filtering within the dropdown
+    searchInput.addEventListener('input', () => {
+      const term = searchInput.value.toLowerCase();
+      for (const { item, value } of checkboxes) {
+        item.style.display = value.toLowerCase().includes(term) ? '' : 'none';
+      }
+    });
+
+    // Prevent clicks inside panel from closing it
+    panel.addEventListener('mousedown', e => e.stopPropagation());
+
+    th.appendChild(panel);
+    filterState.panel = panel;
+    this.#openPanel = panel;
+    this.#openCol = colIndex;
+
+    requestAnimationFrame(() => searchInput.focus());
+  }
+
+  #buildFilterSearch() {
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
     searchInput.className = 'dvfy-table__filter-search';
     searchInput.placeholder = 'Search\u2026';
     searchInput.setAttribute('aria-label', 'Search filter values');
-    panel.appendChild(searchInput);
+    return searchInput;
+  }
 
-    // Quick actions: Select All / Clear All
+  #buildFilterActions(colIndex, checkboxes) {
     const actionsTop = document.createElement('div');
     actionsTop.className = 'dvfy-table__filter-actions-top';
 
@@ -630,20 +659,31 @@ class DvfyTable extends HTMLElement {
     clearAllBtn.type = 'button';
     clearAllBtn.textContent = 'Clear All';
 
+    selectAllBtn.addEventListener('click', () => {
+      for (const { cb, item } of checkboxes) {
+        if (item.style.display !== 'none') cb.checked = true;
+      }
+      this.#applyColumnFilterFromPanel(colIndex, checkboxes);
+    });
+    clearAllBtn.addEventListener('click', () => {
+      for (const { cb, item } of checkboxes) {
+        if (item.style.display !== 'none') cb.checked = false;
+      }
+      this.#applyColumnFilterFromPanel(colIndex, checkboxes);
+    });
+
     actionsTop.appendChild(selectAllBtn);
     actionsTop.appendChild(clearAllBtn);
-    panel.appendChild(actionsTop);
+    return actionsTop;
+  }
 
-    // Value list
+  #buildFilterValueList(filterState, colIndex, checkboxes) {
     const list = document.createElement('div');
     list.className = 'dvfy-table__filter-list';
 
-    // Determine which values are currently checked
     const currentChecked = filterState.checkedValues
       ? new Set(filterState.checkedValues)
       : new Set(filterState.allValues);
-
-    const checkboxes = [];
 
     for (const value of filterState.allValues) {
       const item = document.createElement('label');
@@ -654,7 +694,6 @@ class DvfyTable extends HTMLElement {
       cb.checked = currentChecked.has(value);
       cb.dataset.value = value;
 
-      // Apply filter immediately on toggle
       cb.addEventListener('change', () => {
         this.#applyColumnFilterFromPanel(colIndex, checkboxes);
       });
@@ -669,43 +708,7 @@ class DvfyTable extends HTMLElement {
       checkboxes.push({ cb, item, value });
     }
 
-    panel.appendChild(list);
-
-    // Store checkboxes reference for immediate apply
-    filterState.checkboxes = checkboxes;
-
-    // Search filtering within the dropdown
-    searchInput.addEventListener('input', () => {
-      const term = searchInput.value.toLowerCase();
-      for (const { item, value } of checkboxes) {
-        item.style.display = value.toLowerCase().includes(term) ? '' : 'none';
-      }
-    });
-
-    // Select All / Clear All — apply immediately
-    selectAllBtn.addEventListener('click', () => {
-      for (const { cb, item } of checkboxes) {
-        if (item.style.display !== 'none') cb.checked = true;
-      }
-      this.#applyColumnFilterFromPanel(colIndex, checkboxes);
-    });
-    clearAllBtn.addEventListener('click', () => {
-      for (const { cb, item } of checkboxes) {
-        if (item.style.display !== 'none') cb.checked = false;
-      }
-      this.#applyColumnFilterFromPanel(colIndex, checkboxes);
-    });
-
-    // Prevent clicks inside panel from closing it
-    panel.addEventListener('mousedown', e => e.stopPropagation());
-
-    th.appendChild(panel);
-    filterState.panel = panel;
-    this.#openPanel = panel;
-    this.#openCol = colIndex;
-
-    // Focus search input
-    requestAnimationFrame(() => searchInput.focus());
+    return list;
   }
 
   #applyColumnFilterFromPanel(colIndex, checkboxes) {

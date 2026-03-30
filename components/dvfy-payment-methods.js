@@ -268,82 +268,7 @@ class DvfyPaymentMethods extends HTMLElement {
     list.className = 'dvfy-payment-methods__list';
 
     for (const pm of methods) {
-      const item = document.createElement('div');
-      item.className = 'dvfy-payment-methods__item';
-      if (pm.is_default) item.classList.add('dvfy-payment-methods__item--default');
-
-      // Brand icon
-      const icon = document.createElement('div');
-      icon.className = 'dvfy-payment-methods__brand-icon';
-      icon.textContent = BRAND_LABELS[pm.brand] || pm.brand?.toUpperCase()?.slice(0, 4) || 'CARD';
-      const brandColor = BRAND_COLORS[pm.brand];
-      if (brandColor) {
-        icon.style.color = brandColor;
-      }
-      item.appendChild(icon);
-
-      // Info
-      const info = document.createElement('div');
-      info.className = 'dvfy-payment-methods__info';
-
-      const cardNumber = document.createElement('div');
-      cardNumber.className = 'dvfy-payment-methods__card-number';
-      if (pm.type === 'paypal') {
-        cardNumber.textContent = 'PayPal';
-      } else {
-        cardNumber.textContent = `\u2022\u2022\u2022\u2022 ${pm.last4 || '????'}`;
-      }
-      info.appendChild(cardNumber);
-
-      if (pm.expiry_m && pm.expiry_y) {
-        const expiry = document.createElement('div');
-        expiry.className = 'dvfy-payment-methods__expiry';
-        expiry.textContent = `Expires ${String(pm.expiry_m).padStart(2, '0')}/${String(pm.expiry_y).slice(-2)}`;
-        info.appendChild(expiry);
-      }
-
-      item.appendChild(info);
-
-      // Default badge
-      if (pm.is_default) {
-        const badge = document.createElement('dvfy-badge');
-        badge.setAttribute('status', 'success');
-        badge.setAttribute('size', 'xs');
-        badge.textContent = 'Default';
-        item.appendChild(badge);
-      }
-
-      // Actions
-      const actions = document.createElement('div');
-      actions.className = 'dvfy-payment-methods__actions';
-
-      if (!pm.is_default && this.#canSetDefault()) {
-        const setDefaultBtn = document.createElement('dvfy-button');
-        setDefaultBtn.setAttribute('variant', 'ghost');
-        setDefaultBtn.setAttribute('size', 'xs');
-        setDefaultBtn.textContent = 'Set default';
-        setDefaultBtn.addEventListener('click', () => {
-          this.dispatchEvent(new CustomEvent('dvfy-pm-set-default', { bubbles: true, detail: pm.id }));
-        });
-        actions.appendChild(setDefaultBtn);
-      }
-
-      if (this.#canRemove()) {
-        const removeBtn = document.createElement('dvfy-button');
-        removeBtn.setAttribute('variant', 'ghost');
-        removeBtn.setAttribute('size', 'xs');
-        removeBtn.textContent = 'Remove';
-        removeBtn.addEventListener('click', () => {
-          this.dispatchEvent(new CustomEvent('dvfy-pm-remove', { bubbles: true, detail: pm.id }));
-        });
-        actions.appendChild(removeBtn);
-      }
-
-      if (actions.children.length > 0) {
-        item.appendChild(actions);
-      }
-
-      list.appendChild(item);
+      list.appendChild(this.#buildMethodItem(pm));
     }
 
     this.appendChild(list);
@@ -358,6 +283,85 @@ class DvfyPaymentMethods extends HTMLElement {
       this.dispatchEvent(new CustomEvent('dvfy-pm-add', { bubbles: true }));
     });
     this.appendChild(addBtn);
+  }
+
+  #buildMethodItem(pm) {
+    const item = document.createElement('div');
+    item.className = 'dvfy-payment-methods__item';
+    if (pm.is_default) item.classList.add('dvfy-payment-methods__item--default');
+
+    // Brand icon
+    const icon = document.createElement('div');
+    icon.className = 'dvfy-payment-methods__brand-icon';
+    icon.textContent = BRAND_LABELS[pm.brand] || pm.brand?.toUpperCase()?.slice(0, 4) || 'CARD';
+    const brandColor = BRAND_COLORS[pm.brand];
+    if (brandColor) {
+      icon.style.color = brandColor;
+    }
+    item.appendChild(icon);
+
+    // Info
+    const info = document.createElement('div');
+    info.className = 'dvfy-payment-methods__info';
+
+    const cardNumber = document.createElement('div');
+    cardNumber.className = 'dvfy-payment-methods__card-number';
+    if (pm.type === 'paypal') {
+      cardNumber.textContent = 'PayPal';
+    } else {
+      cardNumber.textContent = `\u2022\u2022\u2022\u2022 ${pm.last4 || '????'}`;
+    }
+    info.appendChild(cardNumber);
+
+    if (pm.expiry_m && pm.expiry_y) {
+      const expiry = document.createElement('div');
+      expiry.className = 'dvfy-payment-methods__expiry';
+      expiry.textContent = `Expires ${String(pm.expiry_m).padStart(2, '0')}/${String(pm.expiry_y).slice(-2)}`;
+      info.appendChild(expiry);
+    }
+
+    item.appendChild(info);
+
+    // Default badge
+    if (pm.is_default) {
+      const badge = document.createElement('dvfy-badge');
+      badge.setAttribute('status', 'success');
+      badge.setAttribute('size', 'xs');
+      badge.textContent = 'Default';
+      item.appendChild(badge);
+    }
+
+    // Actions
+    const actions = document.createElement('div');
+    actions.className = 'dvfy-payment-methods__actions';
+
+    if (!pm.is_default && this.#canSetDefault()) {
+      const setDefaultBtn = document.createElement('dvfy-button');
+      setDefaultBtn.setAttribute('variant', 'ghost');
+      setDefaultBtn.setAttribute('size', 'xs');
+      setDefaultBtn.textContent = 'Set default';
+      setDefaultBtn.addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('dvfy-pm-set-default', { bubbles: true, detail: pm.id }));
+      });
+      actions.appendChild(setDefaultBtn);
+    }
+
+    if (this.#canRemove()) {
+      const removeBtn = document.createElement('dvfy-button');
+      removeBtn.setAttribute('variant', 'ghost');
+      removeBtn.setAttribute('size', 'xs');
+      removeBtn.textContent = 'Remove';
+      removeBtn.addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('dvfy-pm-remove', { bubbles: true, detail: pm.id }));
+      });
+      actions.appendChild(removeBtn);
+    }
+
+    if (actions.children.length > 0) {
+      item.appendChild(actions);
+    }
+
+    return item;
   }
 
   #renderSkeleton() {

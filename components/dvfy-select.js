@@ -334,25 +334,54 @@ class DvfySelect extends HTMLElement {
     const error = this.getAttribute('error');
     const help = this.getAttribute('help');
     const required = this.hasAttribute('required');
-    const searchable = this.hasAttribute('searchable');
-    const name = this.getAttribute('name');
 
     // Label
     if (label) {
-      const lbl = document.createElement('label');
-      lbl.className = 'dvfy-select__label';
-      lbl.textContent = label;
-      if (required) {
-        const req = document.createElement('span');
-        req.className = 'dvfy-select__req';
-        req.textContent = '*';
-        req.setAttribute('aria-hidden', 'true');
-        lbl.appendChild(req);
-      }
-      this.appendChild(lbl);
+      this.appendChild(this.#buildLabel(label, required));
     }
 
     // Native select (mobile fallback)
+    this.appendChild(this.#buildNativeSelect(placeholder));
+
+    // Custom UI wrapper
+    const custom = document.createElement('div');
+    custom.className = 'dvfy-select__custom';
+    custom.appendChild(this.#buildTrigger(placeholder));
+    custom.appendChild(this.#buildDropdown());
+    this.appendChild(custom);
+
+    // Error / help
+    if (error) {
+      const errEl = document.createElement('div');
+      errEl.className = 'dvfy-select__error';
+      errEl.textContent = error;
+      this.appendChild(errEl);
+    } else if (help) {
+      const helpEl = document.createElement('div');
+      helpEl.className = 'dvfy-select__help';
+      helpEl.textContent = help;
+      this.appendChild(helpEl);
+    }
+  }
+
+  #buildLabel(label, required) {
+    const lbl = document.createElement('label');
+    lbl.className = 'dvfy-select__label';
+    lbl.textContent = label;
+    if (required) {
+      const req = document.createElement('span');
+      req.className = 'dvfy-select__req';
+      req.textContent = '*';
+      req.setAttribute('aria-hidden', 'true');
+      lbl.appendChild(req);
+    }
+    return lbl;
+  }
+
+  #buildNativeSelect(placeholder) {
+    const name = this.getAttribute('name');
+    const required = this.hasAttribute('required');
+
     const native = document.createElement('select');
     native.className = 'dvfy-select__native';
     if (name) native.name = name;
@@ -378,13 +407,10 @@ class DvfySelect extends HTMLElement {
       this.#value = native.value;
       this.dispatchEvent(new CustomEvent('change', { detail: { value: this.#value }, bubbles: true }));
     });
-    this.appendChild(native);
+    return native;
+  }
 
-    // Custom UI wrapper
-    const custom = document.createElement('div');
-    custom.className = 'dvfy-select__custom';
-
-    // Trigger button
+  #buildTrigger(placeholder) {
     const trigger = document.createElement('button');
     trigger.className = 'dvfy-select__trigger';
     trigger.setAttribute('type', 'button');
@@ -409,14 +435,16 @@ class DvfySelect extends HTMLElement {
       this.#open ? this.#close() : this.#openDropdown();
     });
     trigger.addEventListener('keydown', e => this.#onKeydown(e));
-    custom.appendChild(trigger);
+    return trigger;
+  }
 
-    // Dropdown
+  #buildDropdown() {
+    const searchable = this.hasAttribute('searchable');
+
     const dropdown = document.createElement('div');
     dropdown.className = 'dvfy-select__dropdown';
     dropdown.setAttribute('role', 'listbox');
 
-    // Search input
     if (searchable) {
       const search = document.createElement('input');
       search.className = 'dvfy-select__search';
@@ -429,7 +457,6 @@ class DvfySelect extends HTMLElement {
       dropdown.appendChild(search);
     }
 
-    // Options list
     const list = document.createElement('div');
     list.className = 'dvfy-select__list';
 
@@ -460,21 +487,7 @@ class DvfySelect extends HTMLElement {
     list.appendChild(empty);
 
     dropdown.appendChild(list);
-    custom.appendChild(dropdown);
-    this.appendChild(custom);
-
-    // Error / help
-    if (error) {
-      const errEl = document.createElement('div');
-      errEl.className = 'dvfy-select__error';
-      errEl.textContent = error;
-      this.appendChild(errEl);
-    } else if (help) {
-      const helpEl = document.createElement('div');
-      helpEl.className = 'dvfy-select__help';
-      helpEl.textContent = help;
-      this.appendChild(helpEl);
-    }
+    return dropdown;
   }
 
   #openDropdown() {
