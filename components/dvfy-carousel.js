@@ -451,19 +451,21 @@ class DvfyCarousel extends HTMLElement {
 
   #tickProgress = () => {
     if (!this.#progressEl || !this.#autoplayMs) return;
-    if (this.#userPaused) {
-      this.#progressRaf = requestAnimationFrame(this.#tickProgress);
-      return;
-    }
+    if (this.#userPaused) return;
     const elapsed = Date.now() - this.#progressStart;
     const pct = Math.min(elapsed / this.#autoplayMs, 1) * 100;
     this.#progressEl.style.width = `${pct}%`;
     if (pct < 100) this.#progressRaf = requestAnimationFrame(this.#tickProgress);
+    else this.#progressRaf = null;
   };
 
   #pauseAutoplay = () => {
     this.#userPaused = true;
-    // Freeze progress — store remaining time
+    // Freeze progress — cancel rAF and store pause time
+    if (this.#progressRaf) {
+      cancelAnimationFrame(this.#progressRaf);
+      this.#progressRaf = null;
+    }
     this.#pausedAt = Date.now();
   };
 
@@ -507,13 +509,13 @@ class DvfyCarousel extends HTMLElement {
   #getActiveIndex() {
     const slides = Array.from(this.querySelectorAll(':scope > dvfy-slide'));
     if (!slides.length) return 0;
-    const carouselLeft = this.getBoundingClientRect().left;
+    const scrollPos = this.scrollLeft;
     let idx = 0;
     let min = Infinity;
-    slides.forEach((slide, i) => {
-      const d = Math.abs(slide.getBoundingClientRect().left - carouselLeft);
+    for (let i = 0; i < slides.length; i++) {
+      const d = Math.abs(slides[i].offsetLeft - scrollPos);
       if (d < min) { min = d; idx = i; }
-    });
+    }
     return idx;
   }
 
