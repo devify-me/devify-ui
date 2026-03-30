@@ -62,8 +62,8 @@ dvfy-transition-root {
  * @attr {string} easing - CSS easing function (default: "ease-out")
  * @attr {boolean} mpa - Enable @view-transition for cross-document MPA navigation
  *
- * @fires transition-start - Fires when a view transition begins
- * @fires transition-finish - Fires when a view transition completes, detail: { success }
+ * @event {CustomEvent} transition-start - Fires when a view transition begins
+ * @event {CustomEvent} transition-finish - Fires when a view transition completes, detail: { success }
  *
  * @slot - Content to wrap; place around HTMX-driven page regions
  *

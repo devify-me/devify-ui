@@ -261,7 +261,7 @@ dvfy-select[label-position="right"] .dvfy-select__help { width: 100%; order: 2; 
  * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {string} label-position - Label placement: top | right | bottom | left (default: "top")
  *
- * @fires change - Selection changed, detail: { value }
+ * @event {CustomEvent} change - Selection changed, detail: { value }
  *
  * @slot - <option> elements defining available choices
  *

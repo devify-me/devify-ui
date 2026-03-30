@@ -97,8 +97,8 @@ function buildAnimationCSS(animation, duration) {
  * @attr {string} duration - Speed: fastest | fast | normal | slow | slowest (default: "normal")
  * @attr {string} name - view-transition-name for named element morphing between states
  *
- * @fires transition-start - Fires when a SPA transition begins
- * @fires transition-finish - Fires when a SPA transition completes, detail: { success }
+ * @event {CustomEvent} transition-start - Fires when a SPA transition begins
+ * @event {CustomEvent} transition-finish - Fires when a SPA transition completes, detail: { success }
  *
  * @slot - Content to wrap with transitions
  *

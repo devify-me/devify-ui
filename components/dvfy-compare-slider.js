@@ -164,7 +164,7 @@ function makeHandleSVG() {
  * @attr {string} label-before - Label overlay on the before panel
  * @attr {string} label-after - Label overlay on the after panel
  *
- * @fires change - Fires on every drag update. detail: { value: number }
+ * @event {CustomEvent} change - Fires on every drag update, detail: { value }
  *
  * @slot before - The "before" content (defines height of the component)
  * @slot after  - The "after" content (absolutely fills same area)

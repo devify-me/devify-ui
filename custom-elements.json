@@ -138,8 +138,7 @@
       ],
       "events": [
         {
-          "name": "auth-submit",
-          "description": "Form submitted, detail: { email, password, ... }"
+          "name": "auth-submit"
         }
       ],
       "cssProperties": [
@@ -203,8 +202,7 @@
       ],
       "events": [
         {
-          "name": "avatar-click",
-          "description": "Interactive avatar clicked, detail: { name, src }"
+          "name": "avatar-click"
         }
       ],
       "cssProperties": [
@@ -748,8 +746,7 @@
       ],
       "events": [
         {
-          "name": "change",
-          "description": "Fires on every drag update. detail: { value: number }"
+          "name": "change"
         }
       ],
       "slots": [
@@ -1469,7 +1466,8 @@
       ],
       "events": [
         {
-          "name": "input"
+          "name": "input",
+          "description": "Fires on input value change (bubbles from inner input)"
         }
       ],
       "cssProperties": [
@@ -1896,8 +1894,7 @@
           "description": "Fires when a SPA transition begins"
         },
         {
-          "name": "transition-finish",
-          "description": "Fires when a SPA transition completes, detail: { success }"
+          "name": "transition-finish"
         }
       ],
       "slots": [
@@ -1942,8 +1939,7 @@
       ],
       "events": [
         {
-          "name": "page-change",
-          "description": "Page changed, detail: { page }"
+          "name": "page-change"
         }
       ],
       "cssProperties": [
@@ -2320,8 +2316,7 @@
       ],
       "events": [
         {
-          "name": "change",
-          "description": "Selection changed"
+          "name": "change"
         }
       ],
       "cssProperties": [
@@ -2559,8 +2554,7 @@
       ],
       "events": [
         {
-          "name": "change",
-          "description": "Selection changed, detail: { value }"
+          "name": "change"
         }
       ],
       "slots": [
@@ -2744,12 +2738,10 @@
       ],
       "events": [
         {
-          "name": "input",
-          "description": "Fires on drag. detail: { value } or { value, valueEnd } in range mode"
+          "name": "input"
         },
         {
-          "name": "change",
-          "description": "Fires on release. detail: { value } or { value, valueEnd } in range mode"
+          "name": "change"
         }
       ],
       "cssProperties": [
@@ -3038,8 +3030,7 @@
       ],
       "events": [
         {
-          "name": "change",
-          "description": "Toggle state changed"
+          "name": "change"
         }
       ],
       "cssProperties": [
@@ -3103,16 +3094,13 @@
       ],
       "events": [
         {
-          "name": "sort",
-          "description": "Column sorted, detail: { column, direction }"
+          "name": "selection-change"
         },
         {
-          "name": "selection-change",
-          "description": "Row selection changed, detail: { selected: number[] }"
+          "name": "filter-change"
         },
         {
-          "name": "filter-change",
-          "description": "Column filter changed, detail: { column, values }"
+          "name": "sort"
         }
       ],
       "slots": [
@@ -3539,8 +3527,7 @@
           "description": "Fires when a view transition begins"
         },
         {
-          "name": "transition-finish",
-          "description": "Fires when a view transition completes, detail: { success }"
+          "name": "transition-finish"
         }
       ],
       "slots": [

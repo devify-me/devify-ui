@@ -271,8 +271,8 @@ dvfy-slider[range] input[type="range"]::-moz-range-thumb {
  * @attr {boolean} range - Enable dual-thumb range mode
  * @attr {number} steps - Number of divisions for tick marks (e.g. 5 = 6 ticks)
  *
- * @fires input - Fires on drag. detail: { value } or { value, valueEnd } in range mode
- * @fires change - Fires on release. detail: { value } or { value, valueEnd } in range mode
+ * @event {CustomEvent} input - Fires on drag, detail: { value } or { value, valueEnd } in range mode
+ * @event {CustomEvent} change - Fires on release, detail: { value } or { value, valueEnd } in range mode
  *
  * @cssprop {color} --dvfy-primary-bg - Fill bar color
  * @cssprop {color} --dvfy-surface-overlay - Track groove background

@@ -149,7 +149,7 @@ dvfy-switch[label-position="bottom"] { flex-direction: column; align-items: cent
  * @attr {string} size - Visual size: xs | sm | md | lg | xl (default: "md")
  * @attr {string} label-position - Label placement: top | right | bottom | left (default: "right")
  *
- * @fires change - Toggle state changed
+ * @event {CustomEvent} change - Toggle state changed, detail: { checked }
  *
  * @cssprop {color} --dvfy-primary-bg - Track color when checked
  * @cssprop {color} --dvfy-neutral-300 - Track color when unchecked

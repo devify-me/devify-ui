@@ -99,7 +99,7 @@ dvfy-modal .dvfy-modal__body {
  * @attr {string} size - Dialog size: xs | sm | md | lg | xl (default: "md")
  * @attr {boolean} required - Prevent dismissal via backdrop click or Escape key
  *
- * @fires close - Modal closed
+ * @event {CustomEvent} close - Modal closed
  *
  * @slot - Modal body content
  *

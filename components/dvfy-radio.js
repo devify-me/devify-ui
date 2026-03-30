@@ -120,7 +120,7 @@ dvfy-radio[label-position="bottom"] { flex-direction: column; align-items: cente
  * @attr {string} size - Visual size: xs | sm | md | lg | xl (default: "md")
  * @attr {string} label-position - Label placement: top | right | bottom | left (default: "right")
  *
- * @fires change - Selection changed
+ * @event {CustomEvent} change - Selection changed, detail: { value }
  *
  * @cssprop {color} --dvfy-primary-bg - Selected radio dot and border color
  * @cssprop {color} --dvfy-input-border - Unselected border color

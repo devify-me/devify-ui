@@ -129,7 +129,7 @@ dvfy-checkbox[label-position="bottom"] { flex-direction: column; align-items: ce
  * @attr {string} label - Label text
  * @attr {string} label-position - Label placement: top | right | bottom | left (default: "right")
  *
- * @fires {CustomEvent} change - Checkbox state changed, detail: { checked, indeterminate }
+ * @event {CustomEvent} change - Checkbox state changed, detail: { checked, indeterminate }
  *
  * @cssprop {color} --dvfy-primary-bg - Checked/indeterminate background
  * @cssprop {color} --dvfy-input-border - Unchecked border color
