@@ -164,6 +164,10 @@ class DvfyCheckbox extends HTMLElement {
     this.#build();
   }
 
+  disconnectedCallback() {
+    this.textContent = '';
+  }
+
   static get observedAttributes() { return ['checked', 'disabled', 'indeterminate', 'label', 'size', 'label-position']; }
 
   attributeChangedCallback() {

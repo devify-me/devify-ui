@@ -138,6 +138,10 @@ class DvfyTooltip extends HTMLElement {
 
   disconnectedCallback() {
     clearTimeout(this.#timer);
+    this.removeEventListener('mouseenter', this.#show);
+    this.removeEventListener('mouseleave', this.#hide);
+    this.removeEventListener('focusin', this.#show);
+    this.removeEventListener('focusout', this.#hide);
   }
 
   static get observedAttributes() { return ['text']; }
