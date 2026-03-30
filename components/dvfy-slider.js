@@ -294,6 +294,12 @@ dvfy-slider[range] input[type="range"]::-moz-range-thumb {
 class DvfySlider extends HTMLElement {
   static #styled = false;
 
+  /** Attributes that require a full DOM rebuild */
+  static #STRUCTURAL = new Set(['range', 'show-value', 'steps', 'name']);
+
+  #pendingRender = false;
+  #initialized = false;
+
   connectedCallback() {
     if (!DvfySlider.#styled) {
       const s = document.createElement('style');
@@ -302,14 +308,134 @@ class DvfySlider extends HTMLElement {
       DvfySlider.#styled = true;
     }
     this.#render();
+    this.#initialized = true;
+  }
+
+  disconnectedCallback() {
+    this.#initialized = false;
   }
 
   static get observedAttributes() {
     return ['label', 'label-position', 'min', 'max', 'step', 'value', 'value-end', 'name', 'disabled', 'size', 'show-value', 'variant', 'no-fill', 'range', 'steps'];
   }
 
-  attributeChangedCallback() {
-    if (this.isConnected) this.#render();
+  #scheduleRender() {
+    if (!this.#pendingRender) {
+      this.#pendingRender = true;
+      queueMicrotask(() => { this.#pendingRender = false; this.#render(); this.#initialized = true; });
+    }
+  }
+
+  attributeChangedCallback(name) {
+    if (!this.isConnected) return;
+
+    // Before first render completes, coalesce everything
+    if (!this.#initialized) return;
+
+    // Structural changes require full rebuild (coalesced)
+    if (DvfySlider.#STRUCTURAL.has(name)) {
+      this.#scheduleRender();
+      return;
+    }
+
+    // Granular updates for non-structural attributes
+    switch (name) {
+      case 'value':
+      case 'value-end':
+        this.#updateValues();
+        break;
+      case 'min':
+      case 'max':
+      case 'step':
+        this.#updateInputProps();
+        break;
+      case 'disabled':
+        this.#updateDisabled();
+        break;
+      case 'label':
+        this.#updateLabel();
+        break;
+      case 'label-position':
+        // Layout handled entirely by CSS attribute selectors — no DOM change needed
+        break;
+      case 'size':
+      case 'variant':
+      case 'no-fill':
+        // Handled entirely by CSS attribute selectors — no DOM change needed
+        break;
+    }
+  }
+
+  /** Update input values and fill bar position without rebuild */
+  #updateValues() {
+    const min = parseFloat(this.getAttribute('min') ?? 0);
+    const max = parseFloat(this.getAttribute('max') ?? 100);
+    const value = parseFloat(this.getAttribute('value') ?? min);
+    const isRange = this.hasAttribute('range');
+    const fill = this.querySelector('.dvfy-slider__fill');
+    const valueSpan = this.querySelector('.dvfy-slider__value');
+
+    if (isRange) {
+      const valueEnd = parseFloat(this.getAttribute('value-end') ?? max);
+      const inputMin = this.querySelector('.dvfy-slider__input-min');
+      const inputMax = this.querySelector('.dvfy-slider__input-max');
+      if (inputMin) inputMin.value = value;
+      if (inputMax) inputMax.value = valueEnd;
+      if (fill) this.#updateFill(fill, this.#frac(value, min, max), this.#frac(valueEnd, min, max), true);
+      if (valueSpan) valueSpan.textContent = `${value} \u2013 ${valueEnd}`;
+    } else {
+      const input = this.querySelector('input[type="range"]');
+      if (input) input.value = value;
+      if (fill) this.#updateFill(fill, 0, this.#frac(value, min, max), false);
+      if (valueSpan) valueSpan.textContent = value;
+    }
+  }
+
+  /** Update min/max/step on input elements without rebuild */
+  #updateInputProps() {
+    const min = parseFloat(this.getAttribute('min') ?? 0);
+    const max = parseFloat(this.getAttribute('max') ?? 100);
+    const step = parseFloat(this.getAttribute('step') ?? 1);
+    const value = parseFloat(this.getAttribute('value') ?? min);
+    const isRange = this.hasAttribute('range');
+    const fill = this.querySelector('.dvfy-slider__fill');
+
+    for (const input of this.querySelectorAll('input[type="range"]')) {
+      input.min = min;
+      input.max = max;
+      input.step = step;
+    }
+
+    // Reposition fill after range change
+    if (isRange) {
+      const valueEnd = parseFloat(this.getAttribute('value-end') ?? max);
+      if (fill) this.#updateFill(fill, this.#frac(value, min, max), this.#frac(valueEnd, min, max), true);
+    } else {
+      if (fill) this.#updateFill(fill, 0, this.#frac(value, min, max), false);
+    }
+  }
+
+  /** Toggle disabled state on inputs without rebuild */
+  #updateDisabled() {
+    const disabled = this.hasAttribute('disabled');
+    for (const input of this.querySelectorAll('input[type="range"]')) {
+      input.disabled = disabled;
+    }
+  }
+
+  /** Update label text without rebuild */
+  #updateLabel() {
+    const label = this.getAttribute('label');
+    const lbl = this.querySelector('.dvfy-slider__label');
+    if (label && lbl) {
+      lbl.textContent = label;
+    } else if (label && !lbl) {
+      // Label added — need rebuild to insert element
+      this.#scheduleRender();
+    } else if (!label && lbl) {
+      // Label removed — need rebuild to remove element
+      this.#scheduleRender();
+    }
   }
 
   #frac(v, min, max) {
