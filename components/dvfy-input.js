@@ -145,6 +145,8 @@ dvfy-input[label-position="right"] .dvfy-input__error-msg { width: 100%; order: 
  * @attr {boolean} clearable - Show clear icon when input has a value
  * @attr {string} label-position - Label placement: top | right | bottom | left (default: "top")
  *
+ * @event {CustomEvent} input - Fires on input value change (bubbles from inner input)
+ *
  * @cssprop {color} --dvfy-input-bg - Input background
  * @cssprop {color} --dvfy-input-border - Input border color
  * @cssprop {color} --dvfy-input-error - Error border and message color

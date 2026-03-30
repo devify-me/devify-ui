@@ -162,7 +162,7 @@ dvfy-avatar-group .dvfy-avatar-group__overflow {
  * @attr {string} label - Visible text label beside or below the avatar
  * @attr {string} label-position - top | right | bottom | left (default: "top")
  *
- * @fires avatar-click - Interactive avatar clicked, detail: { name, src }
+ * @event {CustomEvent} avatar-click - Interactive avatar clicked, detail: { name, src }
  *
  * @cssprop {color} --dvfy-neutral-400 - Initials background color
  * @cssprop {color} --dvfy-success-text - Online status dot color

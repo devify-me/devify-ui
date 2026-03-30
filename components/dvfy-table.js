@@ -319,9 +319,9 @@ dvfy-table[hoverable] tbody tr:hover {
  * @attr {boolean} filterable - Excel-style dropdown filters on data-filter columns
  * @attr {boolean} searchable - Global search input above table
  *
- * @fires sort - Column sorted, detail: { column, direction }
- * @fires selection-change - Row selection changed, detail: { selected: number[] }
- * @fires filter-change - Column filter changed, detail: { column, values }
+ * @event {CustomEvent} sort - Column sorted, detail: { column, direction }
+ * @event {CustomEvent} selection-change - Row selection changed, detail: { selected }
+ * @event {CustomEvent} filter-change - Column filter changed, detail: { column, values }
  *
  * @slot - A <table> element with <thead> and <tbody>
  *

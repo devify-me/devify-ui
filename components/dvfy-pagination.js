@@ -73,7 +73,7 @@ dvfy-pagination .dvfy-pagination__ellipsis {
  * @attr {number} current - Current page number (default: 1)
  * @attr {number} max-visible - Maximum page buttons shown (default: 5)
  *
- * @fires page-change - Page changed, detail: { page }
+ * @event {CustomEvent} page-change - Page changed, detail: { page }
  *
  * @cssprop {color} --dvfy-primary-bg - Active page button background
  * @cssprop {color} --dvfy-primary-text - Active page button text

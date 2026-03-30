@@ -236,7 +236,7 @@ const STYLES = `
  * @attr {string} oauth-google - Google OAuth URL
  * @attr {string} oauth-github - GitHub OAuth URL
  *
- * @fires auth-submit - Form submitted, detail: { email, password, ... }
+ * @event {CustomEvent} auth-submit - Form submitted, detail: { email, password, ... }
  *
  * @cssprop {color} --dvfy-primary-bg - Primary button background
  * @cssprop {color} --dvfy-primary-text - Primary button text color

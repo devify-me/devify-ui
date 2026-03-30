@@ -59,8 +59,8 @@ dvfy-scramble-hover .dvfy-scramble-char {
  * @attr {string} charset - Custom scramble character set
  * @attr {string} trigger - hover | auto | visible (default: hover)
  *
- * @fires scramble-start - Scramble animation begins
- * @fires scramble-end - Scramble animation completes, all characters resolved
+ * @event {CustomEvent} scramble-start - Scramble animation begins
+ * @event {CustomEvent} scramble-end - Scramble animation completes, all characters resolved
  *
  * @slot - Text content to scramble
  *
