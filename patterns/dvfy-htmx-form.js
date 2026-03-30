@@ -342,7 +342,7 @@ class DvfyHtmxForm extends HTMLElement {
 
   #showToast(message, status) {
     if (typeof window.DvfyToast !== 'undefined') {
-      window.DvfyToast.show({ message, status });
+      window.DvfyToast.show({ message, status, context: this });
     }
   }
 
