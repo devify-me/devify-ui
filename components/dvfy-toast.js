@@ -265,12 +265,14 @@ class DvfyToast extends HTMLElement {
   #onResume = () => {
     if (this.#remaining <= 0) return;
 
-    // Resume the progress bar animation for the remaining time
+    // Resume the progress bar — double rAF to flush the frozen state first
     if (this.#progress) {
       requestAnimationFrame(() => {
-        if (!this.#progress) return;
-        this.#progress.style.transition = `transform ${this.#remaining}ms linear`;
-        this.#progress.style.transform = 'scaleX(0)';
+        requestAnimationFrame(() => {
+          if (!this.#progress) return;
+          this.#progress.style.transition = `transform ${this.#remaining}ms linear`;
+          this.#progress.style.transform = 'scaleX(0)';
+        });
       });
     }
 
