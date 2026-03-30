@@ -1,4 +1,5 @@
 import { labelPositionCSS } from '../utils/label-position.js';
+import { injectStyles } from '../utils/styles.js';
 
 /**
  * <dvfy-input> — Text input with label, error, and help text
@@ -137,18 +138,12 @@ ${labelPositionCSS('dvfy-input', { layout: 'field', label: '.dvfy-input__label',
  * @cssprop {color} --dvfy-input-error - Error border and message color
  */
 class DvfyInput extends HTMLElement {
-  static #styled = false;
   /** @type {boolean} tracks password visibility state */
   #passwordVisible = false;
   #id = null;
 
   connectedCallback() {
-    if (!DvfyInput.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyInput.#styled = true;
-    }
+    injectStyles('dvfy-input', STYLES);
     this.#id = this.getAttribute('name') || `dvfy-input-${Math.random().toString(36).slice(2, 8)}`;
     this.#build();
   }

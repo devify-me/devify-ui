@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-description-list> — Key-value display
  *
@@ -152,15 +154,8 @@ dvfy-description-list[layout="horizontal"] dvfy-dl-item .dvfy-dl-item__value {
  * @cssprop {color} --dvfy-surface-muted - Striped row background
  */
 class DvfyDescriptionList extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyDescriptionList.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyDescriptionList.#styled = true;
-    }
+    injectStyles('dvfy-description-list', STYLES);
     this.setAttribute('role', 'list');
     queueMicrotask(() => this.#render());
   }

@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-dropdown> — Dropdown menu
  *
@@ -97,18 +99,12 @@ dvfy-dropdown .dvfy-dropdown__item + .dvfy-dropdown__item {
  * </dvfy-dropdown>
  */
 class DvfyDropdown extends HTMLElement {
-  static #styled = false;
   #menu = null;
   #trigger = null;
   #activeIndex = -1;
 
   connectedCallback() {
-    if (!DvfyDropdown.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyDropdown.#styled = true;
-    }
+    injectStyles('dvfy-dropdown', STYLES);
     this.#build();
     this.addEventListener('keydown', this.#onKey);
     document.addEventListener('click', this.#onOutside);

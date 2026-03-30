@@ -1,4 +1,5 @@
 import { labelPositionCSS } from '../utils/label-position.js';
+import { injectStyles } from '../utils/styles.js';
 
 /**
  * <dvfy-radio> — Radio button with label
@@ -120,15 +121,8 @@ ${labelPositionCSS('dvfy-radio', { layout: 'inline', label: '.dvfy-radio__label'
  * @cssprop {color} --dvfy-input-border - Unselected border color
  */
 class DvfyRadio extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyRadio.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyRadio.#styled = true;
-    }
+    injectStyles('dvfy-radio', STYLES);
     this.setAttribute('role', 'radio');
     this.#build();
   }

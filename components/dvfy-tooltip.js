@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-tooltip> — Tooltip on hover/focus
  *
@@ -107,17 +109,11 @@ dvfy-tooltip[position="right"] .dvfy-tooltip__tip::after {
  * @cssprop {color} --dvfy-tooltip-border - Tooltip border color
  */
 class DvfyTooltip extends HTMLElement {
-  static #styled = false;
   #tip = null;
   #timer = null;
 
   connectedCallback() {
-    if (!DvfyTooltip.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyTooltip.#styled = true;
-    }
+    injectStyles('dvfy-tooltip', STYLES);
     const tipId = `dvfy-tip-${Math.random().toString(36).slice(2, 8)}`;
     this.#tip = document.createElement('span');
     this.#tip.className = 'dvfy-tooltip__tip';

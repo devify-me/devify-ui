@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-toast> — Toast notification
  *
@@ -148,7 +150,6 @@ function getContainer(position, context) {
  * @cssprop {color} --dvfy-danger-bg-subtle - Danger toast background
  */
 class DvfyToast extends HTMLElement {
-  static #styled = false;
   #timer = null;
   #clickHandler = null;
   #remaining = 0;
@@ -193,12 +194,7 @@ class DvfyToast extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!DvfyToast.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyToast.#styled = true;
-    }
+    injectStyles('dvfy-toast', STYLES);
 
     const message = this.textContent.trim();
     const status = this.getAttribute('status') || 'info';

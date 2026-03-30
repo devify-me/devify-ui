@@ -1,4 +1,5 @@
 import { labelPositionCSS } from '../utils/label-position.js';
+import { injectStyles } from '../utils/styles.js';
 
 /**
  * <dvfy-select> — Enhanced select with search
@@ -253,7 +254,6 @@ ${labelPositionCSS('dvfy-select', { layout: 'field', label: '.dvfy-select__label
  * @cssprop {color} --dvfy-active-bg - Selected option background
  */
 class DvfySelect extends HTMLElement {
-  static #styled = false;
   #options = [];
   #value = '';
   #open = false;
@@ -261,12 +261,7 @@ class DvfySelect extends HTMLElement {
   #built = false;
 
   connectedCallback() {
-    if (!DvfySelect.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfySelect.#styled = true;
-    }
+    injectStyles('dvfy-select', STYLES);
 
     // Read options from child <option> elements
     this.#options = Array.from(this.querySelectorAll('option')).map(o => ({

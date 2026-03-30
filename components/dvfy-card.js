@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-card> — Content card
  *
@@ -155,7 +157,6 @@ dvfy-card[spotlight] > * {
  * @cssprop {color} --dvfy-card-spotlight-border-color - Border glow color
  */
 class DvfyCard extends HTMLElement {
-  static #styled = false;
   #rafId = 0;
   #lastX = 0;
   #lastY = 0;
@@ -180,12 +181,7 @@ class DvfyCard extends HTMLElement {
   };
 
   connectedCallback() {
-    if (!DvfyCard.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyCard.#styled = true;
-    }
+    injectStyles('dvfy-card', STYLES);
 
     if (this.hasAttribute('interactive')) {
       if (!this.getAttribute('tabindex')) this.setAttribute('tabindex', '0');

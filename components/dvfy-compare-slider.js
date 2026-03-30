@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const STYLES = `
 dvfy-compare-slider {
   display: block;
@@ -181,8 +183,6 @@ function makeHandleSVG() {
  * </dvfy-compare-slider>
  */
 class DvfyCompareSlider extends HTMLElement {
-  static #styled = false;
-
   /** @type {number} Current divider position 0–100 */
   #value = 50;
   /** @type {HTMLElement|null} */
@@ -192,12 +192,7 @@ class DvfyCompareSlider extends HTMLElement {
   #observer = null;
 
   connectedCallback() {
-    if (!DvfyCompareSlider.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyCompareSlider.#styled = true;
-    }
+    injectStyles('dvfy-compare-slider', STYLES);
 
     this.#build();
     this.#attachInteraction();

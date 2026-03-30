@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-marquee-scroll> — Velocity-driven scroll-accelerated marquee
  *
@@ -94,8 +96,6 @@ dvfy-marquee-scroll .dvfy-marquee-item {
  * @cssprop {length} --dvfy-marquee-fade - Edge fade overlay width (default: 4rem)
  */
 class DvfyMarqueeScroll extends HTMLElement {
-  static #styled = false;
-
   /** @type {HTMLElement|null} */
   #track = null;
 
@@ -127,12 +127,7 @@ class DvfyMarqueeScroll extends HTMLElement {
   #observer = null;
 
   connectedCallback() {
-    if (!DvfyMarqueeScroll.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyMarqueeScroll.#styled = true;
-    }
+    injectStyles('dvfy-marquee-scroll', STYLES);
 
     this.#render();
     this.#setupMotionQuery();

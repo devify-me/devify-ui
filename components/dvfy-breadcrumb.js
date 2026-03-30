@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-breadcrumb> — Breadcrumb navigation
  *
@@ -62,15 +64,8 @@ dvfy-breadcrumb > :last-child {
  * </dvfy-breadcrumb>
  */
 class DvfyBreadcrumb extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyBreadcrumb.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyBreadcrumb.#styled = true;
-    }
+    injectStyles('dvfy-breadcrumb', STYLES);
     this.setAttribute('aria-label', 'Breadcrumb');
     this.#insertSeparators();
   }

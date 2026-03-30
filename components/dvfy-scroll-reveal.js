@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 const STYLES = `
 /* ── scroll-reveal wrapper ── */
 dvfy-scroll-reveal {
@@ -98,7 +100,6 @@ dvfy-scroll-reveal {
  * </dvfy-scroll-reveal>
  */
 class DvfyScrollReveal extends HTMLElement {
-  static #styled = false;
   static get observedAttributes() { return ['animation']; }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -108,12 +109,7 @@ class DvfyScrollReveal extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!DvfyScrollReveal.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyScrollReveal.#styled = true;
-    }
+    injectStyles('dvfy-scroll-reveal', STYLES);
   }
 }
 

@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-stepper> — Multi-step wizard with visual progress.
  *
@@ -185,16 +187,10 @@ dvfy-stepper[vertical] dvfy-step[active] {
  * @event {CustomEvent} change - Fires when active step changes, detail: { step, index }
  */
 class DvfyStepper extends HTMLElement {
-  static #styled = false;
   #nav = null;
 
   connectedCallback() {
-    if (!DvfyStepper.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyStepper.#styled = true;
-    }
+    injectStyles('dvfy-stepper', STYLES);
     this.setAttribute('role', 'navigation');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Progress steps');

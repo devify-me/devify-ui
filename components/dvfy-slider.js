@@ -1,4 +1,5 @@
 import { labelPositionCSS } from '../utils/label-position.js';
+import { injectStyles } from '../utils/styles.js';
 
 /**
  * <dvfy-slider> — Knob-primitive slider with fill bar and range mode
@@ -283,8 +284,6 @@ dvfy-slider[range] input[type="range"]::-moz-range-thumb {
  * <dvfy-slider label="Rating" min="0" max="10" steps="10" value="5" show-value></dvfy-slider>
  */
 class DvfySlider extends HTMLElement {
-  static #styled = false;
-
   /** Attributes that require a full DOM rebuild */
   static #STRUCTURAL = new Set(['range', 'show-value', 'steps', 'name']);
 
@@ -292,12 +291,7 @@ class DvfySlider extends HTMLElement {
   #initialized = false;
 
   connectedCallback() {
-    if (!DvfySlider.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfySlider.#styled = true;
-    }
+    injectStyles('dvfy-slider', STYLES);
     this.#render();
     this.#initialized = true;
   }

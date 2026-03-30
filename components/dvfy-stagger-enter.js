@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-stagger-enter> — CSS staggered DOM-enter animations
  *
@@ -110,19 +112,12 @@ dvfy-stagger-enter[data-direction="right"] > * {
  * using @starting-style + sibling-index() — no JS timers.
  */
 class DvfyStaggerEnter extends HTMLElement {
-  static #styled = false;
-
   static get observedAttributes() {
     return ['direction', 'delay', 'duration', 'easing', 'distance'];
   }
 
   connectedCallback() {
-    if (!DvfyStaggerEnter.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyStaggerEnter.#styled = true;
-    }
+    injectStyles('dvfy-stagger-enter', STYLES);
     this.#applyTokens();
     this.#applyDirection();
   }

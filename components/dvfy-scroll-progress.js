@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-scroll-progress> — CSS scroll-driven reading progress bar
  *
@@ -86,7 +88,6 @@ dvfy-scroll-progress[position="bottom"] {
  * @cssprop {integer} --dvfy-scroll-progress-z - z-index (default: 1000)
  */
 class DvfyScrollProgress extends HTMLElement {
-  static #styled = false;
   static get observedAttributes() { return ['position']; }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -95,12 +96,7 @@ class DvfyScrollProgress extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!DvfyScrollProgress.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyScrollProgress.#styled = true;
-    }
+    injectStyles('dvfy-scroll-progress', STYLES);
   }
 }
 

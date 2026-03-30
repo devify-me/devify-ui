@@ -1,4 +1,5 @@
 import { sanitizeHref } from '../utils/url.js';
+import { injectStyles } from '../utils/styles.js';
 
 const STYLES = `
 dvfy-nav {
@@ -74,7 +75,6 @@ dvfy-nav[disabled] a.dvfy-nav__link {
  * <dvfy-nav href="/docs" icon="📖">Docs</dvfy-nav>
  */
 class DvfyNav extends HTMLElement {
-  static #styled = false;
   #autoActive = false; // tracks whether active was set by auto-detection
 
   static get observedAttributes() {
@@ -82,13 +82,7 @@ class DvfyNav extends HTMLElement {
   }
 
   connectedCallback() {
-    if (!DvfyNav.#styled) {
-      const s = document.createElement('style');
-      s.id = 'dvfy-nav-style';
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyNav.#styled = true;
-    }
+    injectStyles('dvfy-nav', STYLES);
     this.setAttribute('role', 'navigation');
     if (this.hasAttribute('aria-label')) {
       // aria-label is already set by the user, keep it

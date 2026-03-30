@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-htmx-table> — Server-side sorted, filtered, paginated table via HTMX.
  *
@@ -258,7 +260,6 @@ function stripEventHandlers(node) {
 }
 
 class DvfyHtmxTable extends HTMLElement {
-  static #styled = false;
   #table = null;
   #tbody = null;
   #wrapper = null;
@@ -272,12 +273,7 @@ class DvfyHtmxTable extends HTMLElement {
   #searchQuery = '';
 
   connectedCallback() {
-    if (!DvfyHtmxTable.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyHtmxTable.#styled = true;
-    }
+    injectStyles('dvfy-htmx-table', STYLES);
     this.setAttribute('role', 'region');
     if (!this.hasAttribute('aria-label')) {
       this.setAttribute('aria-label', 'Data table');

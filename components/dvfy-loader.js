@@ -1,3 +1,5 @@
+import { injectStyles } from '../utils/styles.js';
+
 /**
  * <dvfy-loader> — Loading spinner
  *
@@ -118,15 +120,8 @@ dvfy-loader[size="xl"] .dvfy-loader__dot { width: 1rem; height: 1rem; }
  * @cssprop {color} --dvfy-border-default - Spinner track color
  */
 class DvfyLoader extends HTMLElement {
-  static #styled = false;
-
   connectedCallback() {
-    if (!DvfyLoader.#styled) {
-      const s = document.createElement('style');
-      s.textContent = STYLES;
-      document.head.appendChild(s);
-      DvfyLoader.#styled = true;
-    }
+    injectStyles('dvfy-loader', STYLES);
     this.setAttribute('role', 'status');
     this.#build();
   }
