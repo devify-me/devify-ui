@@ -281,6 +281,11 @@ class DvfyCarousel extends HTMLElement {
 
   #autoplayTimer = null;
   #userPaused = false;
+  /** @type {boolean} Cached prefers-reduced-motion state */
+  #reducedMotion = false;
+  /** @type {MediaQueryList|null} */
+  #mql = null;
+  #onMotionChange = (e) => { this.#reducedMotion = e.matches; };
   #progressEl = null;
   #progressRaf = null;
   #progressStart = 0;
@@ -296,6 +301,10 @@ class DvfyCarousel extends HTMLElement {
       document.head.appendChild(s);
       DvfyCarousel.#styled = true;
     }
+
+    this.#mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    this.#reducedMotion = this.#mql.matches;
+    this.#mql.addEventListener('change', this.#onMotionChange);
 
     if (DvfyCarousel.#wrapping.has(this)) {
       DvfyCarousel.#wrapping.delete(this);
@@ -334,6 +343,10 @@ class DvfyCarousel extends HTMLElement {
     this.removeEventListener('focusin', this.#pauseAutoplay);
     this.removeEventListener('focusout', this.#resumeAutoplay);
     this.removeEventListener('pointerdown', this.#onUserInteract);
+    if (this.#mql) {
+      this.#mql.removeEventListener('change', this.#onMotionChange);
+      this.#mql = null;
+    }
     this.#stopAutoplay();
 
     if (this.#progressEl?.isConnected) this.#progressEl.remove();
@@ -395,7 +408,7 @@ class DvfyCarousel extends HTMLElement {
   #startAutoplay() {
     const raw = parseFloat(this.getAttribute('autoplay'));
     if (!raw || raw <= 0) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (this.#reducedMotion) return;
 
     this.#autoplayMs = raw * 1000;
     this.#ensureProgressBar();

@@ -90,12 +90,21 @@ class DvfyTransitionRoot extends HTMLElement {
   #onAfterSwap = null;
   /** @type {Function|null} Resolves the current active view transition */
   #resolveTransition = null;
+  /** @type {boolean} Cached prefers-reduced-motion state */
+  #reducedMotion = false;
+  /** @type {MediaQueryList|null} */
+  #mql = null;
+  #onMotionChange = (e) => { this.#reducedMotion = e.matches; };
 
   static get observedAttributes() {
     return ['duration', 'easing', 'mpa'];
   }
 
   connectedCallback() {
+    this.#mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    this.#reducedMotion = this.#mql.matches;
+    this.#mql.addEventListener('change', this.#onMotionChange);
+
     this.#injectBaseStyles();
     this.#apply();
     this.#attachHtmxListeners();
@@ -104,6 +113,10 @@ class DvfyTransitionRoot extends HTMLElement {
   }
 
   disconnectedCallback() {
+    if (this.#mql) {
+      this.#mql.removeEventListener('change', this.#onMotionChange);
+      this.#mql = null;
+    }
     this.#detachHtmxListeners();
     if (this.#attrObserver) {
       this.#attrObserver.disconnect();
@@ -231,7 +244,7 @@ class DvfyTransitionRoot extends HTMLElement {
 
     this.#onBeforeSwap = (/** @type {CustomEvent} */ e) => {
       // Skip if reduced motion — let HTMX swap without a transition
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if (this.#reducedMotion) return;
 
       // Only wrap swaps targeting elements inside this root (or the root itself)
       const target = e.detail?.target;
