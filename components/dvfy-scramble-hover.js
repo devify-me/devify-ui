@@ -84,8 +84,16 @@ class DvfyScrambleHover extends HTMLElement {
   #observer = null;
   /** @type {boolean} Whether the current animation has completed */
   #done = false;
+  /** @type {boolean} Cached prefers-reduced-motion state */
+  #reducedMotion = false;
+  /** @type {MediaQueryList|null} */
+  #mql = null;
+  #onMotionChange = (e) => { this.#reducedMotion = e.matches; };
 
   connectedCallback() {
+    this.#mql = window.matchMedia('(prefers-reduced-motion: reduce)');
+    this.#reducedMotion = this.#mql.matches;
+    this.#mql.addEventListener('change', this.#onMotionChange);
     if (!DvfyScrambleHover.#styled) {
       const s = document.createElement('style');
       s.textContent = STYLES;
@@ -102,6 +110,10 @@ class DvfyScrambleHover extends HTMLElement {
 
   disconnectedCallback() {
     this.#stop();
+    if (this.#mql) {
+      this.#mql.removeEventListener('change', this.#onMotionChange);
+      this.#mql = null;
+    }
     if (this.#observer) {
       this.#observer.disconnect();
       this.#observer = null;
@@ -213,7 +225,7 @@ class DvfyScrambleHover extends HTMLElement {
 
   #start() {
     // Respect reduced-motion: skip to final text immediately
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (this.#reducedMotion) {
       this.#resolve();
       return;
     }
