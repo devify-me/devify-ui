@@ -2496,6 +2496,10 @@
       "description": "Enhanced select dropdown with search, keyboard navigation, and native mobile fallback.",
       "attributes": [
         {
+          "name": "value",
+          "type": "string"
+        },
+        {
           "name": "name",
           "description": "Form field name",
           "type": "string"
@@ -2549,6 +2553,7 @@
       "properties": [
         {
           "name": "value",
+          "attribute": "value",
           "type": "string"
         }
       ],
