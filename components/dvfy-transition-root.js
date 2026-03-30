@@ -293,16 +293,7 @@ class DvfyTransitionRoot extends HTMLElement {
   #attachAttrObserver() {
     this.#attrObserver = new MutationObserver((mutations) => {
       for (const mutation of mutations) {
-        if (mutation.type === 'attributes' &&
-            mutation.attributeName === 'dvfy-transition-name') {
-          this.#applyTransitionName(/** @type {Element} */ (mutation.target));
-        } else if (mutation.type === 'childList') {
-          for (const node of mutation.addedNodes) {
-            if (node.nodeType === Node.ELEMENT_NODE) {
-              this.#applyTransitionNames(/** @type {Element} */ (node));
-            }
-          }
-        }
+        this.#handleMutation(mutation);
       }
     });
 
@@ -311,6 +302,25 @@ class DvfyTransitionRoot extends HTMLElement {
       childList: true,
       attributeFilter: ['dvfy-transition-name'],
     });
+  }
+
+  /**
+   * Route a single MutationRecord to the appropriate handler.
+   *
+   * @param {MutationRecord} mutation
+   */
+  #handleMutation(mutation) {
+    if (mutation.type === 'attributes' &&
+        mutation.attributeName === 'dvfy-transition-name') {
+      this.#applyTransitionName(/** @type {Element} */ (mutation.target));
+      return;
+    }
+    if (mutation.type !== 'childList') return;
+    for (const node of mutation.addedNodes) {
+      if (node.nodeType === Node.ELEMENT_NODE) {
+        this.#applyTransitionNames(/** @type {Element} */ (node));
+      }
+    }
   }
 
   /**
