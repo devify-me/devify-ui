@@ -239,7 +239,7 @@ class DvfyTreeView extends HTMLElement {
   };
 
   #activateNode(node) {
-    this.querySelectorAll('dvfy-tree-node[selected]').forEach(n => {
+    this.querySelectorAll('dvfy-tree-node[selected]').forEach((n) => {
       n.removeAttribute('selected');
       n.removeAttribute('aria-selected');
     });
