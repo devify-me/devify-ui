@@ -1,17 +1,16 @@
-# Issue #232: fix(select): narrow preview, broken searchable, unstyled options, wrong label-position
+# Issue #291: Fix dvfy-button type="submit" does not submit parent form
 
 **Type:** fix
-**Branch:** fix/232-select-bugs
-**Labels:** bug
+**Branch:** fix/291-button-form-submit
+**Labels:** bug, ctx:components, priority:high
 
 ## Plan
 
-- [ ] Fix 1: Narrow preview — add width: 100% to .dvfy-select__custom
-- [ ] Fix 2: Broken searchable toggle — cache #options across rebuilds
-- [ ] Fix 3: Unstyled native options — add appearance: none + token-based styling
-- [ ] Fix 4: label-position left/right — fix flex layout rules
-- [ ] Verify: npm run lint
-- [ ] Verify: npm test
-- [ ] Verify: npm run analyze
+- [ ] Add click handler that calls `form.requestSubmit()` for type="submit" and `form.reset()` for type="reset"
+- [ ] Update JSDoc to document type attribute behavior
+- [ ] Run `npm run analyze` to regenerate manifest
+- [ ] Verify: build passes (`npm run build`)
+- [ ] Verify: lint clean (`npm run lint`)
 
 ## Future
+<!-- Unrelated issues discovered during implementation — do NOT fix inline -->
