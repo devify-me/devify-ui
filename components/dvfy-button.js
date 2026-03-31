@@ -184,10 +184,12 @@ class DvfyButton extends HTMLElement {
     this.#syncAria();
 
     this.addEventListener('keydown', this.#onKey);
+    this.addEventListener('click', this.#onClick);
   }
 
   disconnectedCallback() {
     this.removeEventListener('keydown', this.#onKey);
+    this.removeEventListener('click', this.#onClick);
   }
 
   #onKey = (e) => {
@@ -195,6 +197,15 @@ class DvfyButton extends HTMLElement {
       e.preventDefault();
       this.click();
     }
+  };
+
+  #onClick = () => {
+    const type = this.getAttribute('type');
+    if (!type || type === 'button') return;
+    const form = this.closest('form');
+    if (!form) return;
+    if (type === 'submit') form.requestSubmit();
+    else if (type === 'reset') form.reset();
   };
 
   static get observedAttributes() { return ['disabled', 'loading', 'from', 'to']; }
