@@ -11,6 +11,26 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+---
+
+## [0.2.0] — 2026-04-02
+
+### Breaking Changes
+
+#### `dvfy-button` — `variant="default"` renamed to `variant="primary"`
+
+**Before:**
+```html
+<dvfy-button variant="default">Click</dvfy-button>
+```
+
+**After:**
+```html
+<dvfy-button variant="primary">Click</dvfy-button>
+```
+
+Buttons with no `variant` attribute are unaffected — they continue to render as primary.
+
 ### Fixed
 
 - **`dvfy-select`** — Native `<select>` fallback `change` event no longer bubbles past the component's own CustomEvent, fixing broken enum controls in narrow containers (caused by container query migration)
@@ -65,5 +85,6 @@ None — this is the initial release.
 
 ---
 
-[Unreleased]: https://github.com/devify-me/devify-ui/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/devify-me/devify-ui/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/devify-me/devify-ui/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/devify-me/devify-ui/releases/tag/v0.1.0

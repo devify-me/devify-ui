@@ -155,7 +155,7 @@ export default function App() {
 
       {/* Button with loading state */}
       <DvfyButton
-        variant="default"
+        variant="primary"
         loading={saving}
         disabled={saving}
         onClick={handleSave}

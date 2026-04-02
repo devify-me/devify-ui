@@ -53,19 +53,19 @@ dvfy-button[icon][size="sm"] { padding: var(--dvfy-space-1-5); }
 dvfy-button[icon][size="lg"] { padding: var(--dvfy-space-2-5); }
 dvfy-button[icon][size="xl"] { padding: var(--dvfy-space-3); }
 
-/* Default variant — high specificity to resist overrides */
-dvfy-button:not([variant]), dvfy-button[variant="default"] {
+/* Primary variant (default when no variant specified) — high specificity to resist overrides */
+dvfy-button:not([variant]), dvfy-button[variant="primary"] {
   background: var(--dvfy-primary-bg);
   color: var(--dvfy-primary-text);
   border-color: var(--dvfy-primary-bg);
 }
 dvfy-button:not([variant]):hover:not([disabled]):not([loading]),
-dvfy-button[variant="default"]:hover:not([disabled]):not([loading]) {
+dvfy-button[variant="primary"]:hover:not([disabled]):not([loading]) {
   background: var(--dvfy-primary-bg-hover) !important;
   border-color: var(--dvfy-primary-bg-hover) !important;
 }
 dvfy-button:not([variant]):active:not([disabled]):not([loading]),
-dvfy-button[variant="default"]:active:not([disabled]):not([loading]) {
+dvfy-button[variant="primary"]:active:not([disabled]):not([loading]) {
   background: var(--dvfy-primary-bg-active) !important;
 }
 
@@ -155,7 +155,7 @@ dvfy-button[loading]::after {
  *
  * @element dvfy-button
  *
- * @attr {string} variant - Button style: default | subtle | outline | ghost | danger | gradient (default: "default")
+ * @attr {string} variant - Button style: primary | subtle | outline | ghost | danger | gradient (default: "primary")
  * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {boolean} icon - Icon-only mode with square aspect ratio
  * @attr {boolean} disabled - Disable button and prevent interaction

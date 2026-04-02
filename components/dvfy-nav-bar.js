@@ -193,7 +193,7 @@ const NAV_BAR_RESPONSIVE_FN = (id, bp) => `
  *     <dvfy-nav href="/docs">Docs</dvfy-nav>
  *     <dvfy-nav href="/pricing">Pricing</dvfy-nav>
  *   </dvfy-nav-menu>
- *   <dvfy-button variant="default" size="sm">Sign In</dvfy-button>
+ *   <dvfy-button variant="primary" size="sm">Sign In</dvfy-button>
  * </dvfy-nav-bar>
  */
 class DvfyNavBar extends HTMLElement {

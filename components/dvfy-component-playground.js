@@ -364,7 +364,7 @@ const DEFAULT_CONTENT = {
   'dvfy-toast': 'Changes saved successfully',
   'dvfy-empty': '',
   'dvfy-auth': '',
-  'dvfy-nav': '<a href="#home">Home</a><a href="#about">About</a><a href="#contact">Contact</a><dvfy-button variant="default" size="sm">Sign In</dvfy-button>',
+  'dvfy-nav': '<a href="#home">Home</a><a href="#about">About</a><a href="#contact">Contact</a><dvfy-button variant="primary" size="sm">Sign In</dvfy-button>',
   'dvfy-sidebar': '',
   'dvfy-hamburger': '',
   'dvfy-drawer': '<p>Drawer body content. This panel scrolls independently and can be collapsed.</p><p style="margin-top:0.5rem;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Try the collapse button in the header.</p>',

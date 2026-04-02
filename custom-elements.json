@@ -326,7 +326,7 @@
       "attributes": [
         {
           "name": "variant",
-          "description": "Button style: default | subtle | outline | ghost | danger | gradient (default: \"default\")",
+          "description": "Button style: primary | subtle | outline | ghost | danger | gradient (default: \"primary\")",
           "type": "string"
         },
         {
