@@ -295,7 +295,7 @@ export function renderOverviewTiers(mainEl) {
 
   mainEl.appendChild(para('Every component in @devify/ui is classified into one of five tiers based on its dependency depth. This isn\u2019t arbitrary categorization \u2014 it\u2019s a forcing function that prevents complexity from hiding inside components.'));
 
-  // Tier table
+  // ── Tier table ──
   mainEl.appendChild(heading('The Five Tiers', 2));
 
   const table = document.createElement('table');
@@ -333,24 +333,25 @@ export function renderOverviewTiers(mainEl) {
   table.appendChild(tbody);
   mainEl.appendChild(table);
 
-  // Forcing function
-  mainEl.appendChild(heading('The Forcing Function', 2));
-  mainEl.appendChild(para('The tier system answers one question for every component: "How deep is this component\u2019s dependency chain?" A button has zero dvfy-* dependencies (Tier 1). A nav-bar composes nav-menu, hamburger, and drawer (Tier 3). An auth form composes modal, button, and input (Tier 3).'));
-  mainEl.appendChild(para('If a component is "too complex" for its current tier, that\u2019s a signal to decompose it. Extract the reusable piece into a lower tier, then compose it. This is how the library grows without accumulating accidental complexity.'));
+  // ── Decision tree ──
+  mainEl.appendChild(heading('Decision Tree', 2));
+  mainEl.appendChild(para('To classify a component, walk through these questions in order:'));
+  mainEl.appendChild(codeBlock(`Q1: Does it depend on any Tier 3+ component and define page-level layout?
+    YES \u2192 Tier 5 (Layout)
 
-  // Decomposition principle
-  mainEl.appendChild(heading('Decomposition Principle', 2));
+Q2: Does it depend on any Tier 3+ component and encapsulate a self-contained UX flow?
+    YES \u2192 Tier 4 (Widget)
 
-  const decompAlert = document.createElement('dvfy-alert');
-  decompAlert.setAttribute('status', 'info');
-  decompAlert.setAttribute('title', 'Rule');
-  decompAlert.textContent = 'If a component at Tier N contains logic that could be reused by other Tier N components, extract that logic into a Tier N-1 primitive and compose it.';
-  decompAlert.style.marginBottom = 'var(--dvfy-space-4)';
-  mainEl.appendChild(decompAlert);
+Q3: Does it depend on any Tier 2 component?
+    YES \u2192 Tier 3 (Organism)
 
-  mainEl.appendChild(para('Example: dvfy-nav was a 521-line monolith that handled brand display, nav links, mobile drawer, and hamburger toggle. It was decomposed into three components: dvfy-nav (T1 link primitive), dvfy-nav-menu (T2 link group), and dvfy-nav-bar (T3 full bar). Each piece is independently reusable.'));
+Q4: Does it depend on any Tier 1 component (and no Tier 2+)?
+    YES \u2192 Tier 2 (Composite)
 
-  // Dependency flow
+Q5: Zero dvfy-* dependencies?
+    YES \u2192 Tier 1 (Primitive)`));
+
+  // ── Dependency flow ──
   mainEl.appendChild(heading('Dependency Flow', 2));
   mainEl.appendChild(codeBlock(`T1 Primitives      (zero dvfy-* deps)
   \u2193 composed by
@@ -362,5 +363,102 @@ T4 Widgets         (\u22651 T3 dep, full depth)
   \u2193 composed by
 T5 Layouts         (\u22651 T3+ dep, page-level)`));
 
-  mainEl.appendChild(para('HTMX server components are orthogonal \u2014 they\u2019re flagged with a [server] badge but classified by their composition depth, not their server dependency.'));
+  // ── Dependency constraints ──
+  mainEl.appendChild(heading('Dependency Constraints', 2));
+  mainEl.appendChild(infoTable([
+    ['Tier 1', 'Must not import any dvfy-* component'],
+    ['Tier 2', 'Must have \u22651 Tier 1 dep. Only Tier 1 deps allowed.'],
+    ['Tier 3', 'Must have \u22651 Tier 2 dep. Tier 1 + Tier 2 deps allowed.'],
+    ['Tier 4', 'Must have \u22651 Tier 3 dep. Full composition depth.'],
+    ['Tier 5', 'Must have \u22651 Tier 3+ dep. Page-level spatial arrangement.'],
+    ['All tiers', 'No same-tier dependencies at any level.'],
+  ]));
+
+  // ── Forcing function ──
+  mainEl.appendChild(heading('The Forcing Function', 2));
+  mainEl.appendChild(para('The tier system answers one question for every component: "How deep is this component\u2019s dependency chain?" A button has zero dvfy-* dependencies (Tier 1). A nav-bar composes nav-menu, hamburger, and drawer (Tier 3). An auth form composes modal, button, and input (Tier 3).'));
+  mainEl.appendChild(para('If a component is "too complex" for its current tier, that\u2019s a signal to decompose it. Extract the reusable piece into a lower tier, then compose it. This is how the library grows without accumulating accidental complexity.'));
+
+  // ── Decomposition principle ──
+  mainEl.appendChild(heading('Decomposition Principle', 2));
+
+  const decompAlert = document.createElement('dvfy-alert');
+  decompAlert.setAttribute('status', 'info');
+  decompAlert.setAttribute('title', 'Rule');
+  decompAlert.textContent = 'If a component at Tier N contains logic that could be reused by other Tier N components, extract that logic into a Tier N-1 primitive and compose it.';
+  decompAlert.style.marginBottom = 'var(--dvfy-space-4)';
+  mainEl.appendChild(decompAlert);
+
+  mainEl.appendChild(para('Example: dvfy-nav was a 521-line monolith that handled brand display, nav links, mobile drawer, and hamburger toggle. It was decomposed into three components: dvfy-nav (T1 link primitive), dvfy-nav-menu (T2 link group), and dvfy-nav-bar (T3 full bar). Each piece is independently reusable.'));
+
+  // ── Domain assignment ──
+  mainEl.appendChild(heading('Domain Assignment', 2));
+  mainEl.appendChild(para('Every component belongs to one functional domain, independent of its tier:'));
+  mainEl.appendChild(infoTable([
+    ['Forms', 'User input, selection, toggles \u2014 button, input, select, checkbox, etc.'],
+    ['Data Display', 'Presenting data, content, status \u2014 card, badge, table, progress, etc.'],
+    ['Feedback', 'Alerts, loading, toasts, modals \u2014 alert, loader, toast, modal, etc.'],
+    ['Navigation', 'Wayfinding, menus, breadcrumbs \u2014 nav, tabs, pagination, dropdown, etc.'],
+    ['Layout', 'Page structure, sections \u2014 section, drawer, accordion, etc.'],
+    ['Utility', 'Cross-cutting concerns \u2014 theme-switcher, tooltip, auth, transitions, etc.'],
+  ]));
+
+  // ── HTMX / Server components ──
+  mainEl.appendChild(heading('Server Components (HTMX)', 2));
+  mainEl.appendChild(para('HTMX server interaction is orthogonal to the tier system. Components that require a backend are flagged with server: true and a [server] badge in the catalog, but classified by their composition depth \u2014 not their server dependency.'));
+
+  const serverComponents = getServerComponents();
+  if (serverComponents.length) {
+    const serverList = document.createElement('div');
+    serverList.style.cssText = 'display: flex; flex-wrap: wrap; gap: var(--dvfy-space-2); margin-bottom: var(--dvfy-space-6);';
+    for (const tag of serverComponents) {
+      const meta = COMPONENT_REGISTRY[tag];
+      const chip = document.createElement('dvfy-tag');
+      chip.textContent = `${tag.replace('dvfy-', '')} (T${meta?.tier || '?'})`;
+      chip.setAttribute('size', 'sm');
+      chip.style.cursor = 'pointer';
+      chip.addEventListener('click', () => { location.hash = `#components/${tag}`; });
+      serverList.appendChild(chip);
+    }
+    mainEl.appendChild(serverList);
+  }
+
+  // ── Decomposition backlog ──
+  mainEl.appendChild(heading('Decomposition Backlog', 2));
+  mainEl.appendChild(para('Several Tier 1 components are candidates for future decomposition \u2014 they have zero dvfy-* dependencies but contain logic that could be extracted into reusable primitives:'));
+
+  const backlogItems = [
+    ['dvfy-select', 'Compose dvfy-button (trigger) + dvfy-dropdown (menu)'],
+    ['dvfy-date-picker', 'Decompose into day/week/month/calendar primitives'],
+    ['dvfy-tabs', 'Compose dvfy-button (tab triggers)'],
+    ['dvfy-pagination', 'Compose dvfy-button (page buttons)'],
+    ['dvfy-dropdown', 'Compose dvfy-button (trigger)'],
+    ['dvfy-toast', 'Compose dvfy-alert internally'],
+    ['dvfy-file-upload', 'Compose dvfy-button + dvfy-progress'],
+    ['dvfy-carousel', 'Compose dvfy-button (prev/next)'],
+    ['dvfy-sidebar', 'Compose dvfy-drawer or dvfy-section'],
+  ];
+
+  const backlogTable = document.createElement('table');
+  backlogTable.style.cssText = 'width: 100%; border-collapse: collapse; margin-bottom: var(--dvfy-space-4); font-size: var(--dvfy-text-sm);';
+  for (const [comp, plan] of backlogItems) {
+    const tr = document.createElement('tr');
+    tr.style.cssText = 'border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-muted); cursor: pointer;';
+    tr.addEventListener('click', () => { location.hash = `#components/${comp}`; });
+
+    const td1 = document.createElement('td');
+    td1.textContent = comp;
+    td1.style.cssText = 'padding: var(--dvfy-space-2) var(--dvfy-space-4); font-family: var(--dvfy-font-mono); font-size: var(--dvfy-text-xs); color: var(--dvfy-primary-bg); white-space: nowrap;';
+    tr.appendChild(td1);
+
+    const td2 = document.createElement('td');
+    td2.textContent = plan;
+    td2.style.cssText = 'padding: var(--dvfy-space-2) var(--dvfy-space-4); color: var(--dvfy-text-secondary);';
+    tr.appendChild(td2);
+
+    backlogTable.appendChild(tr);
+  }
+  mainEl.appendChild(backlogTable);
+
+  mainEl.appendChild(para('See GitHub issues labeled "taxonomy" + "decomposition" for tracked work.', true));
 }

@@ -31,9 +31,9 @@ HTMX: Orthogonal. Set server: true in registry. Classify by composition depth ab
 
 | Tier | Name       | Rule                          | Allowed deps    | Count |
 |------|------------|-------------------------------|-----------------|-------|
-| 1    | Primitive  | Zero dvfy-* deps              | None            | 44    |
+| 1    | Primitive  | Zero dvfy-* deps              | None            | 45    |
 | 2    | Composite  | ≥1 Tier 1 dep, only Tier 1    | Tier 1 only     | 7     |
-| 3    | Organism   | ≥1 Tier 2 dep                 | Tier 1 + Tier 2 | 3     |
+| 3    | Organism   | ≥1 Tier 2 dep                 | Tier 1 + Tier 2 | 4     |
 | 4    | Widget     | ≥1 Tier 3 dep, self-contained | Tier 1–3        | 0     |
 | 5    | Layout     | ≥1 Tier 3+ dep, page scaffold | Any             | 0     |
 
@@ -74,7 +74,7 @@ The catalog groups server components via the "Server Required" banner and sideba
 
 ## Classification Reference
 
-### Tier 1 — Primitives (44)
+### Tier 1 — Primitives (45)
 
 | Component             | Domain     | Server |
 |----------------------|------------|--------|
@@ -96,7 +96,7 @@ The catalog groups server components via the "Server Required" banner and sideba
 | dvfy-card            | Display    |        |
 | dvfy-gradient-card   | Display    |        |
 | dvfy-spotlight-card  | Display    |        |
-| dvfy-compare         | Display    |        |
+| dvfy-compare-slider  | Display    |        |
 | dvfy-empty           | Display    |        |
 | dvfy-carousel        | Display    |        |
 | dvfy-scroll-progress | Display    |        |
@@ -106,6 +106,7 @@ The catalog groups server components via the "Server Required" banner and sideba
 | dvfy-loader          | Feedback   |        |
 | dvfy-toast           | Feedback   |        |
 | dvfy-hovercard       | Feedback   |        |
+| dvfy-nav             | Navigation |        |
 | dvfy-hamburger       | Navigation |        |
 | dvfy-breadcrumb      | Navigation |        |
 | dvfy-pagination      | Navigation |        |
@@ -130,18 +131,19 @@ The catalog groups server components via the "Server Required" banner and sideba
 | dvfy-drawer             | Layout     | dvfy-button                        |
 | dvfy-table              | Display    | dvfy-checkbox                      |
 | dvfy-modal              | Feedback   | dvfy-button                        |
-| dvfy-nav                | Navigation | dvfy-hamburger                     |
+| dvfy-nav-menu           | Navigation | dvfy-nav                           |
 | dvfy-theme-switcher     | Utility    | dvfy-dropdown, dvfy-button         |
 | dvfy-accordion          | Layout     | dvfy-section                       |
 | dvfy-component-playground | Utility  | dvfy-button, dvfy-section, dvfy-slider |
 
-### Tier 3 — Organisms (3)
+### Tier 3 — Organisms (4)
 
-| Component        | Domain   | Dependencies | Server |
-|-----------------|----------|-------------|--------|
-| dvfy-auth       | Utility  | dvfy-modal  |        |
-| dvfy-htmx-form  | Forms    | dvfy-modal  | server |
-| dvfy-confirm    | Feedback | dvfy-modal  | server |
+| Component        | Domain     | Dependencies                              | Server |
+|-----------------|------------|-------------------------------------------|--------|
+| dvfy-nav-bar    | Navigation | dvfy-nav-menu, dvfy-hamburger, dvfy-drawer |        |
+| dvfy-auth       | Utility    | dvfy-modal                                |        |
+| dvfy-htmx-form  | Forms      | dvfy-modal                                | server |
+| dvfy-confirm    | Feedback   | dvfy-modal                                | server |
 
 ### Tier 4 — Widgets (0)
 
