@@ -1,7 +1,7 @@
 ---
 name: catalog-review
 description: Review the @devify/ui component catalog for UX, visual, and performance issues
-allowed-tools: ["Bash", "Read", "WebFetch", "WebSearch", "Agent", "mcp__plugin_playwright_playwright__*", "mcp__grob__write_knowledge", "mcp__grob__record_observation"]
+allowed-tools: ["Bash", "Read", "WebFetch", "WebSearch", "Agent", "mcp__plugin_playwright_playwright__*"]
 ---
 
 # Catalog Review
@@ -67,7 +67,5 @@ Create a structured report with:
 - **Major**: noticeable visual problems
 - **Minor**: polish items
 - **Suggestions**: enhancement ideas
-
-Store as an observation via `record_observation` with category "architecture".
 
 If critical or major issues found, create GitHub issues on devify-me/devify-ui.
