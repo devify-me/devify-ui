@@ -105,7 +105,7 @@ export function renderOverview(mainEl) {
     { label: 'Components', value: componentCount, hash: '#components/dvfy-button' },
     { label: 'Server Components', value: serverCount, hash: '#components/dvfy-htmx-form' },
     { label: 'Token Groups', value: tokenGroupCount, hash: '#tokens/colors' },
-    { label: 'Architecture Tiers', value: 5, hash: '#overview/tiers' },
+    { label: 'Architecture Tiers', value: Object.keys(TIERS).length, hash: '#overview/tiers' },
   ];
 
   for (const stat of stats) {
@@ -293,10 +293,13 @@ export function renderOverviewStart(mainEl) {
 export function renderOverviewTiers(mainEl) {
   mainEl.appendChild(heading('Composition Model'));
 
-  mainEl.appendChild(para('Every component in @devify/ui is classified into one of five tiers based on its dependency depth. This isn\u2019t arbitrary categorization \u2014 it\u2019s a forcing function that prevents complexity from hiding inside components.'));
+  const tierKeys = Object.keys(TIERS).map(Number).sort((a, b) => a - b);
+  const tierCount = tierKeys.length;
+
+  mainEl.appendChild(para(`Every component in @devify/ui is classified into one of ${tierCount} tiers based on its dependency depth. This isn\u2019t arbitrary categorization \u2014 it\u2019s a forcing function that prevents complexity from hiding inside components.`));
 
   // ── Tier table ──
-  mainEl.appendChild(heading('The Five Tiers', 2));
+  mainEl.appendChild(heading(`The ${tierCount} Tiers`, 2));
 
   const table = document.createElement('table');
   table.style.cssText = 'width: 100%; border-collapse: collapse; margin-bottom: var(--dvfy-space-6); font-size: var(--dvfy-text-sm);';
@@ -314,8 +317,9 @@ export function renderOverviewTiers(mainEl) {
   table.appendChild(thead);
 
   const tbody = document.createElement('tbody');
-  for (const n of [1, 2, 3, 4, 5]) {
+  for (const n of tierKeys) {
     const tier = TIERS[n];
+    if (!tier) continue;
     const count = getComponentsByTier(n).length;
     const tr = document.createElement('tr');
     tr.style.cssText = 'border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-muted); cursor: pointer;';
@@ -333,46 +337,34 @@ export function renderOverviewTiers(mainEl) {
   table.appendChild(tbody);
   mainEl.appendChild(table);
 
-  // ── Decision tree ──
+  // ── Decision tree (built from TIERS data) ──
   mainEl.appendChild(heading('Decision Tree', 2));
-  mainEl.appendChild(para('To classify a component, walk through these questions in order:'));
-  mainEl.appendChild(codeBlock(`Q1: Does it depend on any Tier 3+ component and define page-level layout?
-    YES \u2192 Tier 5 (Layout)
+  mainEl.appendChild(para('To classify a component, walk through the tiers from highest to lowest:'));
 
-Q2: Does it depend on any Tier 3+ component and encapsulate a self-contained UX flow?
-    YES \u2192 Tier 4 (Widget)
+  const decisionLines = [...tierKeys].reverse().map((n, i) => {
+    const tier = TIERS[n];
+    return `Q${i + 1}: ${tier.rules}\n    YES \u2192 Tier ${n} (${tier.name})`;
+  });
+  mainEl.appendChild(codeBlock(decisionLines.join('\n\n')));
 
-Q3: Does it depend on any Tier 2 component?
-    YES \u2192 Tier 3 (Organism)
-
-Q4: Does it depend on any Tier 1 component (and no Tier 2+)?
-    YES \u2192 Tier 2 (Composite)
-
-Q5: Zero dvfy-* dependencies?
-    YES \u2192 Tier 1 (Primitive)`));
-
-  // ── Dependency flow ──
+  // ── Dependency flow (built from TIERS data) ──
   mainEl.appendChild(heading('Dependency Flow', 2));
-  mainEl.appendChild(codeBlock(`T1 Primitives      (zero dvfy-* deps)
-  \u2193 composed by
-T2 Composites      (\u22651 T1 dep, only T1 deps)
-  \u2193 composed by
-T3 Organisms       (\u22651 T2 dep, T1+T2 deps)
-  \u2193 composed by
-T4 Widgets         (\u22651 T3 dep, full depth)
-  \u2193 composed by
-T5 Layouts         (\u22651 T3+ dep, page-level)`));
+
+  const flowLines = tierKeys.map((n) => {
+    const tier = TIERS[n];
+    return `T${n} ${tier.name.padEnd(14)} (${tier.rules.toLowerCase()})`;
+  });
+  mainEl.appendChild(codeBlock(flowLines.join('\n  \u2193 composed by\n')));
 
   // ── Dependency constraints ──
   mainEl.appendChild(heading('Dependency Constraints', 2));
-  mainEl.appendChild(infoTable([
-    ['Tier 1', 'Must not import any dvfy-* component'],
-    ['Tier 2', 'Must have \u22651 Tier 1 dep. Only Tier 1 deps allowed.'],
-    ['Tier 3', 'Must have \u22651 Tier 2 dep. Tier 1 + Tier 2 deps allowed.'],
-    ['Tier 4', 'Must have \u22651 Tier 3 dep. Full composition depth.'],
-    ['Tier 5', 'Must have \u22651 Tier 3+ dep. Page-level spatial arrangement.'],
-    ['All tiers', 'No same-tier dependencies at any level.'],
-  ]));
+
+  const constraintRows = tierKeys.map((n) => {
+    const tier = TIERS[n];
+    return [`Tier ${n} \u2014 ${tier.name}`, tier.rules];
+  });
+  constraintRows.push(['All tiers', 'No same-tier dependencies at any level.']);
+  mainEl.appendChild(infoTable(constraintRows));
 
   // ── Forcing function ──
   mainEl.appendChild(heading('The Forcing Function', 2));
