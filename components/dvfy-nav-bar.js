@@ -153,8 +153,8 @@ dvfy-nav-bar[sticky] .dvfy-nav-bar__bar {
 
 const NAV_BAR_RESPONSIVE_FN = (id, bp) => `
 @container dvfy-nav-bar (max-width: ${bp}px) {
-  [data-nav-bar-id="${id}"] dvfy-nav-menu { display: none; }
-  [data-nav-bar-id="${id}"] .dvfy-nav-bar__actions { display: none; }
+  [data-nav-bar-id="${id}"] .dvfy-nav-bar__bar > dvfy-nav-menu { display: none; }
+  [data-nav-bar-id="${id}"] .dvfy-nav-bar__bar > .dvfy-nav-bar__actions { display: none; }
   [data-nav-bar-id="${id}"] .dvfy-nav-bar__hamburger { display: block; }
   [data-nav-bar-id="${id}"] .dvfy-nav-bar__bar { justify-content: space-between; }
 }
