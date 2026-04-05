@@ -31,8 +31,8 @@ HTMX: Orthogonal. Set server: true in registry. Classify by composition depth ab
 
 | Tier | Name       | Rule                          | Allowed deps    | Count |
 |------|------------|-------------------------------|-----------------|-------|
-| 1    | Primitive  | Zero dvfy-* deps              | None            | 45    |
-| 2    | Composite  | ≥1 Tier 1 dep, only Tier 1    | Tier 1 only     | 7     |
+| 1    | Primitive  | Zero dvfy-* deps              | None            | 51    |
+| 2    | Composite  | ≥1 Tier 1 dep, only Tier 1    | Tier 1 only     | 13    |
 | 3    | Organism   | ≥1 Tier 2 dep                 | Tier 1 + Tier 2 | 4     |
 | 4    | Widget     | ≥1 Tier 3 dep, self-contained | Tier 1–3        | 0     |
 | 5    | Layout     | ≥1 Tier 3+ dep, page scaffold | Any             | 0     |
@@ -43,12 +43,12 @@ HTMX server interaction is not a composition tier — it's a property. Component
 
 The catalog groups server components via the "Server Required" banner and sidebar indicators. They appear in their functional domain (Forms, Feedback, etc.), not a separate HTMX category.
 
-**Current server components:**
-- `dvfy-infinite-scroll` (Tier 1) — scroll-triggered loading
-- `dvfy-live-search` (Tier 1) — debounced search input
-- `dvfy-htmx-table` (Tier 1) — sortable, paginated table
-- `dvfy-htmx-form` (Tier 3) — AJAX form submission with validation
-- `dvfy-confirm` (Tier 3) — confirmation dialog for destructive actions
+**Current server components** (classified by composition depth, not by HTMX usage):
+- `dvfy-infinite-scroll` (Tier 1, Utility) — scroll-triggered loading
+- `dvfy-live-search` (Tier 1, Forms) — debounced search input
+- `dvfy-htmx-table` (Tier 1, Display) — sortable, paginated table
+- `dvfy-htmx-form` (Tier 3, Forms) — AJAX form submission with validation
+- `dvfy-confirm` (Tier 3, Feedback) — confirmation dialog for destructive actions
 
 ## Domain Assignment
 
@@ -74,7 +74,7 @@ The catalog groups server components via the "Server Required" banner and sideba
 
 ## Classification Reference
 
-### Tier 1 — Primitives (45)
+### Tier 1 — Primitives (51)
 
 | Component             | Domain     | Server |
 |----------------------|------------|--------|
@@ -101,11 +101,13 @@ The catalog groups server components via the "Server Required" banner and sideba
 | dvfy-carousel        | Display    |        |
 | dvfy-scroll-progress | Display    |        |
 | dvfy-marquee-scroll  | Display    |        |
+| dvfy-description-list | Display   |        |
 | dvfy-htmx-table      | Display    | server |
 | dvfy-alert           | Feedback   |        |
 | dvfy-loader          | Feedback   |        |
 | dvfy-toast           | Feedback   |        |
 | dvfy-hovercard       | Feedback   |        |
+| dvfy-card-glow       | Feedback   |        |
 | dvfy-nav             | Navigation |        |
 | dvfy-hamburger       | Navigation |        |
 | dvfy-breadcrumb      | Navigation |        |
@@ -115,16 +117,20 @@ The catalog groups server components via the "Server Required" banner and sideba
 | dvfy-tree-node       | Navigation |        |
 | dvfy-tree-view       | Navigation |        |
 | dvfy-sidebar         | Navigation |        |
+| dvfy-command-palette | Navigation |        |
 | dvfy-section         | Layout     |        |
+| dvfy-stepper         | Layout     |        |
 | dvfy-tooltip         | Utility    |        |
+| dvfy-popover         | Utility    |        |
 | dvfy-scroll-reveal   | Utility    |        |
 | dvfy-page-transition | Utility    |        |
 | dvfy-transition-root | Utility    |        |
 | dvfy-text-vortex     | Utility    |        |
 | dvfy-scramble-hover  | Utility    |        |
+| dvfy-stagger-enter   | Utility    |        |
 | dvfy-infinite-scroll | Utility    | server |
 
-### Tier 2 — Composites (7)
+### Tier 2 — Composites (13)
 
 | Component                | Domain     | Dependencies                       |
 |-------------------------|------------|------------------------------------|
@@ -135,6 +141,12 @@ The catalog groups server components via the "Server Required" banner and sideba
 | dvfy-theme-switcher     | Utility    | dvfy-dropdown, dvfy-button         |
 | dvfy-accordion          | Layout     | dvfy-section                       |
 | dvfy-component-playground | Utility  | dvfy-button, dvfy-section, dvfy-slider |
+| dvfy-usage-meter        | Display    | dvfy-progress                      |
+| dvfy-invoice-list       | Display    | dvfy-badge                         |
+| dvfy-subscription-card  | Display    | dvfy-badge, dvfy-button            |
+| dvfy-plan-picker        | Display    | dvfy-button, dvfy-badge            |
+| dvfy-payment-methods    | Forms      | dvfy-button                        |
+| dvfy-payment-setup      | Forms      | dvfy-button, dvfy-loader           |
 
 ### Tier 3 — Organisms (4)
 
@@ -166,7 +178,9 @@ The following Tier 1 components were reclassified from higher tiers because they
 - **dvfy-file-upload** — could compose dvfy-button, dvfy-progress
 - **dvfy-carousel** — could compose dvfy-button (prev/next)
 - **dvfy-sidebar** — could compose dvfy-drawer or dvfy-section
-- **dvfy-card, dvfy-gradient-card, dvfy-spotlight-card** — evaluate composition hierarchy
+- **dvfy-card** — evaluate composition hierarchy with gradient-card and spotlight-card
+- **dvfy-gradient-card** — evaluate composition hierarchy with card
+- **dvfy-spotlight-card** — evaluate composition hierarchy with card
 - **dvfy-tree-view** — already has dvfy-tree-node; verify composition reflected in deps
 
 See GitHub issues labeled `taxonomy` + `decomposition` for tracked work.
