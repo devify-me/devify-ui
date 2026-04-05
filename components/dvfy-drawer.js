@@ -254,11 +254,14 @@ class DvfyDrawer extends HTMLElement {
   }
 
   #build() {
-    // Preserve slotted content
-    const children = [...this.childNodes].filter(
-      n => !n.classList?.contains('dvfy-drawer__header') &&
-           !n.classList?.contains('dvfy-drawer__body')
-    );
+    // Preserve slotted content — extract from existing body if rebuilding
+    const existingBody = this.querySelector('.dvfy-drawer__body');
+    const children = existingBody
+      ? [...existingBody.childNodes]
+      : [...this.childNodes].filter(
+          n => !n.classList?.contains('dvfy-drawer__header') &&
+               !n.classList?.contains('dvfy-drawer__body')
+        );
 
     this.textContent = '';
     const showHeader = !this.hasAttribute('no-header');
