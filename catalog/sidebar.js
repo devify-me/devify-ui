@@ -54,7 +54,7 @@ export function buildSidebar(containerEl) {
     t.appendChild(overviewNode);
 
     // Tokens — all items sorted alphabetically
-    const tokenKeys = Object.keys(TOKEN_GROUPS).filter(k => k !== 'typography');
+    const tokenKeys = Object.keys(TOKEN_GROUPS).filter(k => k !== 'typography' && k !== 'colors');
     const allTokenItems = [
       { label: 'Colors', href: '#tokens/colors' },
       { label: 'Typography', href: '#tokens/typography' },
