@@ -130,6 +130,8 @@ ${labelPositionCSS('dvfy-input', { layout: 'field', label: '.dvfy-input__label',
  * @attr {boolean} no-preview - Disable password visibility toggle for password inputs
  * @attr {boolean} clearable - Show clear icon when input has a value
  * @attr {string} label-position - Label placement: top | right | bottom | left (default: "top")
+ * @attr {string} pattern - Regex pattern for native HTML form validation
+ * @attr {string} title - Tooltip and validation message for pattern mismatch
  *
  * @event {CustomEvent} input - Fires on input value change (bubbles from inner input)
  *
@@ -151,7 +153,7 @@ class DvfyInput extends HTMLElement {
   disconnectedCallback() {}
 
   static get observedAttributes() {
-    return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'no-preview', 'clearable', 'label-position'];
+    return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'no-preview', 'clearable', 'label-position', 'pattern', 'title'];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -187,6 +189,14 @@ class DvfyInput extends HTMLElement {
       case 'help':
         this.#patchMessages(input);
         break;
+      case 'pattern':
+        if (newValue) input.pattern = newValue;
+        else input.removeAttribute('pattern');
+        break;
+      case 'title':
+        if (newValue) input.title = newValue;
+        else input.removeAttribute('title');
+        break;
       case 'label-position':
         break; // CSS-only
     }
@@ -219,6 +229,8 @@ class DvfyInput extends HTMLElement {
     input.placeholder = this.getAttribute('placeholder') || '';
     if (this.hasAttribute('required')) input.required = true;
     if (this.hasAttribute('disabled')) input.disabled = true;
+    if (this.getAttribute('pattern')) input.pattern = this.getAttribute('pattern');
+    if (this.getAttribute('title')) input.title = this.getAttribute('title');
     this.#setAriaOnInput(input);
     wrapper.appendChild(input);
 

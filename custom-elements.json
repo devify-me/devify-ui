@@ -1459,6 +1459,16 @@
           "name": "label-position",
           "description": "Label placement: top | right | bottom | left (default: \"top\")",
           "type": "string"
+        },
+        {
+          "name": "pattern",
+          "description": "Regex pattern for native HTML form validation",
+          "type": "string"
+        },
+        {
+          "name": "title",
+          "description": "Tooltip and validation message for pattern mismatch",
+          "type": "string"
         }
       ],
       "properties": [
