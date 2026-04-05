@@ -25,7 +25,8 @@
     "components/",
     "patterns/",
     "tokens/",
-    "dist/"
+    "dist/",
+    "custom-elements.json"
   ],
   "exports": {
     ".": {
