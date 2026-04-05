@@ -4,31 +4,37 @@
  * Taxonomy (tiers, domains, registry), HTMX patterns, token groups, and semantic tokens.
  */
 
-/** Tier definitions — complexity/dependency classification */
+/** Tier definitions — composition depth classification (see docs/taxonomy.md) */
 export const TIERS = {
   1: {
     name: 'Primitives',
     label: 'Tier 1 — Primitives',
-    description: 'Zero dvfy-* structural dependencies. Pure tokens + native HTML.',
-    rules: 'Must not import or render other dvfy-* components.',
+    description: 'Zero dvfy-* dependencies. Pure tokens + native HTML.',
+    rules: 'Zero dvfy-* dependencies.',
   },
   2: {
     name: 'Composites',
     label: 'Tier 2 — Composites',
-    description: 'May use 0–2 Tier 1 components. Enhanced behavior over native.',
-    rules: 'May depend on up to 2 Tier 1 components. No Tier 2+ deps.',
+    description: 'Compose at least one Tier 1 component. Only Tier 1 dependencies allowed.',
+    rules: '≥1 Tier 1 dep, only Tier 1 deps.',
   },
   3: {
     name: 'Organisms',
     label: 'Tier 3 — Organisms',
-    description: 'Compose 2+ components. Cross-component state management.',
-    rules: 'May depend on Tier 1 and Tier 2 components. Complex composition.',
+    description: 'Compose at least one Tier 2 component. Cross-component coordination.',
+    rules: '≥1 Tier 2 dep. May also depend on Tier 1.',
   },
   4: {
-    name: 'Patterns',
-    label: 'Tier 4 — HTMX Patterns',
-    description: 'HTMX server-interaction orchestration. Can use any tier.',
-    rules: 'Requires server backend. May depend on any tier.',
+    name: 'Widgets',
+    label: 'Tier 4 — Widgets',
+    description: 'Self-contained UX flows composing Tier 3+ components.',
+    rules: '≥1 Tier 3 dep. Self-contained functional unit.',
+  },
+  5: {
+    name: 'Layouts',
+    label: 'Tier 5 — Layouts',
+    description: 'Page-level scaffolds composing Tier 3+ components.',
+    rules: '≥1 Tier 3+ dep. Defines page-level spatial layout.',
   },
 };
 
@@ -40,90 +46,93 @@ export const DOMAINS = {
   navigation: 'Navigation',
   layout:     'Layout',
   utility:    'Utility',
-  htmx:       'HTMX Patterns',
 };
 
-/** Component registry — single source of truth for classification */
+/** Component registry — single source of truth for classification (see docs/taxonomy.md) */
 export const COMPONENT_REGISTRY = {
-  // Tier 1 — Primitives
-  'dvfy-button':    { tier: 1, domain: 'forms',      deps: [] },
-  'dvfy-input':     { tier: 1, domain: 'forms',      deps: [] },
-  'dvfy-textarea':  { tier: 1, domain: 'forms',      deps: [] },
-  'dvfy-checkbox':  { tier: 1, domain: 'forms',      deps: [] },
-  'dvfy-radio':     { tier: 1, domain: 'forms',      deps: [] },
-  'dvfy-switch':    { tier: 1, domain: 'forms',      deps: [] },
-  'dvfy-slider':    { tier: 1, domain: 'forms',      deps: [] },
-  'dvfy-badge':     { tier: 1, domain: 'display',    deps: [] },
-  'dvfy-tag':       { tier: 1, domain: 'display',    deps: [] },
-  'dvfy-avatar':    { tier: 1, domain: 'display',    deps: [] },
-  'dvfy-progress':  { tier: 1, domain: 'display',    deps: [] },
-  'dvfy-description-list': { tier: 1, domain: 'display', deps: [] },
+  // ── Tier 1 — Primitives (zero dvfy-* deps) ────────────────────────────────
+  // Forms
+  'dvfy-button':       { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-input':        { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-textarea':     { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-checkbox':     { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-radio':        { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-switch':       { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-slider':       { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-select':       { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-file-upload':  { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-date-picker':  { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-live-search':  { tier: 1, domain: 'forms',      deps: [], server: true },
+  // Data Display
+  'dvfy-badge':           { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-tag':             { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-avatar':          { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-progress':        { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-card':            { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-gradient-card':   { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-spotlight-card':  { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-compare-slider':  { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-empty':           { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-carousel':        { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-scroll-progress': { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-marquee-scroll':  { tier: 1, domain: 'display',    deps: [] },
+  'dvfy-description-list': { tier: 1, domain: 'display',   deps: [] },
+  'dvfy-htmx-table':      { tier: 1, domain: 'display',    deps: [], server: true },
+  // Feedback
   'dvfy-alert':     { tier: 1, domain: 'feedback',   deps: [] },
   'dvfy-loader':    { tier: 1, domain: 'feedback',   deps: [] },
+  'dvfy-toast':     { tier: 1, domain: 'feedback',   deps: [] },
+  'dvfy-hovercard': { tier: 1, domain: 'feedback',   deps: [] },
   'dvfy-card-glow': { tier: 1, domain: 'feedback',   deps: [] },
-  'dvfy-hamburger': { tier: 1, domain: 'navigation', deps: [] },
-  'dvfy-drawer':    { tier: 1, domain: 'layout',     deps: [] },
-  'dvfy-section':   { tier: 1, domain: 'layout',     deps: [] },
-  'dvfy-tooltip':       { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-hovercard':     { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-popover':       { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-scroll-reveal':    { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-scroll-progress':  { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-page-transition':  { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-text-vortex':      { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-scramble-hover':   { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-stagger-enter':    { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-marquee-scroll':   { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-transition-root':  { tier: 1, domain: 'utility',    deps: [] },
-  'dvfy-tree-node':       { tier: 1, domain: 'navigation', deps: [] },
+  // Navigation
+  'dvfy-nav':        { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-hamburger':  { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-breadcrumb': { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-pagination': { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-tabs':       { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-dropdown':   { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-tree-node':  { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-tree-view':  { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-sidebar':    { tier: 1, domain: 'navigation', deps: [] },
+  // Layout
+  'dvfy-section': { tier: 1, domain: 'layout', deps: [] },
+  // Utility
+  'dvfy-tooltip':         { tier: 1, domain: 'utility', deps: [] },
+  'dvfy-scroll-reveal':   { tier: 1, domain: 'utility', deps: [] },
+  'dvfy-page-transition': { tier: 1, domain: 'utility', deps: [] },
+  'dvfy-transition-root': { tier: 1, domain: 'utility', deps: [] },
+  'dvfy-text-vortex':     { tier: 1, domain: 'utility', deps: [] },
+  'dvfy-scramble-hover':  { tier: 1, domain: 'utility', deps: [] },
+  'dvfy-infinite-scroll': { tier: 1, domain: 'utility', deps: [], server: true },
+  'dvfy-popover':         { tier: 1, domain: 'utility', deps: [] },
+  'dvfy-stagger-enter':   { tier: 1, domain: 'utility', deps: [] },
+  'dvfy-command-palette':  { tier: 1, domain: 'navigation', deps: [] },
+  'dvfy-stepper':          { tier: 1, domain: 'layout',     deps: [] },
 
-  // Tier 2 — Composites
-  'dvfy-select':         { tier: 2, domain: 'forms',      deps: [] },
-  'dvfy-date-picker':    { tier: 2, domain: 'forms',      deps: [] },
-  'dvfy-file-upload':    { tier: 2, domain: 'forms',      deps: [] },
-  'dvfy-card':           { tier: 2, domain: 'display',    deps: [] },
-  'dvfy-gradient-card':  { tier: 2, domain: 'display',    deps: [] },
-  'dvfy-spotlight-card': { tier: 2, domain: 'display',    deps: [] },
-  'dvfy-compare-slider': { tier: 2, domain: 'display',    deps: [] },
-  'dvfy-empty':          { tier: 2, domain: 'display',    deps: ['dvfy-button'] },
-  'dvfy-table':          { tier: 2, domain: 'display',    deps: ['dvfy-checkbox'] },
-  'dvfy-modal':          { tier: 2, domain: 'feedback',   deps: ['dvfy-button'] },
-  'dvfy-toast':          { tier: 2, domain: 'feedback',   deps: [] },
-  'dvfy-breadcrumb':     { tier: 2, domain: 'navigation', deps: [] },
-  'dvfy-pagination':     { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
-  'dvfy-tabs':           { tier: 2, domain: 'navigation', deps: [] },
-  'dvfy-dropdown':       { tier: 2, domain: 'navigation', deps: ['dvfy-button'] },
-  'dvfy-nav':            { tier: 2, domain: 'navigation', deps: ['dvfy-hamburger', 'dvfy-drawer'] },
-  'dvfy-nav-menu':       { tier: 2, domain: 'navigation', deps: ['dvfy-nav'] },
-  'dvfy-tree-view':      { tier: 2, domain: 'navigation', deps: ['dvfy-tree-node'] },
-  'dvfy-theme-switcher': { tier: 2, domain: 'utility',    deps: [] },
-
-  // Tier 3 — Organisms
-  'dvfy-nav-bar':   { tier: 3, domain: 'navigation', deps: ['dvfy-nav-menu', 'dvfy-hamburger', 'dvfy-drawer'] },
-  'dvfy-carousel':  { tier: 3, domain: 'layout',     deps: [] },
-  'dvfy-accordion': { tier: 3, domain: 'layout',     deps: ['dvfy-section'] },
-  'dvfy-stepper':   { tier: 3, domain: 'layout',     deps: [] },
-  'dvfy-sidebar':   { tier: 3, domain: 'navigation', deps: [] },
-  'dvfy-auth':      { tier: 3, domain: 'utility',    deps: ['dvfy-modal'] },
-  'dvfy-command-palette': { tier: 3, domain: 'navigation', deps: [] },
-
+  // ── Tier 2 — Composites (≥1 T1 dep, only T1 deps) ─────────────────────────
+  'dvfy-drawer':              { tier: 2, domain: 'layout',     deps: ['dvfy-button'] },
+  'dvfy-table':               { tier: 2, domain: 'display',    deps: ['dvfy-checkbox'] },
+  'dvfy-modal':               { tier: 2, domain: 'feedback',   deps: ['dvfy-button'] },
+  'dvfy-nav-menu':            { tier: 2, domain: 'navigation', deps: ['dvfy-nav'] },
+  'dvfy-theme-switcher':      { tier: 2, domain: 'utility',    deps: ['dvfy-dropdown', 'dvfy-button'] },
+  'dvfy-accordion':           { tier: 2, domain: 'layout',     deps: ['dvfy-section'] },
+  'dvfy-component-playground': { tier: 2, domain: 'utility',   deps: ['dvfy-button', 'dvfy-section', 'dvfy-slider'] },
   // Billing & Payments
-  'dvfy-usage-meter':       { tier: 2, domain: 'display',  deps: ['dvfy-progress'] },
-  'dvfy-invoice-list':      { tier: 2, domain: 'display',  deps: ['dvfy-badge'] },
-  'dvfy-subscription-card': { tier: 2, domain: 'display',  deps: ['dvfy-badge', 'dvfy-button'] },
-  'dvfy-plan-picker':       { tier: 2, domain: 'display',  deps: ['dvfy-button', 'dvfy-badge'] },
-  'dvfy-payment-methods':   { tier: 2, domain: 'forms',    deps: ['dvfy-button'] },
-  'dvfy-payment-setup':     { tier: 2, domain: 'forms',    deps: ['dvfy-button', 'dvfy-loader'] },
+  'dvfy-usage-meter':       { tier: 2, domain: 'display', deps: ['dvfy-progress'] },
+  'dvfy-invoice-list':      { tier: 2, domain: 'display', deps: ['dvfy-badge'] },
+  'dvfy-subscription-card': { tier: 2, domain: 'display', deps: ['dvfy-badge', 'dvfy-button'] },
+  'dvfy-plan-picker':       { tier: 2, domain: 'display', deps: ['dvfy-button', 'dvfy-badge'] },
+  'dvfy-payment-methods':   { tier: 2, domain: 'forms',   deps: ['dvfy-button'] },
+  'dvfy-payment-setup':     { tier: 2, domain: 'forms',   deps: ['dvfy-button', 'dvfy-loader'] },
 
-  // Tier 4 — HTMX Patterns
-  'dvfy-htmx-form':       { tier: 4, domain: 'htmx', deps: [] },
-  'dvfy-confirm':         { tier: 4, domain: 'htmx', deps: [] },
-  'dvfy-infinite-scroll':  { tier: 4, domain: 'htmx', deps: [] },
-  'dvfy-live-search':      { tier: 4, domain: 'htmx', deps: [] },
-  'dvfy-htmx-table':       { tier: 4, domain: 'htmx', deps: [] },
+  // ── Tier 3 — Organisms (≥1 T2 dep) ────────────────────────────────────────
+  'dvfy-nav-bar':    { tier: 3, domain: 'navigation', deps: ['dvfy-nav-menu', 'dvfy-hamburger', 'dvfy-drawer'] },
+  'dvfy-auth':       { tier: 3, domain: 'utility',    deps: ['dvfy-modal'] },
+  'dvfy-htmx-form':  { tier: 3, domain: 'forms',      deps: ['dvfy-modal'], server: true },
+  'dvfy-confirm':    { tier: 3, domain: 'feedback',    deps: ['dvfy-modal'], server: true },
 };
 
-/** Get tags for a given tier number (excludes Tier 4 patterns) */
+/** Get tags for a given tier number */
 export function getComponentsByTier(n) {
   return Object.entries(COMPONENT_REGISTRY)
     .filter(([, meta]) => meta.tier === n)
@@ -146,15 +155,33 @@ export function getTierForComponent(tag) {
 /** Components grouped by domain for sidebar navigation — derived from registry */
 export const COMPONENT_CATEGORIES = Object.fromEntries(
   Object.entries(DOMAINS)
-    .filter(([k]) => k !== 'htmx')
     .map(([key, label]) => [label, getComponentsByDomain(key)])
     .filter(([, tags]) => tags.length)
 );
 
-/** Get server component tags (HTMX patterns — domain: htmx) */
+/** Get server component tags (server: true flag — HTMX is orthogonal to tiers) */
 export function getServerComponents() {
-  return getComponentsByDomain('htmx');
+  return Object.entries(COMPONENT_REGISTRY)
+    .filter(([, meta]) => meta.server)
+    .map(([tag]) => tag);
 }
+
+/** Decomposition backlog — T1 components that are candidates for future composition */
+export const DECOMPOSITION_BACKLOG = [
+  ['dvfy-select',       'Compose dvfy-button (trigger) + dvfy-dropdown (menu)'],
+  ['dvfy-date-picker',  'Decompose into day/week/month/calendar primitives'],
+  ['dvfy-tabs',         'Compose dvfy-button (tab triggers)'],
+  ['dvfy-pagination',   'Compose dvfy-button (page buttons)'],
+  ['dvfy-dropdown',     'Compose dvfy-button (trigger)'],
+  ['dvfy-toast',        'Compose dvfy-alert internally'],
+  ['dvfy-file-upload',  'Compose dvfy-button + dvfy-progress'],
+  ['dvfy-carousel',     'Compose dvfy-button (prev/next)'],
+  ['dvfy-sidebar',      'Compose dvfy-drawer or dvfy-section'],
+  ['dvfy-card',           'Evaluate composition hierarchy with gradient-card and spotlight-card'],
+  ['dvfy-gradient-card',  'Evaluate composition hierarchy with card'],
+  ['dvfy-spotlight-card', 'Evaluate composition hierarchy with card'],
+  ['dvfy-tree-view',    'Verify composition with dvfy-tree-node reflected in deps'],
+];
 
 /** HTMX integration patterns with descriptions */
 export const HTMX_PATTERNS = {

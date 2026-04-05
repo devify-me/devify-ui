@@ -7,7 +7,7 @@
  * #overview/start  — Getting Started: install, import, first component, theming
  * #overview/tiers  — Composition Model: 5-tier hierarchy, forcing function, decomposition
  */
-import { COMPONENT_CATEGORIES, TOKEN_GROUPS, TIERS, getComponentsByTier, getServerComponents, COMPONENT_REGISTRY } from './data.js';
+import { COMPONENT_CATEGORIES, TOKEN_GROUPS, TIERS, getComponentsByTier, getServerComponents, COMPONENT_REGISTRY, DECOMPOSITION_BACKLOG } from './data.js';
 
 // ─── Shared helpers ──────────────────────────────────────────────────────────
 
@@ -419,21 +419,9 @@ export function renderOverviewTiers(mainEl) {
   mainEl.appendChild(heading('Decomposition Backlog', 2));
   mainEl.appendChild(para('Several Tier 1 components are candidates for future decomposition \u2014 they have zero dvfy-* dependencies but contain logic that could be extracted into reusable primitives:'));
 
-  const backlogItems = [
-    ['dvfy-select', 'Compose dvfy-button (trigger) + dvfy-dropdown (menu)'],
-    ['dvfy-date-picker', 'Decompose into day/week/month/calendar primitives'],
-    ['dvfy-tabs', 'Compose dvfy-button (tab triggers)'],
-    ['dvfy-pagination', 'Compose dvfy-button (page buttons)'],
-    ['dvfy-dropdown', 'Compose dvfy-button (trigger)'],
-    ['dvfy-toast', 'Compose dvfy-alert internally'],
-    ['dvfy-file-upload', 'Compose dvfy-button + dvfy-progress'],
-    ['dvfy-carousel', 'Compose dvfy-button (prev/next)'],
-    ['dvfy-sidebar', 'Compose dvfy-drawer or dvfy-section'],
-  ];
-
   const backlogTable = document.createElement('table');
   backlogTable.style.cssText = 'width: 100%; border-collapse: collapse; margin-bottom: var(--dvfy-space-4); font-size: var(--dvfy-text-sm);';
-  for (const [comp, plan] of backlogItems) {
+  for (const [comp, plan] of DECOMPOSITION_BACKLOG) {
     const tr = document.createElement('tr');
     tr.style.cssText = 'border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-muted); cursor: pointer;';
     tr.addEventListener('click', () => { location.hash = `#components/${comp}`; });
