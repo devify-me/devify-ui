@@ -22,6 +22,7 @@ dvfy-textarea {
   display: flex;
   flex-direction: column;
   gap: var(--dvfy-space-1-5);
+  width: 100%;
   font-family: var(--dvfy-font-sans);
   container-type: inline-size;
   container-name: dvfy-textarea;

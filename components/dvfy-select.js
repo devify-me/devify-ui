@@ -538,6 +538,10 @@ class DvfySelect extends HTMLElement {
     list.appendChild(empty);
 
     dropdown.appendChild(list);
+
+    // Forward keydown events from dropdown to main handler
+    dropdown.addEventListener('keydown', e => this.#onKeydown(e));
+
     return dropdown;
   }
 
@@ -732,6 +736,9 @@ class DvfySelect extends HTMLElement {
       search.value = '';
       this.#filter('');
       setTimeout(() => search.focus(), 0);
+    } else {
+      // No search — keep focus on trigger for keyboard nav
+      trigger?.focus();
     }
 
     // Focus selected or first
@@ -801,8 +808,10 @@ class DvfySelect extends HTMLElement {
     this.#focusedIndex = clamped;
     for (const item of this.querySelectorAll('.dvfy-select__option')) {
       item.classList.remove('dvfy-select--focused');
+      item.setAttribute('aria-selected', 'false');
     }
     items[clamped]?.classList.add('dvfy-select--focused');
+    items[clamped]?.setAttribute('aria-selected', 'true');
     items[clamped]?.scrollIntoView({ block: 'nearest' });
   }
 
