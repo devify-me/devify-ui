@@ -44,6 +44,7 @@ import { injectStyles } from '../utils/styles.js';
 const STYLES = `
 dvfy-table {
   display: block;
+  width: 100%;
   font-family: var(--dvfy-font-sans);
   color: var(--dvfy-text-primary);
   container-type: inline-size;
