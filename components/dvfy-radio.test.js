@@ -1,11 +1,18 @@
 import { fixture, html, expect, oneEvent } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-radio.js';
+
+// dvfy-radio uses role="radio" on a custom element containing a native radio input for better
+// component control. Axe flags this as nested-interactive, but the inner input is hidden
+// and the component itself handles all interactive behavior via keyboard/mouse events.
+const RADIO_A11Y_RULES = { ignoredRules: ['nested-interactive'] };
 
 describe('dvfy-radio', () => {
   describe('rendering', () => {
     it('renders with role="radio"', async () => {
       const el = await fixture(html`<dvfy-radio label="Option A"></dvfy-radio>`);
       expect(el.getAttribute('role')).to.equal('radio');
+      await checkA11y(el, RADIO_A11Y_RULES);
     });
 
     it('creates an inner radio input', async () => {
@@ -13,6 +20,7 @@ describe('dvfy-radio', () => {
       const input = el.querySelector('.dvfy-radio__input');
       expect(input).to.exist;
       expect(input.type).to.equal('radio');
+      await checkA11y(el, RADIO_A11Y_RULES);
     });
 
     it('shows the label text', async () => {
@@ -20,6 +28,7 @@ describe('dvfy-radio', () => {
       const lbl = el.querySelector('.dvfy-radio__label');
       expect(lbl).to.exist;
       expect(lbl.textContent).to.equal('Option A');
+      await checkA11y(el, RADIO_A11Y_RULES);
     });
   });
 
@@ -29,6 +38,7 @@ describe('dvfy-radio', () => {
       const input = el.querySelector('.dvfy-radio__input');
       expect(input.checked).to.be.true;
       expect(el.getAttribute('aria-checked')).to.equal('true');
+      await checkA11y(el, RADIO_A11Y_RULES);
     });
   });
 
@@ -36,6 +46,7 @@ describe('dvfy-radio', () => {
     it('has aria-checked="false" when not checked', async () => {
       const el = await fixture(html`<dvfy-radio label="Off"></dvfy-radio>`);
       expect(el.getAttribute('aria-checked')).to.equal('false');
+      await checkA11y(el, RADIO_A11Y_RULES);
     });
   });
 
@@ -44,6 +55,7 @@ describe('dvfy-radio', () => {
       const el = await fixture(html`<dvfy-radio label="Disabled" disabled></dvfy-radio>`);
       const input = el.querySelector('.dvfy-radio__input');
       expect(input.disabled).to.be.true;
+      await checkA11y(el, RADIO_A11Y_RULES);
     });
   });
 
@@ -66,6 +78,7 @@ describe('dvfy-radio', () => {
       expect(blue.hasAttribute('checked')).to.be.true;
       expect(red.getAttribute('aria-checked')).to.equal('false');
       expect(red.hasAttribute('checked')).to.be.false;
+      await checkA11y(container, RADIO_A11Y_RULES);
     });
   });
 
@@ -82,6 +95,7 @@ describe('dvfy-radio', () => {
       const event = await oneEvent(el, 'change');
       expect(event).to.exist;
       expect(event.bubbles).to.be.true;
+      await checkA11y(el, RADIO_A11Y_RULES);
     });
   });
 });
