@@ -1,4 +1,5 @@
 import { fixture, html, expect } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-section.js';
 import './dvfy-accordion.js';
 
@@ -13,12 +14,14 @@ describe('dvfy-accordion', () => {
       `);
       const sections = el.querySelectorAll('dvfy-section');
       expect(sections.length).to.equal(2);
+      await checkA11y(el);
     });
 
     it('is defined as a custom element', async () => {
       const el = await fixture(html`<dvfy-accordion></dvfy-accordion>`);
       expect(el).to.be.instanceOf(HTMLElement);
       expect(customElements.get('dvfy-accordion')).to.exist;
+      await checkA11y(el);
     });
   });
 
@@ -26,16 +29,19 @@ describe('dvfy-accordion', () => {
     it('sets role=region', async () => {
       const el = await fixture(html`<dvfy-accordion></dvfy-accordion>`);
       expect(el.getAttribute('role')).to.equal('region');
+      await checkA11y(el);
     });
 
     it('sets default aria-label', async () => {
       const el = await fixture(html`<dvfy-accordion></dvfy-accordion>`);
       expect(el.getAttribute('aria-label')).to.equal('Accordion');
+      await checkA11y(el);
     });
 
     it('preserves custom aria-label', async () => {
       const el = await fixture(html`<dvfy-accordion aria-label="FAQ"></dvfy-accordion>`);
       expect(el.getAttribute('aria-label')).to.equal('FAQ');
+      await checkA11y(el);
     });
   });
 
@@ -48,6 +54,7 @@ describe('dvfy-accordion', () => {
         </dvfy-accordion>
       `);
       expect(el.hasAttribute('exclusive')).to.be.true;
+      await checkA11y(el);
     });
 
     it('closes other sections when one is opened in exclusive mode', async () => {
@@ -68,6 +75,7 @@ describe('dvfy-accordion', () => {
 
       expect(sections[1].hasAttribute('open')).to.be.true;
       expect(sections[0].hasAttribute('open')).to.be.false;
+      await checkA11y(el);
     });
   });
 

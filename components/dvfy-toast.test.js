@@ -1,4 +1,5 @@
 import { fixture, html, expect, oneEvent } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-toast.js';
 
 describe('dvfy-toast', () => {
@@ -12,6 +13,7 @@ describe('dvfy-toast', () => {
       const el = await fixture(html`<dvfy-toast>Hello</dvfy-toast>`);
       expect(el.getAttribute('role')).to.equal('alert');
       expect(el.querySelector('.dvfy-toast__msg').textContent).to.equal('Hello');
+      await checkA11y(el);
     });
 
     it('renders the status icon', async () => {
@@ -19,16 +21,19 @@ describe('dvfy-toast', () => {
       const icon = el.querySelector('.dvfy-toast__icon');
       expect(icon).to.exist;
       expect(icon.getAttribute('aria-hidden')).to.equal('true');
+      await checkA11y(el);
     });
 
     it('renders progress bar for auto-dismiss', async () => {
       const el = await fixture(html`<dvfy-toast duration="3000">Timed</dvfy-toast>`);
       expect(el.querySelector('.dvfy-toast__progress')).to.exist;
+      await checkA11y(el);
     });
 
     it('does not render progress bar when duration is 0', async () => {
       const el = await fixture(html`<dvfy-toast duration="0">Persistent</dvfy-toast>`);
       expect(el.querySelector('.dvfy-toast__progress')).to.be.null;
+      await checkA11y(el);
     });
   });
 
@@ -36,16 +41,19 @@ describe('dvfy-toast', () => {
     it('accepts status="success"', async () => {
       const el = await fixture(html`<dvfy-toast status="success">Saved</dvfy-toast>`);
       expect(el.getAttribute('status')).to.equal('success');
+      await checkA11y(el);
     });
 
     it('accepts status="warning"', async () => {
       const el = await fixture(html`<dvfy-toast status="warning">Warning</dvfy-toast>`);
       expect(el.getAttribute('status')).to.equal('warning');
+      await checkA11y(el);
     });
 
     it('accepts status="danger"', async () => {
       const el = await fixture(html`<dvfy-toast status="danger">Error</dvfy-toast>`);
       expect(el.getAttribute('status')).to.equal('danger');
+      await checkA11y(el);
     });
 
     it('updates icon when status changes', async () => {
@@ -54,12 +62,14 @@ describe('dvfy-toast', () => {
       el.setAttribute('status', 'success');
       const iconAfter = el.querySelector('.dvfy-toast__icon').textContent;
       expect(iconAfter).to.not.equal(iconBefore);
+      await checkA11y(el);
     });
 
     it('defaults duration to 4000ms', async () => {
       const el = await fixture(html`<dvfy-toast>Default timer</dvfy-toast>`);
       // Progress bar should exist (duration > 0)
       expect(el.querySelector('.dvfy-toast__progress')).to.exist;
+      await checkA11y(el);
     });
   });
 
@@ -113,11 +123,13 @@ describe('dvfy-toast', () => {
     it('sets role="alert"', async () => {
       const el = await fixture(html`<dvfy-toast>ARIA test</dvfy-toast>`);
       expect(el.getAttribute('role')).to.equal('alert');
+      await checkA11y(el);
     });
 
     it('hides the icon from assistive technology', async () => {
       const el = await fixture(html`<dvfy-toast>Test</dvfy-toast>`);
       expect(el.querySelector('.dvfy-toast__icon').getAttribute('aria-hidden')).to.equal('true');
+      await checkA11y(el);
     });
   });
 });
