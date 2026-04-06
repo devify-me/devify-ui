@@ -55,10 +55,12 @@ Add validation states (error, warning, success) to form controls + new dvfy-fiel
 
 ### Phase 3: Integration & Testing
 
-- [x] Full test suite (npm test — 1370 tests pass)
+- [x] Full test suite (npm test — 1371 tests pass)
 - [x] Contrast audit (npm run contrast:ci — 90/90 WCAG AA)
-- [x] Lint & build (npm run lint clean, npm run build 500.6 KB)
-- [ ] Manual verification (keyboard nav, screen reader)
+- [x] Lint & build (npm run lint clean, npm run build 500.7 KB)
+- [x] Manual verification & fixes:
+  - Fixed dvfy-select keyboard navigation (dropdown keydown listener, focus mgmt)
+  - Fixed dvfy-textarea width (added width: 100% to component, 21f29d5)
 
 ### Phase 4: Documentation
 
