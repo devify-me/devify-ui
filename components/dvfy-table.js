@@ -118,10 +118,22 @@ dvfy-table th[data-sort] {
 dvfy-table th[data-sort]:hover {
   background: var(--dvfy-hover-bg);
 }
-dvfy-table th[data-sort] .dvfy-table__sort {
-  font-size: var(--dvfy-text-xs);
-  color: var(--dvfy-text-muted);
+
+/* Sort indicator triangle */
+.dvfy-table__sort {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
   margin-left: var(--dvfy-space-1);
+  font-size: 0.75rem;
+  line-height: 1;
+  color: var(--dvfy-text-muted);
+  flex-shrink: 0;
+  transition: color var(--dvfy-duration-fast) var(--dvfy-ease-out);
+}
+
+.dvfy-table__sort--active {
+  color: var(--dvfy-primary-bg);
 }
 
 /* Header cell content layout */
@@ -922,6 +934,13 @@ class DvfyTable extends HTMLElement {
     }
     const dir = th.getAttribute('data-sort');
     indicator.textContent = dir === 'asc' ? '\u25B2' : dir === 'desc' ? '\u25BC' : '\u25B4';
+
+    // Update active class based on sort state
+    if (dir === 'asc' || dir === 'desc') {
+      indicator.classList.add('dvfy-table__sort--active');
+    } else {
+      indicator.classList.remove('dvfy-table__sort--active');
+    }
   }
 
   #handleSort(th, table) {
@@ -934,7 +953,10 @@ class DvfyTable extends HTMLElement {
       if (s !== th) {
         s.removeAttribute('data-sort');
         const ind = s.querySelector('.dvfy-table__sort');
-        if (ind) ind.textContent = '';
+        if (ind) {
+          ind.textContent = '';
+          ind.classList.remove('dvfy-table__sort--active');
+        }
       }
     }
 

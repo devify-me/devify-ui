@@ -112,6 +112,65 @@ describe('dvfy-table', () => {
       expect(headers[0].getAttribute('data-sort')).to.not.be.oneOf(['asc', 'desc']);
       await checkA11y(el);
     });
+
+    it('maintains stable sort indicator size when sorting', async () => {
+      const el = await fixture(TABLE_HTML);
+      const th = el.querySelector('th[data-sort]');
+      const indicator = th.querySelector('.dvfy-table__sort');
+
+      // Get initial dimensions
+      const rect1 = indicator.getBoundingClientRect();
+      const initialWidth = rect1.width;
+      const initialHeight = rect1.height;
+
+      // Click to sort
+      th.click();
+      const rect2 = indicator.getBoundingClientRect();
+      expect(rect2.width).to.equal(initialWidth);
+      expect(rect2.height).to.equal(initialHeight);
+
+      // Click again to reverse sort
+      th.click();
+      const rect3 = indicator.getBoundingClientRect();
+      expect(rect3.width).to.equal(initialWidth);
+      expect(rect3.height).to.equal(initialHeight);
+
+      await checkA11y(el);
+    });
+
+    it('applies --active class to sorted indicator', async () => {
+      const el = await fixture(TABLE_HTML);
+      const th = el.querySelector('th[data-sort]');
+      const indicator = th.querySelector('.dvfy-table__sort');
+
+      // Initially no active class
+      expect(indicator.classList.contains('dvfy-table__sort--active')).to.be.false;
+
+      // Click to sort
+      th.click();
+      expect(indicator.classList.contains('dvfy-table__sort--active')).to.be.true;
+
+      await checkA11y(el);
+    });
+
+    it('removes --active class from inactive indicators when switching columns', async () => {
+      const el = await fixture(TABLE_HTML);
+      const headers = el.querySelectorAll('th[data-sort]');
+      const indicator1 = headers[0].querySelector('.dvfy-table__sort');
+      const indicator2 = headers[1].querySelector('.dvfy-table__sort');
+
+      // Sort first column
+      headers[0].click();
+      expect(indicator1.classList.contains('dvfy-table__sort--active')).to.be.true;
+      expect(indicator2.classList.contains('dvfy-table__sort--active')).to.be.false;
+
+      // Sort second column
+      headers[1].click();
+      expect(indicator1.classList.contains('dvfy-table__sort--active')).to.be.false;
+      expect(indicator2.classList.contains('dvfy-table__sort--active')).to.be.true;
+
+      await checkA11y(el);
+    });
   });
 
   describe('selectable', () => {
