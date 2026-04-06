@@ -2,17 +2,20 @@ import { labelPositionCSS } from '../utils/label-position.js';
 import { injectStyles } from '../utils/styles.js';
 
 /**
- * <dvfy-select> — Enhanced select with search
+ * <dvfy-select> — Enhanced select with search, validation state, and help text
  *
  * Attributes:
  *   label:       label text
  *   name:        form field name
  *   placeholder: placeholder text
- *   error:       error message
+ *   error:       error message (deprecated: use state="error" + slot)
+ *   state:       validation state: error | warning | success
  *   help:        help text
  *   required:    boolean
  *   disabled:    boolean
  *   searchable:  boolean — enables filter input
+ *   size:        xs | sm | md | lg | xl (default: "md")
+ *   label-position: top | right | bottom | left (default: "top")
  *
  * Children are <option> elements (read on connect).
  * Dispatches 'change' event on selection.
@@ -25,10 +28,9 @@ import { injectStyles } from '../utils/styles.js';
  *   </dvfy-select>
  *
  * @example
- * <dvfy-select label="Country" name="country" searchable>
+ * <dvfy-select label="Country" name="country" state="error">
  *   <option value="us">United States</option>
- *   <option value="ca">Canada</option>
- *   <option value="mx">Mexico</option>
+ *   <span slot="error-message">Please select a country</span>
  * </dvfy-select>
  */
 
@@ -155,8 +157,38 @@ dvfy-select .dvfy-select__empty {
   color: var(--dvfy-text-muted);
 }
 
-/* Error state */
-dvfy-select[error] .dvfy-select__trigger { border-color: var(--dvfy-danger-border); }
+/* State: error */
+dvfy-select[error] .dvfy-select__trigger { border-color: var(--dvfy-input-error); }
+dvfy-select[state="error"] .dvfy-select__trigger { border-color: var(--dvfy-input-error); }
+dvfy-select[state="error"] .dvfy-select__trigger:focus-visible {
+  box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-input-error) 25%, transparent);
+}
+
+/* State: warning */
+dvfy-select[state="warning"] .dvfy-select__trigger { border-color: var(--dvfy-warning-border); }
+dvfy-select[state="warning"] .dvfy-select__trigger:focus-visible {
+  box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-warning-border) 25%, transparent);
+}
+
+/* State: success */
+dvfy-select[state="success"] .dvfy-select__trigger { border-color: var(--dvfy-success-border); }
+dvfy-select[state="success"] .dvfy-select__trigger:focus-visible {
+  box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-success-border) 25%, transparent);
+}
+
+/* Message text colors */
+dvfy-select .dvfy-select__error-msg {
+  font-size: var(--dvfy-text-xs);
+  color: var(--dvfy-danger-text);
+}
+dvfy-select .dvfy-select__warning-msg {
+  font-size: var(--dvfy-text-xs);
+  color: var(--dvfy-warning-text);
+}
+dvfy-select .dvfy-select__success-msg {
+  font-size: var(--dvfy-text-xs);
+  color: var(--dvfy-success-text);
+}
 dvfy-select .dvfy-select__error {
   font-size: var(--dvfy-text-xs);
   color: var(--dvfy-danger-text);
@@ -165,6 +197,9 @@ dvfy-select .dvfy-select__help {
   font-size: var(--dvfy-text-xs);
   color: var(--dvfy-text-muted);
 }
+
+/* Hide slot source elements from visual display */
+dvfy-select [slot] { display: none; }
 
 /* Disabled */
 dvfy-select[disabled] .dvfy-select__trigger {
@@ -197,7 +232,8 @@ dvfy-select .dvfy-select__native option {
   background: var(--dvfy-surface-raised);
   color: var(--dvfy-text-primary);
 }
-dvfy-select[error] .dvfy-select__native { border-color: var(--dvfy-danger-border); }
+dvfy-select[error] .dvfy-select__native { border-color: var(--dvfy-input-error); }
+dvfy-select[state="error"] .dvfy-select__native { border-color: var(--dvfy-input-error); }
 dvfy-select[disabled] .dvfy-select__native {
   background: var(--dvfy-disabled-bg);
   color: var(--dvfy-disabled-text);
@@ -226,18 +262,19 @@ dvfy-select[size="xl"] .dvfy-select__trigger { padding: var(--dvfy-space-3) var(
 dvfy-select[size="xl"] .dvfy-select__label { font-size: var(--dvfy-text-base); }
 dvfy-select[size="xl"] .dvfy-select__native { padding: var(--dvfy-space-3) var(--dvfy-space-4); font-size: var(--dvfy-text-lg); border-radius: var(--dvfy-radius-xl); }
 
-${labelPositionCSS('dvfy-select', { layout: 'field', label: '.dvfy-select__label', content: ['.dvfy-select__custom', '.dvfy-select__native'], messages: ['.dvfy-select__error', '.dvfy-select__help'] })}
+${labelPositionCSS('dvfy-select', { layout: 'field', label: '.dvfy-select__label', content: ['.dvfy-select__custom', '.dvfy-select__native'], messages: ['.dvfy-select__error', '.dvfy-select__help', '.dvfy-select__error-msg', '.dvfy-select__warning-msg', '.dvfy-select__success-msg'] })}
 `;
 
 /**
- * Enhanced select dropdown with search, keyboard navigation, and native mobile fallback.
+ * Enhanced select dropdown with search, keyboard navigation, validation states, and native mobile fallback.
  *
  * @element dvfy-select
  *
  * @attr {string} label - Label text
  * @attr {string} name - Form field name
  * @attr {string} placeholder - Placeholder text (default: "Select...")
- * @attr {string} error - Error message (enables error styling)
+ * @attr {string} error - Error message (deprecated: use state="error" + slot; enables error styling)
+ * @attr {string} state - Validation state: error | warning | success
  * @attr {string} help - Help text shown below select
  * @attr {boolean} required - Mark field as required
  * @attr {boolean} disabled - Disable interaction
@@ -245,9 +282,12 @@ ${labelPositionCSS('dvfy-select', { layout: 'field', label: '.dvfy-select__label
  * @attr {string} size - Size: xs | sm | md | lg | xl (default: "md")
  * @attr {string} label-position - Label placement: top | right | bottom | left (default: "top")
  *
- * @event {CustomEvent} change - Selection changed, detail: { value }
- *
  * @slot - <option> elements defining available choices
+ * @slot error-message - Error message text (displayed when state="error")
+ * @slot warning-message - Warning message text (displayed when state="warning")
+ * @slot success-message - Success message text (displayed when state="success")
+ *
+ * @event {CustomEvent} change - Selection changed, detail: { value }
  *
  * @cssprop {color} --dvfy-surface-raised - Dropdown background
  * @cssprop {color} --dvfy-hover-bg - Option hover background
@@ -260,8 +300,13 @@ class DvfySelect extends HTMLElement {
   #focusedIndex = -1;
   #built = false;
 
+  #id = null;
+
   connectedCallback() {
     injectStyles('dvfy-select', STYLES);
+
+    // Generate ID for aria attributes
+    this.#id = this.getAttribute('name') || `dvfy-select-${Math.random().toString(36).slice(2, 8)}`;
 
     // Read options from child <option> elements
     this.#options = Array.from(this.querySelectorAll('option')).map(o => ({
@@ -291,7 +336,7 @@ class DvfySelect extends HTMLElement {
     this.#built = false;
   }
 
-  static get observedAttributes() { return ['error', 'help', 'disabled', 'label', 'placeholder', 'required', 'label-position', 'size', 'searchable', 'value']; }
+  static get observedAttributes() { return ['error', 'help', 'disabled', 'label', 'placeholder', 'required', 'label-position', 'size', 'searchable', 'value', 'state']; }
 
   attributeChangedCallback(name, oldVal, newVal) {
     if (!this.#built) return;
@@ -299,6 +344,7 @@ class DvfySelect extends HTMLElement {
     switch (name) {
       case 'error':
       case 'help':
+      case 'state':
         this.#patchMessage();
         break;
       case 'disabled':
@@ -340,11 +386,16 @@ class DvfySelect extends HTMLElement {
   }
 
   #buildUI() {
+    // Preserve slotted children before clearing
+    const slottedChildren = Array.from(this.children).filter(el => el.hasAttribute('slot'));
+
     const label = this.getAttribute('label');
     const placeholder = this.getAttribute('placeholder') || 'Select...';
     const error = this.getAttribute('error');
     const help = this.getAttribute('help');
     const required = this.hasAttribute('required');
+
+    this.textContent = '';
 
     // Label
     if (label) {
@@ -361,18 +412,11 @@ class DvfySelect extends HTMLElement {
     custom.appendChild(this.#buildDropdown());
     this.appendChild(custom);
 
-    // Error / help
-    if (error) {
-      const errEl = document.createElement('div');
-      errEl.className = 'dvfy-select__error';
-      errEl.textContent = error;
-      this.appendChild(errEl);
-    } else if (help) {
-      const helpEl = document.createElement('div');
-      helpEl.className = 'dvfy-select__help';
-      helpEl.textContent = help;
-      this.appendChild(helpEl);
-    }
+    // Re-attach slotted children before appending messages
+    slottedChildren.forEach(el => this.appendChild(el));
+
+    // Messages
+    this.#appendMessages();
   }
 
   #buildLabel(label, required) {
@@ -504,24 +548,78 @@ class DvfySelect extends HTMLElement {
   /* ── Granular patch helpers ── */
 
   #patchMessage() {
+    const trigger = this.querySelector('.dvfy-select__trigger');
     const error = this.getAttribute('error');
+    const state = this.getAttribute('state');
     const help = this.getAttribute('help');
+    const errorText = this.querySelector('[slot="error-message"]')?.textContent?.trim();
+    const warningText = this.querySelector('[slot="warning-message"]')?.textContent?.trim();
+    const successText = this.querySelector('[slot="success-message"]')?.textContent?.trim();
 
     // Remove existing message elements
+    this.querySelector('.dvfy-select__error-msg')?.remove();
+    this.querySelector('.dvfy-select__warning-msg')?.remove();
+    this.querySelector('.dvfy-select__success-msg')?.remove();
     this.querySelector('.dvfy-select__error')?.remove();
     this.querySelector('.dvfy-select__help')?.remove();
 
+    // Legacy error attribute takes precedence
     if (error) {
-      const errEl = document.createElement('div');
-      errEl.className = 'dvfy-select__error';
+      const errEl = document.createElement('span');
+      errEl.className = 'dvfy-select__error-msg';
+      errEl.role = 'alert';
       errEl.textContent = error;
+      errEl.id = `${this.#id}-error`;
       this.appendChild(errEl);
-    } else if (help) {
-      const helpEl = document.createElement('div');
+      if (trigger) trigger.setAttribute('aria-invalid', 'true');
+    }
+    // State: error
+    else if (state === 'error' && errorText) {
+      const errEl = document.createElement('span');
+      errEl.className = 'dvfy-select__error-msg';
+      errEl.role = 'alert';
+      errEl.textContent = errorText;
+      errEl.id = `${this.#id}-error`;
+      this.appendChild(errEl);
+      if (trigger) trigger.setAttribute('aria-invalid', 'true');
+    }
+    // State: warning
+    else if (state === 'warning' && warningText) {
+      const warnEl = document.createElement('span');
+      warnEl.className = 'dvfy-select__warning-msg';
+      warnEl.role = 'status';
+      warnEl.textContent = warningText;
+      warnEl.id = `${this.#id}-warning`;
+      this.appendChild(warnEl);
+      if (trigger) trigger.setAttribute('aria-invalid', 'false');
+    }
+    // State: success
+    else if (state === 'success' && successText) {
+      const succEl = document.createElement('span');
+      succEl.className = 'dvfy-select__success-msg';
+      succEl.role = 'status';
+      succEl.textContent = successText;
+      succEl.id = `${this.#id}-success`;
+      this.appendChild(succEl);
+      if (trigger) trigger.setAttribute('aria-invalid', 'false');
+    }
+    // Default: no state
+    else {
+      if (trigger) trigger.setAttribute('aria-invalid', 'false');
+    }
+
+    // Help text
+    if (help) {
+      const helpEl = document.createElement('span');
       helpEl.className = 'dvfy-select__help';
       helpEl.textContent = help;
+      helpEl.id = `${this.#id}-help`;
       this.appendChild(helpEl);
     }
+  }
+
+  #appendMessages() {
+    this.#patchMessage();
   }
 
   #patchDisabled() {

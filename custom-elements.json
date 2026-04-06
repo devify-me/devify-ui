@@ -830,7 +830,7 @@
     {
       "name": "dvfy-date-picker",
       "path": "./components/dvfy-date-picker.js",
-      "description": "<dvfy-date-picker> — Calendar date/time picker with dropdown\n\nRenders a text input that opens a floating calendar panel. Supports single\ndate, date range, time, and datetime modes. Fully keyboard accessible with\nlocale-aware display formatting.",
+      "description": "<dvfy-date-picker> — Calendar date/time picker with dropdown\n\nRenders a text input that opens a floating calendar panel. Supports single\ndate, date range, time, and datetime modes. Fully keyboard accessible with\nlocale-aware display formatting, and validation state support (error, warning, success).",
       "attributes": [
         {
           "name": "value",
@@ -889,7 +889,12 @@
         },
         {
           "name": "error",
-          "description": "Error message (enables error styling)",
+          "description": "Error message (deprecated: use state=\"error\" + slot; enables error styling)",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "description": "Validation state: error | warning | success",
           "type": "string"
         },
         {
@@ -918,6 +923,20 @@
       "events": [
         {
           "name": "change"
+        }
+      ],
+      "slots": [
+        {
+          "name": "error-message",
+          "description": "Child element shown when state=\"error\""
+        },
+        {
+          "name": "warning-message",
+          "description": "Child element shown when state=\"warning\""
+        },
+        {
+          "name": "success-message",
+          "description": "Child element shown when state=\"success\""
         }
       ],
       "cssProperties": [
@@ -1160,6 +1179,63 @@
         {
           "name": "--dvfy-text-secondary",
           "description": "Title color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-field-group",
+      "path": "./components/dvfy-field-group.js",
+      "description": "Wrapper component that groups related form fields with a shared label, help text,\nand group-level validation message. Renders as a semantic fieldset + legend.",
+      "attributes": [
+        {
+          "name": "label",
+          "description": "Group label text (e.g., \"Address\", \"Date Range\")",
+          "type": "string"
+        },
+        {
+          "name": "help",
+          "description": "Helper text shown below the legend",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "description": "Group-level validation state: error | warning | success",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Child form elements (dvfy-input, dvfy-select, etc.)"
+        },
+        {
+          "name": "error-message",
+          "description": "Group-level error message (shown when state=\"error\")"
+        },
+        {
+          "name": "warning-message",
+          "description": "Group-level warning message (shown when state=\"warning\")"
+        },
+        {
+          "name": "success-message",
+          "description": "Group-level success message (shown when state=\"success\")"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-danger-text",
+          "description": "Error message text color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-warning-text",
+          "description": "Warning message text color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-success-text",
+          "description": "Success message text color",
           "type": "color"
         }
       ]
@@ -1427,7 +1503,12 @@
         },
         {
           "name": "error",
-          "description": "Error message (enables error styling)",
+          "description": "Error message (deprecated: use state=\"error\" + slot; enables error styling)",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "description": "Validation state: error | warning | success",
           "type": "string"
         },
         {
@@ -1483,6 +1564,20 @@
         {
           "name": "input",
           "description": "Fires on input value change (bubbles from inner input)"
+        }
+      ],
+      "slots": [
+        {
+          "name": "error-message",
+          "description": "Child element shown when state=\"error\""
+        },
+        {
+          "name": "warning-message",
+          "description": "Child element shown when state=\"warning\""
+        },
+        {
+          "name": "success-message",
+          "description": "Child element shown when state=\"success\""
         }
       ],
       "cssProperties": [
@@ -2513,7 +2608,7 @@
     {
       "name": "dvfy-select",
       "path": "./components/dvfy-select.js",
-      "description": "Enhanced select dropdown with search, keyboard navigation, and native mobile fallback.",
+      "description": "Enhanced select dropdown with search, keyboard navigation, validation states, and native mobile fallback.",
       "attributes": [
         {
           "name": "value",
@@ -2526,7 +2621,7 @@
         },
         {
           "name": "error",
-          "description": "Error message (enables error styling)",
+          "description": "Error message (deprecated: use state=\"error\" + slot; enables error styling)",
           "type": "string"
         },
         {
@@ -2568,6 +2663,11 @@
           "name": "searchable",
           "description": "Enable filter input in dropdown",
           "type": "boolean"
+        },
+        {
+          "name": "state",
+          "description": "Validation state: error | warning | success",
+          "type": "string"
         }
       ],
       "properties": [
@@ -2586,6 +2686,18 @@
         {
           "name": "",
           "description": "<option> elements defining available choices"
+        },
+        {
+          "name": "error-message",
+          "description": "Error message text (displayed when state=\"error\")"
+        },
+        {
+          "name": "warning-message",
+          "description": "Warning message text (displayed when state=\"warning\")"
+        },
+        {
+          "name": "success-message",
+          "description": "Success message text (displayed when state=\"success\")"
         }
       ],
       "cssProperties": [
@@ -3302,7 +3414,7 @@
     {
       "name": "dvfy-textarea",
       "path": "./components/dvfy-textarea.js",
-      "description": "Multiline text input with auto-resize, character count, and error/help text.",
+      "description": "Multiline text input with auto-resize, validation state, and character count.",
       "attributes": [
         {
           "name": "value",
@@ -3331,7 +3443,12 @@
         },
         {
           "name": "error",
-          "description": "Error message (enables error styling)",
+          "description": "Error message (deprecated: use state=\"error\" + slot; enables error styling)",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "description": "Validation state: error | warning | success",
           "type": "string"
         },
         {
@@ -3371,6 +3488,20 @@
           "attribute": "value",
           "description": "Initial value",
           "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "error-message",
+          "description": "Error message text (displayed when state=\"error\")"
+        },
+        {
+          "name": "warning-message",
+          "description": "Warning message text (displayed when state=\"warning\")"
+        },
+        {
+          "name": "success-message",
+          "description": "Success message text (displayed when state=\"success\")"
         }
       ],
       "cssProperties": [

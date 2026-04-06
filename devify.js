@@ -57,6 +57,7 @@ import './components/dvfy-toast.js';
 import './components/dvfy-empty.js';
 import './components/dvfy-tag.js';
 import './components/dvfy-select.js';
+import './components/dvfy-field-group.js';
 import './components/dvfy-theme-switcher.js';
 import './components/dvfy-auth.js';
 import './components/dvfy-hamburger.js';

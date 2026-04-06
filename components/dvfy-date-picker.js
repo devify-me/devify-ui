@@ -48,9 +48,19 @@ dvfy-date-picker .dvfy-date-picker__input:focus {
   border-color: var(--dvfy-input-border-focus);
   box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-ring-color) 25%, transparent);
 }
-dvfy-date-picker[error] .dvfy-date-picker__input { border-color: var(--dvfy-input-error); }
-dvfy-date-picker[error] .dvfy-date-picker__input:focus {
+dvfy-date-picker[error] .dvfy-date-picker__input,
+dvfy-date-picker[state="error"] .dvfy-date-picker__input { border-color: var(--dvfy-input-error); }
+dvfy-date-picker[error] .dvfy-date-picker__input:focus,
+dvfy-date-picker[state="error"] .dvfy-date-picker__input:focus {
   box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-input-error) 25%, transparent);
+}
+dvfy-date-picker[state="warning"] .dvfy-date-picker__input { border-color: var(--dvfy-warning-border); }
+dvfy-date-picker[state="warning"] .dvfy-date-picker__input:focus {
+  box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-warning-border) 25%, transparent);
+}
+dvfy-date-picker[state="success"] .dvfy-date-picker__input { border-color: var(--dvfy-success-border); }
+dvfy-date-picker[state="success"] .dvfy-date-picker__input:focus {
+  box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-success-border) 25%, transparent);
 }
 dvfy-date-picker[disabled] .dvfy-date-picker__input {
   background: var(--dvfy-disabled-bg);
@@ -338,9 +348,12 @@ dvfy-date-picker .dvfy-date-picker__year-item:focus-visible {
 
 /* ── Help / error ── */
 dvfy-date-picker .dvfy-date-picker__help { font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted); }
-dvfy-date-picker .dvfy-date-picker__error-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-input-error); }
+dvfy-date-picker .dvfy-date-picker__error-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-danger-text); }
+dvfy-date-picker .dvfy-date-picker__warning-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-warning-text); }
+dvfy-date-picker .dvfy-date-picker__success-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-success-text); }
+dvfy-date-picker [slot] { display: none; }
 
-${labelPositionCSS('dvfy-date-picker', { layout: 'field', label: '.dvfy-date-picker__label', content: ['.dvfy-date-picker__wrapper'], messages: ['.dvfy-date-picker__help', '.dvfy-date-picker__error-msg'] })}
+${labelPositionCSS('dvfy-date-picker', { layout: 'field', label: '.dvfy-date-picker__label', content: ['.dvfy-date-picker__wrapper'], messages: ['.dvfy-date-picker__help', '.dvfy-date-picker__error-msg', '.dvfy-date-picker__warning-msg', '.dvfy-date-picker__success-msg'] })}
 `;
 
 // Build calendar SVG icon via DOM API (avoids innerHTML with external content)
@@ -386,7 +399,7 @@ function buildCalendarIcon() {
  *
  * Renders a text input that opens a floating calendar panel. Supports single
  * date, date range, time, and datetime modes. Fully keyboard accessible with
- * locale-aware display formatting.
+ * locale-aware display formatting, and validation state support (error, warning, success).
  *
  * @element dvfy-date-picker
  *
@@ -401,9 +414,14 @@ function buildCalendarIcon() {
  * @attr {boolean} disabled - Disable the component
  * @attr {string} placeholder - Placeholder text for the input
  * @attr {string} name - Form field name
- * @attr {string} error - Error message (enables error styling)
+ * @attr {string} error - Error message (deprecated: use state="error" + slot; enables error styling)
+ * @attr {string} state - Validation state: error | warning | success
  * @attr {string} help - Help text shown below input
  * @attr {string} label-position - Label placement: top | right | bottom | left (default: "top")
+ *
+ * @slot error-message - Child element shown when state="error"
+ * @slot warning-message - Child element shown when state="warning"
+ * @slot success-message - Child element shown when state="success"
  *
  * @event {CustomEvent} change - Fires on selection; detail: { value, valueEnd? }
  *
@@ -419,6 +437,11 @@ function buildCalendarIcon() {
  *
  * @example
  * <dvfy-date-picker label="Meeting" type="datetime" value="2026-03-22T14:30"></dvfy-date-picker>
+ *
+ * @example
+ * <dvfy-date-picker label="Check-in" state="error">
+ *   <span slot="error-message">Date must be in the future</span>
+ * </dvfy-date-picker>
  */
 class DvfyDatePicker extends HTMLElement {
   // Viewed month/year in the calendar
@@ -454,7 +477,7 @@ class DvfyDatePicker extends HTMLElement {
   static get observedAttributes() {
     return [
       'label', 'value', 'value-end', 'min', 'max', 'type', 'range',
-      'required', 'disabled', 'placeholder', 'name', 'error', 'help', 'label-position',
+      'required', 'disabled', 'placeholder', 'name', 'error', 'state', 'help', 'label-position',
     ];
   }
 
@@ -464,7 +487,7 @@ class DvfyDatePicker extends HTMLElement {
       this.#parseAttrs();
       this.#updateInputDisplay();
       this.#refreshGrid();
-    } else if (name === 'error' || name === 'help') {
+    } else if (name === 'error' || name === 'state' || name === 'help') {
       this.#patchMessages();
     } else if (name === 'disabled') {
       const input = this.querySelector('.dvfy-date-picker__input');
@@ -596,6 +619,9 @@ class DvfyDatePicker extends HTMLElement {
   // ── Build ────────────────────────────────────────────────────────────────────
 
   #build() {
+    // Preserve Light DOM children with slot attributes (e.g. error-message, warning-message, success-message)
+    // These are hidden via CSS ([slot] { display: none }) and used as data sources for rendered messages.
+    const slottedChildren = Array.from(this.children).filter(el => el.hasAttribute('slot'));
     const wasOpen = this.#isOpen;
     this.textContent = '';
     this.removeAttribute('open');
@@ -656,6 +682,11 @@ class DvfyDatePicker extends HTMLElement {
     // Popup
     wrapper.appendChild(this.#buildPopup());
     this.appendChild(wrapper);
+
+    // Re-attach slotted children before #appendMessages so it can read their text.
+    // They are hidden via CSS ([slot] { display: none }) and serve as data sources.
+    slottedChildren.forEach(el => this.appendChild(el));
+
     this.#appendMessages();
 
     // Outside-click handler
@@ -1247,24 +1278,92 @@ class DvfyDatePicker extends HTMLElement {
   // ── Messages ─────────────────────────────────────────────────────────────────
 
   #appendMessages() {
+    const input = this.querySelector('.dvfy-date-picker__input');
+    const errorText = this.querySelector('[slot="error-message"]')?.textContent?.trim();
+    const warningText = this.querySelector('[slot="warning-message"]')?.textContent?.trim();
+    const successText = this.querySelector('[slot="success-message"]')?.textContent?.trim();
+
     const error = this.getAttribute('error');
+    const state = this.getAttribute('state');
     const help = this.getAttribute('help');
+
+    // Legacy error attribute takes precedence
     if (error) {
       const el = document.createElement('span');
       el.className = 'dvfy-date-picker__error-msg';
+      el.id = `${this.#id}-error`;
       el.setAttribute('role', 'alert');
       el.textContent = error;
       this.appendChild(el);
-    } else if (help) {
+      if (input) {
+        input.setAttribute('aria-invalid', 'true');
+        input.setAttribute('aria-describedby', el.id);
+      }
+    }
+    // State: error
+    else if (state === 'error' && errorText) {
+      const el = document.createElement('span');
+      el.className = 'dvfy-date-picker__error-msg';
+      el.id = `${this.#id}-error`;
+      el.setAttribute('role', 'alert');
+      el.textContent = errorText;
+      this.appendChild(el);
+      if (input) {
+        input.setAttribute('aria-invalid', 'true');
+        input.setAttribute('aria-describedby', el.id);
+      }
+    }
+    // State: warning
+    else if (state === 'warning' && warningText) {
+      const el = document.createElement('span');
+      el.className = 'dvfy-date-picker__warning-msg';
+      el.id = `${this.#id}-warning`;
+      el.role = 'status';
+      el.textContent = warningText;
+      this.appendChild(el);
+      if (input) {
+        input.setAttribute('aria-invalid', 'false');
+        input.setAttribute('aria-describedby', el.id);
+      }
+    }
+    // State: success
+    else if (state === 'success' && successText) {
+      const el = document.createElement('span');
+      el.className = 'dvfy-date-picker__success-msg';
+      el.id = `${this.#id}-success`;
+      el.role = 'status';
+      el.textContent = successText;
+      this.appendChild(el);
+      if (input) {
+        input.setAttribute('aria-invalid', 'false');
+        input.setAttribute('aria-describedby', el.id);
+      }
+    }
+    // Default: no state
+    else {
+      if (input) {
+        input.setAttribute('aria-invalid', 'false');
+        input.removeAttribute('aria-describedby');
+      }
+    }
+
+    // Help text (always shown if present, unless error state)
+    if (help && !error && state !== 'error') {
       const el = document.createElement('span');
       el.className = 'dvfy-date-picker__help';
+      el.id = `${this.#id}-help`;
       el.textContent = help;
       this.appendChild(el);
+      if (input && !state) {
+        input.setAttribute('aria-describedby', el.id);
+      }
     }
   }
 
   #patchMessages() {
     this.querySelector('.dvfy-date-picker__error-msg')?.remove();
+    this.querySelector('.dvfy-date-picker__warning-msg')?.remove();
+    this.querySelector('.dvfy-date-picker__success-msg')?.remove();
     this.querySelector('.dvfy-date-picker__help')?.remove();
     this.#appendMessages();
   }
