@@ -97,6 +97,7 @@ class DvfyScrollProgress extends HTMLElement {
 
   connectedCallback() {
     injectStyles('dvfy-scroll-progress', STYLES);
+    this.setAttribute('aria-hidden', 'true');
   }
 }
 

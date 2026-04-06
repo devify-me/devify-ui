@@ -101,6 +101,7 @@ class DvfyTransitionRoot extends HTMLElement {
   }
 
   connectedCallback() {
+    this.setAttribute('aria-hidden', 'true');
     this.#mql = window.matchMedia('(prefers-reduced-motion: reduce)');
     this.#reducedMotion = this.#mql.matches;
     this.#mql.addEventListener('change', this.#onMotionChange);

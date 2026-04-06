@@ -110,6 +110,7 @@ class DvfyScrollReveal extends HTMLElement {
 
   connectedCallback() {
     injectStyles('dvfy-scroll-reveal', STYLES);
+    this.setAttribute('aria-hidden', 'true');
   }
 }
 

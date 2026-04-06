@@ -118,6 +118,7 @@ class DvfyStaggerEnter extends HTMLElement {
 
   connectedCallback() {
     injectStyles('dvfy-stagger-enter', STYLES);
+    this.setAttribute('aria-hidden', 'true');
     this.#applyTokens();
     this.#applyDirection();
   }
