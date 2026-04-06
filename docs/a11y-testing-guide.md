@@ -219,6 +219,109 @@ describe('dvfy-modal — accessibility', () => {
    - **ARIA attributes** — Correct roles, expanded/selected/checked states?
 4. Do NOT call `checkA11y()` in a11y files (they're too detailed for automated checks)
 
+## Form Validation State Testing
+
+Form controls (dvfy-input, dvfy-select, dvfy-textarea, dvfy-date-picker) expose a `state` attribute with three values: `error`, `warning`, and `success`. Testing validation states requires checking:
+
+### Color Contrast for Validation States
+
+Each state uses semantic border tokens that are guaranteed WCAG AA compliant by the design system:
+- **Error state:** `--dvfy-input-error` (red, 4.5:1 contrast)
+- **Warning state:** `--dvfy-warning-border` (amber, 4.5:1 contrast)
+- **Success state:** `--dvfy-success-border` (green, 4.5:1 contrast)
+
+These are verified via the contrast audit (`npm run contrast:ci`), which is part of the CI pipeline.
+
+### ARIA Attributes for Validation Messages
+
+Form controls with validation messages use these ARIA patterns:
+
+```javascript
+// Error messages get role="alert" (assertive announcement)
+it('renders error message with alert role', async () => {
+  const el = await fixture(html`
+    <dvfy-input label="Email" state="error">
+      <span slot="error-message">Invalid email format</span>
+    </dvfy-input>
+  `);
+  const errorMsg = el.querySelector('.dvfy-input__error-msg');
+  expect(errorMsg.getAttribute('role')).to.equal('alert');
+  expect(errorMsg.textContent).to.equal('Invalid email format');
+  
+  await checkA11y(el);
+});
+
+// Warning and success messages get role="status" (polite announcement)
+it('renders success message with status role', async () => {
+  const el = await fixture(html`
+    <dvfy-input label="Username" state="success">
+      <span slot="success-message">Username available</span>
+    </dvfy-input>
+  `);
+  const successMsg = el.querySelector('.dvfy-input__success-msg');
+  expect(successMsg.getAttribute('role')).to.equal('status');
+  
+  await checkA11y(el);
+});
+
+// aria-invalid reflects input state
+it('sets aria-invalid on error state', async () => {
+  const el = await fixture(html`
+    <dvfy-input label="Email" state="error">
+      <span slot="error-message">Invalid</span>
+    </dvfy-input>
+  `);
+  const input = el.querySelector('input');
+  expect(input.getAttribute('aria-invalid')).to.equal('true');
+  
+  await checkA11y(el);
+});
+```
+
+### Field Group (dvfy-field-group) Accessibility
+
+`dvfy-field-group` groups related form controls with semantic `<fieldset>` + `<legend>` structure. Test that:
+
+```javascript
+it('renders semantic fieldset structure', async () => {
+  const el = await fixture(html`
+    <dvfy-field-group label="Address">
+      <dvfy-input label="Street" name="street"></dvfy-input>
+      <dvfy-input label="City" name="city"></dvfy-input>
+    </dvfy-field-group>
+  `);
+  
+  const fieldset = el.querySelector('fieldset');
+  const legend = el.querySelector('legend');
+  
+  expect(fieldset).to.exist;
+  expect(legend).to.exist;
+  expect(legend.textContent).to.include('Address');
+  expect(legend).to.equal(fieldset.firstChild); // Legend is first child
+  
+  await checkA11y(el);
+});
+
+// Group-level error messages are linked via aria-describedby
+it('links group-level error with aria-describedby', async () => {
+  const el = await fixture(html`
+    <dvfy-field-group label="Dates" state="error">
+      <dvfy-input label="Start" name="start" type="date"></dvfy-input>
+      <dvfy-input label="End" name="end" type="date"></dvfy-input>
+      <span slot="error-message">End date must be after start date</span>
+    </dvfy-field-group>
+  `);
+  
+  const fieldset = el.querySelector('fieldset');
+  const errorMsg = el.querySelector('.dvfy-field-group__error-msg');
+  
+  expect(errorMsg.id).to.exist;
+  expect(fieldset.getAttribute('aria-describedby')).to.include(errorMsg.id);
+  
+  await checkA11y(el);
+});
+```
+
 ## Debugging A11y Failures
 
 ### 1. Read the axe Violation Message

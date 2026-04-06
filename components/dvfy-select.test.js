@@ -88,8 +88,8 @@ describe('dvfy-select', () => {
           <option value="a">A</option>
         </dvfy-select>
       `);
-      expect(el.querySelector('.dvfy-select__error')).to.exist;
-      expect(el.querySelector('.dvfy-select__error').textContent).to.equal('Required field');
+      expect(el.querySelector('.dvfy-select__error-msg')).to.exist;
+      expect(el.querySelector('.dvfy-select__error-msg').textContent).to.equal('Required field');
       await checkA11y(el, SELECT_A11Y_RULES);
     });
 
@@ -111,7 +111,7 @@ describe('dvfy-select', () => {
         </dvfy-select>
       `);
       el.setAttribute('error', 'Oops');
-      expect(el.querySelector('.dvfy-select__error').textContent).to.equal('Oops');
+      expect(el.querySelector('.dvfy-select__error-msg').textContent).to.equal('Oops');
       await checkA11y(el, SELECT_A11Y_RULES);
     });
 
@@ -368,6 +368,98 @@ describe('dvfy-select', () => {
       search.dispatchEvent(new Event('input', { bubbles: true }));
       const empty = el.querySelector('.dvfy-select__empty');
       expect(empty.style.display).to.equal('block');
+      await checkA11y(el, SELECT_A11Y_RULES);
+    });
+  });
+
+  describe('state attribute', () => {
+    it('renders error message when state="error"', async () => {
+      const el = await fixture(html`
+        <dvfy-select label="Country" name="country" state="error">
+          <option value="us">United States</option>
+          <span slot="error-message">Please select a country</span>
+        </dvfy-select>
+      `);
+      const errorMsg = el.querySelector('.dvfy-select__error-msg');
+      expect(errorMsg).to.exist;
+      expect(errorMsg.textContent).to.equal('Please select a country');
+      await checkA11y(el, SELECT_A11Y_RULES);
+    });
+
+    it('renders warning message when state="warning"', async () => {
+      const el = await fixture(html`
+        <dvfy-select label="Country" name="country" state="warning">
+          <option value="us">United States</option>
+          <span slot="warning-message">This field will be required soon</span>
+        </dvfy-select>
+      `);
+      const warningMsg = el.querySelector('.dvfy-select__warning-msg');
+      expect(warningMsg).to.exist;
+      expect(warningMsg.textContent).to.equal('This field will be required soon');
+      await checkA11y(el, SELECT_A11Y_RULES);
+    });
+
+    it('renders success message when state="success"', async () => {
+      const el = await fixture(html`
+        <dvfy-select label="Country" name="country" state="success">
+          <option value="us">United States</option>
+          <span slot="success-message">Country verified</span>
+        </dvfy-select>
+      `);
+      const successMsg = el.querySelector('.dvfy-select__success-msg');
+      expect(successMsg).to.exist;
+      expect(successMsg.textContent).to.equal('Country verified');
+      await checkA11y(el, SELECT_A11Y_RULES);
+    });
+
+    it('renders no message when state is not set', async () => {
+      const el = await fixture(html`
+        <dvfy-select label="Country" name="country">
+          <option value="us">United States</option>
+        </dvfy-select>
+      `);
+      expect(el.querySelector('.dvfy-select__error-msg')).to.not.exist;
+      expect(el.querySelector('.dvfy-select__warning-msg')).to.not.exist;
+      expect(el.querySelector('.dvfy-select__success-msg')).to.not.exist;
+      await checkA11y(el, SELECT_A11Y_RULES);
+    });
+
+    it('updates message when state changes', async () => {
+      const el = await fixture(html`
+        <dvfy-select label="Country" name="country" state="error">
+          <option value="us">United States</option>
+          <span slot="error-message">Error 1</span>
+          <span slot="warning-message">Warning 1</span>
+        </dvfy-select>
+      `);
+      expect(el.querySelector('.dvfy-select__error-msg')?.textContent).to.equal('Error 1');
+      expect(el.querySelector('.dvfy-select__warning-msg')).to.not.exist;
+
+      el.setAttribute('state', 'warning');
+
+      expect(el.querySelector('.dvfy-select__error-msg')).to.not.exist;
+      expect(el.querySelector('.dvfy-select__warning-msg')?.textContent).to.equal('Warning 1');
+      await checkA11y(el, SELECT_A11Y_RULES);
+    });
+
+    it('backward compatible with error attribute', async () => {
+      const el = await fixture(html`
+        <dvfy-select label="Country" name="country" error="Legacy error">
+          <option value="us">United States</option>
+        </dvfy-select>
+      `);
+      const errorMsg = el.querySelector('.dvfy-select__error-msg');
+      expect(errorMsg?.textContent).to.equal('Legacy error');
+      await checkA11y(el, SELECT_A11Y_RULES);
+    });
+
+    it('passes axe checks for all states', async () => {
+      const el = await fixture(html`
+        <dvfy-select label="Country" name="country" state="error">
+          <option value="us">United States</option>
+          <span slot="error-message">Invalid</span>
+        </dvfy-select>
+      `);
       await checkA11y(el, SELECT_A11Y_RULES);
     });
   });

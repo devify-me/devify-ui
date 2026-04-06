@@ -62,6 +62,7 @@ export const COMPONENT_REGISTRY = {
   'dvfy-select':       { tier: 1, domain: 'forms',      deps: [] },
   'dvfy-file-upload':  { tier: 1, domain: 'forms',      deps: [] },
   'dvfy-date-picker':  { tier: 1, domain: 'forms',      deps: [] },
+  'dvfy-field-group':  { tier: 2, domain: 'forms',      deps: ['dvfy-input', 'dvfy-select'] },
   'dvfy-live-search':  { tier: 1, domain: 'forms',      deps: [], server: true },
   // Data Display
   'dvfy-badge':           { tier: 1, domain: 'display',    deps: [] },

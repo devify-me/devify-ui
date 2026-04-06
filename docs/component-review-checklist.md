@@ -18,6 +18,35 @@ Use this checklist when auditing or reviewing a `dvfy-*` component for productio
 - [ ] Boolean attributes work as presence/absence (not `="true"/"false"`)
 - [ ] Default values are sensible when attributes are omitted
 
+## Form Control Validation States (if applicable)
+
+For form controls (dvfy-input, dvfy-select, dvfy-textarea, dvfy-date-picker) and field groups:
+
+- [ ] `state` attribute added to `observedAttributes` array
+- [ ] `attributeChangedCallback` includes state case that triggers re-render
+- [ ] Light DOM children with `slot="error-message"`, `slot="warning-message"`, `slot="success-message"` are preserved during builds
+- [ ] `#build()` method saves slotted children before clearing (`textContent = ''`)
+- [ ] `#build()` method re-attaches slotted children before message rendering
+- [ ] `#appendMessages()` or equivalent method renders messages based on state:
+  - Error messages get `role="alert"` (assertive announcement)
+  - Warning/success messages get `role="status"` (polite announcement)
+  - Backward compatibility with legacy `error` attribute maintained
+- [ ] CSS includes state selectors for error/warning/success with proper tokens:
+  - Border color: `--dvfy-input-error` (error), `--dvfy-warning-border` (warning), `--dvfy-success-border` (success)
+  - Focus ring matches state color
+  - Message text color uses semantic tokens (`--dvfy-danger-text`, `--dvfy-warning-text`, `--dvfy-success-text`)
+- [ ] All state variations pass WCAG 2.1 AA color contrast (90/90 via `npm run contrast:ci`)
+- [ ] JSDoc includes `@attr state` and three `@slot` entries (error/warning/success-message)
+
+**For dvfy-field-group specifically:**
+- [ ] Semantic `<fieldset>` + `<legend>` structure
+- [ ] `label` attribute rendered as legend
+- [ ] `help` attribute rendered below legend
+- [ ] Default slot preserves child form controls
+- [ ] Group-level message slots (error/warning/success-message) for cross-field validation
+- [ ] `aria-describedby` links fieldset to group-level error message when `state` is set
+- [ ] Tests verify fieldset/legend structure, slot rendering, state transitions, message display (see `components/dvfy-field-group.test.js` and `components/dvfy-field-group.a11y.test.js`)
+
 ## Accessibility
 
 - [ ] Appropriate ARIA role assigned (e.g., `role="button"`, `role="dialog"`)
@@ -84,6 +113,6 @@ Audit in tier order — primitives first because bugs cascade:
 
 | Phase | Tier | Components                                                                                           |
 |-------|------|------------------------------------------------------------------------------------------------------|
-| 1     | T1   | button, input, checkbox, radio, switch, textarea, section, badge, tag, avatar, alert, loader, progress, tooltip, hamburger, select, dropdown, tabs, card, empty, toast, breadcrumb, pagination, sidebar, carousel, and remaining primitives |
-| 2     | T2   | drawer, table, modal, nav, theme-switcher, accordion, component-playground                            |
+| 1     | T1   | button, input (+ validation states), checkbox, radio, switch, textarea (+ validation states), section, badge, tag, avatar, alert, loader, progress, tooltip, hamburger, select (+ validation states), date-picker (+ validation states), dropdown, tabs, card, empty, toast, breadcrumb, pagination, sidebar, carousel, and remaining primitives |
+| 2     | T2   | drawer, table, modal, nav, theme-switcher, accordion, component-playground, field-group (+ validation states)                            |
 | 3     | T3   | auth, htmx-form, confirm                                                                             |

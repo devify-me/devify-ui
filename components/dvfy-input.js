@@ -2,16 +2,18 @@ import { labelPositionCSS } from '../utils/label-position.js';
 import { injectStyles } from '../utils/styles.js';
 
 /**
- * <dvfy-input> — Text input with label, error, and help text
+ * <dvfy-input> — Text input with label, validation state, and help text
  *
  * Attributes:
- *   label, type, name, value, placeholder, error, help, required, disabled, size
+ *   label, type, name, value, placeholder, error, state, help, required, disabled, size
  *
  * Features:
  *   Password visibility toggle when type="password"
+ *   Validation state (error | warning | success) with message slots
  *
  * Usage:
  *   <dvfy-input label="Email" type="email" name="email" required></dvfy-input>
+ *   <dvfy-input label="Email" state="error"><span slot="error-message">Invalid email</span></dvfy-input>
  *   <dvfy-input label="Password" type="password" error="Too short"></dvfy-input>
  */
 
@@ -70,14 +72,27 @@ dvfy-input[size="lg"] .dvfy-input__field { padding: var(--dvfy-space-2-5) var(--
 dvfy-input[size="xl"] .dvfy-input__field { padding: var(--dvfy-space-3) var(--dvfy-space-4); font-size: var(--dvfy-text-lg); border-radius: var(--dvfy-radius-xl); }
 dvfy-input[size="xl"] .dvfy-input__label { font-size: var(--dvfy-text-base); }
 dvfy-input .dvfy-input__field--has-toggle { padding-right: 3.5rem; }
-dvfy-input[error] .dvfy-input__field { border-color: var(--dvfy-input-error); }
-dvfy-input[error] .dvfy-input__field:focus {
+dvfy-input[error] .dvfy-input__field,
+dvfy-input[state="error"] .dvfy-input__field { border-color: var(--dvfy-input-error); }
+dvfy-input[error] .dvfy-input__field:focus,
+dvfy-input[state="error"] .dvfy-input__field:focus {
   box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-input-error) 25%, transparent);
+}
+dvfy-input[state="warning"] .dvfy-input__field { border-color: var(--dvfy-warning-border); }
+dvfy-input[state="warning"] .dvfy-input__field:focus {
+  box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-warning-border) 25%, transparent);
+}
+dvfy-input[state="success"] .dvfy-input__field { border-color: var(--dvfy-success-border); }
+dvfy-input[state="success"] .dvfy-input__field:focus {
+  box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-success-border) 25%, transparent);
 }
 dvfy-input[disabled] .dvfy-input__field { background: var(--dvfy-disabled-bg); color: var(--dvfy-disabled-text); cursor: not-allowed; }
 dvfy-input[disabled] .dvfy-input__label { color: var(--dvfy-disabled-text); }
 dvfy-input .dvfy-input__help { font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted); }
 dvfy-input .dvfy-input__error-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-input-error); }
+dvfy-input .dvfy-input__warning-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-warning-text); }
+dvfy-input .dvfy-input__success-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-success-text); }
+dvfy-input [slot] { display: none; }
 
 dvfy-input .dvfy-input__toggle,
 dvfy-input .dvfy-input__clear {
@@ -109,7 +124,7 @@ dvfy-input .dvfy-input__clear { display: none; }
 dvfy-input .dvfy-input__clear--visible { display: block; }
 dvfy-input[clearable] .dvfy-input__field { padding-right: 2.5rem; }
 
-${labelPositionCSS('dvfy-input', { layout: 'field', label: '.dvfy-input__label', content: ['.dvfy-input__wrapper'], messages: ['.dvfy-input__help', '.dvfy-input__error-msg'] })}
+${labelPositionCSS('dvfy-input', { layout: 'field', label: '.dvfy-input__label', content: ['.dvfy-input__wrapper'], messages: ['.dvfy-input__help', '.dvfy-input__error-msg', '.dvfy-input__warning-msg', '.dvfy-input__success-msg'] })}
 `;
 
 /**
@@ -122,7 +137,8 @@ ${labelPositionCSS('dvfy-input', { layout: 'field', label: '.dvfy-input__label',
  * @attr {string} name - Form field name
  * @attr {string} value - Input value
  * @attr {string} placeholder - Placeholder text
- * @attr {string} error - Error message (enables error styling)
+ * @attr {string} error - Error message (deprecated: use state="error" + slot; enables error styling)
+ * @attr {string} state - Validation state: error | warning | success
  * @attr {string} help - Help text shown below input
  * @attr {boolean} required - Mark field as required
  * @attr {boolean} disabled - Disable input
@@ -133,11 +149,25 @@ ${labelPositionCSS('dvfy-input', { layout: 'field', label: '.dvfy-input__label',
  * @attr {string} pattern - Regex pattern for native HTML form validation
  * @attr {string} title - Tooltip and validation message for pattern mismatch
  *
+ * @slot error-message - Child element shown when state="error"
+ * @slot warning-message - Child element shown when state="warning"
+ * @slot success-message - Child element shown when state="success"
+ *
  * @event {CustomEvent} input - Fires on input value change (bubbles from inner input)
  *
  * @cssprop {color} --dvfy-input-bg - Input background
  * @cssprop {color} --dvfy-input-border - Input border color
  * @cssprop {color} --dvfy-input-error - Error border and message color
+ *
+ * @example
+ * <dvfy-input label="Email" type="email" name="email" state="error">
+ *   <span slot="error-message">Invalid email format</span>
+ * </dvfy-input>
+ *
+ * @example
+ * <dvfy-input label="Username" name="username" state="success">
+ *   <span slot="success-message">Username is available</span>
+ * </dvfy-input>
  */
 class DvfyInput extends HTMLElement {
   /** @type {boolean} tracks password visibility state */
@@ -153,7 +183,7 @@ class DvfyInput extends HTMLElement {
   disconnectedCallback() {}
 
   static get observedAttributes() {
-    return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'help', 'required', 'disabled', 'no-preview', 'clearable', 'label-position', 'pattern', 'title'];
+    return ['label', 'type', 'name', 'value', 'placeholder', 'error', 'state', 'help', 'required', 'disabled', 'no-preview', 'clearable', 'label-position', 'pattern', 'title'];
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -186,6 +216,7 @@ class DvfyInput extends HTMLElement {
         input.disabled = this.hasAttribute('disabled');
         break;
       case 'error':
+      case 'state':
       case 'help':
         this.#patchMessages(input);
         break;
@@ -203,6 +234,9 @@ class DvfyInput extends HTMLElement {
   }
 
   #build() {
+    // Preserve Light DOM children with slot attributes (e.g. error-message, warning-message, success-message)
+    // These are hidden via CSS ([slot] { display: none }) and used as data sources for rendered messages.
+    const slottedChildren = Array.from(this.children).filter(el => el.hasAttribute('slot'));
     this.textContent = '';
     const id = this.#id;
     const type = this.getAttribute('type') || 'text';
@@ -241,6 +275,10 @@ class DvfyInput extends HTMLElement {
     if (this.hasAttribute('clearable') && !hasPreview) this.#appendClearButton(wrapper, input);
 
     this.appendChild(wrapper);
+
+    // Re-attach slotted children before #appendMessages so it can read their text.
+    // They are hidden via CSS ([slot] { display: none }) and serve as data sources.
+    slottedChildren.forEach(el => this.appendChild(el));
 
     // Error or help text
     this.#appendMessages();
@@ -284,12 +322,17 @@ class DvfyInput extends HTMLElement {
 
   #setAriaOnInput(input) {
     const error = this.getAttribute('error');
+    const state = this.getAttribute('state');
     const help = this.getAttribute('help');
     input.removeAttribute('aria-invalid');
     input.removeAttribute('aria-describedby');
-    if (error) {
+    if (error || state === 'error') {
       input.setAttribute('aria-invalid', 'true');
       input.setAttribute('aria-describedby', `${this.#id}-error`);
+    } else if (state === 'warning') {
+      input.setAttribute('aria-describedby', `${this.#id}-warning`);
+    } else if (state === 'success') {
+      input.setAttribute('aria-describedby', `${this.#id}-success`);
     } else if (help) {
       input.setAttribute('aria-describedby', `${this.#id}-help`);
     }
@@ -297,14 +340,41 @@ class DvfyInput extends HTMLElement {
 
   #appendMessages() {
     const error = this.getAttribute('error');
+    const state = this.getAttribute('state');
     const help = this.getAttribute('help');
+
     if (error) {
+      // Legacy error attribute: render inline error message
       const err = document.createElement('span');
       err.className = 'dvfy-input__error-msg';
       err.id = `${this.#id}-error`;
       err.setAttribute('role', 'alert');
       err.textContent = error;
       this.appendChild(err);
+    } else if (state === 'error') {
+      const slotEl = this.querySelector('[slot="error-message"]');
+      const msg = document.createElement('span');
+      msg.className = 'dvfy-input__error-msg';
+      msg.id = `${this.#id}-error`;
+      msg.setAttribute('role', 'alert');
+      if (slotEl) msg.textContent = slotEl.textContent;
+      this.appendChild(msg);
+    } else if (state === 'warning') {
+      const slotEl = this.querySelector('[slot="warning-message"]');
+      const msg = document.createElement('span');
+      msg.className = 'dvfy-input__warning-msg';
+      msg.id = `${this.#id}-warning`;
+      msg.role = 'status';
+      if (slotEl) msg.textContent = slotEl.textContent;
+      this.appendChild(msg);
+    } else if (state === 'success') {
+      const slotEl = this.querySelector('[slot="success-message"]');
+      const msg = document.createElement('span');
+      msg.className = 'dvfy-input__success-msg';
+      msg.id = `${this.#id}-success`;
+      msg.role = 'status';
+      if (slotEl) msg.textContent = slotEl.textContent;
+      this.appendChild(msg);
     } else if (help) {
       const hlp = document.createElement('span');
       hlp.className = 'dvfy-input__help';
@@ -316,6 +386,8 @@ class DvfyInput extends HTMLElement {
 
   #patchMessages(input) {
     this.querySelector('.dvfy-input__error-msg')?.remove();
+    this.querySelector('.dvfy-input__warning-msg')?.remove();
+    this.querySelector('.dvfy-input__success-msg')?.remove();
     this.querySelector('.dvfy-input__help')?.remove();
     this.#setAriaOnInput(input);
     this.#appendMessages();

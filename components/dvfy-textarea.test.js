@@ -126,4 +126,81 @@ describe('dvfy-textarea', () => {
       await checkA11y(el, TEXTAREA_NO_LABEL_A11Y_RULES);
     });
   });
+
+  describe('state attribute', () => {
+    it('renders error message when state="error"', async () => {
+      const el = await fixture(html`
+        <dvfy-textarea label="Bio" name="bio" state="error">
+          <span slot="error-message">This field is required</span>
+        </dvfy-textarea>
+      `);
+      const errorMsg = el.querySelector('.dvfy-textarea__error-msg');
+      expect(errorMsg).to.exist;
+      expect(errorMsg.textContent).to.equal('This field is required');
+      await checkA11y(el);
+    });
+
+    it('renders warning message when state="warning"', async () => {
+      const el = await fixture(html`
+        <dvfy-textarea label="Bio" name="bio" state="warning">
+          <span slot="warning-message">Character limit approaching</span>
+        </dvfy-textarea>
+      `);
+      const warningMsg = el.querySelector('.dvfy-textarea__warning-msg');
+      expect(warningMsg).to.exist;
+      expect(warningMsg.textContent).to.equal('Character limit approaching');
+      await checkA11y(el);
+    });
+
+    it('renders success message when state="success"', async () => {
+      const el = await fixture(html`
+        <dvfy-textarea label="Bio" name="bio" state="success">
+          <span slot="success-message">Saved successfully</span>
+        </dvfy-textarea>
+      `);
+      const successMsg = el.querySelector('.dvfy-textarea__success-msg');
+      expect(successMsg).to.exist;
+      expect(successMsg.textContent).to.equal('Saved successfully');
+      await checkA11y(el);
+    });
+
+    it('renders no message when state is not set', async () => {
+      const el = await fixture(html`<dvfy-textarea label="Bio" name="bio"></dvfy-textarea>`);
+      expect(el.querySelector('.dvfy-textarea__error-msg')).to.not.exist;
+      expect(el.querySelector('.dvfy-textarea__warning-msg')).to.not.exist;
+      expect(el.querySelector('.dvfy-textarea__success-msg')).to.not.exist;
+      await checkA11y(el);
+    });
+
+    it('updates message when state changes', async () => {
+      const el = await fixture(html`
+        <dvfy-textarea label="Bio" name="bio" state="error">
+          <span slot="error-message">Error 1</span>
+          <span slot="warning-message">Warning 1</span>
+        </dvfy-textarea>
+      `);
+      expect(el.querySelector('.dvfy-textarea__error-msg')?.textContent).to.equal('Error 1');
+
+      el.setAttribute('state', 'warning');
+
+      expect(el.querySelector('.dvfy-textarea__warning-msg')?.textContent).to.equal('Warning 1');
+      await checkA11y(el);
+    });
+
+    it('backward compatible with error attribute', async () => {
+      const el = await fixture(html`<dvfy-textarea label="Bio" name="bio" error="Legacy error"></dvfy-textarea>`);
+      const errorMsg = el.querySelector('.dvfy-textarea__error-msg');
+      expect(errorMsg?.textContent).to.equal('Legacy error');
+      await checkA11y(el, TEXTAREA_NO_LABEL_A11Y_RULES);
+    });
+
+    it('passes axe checks for all states', async () => {
+      const el = await fixture(html`
+        <dvfy-textarea label="Bio" name="bio" state="error">
+          <span slot="error-message">Invalid</span>
+        </dvfy-textarea>
+      `);
+      await checkA11y(el);
+    });
+  });
 });

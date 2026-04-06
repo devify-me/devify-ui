@@ -130,4 +130,90 @@ describe('dvfy-input', () => {
       await checkA11y(el, { ignoredRules: ['label'] });
     });
   });
+
+  describe('state attribute', () => {
+    it('shows error message when state="error" with error-message slot', async () => {
+      const el = await fixture(html`
+        <dvfy-input label="Email" state="error">
+          <span slot="error-message">Invalid email format</span>
+        </dvfy-input>
+      `);
+      const msg = el.querySelector('.dvfy-input__error-msg');
+      expect(msg).to.exist;
+      expect(msg.textContent).to.equal('Invalid email format');
+      expect(msg.getAttribute('role')).to.equal('alert');
+      await checkA11y(el, { ignoredRules: ['label-title-only'] });
+    });
+
+    it('shows warning message when state="warning" with warning-message slot', async () => {
+      const el = await fixture(html`
+        <dvfy-input label="Plan" state="warning">
+          <span slot="warning-message">Billing renews in 3 days</span>
+        </dvfy-input>
+      `);
+      const msg = el.querySelector('.dvfy-input__warning-msg');
+      expect(msg).to.exist;
+      expect(msg.textContent).to.equal('Billing renews in 3 days');
+      await checkA11y(el, { ignoredRules: ['label-title-only'] });
+    });
+
+    it('shows success message when state="success" with success-message slot', async () => {
+      const el = await fixture(html`
+        <dvfy-input label="Username" state="success">
+          <span slot="success-message">Username is available</span>
+        </dvfy-input>
+      `);
+      const msg = el.querySelector('.dvfy-input__success-msg');
+      expect(msg).to.exist;
+      expect(msg.textContent).to.equal('Username is available');
+      await checkA11y(el, { ignoredRules: ['label-title-only'] });
+    });
+
+    it('renders with no state (default styling, no message)', async () => {
+      const el = await fixture(html`<dvfy-input label="Name"></dvfy-input>`);
+      expect(el.querySelector('.dvfy-input__error-msg')).to.not.exist;
+      expect(el.querySelector('.dvfy-input__warning-msg')).to.not.exist;
+      expect(el.querySelector('.dvfy-input__success-msg')).to.not.exist;
+      await checkA11y(el);
+    });
+
+    it('sets aria-invalid on inner input when state="error"', async () => {
+      const el = await fixture(html`
+        <dvfy-input label="Email" state="error">
+          <span slot="error-message">Required</span>
+        </dvfy-input>
+      `);
+      const input = el.querySelector('.dvfy-input__field');
+      expect(input.getAttribute('aria-invalid')).to.equal('true');
+      await checkA11y(el, { ignoredRules: ['label-title-only'] });
+    });
+
+    it('updates message display when state attribute changes', async () => {
+      const el = await fixture(html`
+        <dvfy-input label="Email" state="error">
+          <span slot="error-message">Invalid</span>
+          <span slot="success-message">Valid</span>
+        </dvfy-input>
+      `);
+      expect(el.querySelector('.dvfy-input__error-msg')).to.exist;
+      expect(el.querySelector('.dvfy-input__success-msg')).to.not.exist;
+
+      el.setAttribute('state', 'success');
+
+      expect(el.querySelector('.dvfy-input__error-msg')).to.not.exist;
+      expect(el.querySelector('.dvfy-input__success-msg')).to.exist;
+      expect(el.querySelector('.dvfy-input__success-msg').textContent).to.equal('Valid');
+    });
+
+    it('backward compat: error attribute still shows error message', async () => {
+      const el = await fixture(html`<dvfy-input label="Email" error="Required field"></dvfy-input>`);
+      const msg = el.querySelector('.dvfy-input__error-msg');
+      expect(msg).to.exist;
+      expect(msg.textContent).to.equal('Required field');
+      expect(msg.getAttribute('role')).to.equal('alert');
+      const input = el.querySelector('.dvfy-input__field');
+      expect(input.getAttribute('aria-invalid')).to.equal('true');
+      await checkA11y(el, { ignoredRules: ['label-title-only'] });
+    });
+  });
 });

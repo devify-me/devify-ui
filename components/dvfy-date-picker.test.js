@@ -214,4 +214,77 @@ describe('dvfy-date-picker', () => {
       expect(input.value).to.not.be.empty;
     });
   });
+
+  describe('state attribute', () => {
+    it('renders error message when state="error"', async () => {
+      const el = await fixture(html`
+        <dvfy-date-picker label="Date" state="error">
+          <span slot="error-message">Invalid date</span>
+        </dvfy-date-picker>
+      `);
+      const errorMsg = el.querySelector('.dvfy-date-picker__error-msg');
+      expect(errorMsg).to.exist;
+      expect(errorMsg.textContent).to.equal('Invalid date');
+    });
+
+    it('renders warning message when state="warning"', async () => {
+      const el = await fixture(html`
+        <dvfy-date-picker label="Date" state="warning">
+          <span slot="warning-message">Date is in the past</span>
+        </dvfy-date-picker>
+      `);
+      const warningMsg = el.querySelector('.dvfy-date-picker__warning-msg');
+      expect(warningMsg).to.exist;
+      expect(warningMsg.textContent).to.equal('Date is in the past');
+    });
+
+    it('renders success message when state="success"', async () => {
+      const el = await fixture(html`
+        <dvfy-date-picker label="Date" state="success">
+          <span slot="success-message">Date confirmed</span>
+        </dvfy-date-picker>
+      `);
+      const successMsg = el.querySelector('.dvfy-date-picker__success-msg');
+      expect(successMsg).to.exist;
+      expect(successMsg.textContent).to.equal('Date confirmed');
+    });
+
+    it('renders no message when state is not set', async () => {
+      const el = await fixture(html`<dvfy-date-picker label="Date"></dvfy-date-picker>`);
+      expect(el.querySelector('.dvfy-date-picker__error-msg')).to.not.exist;
+      expect(el.querySelector('.dvfy-date-picker__warning-msg')).to.not.exist;
+      expect(el.querySelector('.dvfy-date-picker__success-msg')).to.not.exist;
+    });
+
+    it('updates message when state changes', async () => {
+      const el = await fixture(html`
+        <dvfy-date-picker label="Date" state="error">
+          <span slot="error-message">Error 1</span>
+          <span slot="warning-message">Warning 1</span>
+        </dvfy-date-picker>
+      `);
+      expect(el.querySelector('.dvfy-date-picker__error-msg')?.textContent).to.equal('Error 1');
+
+      el.setAttribute('state', 'warning');
+      await new Promise(resolve => setTimeout(resolve, 0));
+
+      expect(el.querySelector('.dvfy-date-picker__warning-msg')?.textContent).to.equal('Warning 1');
+    });
+
+    it('backward compatible with error attribute', async () => {
+      const el = await fixture(html`<dvfy-date-picker label="Date" error="Legacy error"></dvfy-date-picker>`);
+      const errorMsg = el.querySelector('.dvfy-date-picker__error-msg');
+      expect(errorMsg?.textContent).to.equal('Legacy error');
+    });
+
+    it('sets aria-invalid on error state', async () => {
+      const el = await fixture(html`
+        <dvfy-date-picker label="Date" state="error">
+          <span slot="error-message">Invalid date</span>
+        </dvfy-date-picker>
+      `);
+      const input = el.querySelector('.dvfy-date-picker__input');
+      expect(input.getAttribute('aria-invalid')).to.equal('true');
+    });
+  });
 });

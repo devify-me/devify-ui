@@ -19,12 +19,13 @@ All dvfy-* components have been audited and fixed to meet [WCAG 2.1 Level AA](ht
 These components are foundational and used everywhere. All tested with automated axe-core checks in functional tests.
 
 - **button** — primary, danger, secondary variants; disabled, loading states
-- **input** — text, email, password; disabled, invalid states
+- **input** — text, email, password; disabled, validation states (error, warning, success)
 - **checkbox** — checked, unchecked, disabled states
 - **radio** — selected, unselected, disabled states
 - **switch** — on/off states; disabled state
-- **textarea** — standard, disabled, invalid states
-- **select** — dropdown selection; disabled state
+- **textarea** — standard, disabled, validation states (error, warning, success)
+- **select** — dropdown selection; disabled, validation states (error, warning, success)
+- **date-picker** — date selection; disabled, validation states (error, warning, success)
 - **badge** — variant colors (success, warning, danger, info)
 - **tag** — closeable, non-closeable variants
 - **avatar** — size variants, alt text
@@ -41,7 +42,7 @@ These components are foundational and used everywhere. All tested with automated
 
 **Result:** ✅ All 20 components pass 299+ axe checks
 
-### Tier B: Complex Interactions (5 components)
+### Tier B: Complex Interactions (6 components)
 
 These components have complex state management, focus traps, and keyboard navigation. Tested with both axe-core checks AND dedicated `*.a11y.test.js` files.
 
@@ -50,8 +51,9 @@ These components have complex state management, focus traps, and keyboard naviga
 - **nav** — semantic nav element, focus management, aria-current
 - **table** — role="table", header scope, row/cell hierarchy
 - **accordion** — ARIA disclosure pattern, aria-expanded, arrow keys
+- **field-group** — semantic fieldset/legend, group-level validation states, multi-input grouping
 
-**Result:** ✅ All 5 components pass 155+ deep a11y tests + axe checks
+**Result:** ✅ All 6 components pass 186+ deep a11y tests + axe checks
 
 ### Tier C: Presentational Components (20+ components)
 
@@ -92,6 +94,18 @@ See `docs/wcag-contrast-audit.md` for full contrast audit results. Summary:
 | devify-pink-dark | `--dvfy-primary-text` | neutral-0 (#fff) | neutral-950 (#020617) | White on brand-500 was 3.23:1 |
 
 **All token pairs now pass 4.5:1 (AA) or 7:1 (AAA).**
+
+### Validation State Tokens (Phase 2: Issue #313)
+
+Form controls (dvfy-input, dvfy-select, dvfy-textarea, dvfy-date-picker) expose validation states with semantic border and text color tokens:
+
+| State | Border Token | Text Token | WCAG Level | Usage |
+|---|---|---|---|---|
+| error | `--dvfy-input-error` | `--dvfy-danger-text` | AA (4.5:1) | Invalid input, form submission errors |
+| warning | `--dvfy-warning-border` | `--dvfy-warning-text` | AA (4.5:1) | Renewal soon, soft validation, non-blocking issues |
+| success | `--dvfy-success-border` | `--dvfy-success-text` | AA (4.5:1) | Form validation pass, confirmation |
+
+These tokens are reused from the existing semantic palette (no new tokens added). They are verified via `npm run contrast:ci` on every build.
 
 ### ARIA Role Updates
 
@@ -146,8 +160,9 @@ The following axe violations are intentionally suppressed because they are false
 
 ### Automated Tests (npm test)
 
-- **299+ axe-core checks** across Tier A components
-- **155+ deep a11y tests** across Tier B components
+- **314+ axe-core checks** across Tier A components (including validation states)
+- **186+ deep a11y tests** across Tier B components (including field-group)
+- **1371 total tests** pass including functional tests with axe checks
 - **100% of components** have functional tests with axe checks at the end
 - **Tests run on every commit** via `.github/workflows/test.yml`
 - **Test suite:** @open-wc/testing + web-test-runner + Chromium
