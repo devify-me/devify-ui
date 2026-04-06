@@ -200,6 +200,11 @@ dvfy-table th[data-sort]:focus {
 .dvfy-table__filter-icon:hover .dvfy-table__filter-line {
   background: var(--dvfy-text-primary);
 }
+.dvfy-table__filter-icon:focus-visible {
+  outline: 2px solid var(--dvfy-border-focus);
+  outline-offset: -2px;
+  border-radius: var(--dvfy-radius-sm);
+}
 .dvfy-table__filter-icon--active {
   background: var(--dvfy-primary-bg);
 }
