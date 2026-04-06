@@ -170,6 +170,7 @@ dvfy-text-vortex .dvfy-vortex-chars {
 class DvfyTextVortex extends HTMLElement {
   connectedCallback() {
     injectStyles('dvfy-text-vortex', STYLES);
+    this.setAttribute('aria-hidden', 'true');
     this.#applyTokens();
     this.#render();
     this.#detectScrollSupport();

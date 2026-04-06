@@ -1,4 +1,5 @@
 import { fixture, html, expect, oneEvent } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-button.js';
 
 describe('dvfy-button', () => {
@@ -8,16 +9,19 @@ describe('dvfy-button', () => {
       expect(el.textContent.trim()).to.equal('Click me');
       expect(el.getAttribute('role')).to.equal('button');
       expect(el.getAttribute('tabindex')).to.equal('0');
+      await checkA11y(el);
     });
 
     it('accepts variant attribute', async () => {
       const el = await fixture(html`<dvfy-button variant="danger">Delete</dvfy-button>`);
       expect(el.getAttribute('variant')).to.equal('danger');
+      await checkA11y(el);
     });
 
     it('accepts size attribute', async () => {
       const el = await fixture(html`<dvfy-button size="lg">Large</dvfy-button>`);
       expect(el.getAttribute('size')).to.equal('lg');
+      await checkA11y(el);
     });
   });
 
@@ -26,6 +30,7 @@ describe('dvfy-button', () => {
       const el = await fixture(html`<dvfy-button disabled>Disabled</dvfy-button>`);
       expect(el.getAttribute('aria-disabled')).to.equal('true');
       expect(el.getAttribute('tabindex')).to.equal('-1');
+      await checkA11y(el);
     });
 
     it('restores tabindex when disabled is removed', async () => {
@@ -33,6 +38,7 @@ describe('dvfy-button', () => {
       el.removeAttribute('disabled');
       expect(el.getAttribute('tabindex')).to.equal('0');
       expect(el.getAttribute('aria-disabled')).to.equal('false');
+      await checkA11y(el);
     });
   });
 
@@ -40,12 +46,14 @@ describe('dvfy-button', () => {
     it('sets aria-busy when loading', async () => {
       const el = await fixture(html`<dvfy-button loading>Loading</dvfy-button>`);
       expect(el.getAttribute('aria-busy')).to.equal('true');
+      await checkA11y(el);
     });
 
     it('clears aria-busy when loading is removed', async () => {
       const el = await fixture(html`<dvfy-button loading>Test</dvfy-button>`);
       el.removeAttribute('loading');
       expect(el.getAttribute('aria-busy')).to.equal('false');
+      await checkA11y(el);
     });
   });
 
@@ -70,12 +78,14 @@ describe('dvfy-button', () => {
       const el = await fixture(html`<dvfy-button variant="gradient" from="#ff0000" to="#00ff00">Gradient</dvfy-button>`);
       expect(el.style.getPropertyValue('--dvfy-btn-grad-from')).to.equal('#ff0000');
       expect(el.style.getPropertyValue('--dvfy-btn-grad-to')).to.equal('#00ff00');
+      await checkA11y(el);
     });
 
     it('updates CSS properties when attributes change', async () => {
       const el = await fixture(html`<dvfy-button variant="gradient" from="#ff0000" to="#00ff00">Gradient</dvfy-button>`);
       el.setAttribute('from', '#0000ff');
       expect(el.style.getPropertyValue('--dvfy-btn-grad-from')).to.equal('#0000ff');
+      await checkA11y(el);
     });
   });
 });

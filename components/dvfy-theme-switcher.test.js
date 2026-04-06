@@ -1,4 +1,5 @@
 import { fixture, html, expect } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-dropdown.js';
 import './dvfy-button.js';
 import './dvfy-theme-switcher.js';
@@ -19,6 +20,7 @@ describe('dvfy-theme-switcher', () => {
     it('renders with default attributes', async () => {
       const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
       expect(el).to.exist;
+      await checkA11y(el);
     });
 
     it('is defined as a custom element', async () => {
@@ -29,12 +31,14 @@ describe('dvfy-theme-switcher', () => {
       const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
       const toggle = el.querySelector('.dvfy-ts__toggle');
       expect(toggle).to.exist;
+      await checkA11y(el);
     });
 
     it('renders thumb inside toggle', async () => {
       const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
       const thumb = el.querySelector('.dvfy-ts__thumb');
       expect(thumb).to.exist;
+      await checkA11y(el);
     });
   });
 
@@ -49,6 +53,7 @@ describe('dvfy-theme-switcher', () => {
       // With multiple themes, a select or dropdown should appear
       const select = el.querySelector('dvfy-select');
       expect(select).to.exist;
+      await checkA11y(el);
     });
 
     it('hides theme selector with only one theme', async () => {
@@ -59,12 +64,14 @@ describe('dvfy-theme-switcher', () => {
       `);
       const select = el.querySelector('dvfy-select');
       expect(select).to.not.exist;
+      await checkA11y(el);
     });
 
     it('hides theme selector with no themes', async () => {
       const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
       const select = el.querySelector('dvfy-select');
       expect(select).to.not.exist;
+      await checkA11y(el);
     });
   });
 
@@ -72,11 +79,13 @@ describe('dvfy-theme-switcher', () => {
     it('defaults to light mode', async () => {
       const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
       expect(el.getAttribute('data-mode')).to.equal('light');
+      await checkA11y(el);
     });
 
     it('accepts default-mode=dark', async () => {
       const el = await fixture(html`<dvfy-theme-switcher default-mode="dark"></dvfy-theme-switcher>`);
       expect(el.getAttribute('data-mode')).to.equal('dark');
+      await checkA11y(el);
     });
 
     it('toggles mode on click', async () => {
@@ -91,6 +100,7 @@ describe('dvfy-theme-switcher', () => {
       expect(el.getAttribute('data-mode')).to.equal('dark');
       toggle.click();
       expect(el.getAttribute('data-mode')).to.equal('light');
+      await checkA11y(el);
     });
   });
 
@@ -99,12 +109,14 @@ describe('dvfy-theme-switcher', () => {
       const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
       const toggle = el.querySelector('.dvfy-ts__toggle');
       expect(toggle.getAttribute('role')).to.equal('switch');
+      await checkA11y(el);
     });
 
     it('toggle has aria-label', async () => {
       const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
       const toggle = el.querySelector('.dvfy-ts__toggle');
       expect(toggle.getAttribute('aria-label')).to.equal('Dark mode');
+      await checkA11y(el);
     });
 
     it('toggle aria-checked reflects mode', async () => {
@@ -113,6 +125,7 @@ describe('dvfy-theme-switcher', () => {
       expect(toggle.getAttribute('aria-checked')).to.equal('false');
       toggle.click();
       expect(toggle.getAttribute('aria-checked')).to.equal('true');
+      await checkA11y(el);
     });
   });
 
@@ -120,6 +133,7 @@ describe('dvfy-theme-switcher', () => {
     it('exposes addTheme method', async () => {
       const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
       expect(el.addTheme).to.be.a('function');
+      await checkA11y(el);
     });
 
     it('adds a theme dynamically', async () => {
@@ -129,6 +143,7 @@ describe('dvfy-theme-switcher', () => {
       // After adding 2 themes, select should appear
       const select = el.querySelector('dvfy-select');
       expect(select).to.exist;
+      await checkA11y(el);
     });
 
     it('does not add duplicate themes', async () => {
@@ -138,6 +153,7 @@ describe('dvfy-theme-switcher', () => {
       el.addTheme('second', 'Second');
       const options = el.querySelectorAll('dvfy-select option');
       expect(options.length).to.equal(2);
+      await checkA11y(el);
     });
   });
 
@@ -145,6 +161,7 @@ describe('dvfy-theme-switcher', () => {
     it('exposes removeTheme method', async () => {
       const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
       expect(el.removeTheme).to.be.a('function');
+      await checkA11y(el);
     });
   });
 
@@ -152,6 +169,7 @@ describe('dvfy-theme-switcher', () => {
     it('exposes setTheme method', async () => {
       const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
       expect(el.setTheme).to.be.a('function');
+      await checkA11y(el);
     });
   });
 
@@ -165,6 +183,7 @@ describe('dvfy-theme-switcher', () => {
       `);
       const select = el.querySelector('dvfy-select');
       expect(select).to.exist;
+      await checkA11y(el);
     });
 
     it('uses dropdown variant when specified', async () => {
@@ -176,6 +195,7 @@ describe('dvfy-theme-switcher', () => {
       `);
       const dropdown = el.querySelector('dvfy-dropdown');
       expect(dropdown).to.exist;
+      await checkA11y(el);
     });
   });
 

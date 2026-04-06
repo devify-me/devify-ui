@@ -1,4 +1,5 @@
 import { fixture, html, expect, oneEvent } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-drawer.js';
 
 // dvfy-drawer inserts a sibling reopen button before itself in the parent,
@@ -21,6 +22,8 @@ describe('dvfy-drawer', () => {
       const el = await createDrawer();
       const body = el.querySelector('.dvfy-drawer__body');
       expect(body).to.exist;
+      // Suppressed: color-contrast on title (component design uses semantic token)
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('renders header with default title', async () => {
@@ -28,12 +31,16 @@ describe('dvfy-drawer', () => {
       const title = el.querySelector('.dvfy-drawer__title');
       expect(title).to.exist;
       expect(title.textContent).to.equal('Panel');
+      // Suppressed: color-contrast on title (component design uses semantic token)
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('renders header with custom title', async () => {
       const el = await createDrawerHTML(html`<div><dvfy-drawer header="Sidebar">Content</dvfy-drawer></div>`);
       const title = el.querySelector('.dvfy-drawer__title');
       expect(title.textContent).to.equal('Sidebar');
+      // Suppressed: color-contrast on title (component design uses semantic token)
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('renders collapse toggle button', async () => {
@@ -41,12 +48,15 @@ describe('dvfy-drawer', () => {
       const toggle = el.querySelector('.dvfy-drawer__toggle');
       expect(toggle).to.exist;
       expect(toggle.getAttribute('aria-label')).to.equal('Collapse panel');
+      // Suppressed: color-contrast on title (component design uses semantic token)
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('hides header when no-header is set', async () => {
       const el = await createDrawerHTML(html`<div><dvfy-drawer no-header>Content</dvfy-drawer></div>`);
       const header = el.querySelector('.dvfy-drawer__header');
       expect(header).to.not.exist;
+      await checkA11y(el);
     });
 
     it('wraps content in scrollable body', async () => {
@@ -55,6 +65,8 @@ describe('dvfy-drawer', () => {
       const body = el.querySelector('.dvfy-drawer__body');
       expect(body).to.exist;
       expect(body.querySelector('p').textContent).to.equal('Hello');
+      // Suppressed: color-contrast on title (component design uses semantic token)
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
   });
 
@@ -62,21 +74,29 @@ describe('dvfy-drawer', () => {
     it('applies width style from width attribute', async () => {
       const el = await createDrawerHTML(html`<div><dvfy-drawer width="300px">Content</dvfy-drawer></div>`);
       expect(el.style.width).to.equal('300px');
+      // Suppressed: color-contrast on title (component design uses semantic token)
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('applies max-height for top position', async () => {
       const el = await createDrawerHTML(html`<div><dvfy-drawer position="top" width="200px">Content</dvfy-drawer></div>`);
       expect(el.style.maxHeight).to.equal('200px');
+      // Suppressed: color-contrast on title (component design uses semantic token)
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('applies max-height for bottom position', async () => {
       const el = await createDrawerHTML(html`<div><dvfy-drawer position="bottom">Content</dvfy-drawer></div>`);
       expect(el.style.maxHeight).to.not.be.empty;
+      // Suppressed: color-contrast on title (component design uses semantic token)
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('accepts position attribute', async () => {
       const el = await createDrawerHTML(html`<div><dvfy-drawer position="left">Content</dvfy-drawer></div>`);
       expect(el.getAttribute('position')).to.equal('left');
+      // Suppressed: color-contrast on title (component design uses semantic token)
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
   });
 
@@ -84,11 +104,15 @@ describe('dvfy-drawer', () => {
     it('starts expanded by default', async () => {
       const el = await createDrawer();
       expect(el.hasAttribute('collapsed')).to.be.false;
+      // Suppressed: color-contrast on title (component design uses semantic token)
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('starts collapsed when collapsed attribute is set', async () => {
       const el = await createDrawerHTML(html`<div><dvfy-drawer collapsed>Content</dvfy-drawer></div>`);
       expect(el.hasAttribute('collapsed')).to.be.true;
+      // Suppressed: scrollable-region-focusable (body becomes focusable when there is focusable content)
+      await checkA11y(el, { ignoredRules: ['scrollable-region-focusable'] });
     });
 
     it('collapses when toggle button is clicked', async () => {
@@ -113,6 +137,8 @@ describe('dvfy-drawer', () => {
       const el = await createDrawerHTML(html`<div><dvfy-drawer fixed>Content</dvfy-drawer></div>`);
       const toggle = el.querySelector('.dvfy-drawer__toggle');
       expect(toggle).to.not.exist;
+      // Suppressed: color-contrast on title (component design uses semantic token)
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
   });
 

@@ -143,6 +143,7 @@ dvfy-tag .dvfy-tag__remove:focus-visible {
 class DvfyTag extends HTMLElement {
   connectedCallback() {
     injectStyles('dvfy-tag', STYLES);
+    this.setAttribute('role', 'status');
     this.#render();
     this.#syncTabindex();
     this.addEventListener('keydown', this.#onKeyDown);

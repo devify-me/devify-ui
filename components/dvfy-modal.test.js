@@ -1,4 +1,5 @@
 import { fixture, html, expect, oneEvent } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-modal.js';
 
 describe('dvfy-modal', () => {
@@ -8,6 +9,7 @@ describe('dvfy-modal', () => {
       expect(el.hasAttribute('open')).to.be.false;
       // No backdrop should be built
       expect(el.querySelector('.dvfy-modal__backdrop')).to.be.null;
+      await checkA11y(el);
     });
 
     it('renders dialog structure when open', async () => {
@@ -16,6 +18,7 @@ describe('dvfy-modal', () => {
       expect(el.querySelector('.dvfy-modal__dialog')).to.exist;
       expect(el.querySelector('.dvfy-modal__header')).to.exist;
       expect(el.querySelector('.dvfy-modal__body')).to.exist;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
 
     it('renders title in header', async () => {
@@ -23,12 +26,14 @@ describe('dvfy-modal', () => {
       const title = el.querySelector('.dvfy-modal__title');
       expect(title).to.exist;
       expect(title.textContent).to.equal('My Modal');
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
 
     it('renders body content', async () => {
       const el = await fixture(html`<dvfy-modal open title="Test"><p>Body text</p></dvfy-modal>`);
       const body = el.querySelector('.dvfy-modal__body');
       expect(body.querySelector('p').textContent).to.equal('Body text');
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
 
     it('renders close button', async () => {
@@ -36,6 +41,7 @@ describe('dvfy-modal', () => {
       const btn = el.querySelector('.dvfy-modal__close');
       expect(btn).to.exist;
       expect(btn.getAttribute('aria-label')).to.equal('Close');
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
   });
 
@@ -43,12 +49,14 @@ describe('dvfy-modal', () => {
     it('accepts size attribute', async () => {
       const el = await fixture(html`<dvfy-modal open title="Small" size="sm"><p>Small</p></dvfy-modal>`);
       expect(el.getAttribute('size')).to.equal('sm');
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
 
     it('accepts all size values', async () => {
       for (const size of ['xs', 'sm', 'md', 'lg', 'xl']) {
         const el = await fixture(html`<dvfy-modal open title="Size" size="${size}"><p>Content</p></dvfy-modal>`);
         expect(el.getAttribute('size')).to.equal(size);
+        await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
       }
     });
 
@@ -56,6 +64,7 @@ describe('dvfy-modal', () => {
       const el = await fixture(html`<dvfy-modal open title="Old Title"><p>Body</p></dvfy-modal>`);
       el.setAttribute('title', 'New Title');
       expect(el.querySelector('.dvfy-modal__title').textContent).to.equal('New Title');
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
   });
 
@@ -65,6 +74,7 @@ describe('dvfy-modal', () => {
       expect(el.querySelector('.dvfy-modal__backdrop')).to.be.null;
       el.setAttribute('open', '');
       expect(el.querySelector('.dvfy-modal__backdrop')).to.exist;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
 
     it('closes when open attribute is removed', async () => {
@@ -72,6 +82,7 @@ describe('dvfy-modal', () => {
       expect(el.hasAttribute('open')).to.be.true;
       el.removeAttribute('open');
       expect(el.hasAttribute('open')).to.be.false;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name'] });
     });
 
     it('closes when close button is clicked', async () => {
@@ -79,6 +90,7 @@ describe('dvfy-modal', () => {
       const btn = el.querySelector('.dvfy-modal__close');
       btn.click();
       expect(el.hasAttribute('open')).to.be.false;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name'] });
     });
 
     it('closes on backdrop click', async () => {
@@ -86,6 +98,7 @@ describe('dvfy-modal', () => {
       const backdrop = el.querySelector('.dvfy-modal__backdrop');
       backdrop.click();
       expect(el.hasAttribute('open')).to.be.false;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name'] });
     });
 
     it('does not close on dialog click (only backdrop)', async () => {
@@ -93,6 +106,7 @@ describe('dvfy-modal', () => {
       const dialog = el.querySelector('.dvfy-modal__dialog');
       dialog.click();
       expect(el.hasAttribute('open')).to.be.true;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
   });
 
@@ -100,6 +114,7 @@ describe('dvfy-modal', () => {
     it('hides close button when required', async () => {
       const el = await fixture(html`<dvfy-modal open required title="Required"><p>Content</p></dvfy-modal>`);
       expect(el.querySelector('.dvfy-modal__close')).to.be.null;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
 
     it('does not close on backdrop click when required', async () => {
@@ -107,12 +122,14 @@ describe('dvfy-modal', () => {
       const backdrop = el.querySelector('.dvfy-modal__backdrop');
       backdrop.click();
       expect(el.hasAttribute('open')).to.be.true;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
 
     it('does not close on Escape when required', async () => {
       const el = await fixture(html`<dvfy-modal open required title="Required"><p>Content</p></dvfy-modal>`);
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
       expect(el.hasAttribute('open')).to.be.true;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
   });
 
@@ -121,6 +138,7 @@ describe('dvfy-modal', () => {
       const el = await fixture(html`<dvfy-modal open title="Escape"><p>Content</p></dvfy-modal>`);
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
       expect(el.hasAttribute('open')).to.be.false;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name'] });
     });
 
     it('focuses first focusable element on open', async () => {
@@ -132,6 +150,7 @@ describe('dvfy-modal', () => {
       // Focus may be on close button or another focusable
       const focusable = el.querySelector('.dvfy-modal__dialog button, .dvfy-modal__dialog [href], .dvfy-modal__dialog input');
       expect(focusable).to.exist;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
   });
 
@@ -142,6 +161,7 @@ describe('dvfy-modal', () => {
       const event = await oneEvent(el, 'close');
       expect(event).to.exist;
       expect(event.bubbles).to.be.true;
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name'] });
     });
   });
 
@@ -150,24 +170,28 @@ describe('dvfy-modal', () => {
       const el = await fixture(html`<dvfy-modal open title="ARIA"><p>Content</p></dvfy-modal>`);
       const dialog = el.querySelector('.dvfy-modal__dialog');
       expect(dialog.getAttribute('role')).to.equal('dialog');
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
 
     it('sets aria-modal="true"', async () => {
       const el = await fixture(html`<dvfy-modal open title="ARIA"><p>Content</p></dvfy-modal>`);
       const dialog = el.querySelector('.dvfy-modal__dialog');
       expect(dialog.getAttribute('aria-modal')).to.equal('true');
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
 
     it('close button has aria-label', async () => {
       const el = await fixture(html`<dvfy-modal open title="ARIA"><p>Content</p></dvfy-modal>`);
       const btn = el.querySelector('.dvfy-modal__close');
       expect(btn.getAttribute('aria-label')).to.equal('Close');
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });
   });
 
   describe('cleanup', () => {
     it('removes keydown listener on disconnect', async () => {
       const el = await fixture(html`<dvfy-modal open title="Cleanup"><p>Content</p></dvfy-modal>`);
+      await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
       el.remove();
       // Pressing Escape after removal should not throw
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));

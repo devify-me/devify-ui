@@ -139,6 +139,7 @@ class DvfyPageTransition extends HTMLElement {
   }
 
   connectedCallback() {
+    this.setAttribute('aria-hidden', 'true');
     this.#injectBaseStyles();
     this.#apply();
   }

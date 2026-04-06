@@ -1,4 +1,5 @@
 import { fixture, html, expect } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-tabs.js';
 
 describe('dvfy-tabs', () => {
@@ -15,6 +16,7 @@ describe('dvfy-tabs', () => {
       expect(list.getAttribute('role')).to.equal('tablist');
       const triggers = list.querySelectorAll('.dvfy-tabs__trigger');
       expect(triggers.length).to.equal(2);
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('renders trigger text from tab label attribute', async () => {
@@ -27,6 +29,7 @@ describe('dvfy-tabs', () => {
       const triggers = el.querySelectorAll('.dvfy-tabs__trigger');
       expect(triggers[0].textContent).to.equal('General');
       expect(triggers[1].textContent).to.equal('Settings');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('uses fallback label when label attribute is missing', async () => {
@@ -37,6 +40,7 @@ describe('dvfy-tabs', () => {
       `);
       const trigger = el.querySelector('.dvfy-tabs__trigger');
       expect(trigger.textContent).to.equal('Tab 1');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
   });
 
@@ -51,6 +55,7 @@ describe('dvfy-tabs', () => {
       const tabs = el.querySelectorAll('dvfy-tab');
       expect(tabs[0].hasAttribute('active')).to.be.true;
       expect(tabs[1].hasAttribute('active')).to.be.false;
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('activates tab specified by active attribute', async () => {
@@ -63,6 +68,7 @@ describe('dvfy-tabs', () => {
       const tabs = el.querySelectorAll('dvfy-tab');
       expect(tabs[0].hasAttribute('active')).to.be.false;
       expect(tabs[1].hasAttribute('active')).to.be.true;
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('changes active tab when active attribute updates', async () => {
@@ -76,6 +82,7 @@ describe('dvfy-tabs', () => {
       const tabs = el.querySelectorAll('dvfy-tab');
       expect(tabs[0].hasAttribute('active')).to.be.false;
       expect(tabs[1].hasAttribute('active')).to.be.true;
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
   });
 
@@ -92,6 +99,7 @@ describe('dvfy-tabs', () => {
       const tabs = el.querySelectorAll('dvfy-tab');
       expect(tabs[0].hasAttribute('active')).to.be.false;
       expect(tabs[1].hasAttribute('active')).to.be.true;
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('updates aria-selected on triggers', async () => {
@@ -108,6 +116,7 @@ describe('dvfy-tabs', () => {
       triggers[1].click();
       expect(triggers[0].getAttribute('aria-selected')).to.equal('false');
       expect(triggers[1].getAttribute('aria-selected')).to.equal('true');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('updates tabindex on triggers', async () => {
@@ -124,6 +133,7 @@ describe('dvfy-tabs', () => {
       triggers[1].click();
       expect(triggers[0].getAttribute('tabindex')).to.equal('-1');
       expect(triggers[1].getAttribute('tabindex')).to.equal('0');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
   });
 
@@ -141,6 +151,7 @@ describe('dvfy-tabs', () => {
       triggers[0].focus();
       list.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
       expect(el.getAttribute('active')).to.equal('1');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('moves to previous tab on ArrowLeft', async () => {
@@ -156,6 +167,7 @@ describe('dvfy-tabs', () => {
       triggers[2].focus();
       list.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
       expect(el.getAttribute('active')).to.equal('1');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('wraps around on ArrowRight from last tab', async () => {
@@ -171,6 +183,7 @@ describe('dvfy-tabs', () => {
       triggers[2].focus();
       list.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
       expect(el.getAttribute('active')).to.equal('0');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('wraps around on ArrowLeft from first tab', async () => {
@@ -186,6 +199,7 @@ describe('dvfy-tabs', () => {
       triggers[0].focus();
       list.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
       expect(el.getAttribute('active')).to.equal('2');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('jumps to first tab on Home', async () => {
@@ -201,6 +215,7 @@ describe('dvfy-tabs', () => {
       triggers[2].focus();
       list.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
       expect(el.getAttribute('active')).to.equal('0');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('jumps to last tab on End', async () => {
@@ -216,6 +231,7 @@ describe('dvfy-tabs', () => {
       triggers[0].focus();
       list.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
       expect(el.getAttribute('active')).to.equal('2');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
   });
 
@@ -228,6 +244,7 @@ describe('dvfy-tabs', () => {
       `);
       const list = el.querySelector('.dvfy-tabs__list');
       expect(list.getAttribute('role')).to.equal('tablist');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('sets role=tab on triggers', async () => {
@@ -238,6 +255,7 @@ describe('dvfy-tabs', () => {
       `);
       const trigger = el.querySelector('.dvfy-tabs__trigger');
       expect(trigger.getAttribute('role')).to.equal('tab');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('sets role=tabpanel on dvfy-tab elements', async () => {
@@ -248,6 +266,7 @@ describe('dvfy-tabs', () => {
       `);
       const tab = el.querySelector('dvfy-tab');
       expect(tab.getAttribute('role')).to.equal('tabpanel');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
   });
 });

@@ -26,6 +26,9 @@ Use this checklist when auditing or reviewing a `dvfy-*` component for productio
 - [ ] Color contrast meets WCAG 2.1 AA (4.5:1 text, 3:1 UI)
 - [ ] Focus indicator visible (uses `--dvfy-ring-*` tokens)
 - [ ] `aria-disabled` and `disabled` attribute behave consistently
+- [ ] Functional test includes `await checkA11y(el)` at end of each test case
+- [ ] If component is interactive (modal, dropdown, nav, tabs): dedicated `*.a11y.test.js` file with focus trap, keyboard nav, ARIA attribute tests
+- [ ] Any axe violations intentionally suppressed are documented with reason (see `docs/a11y-testing-guide.md`)
 
 ## Keyboard Navigation
 
@@ -41,6 +44,16 @@ Use this checklist when auditing or reviewing a `dvfy-*` component for productio
 - [ ] Events bubble (`bubbles: true`)
 - [ ] Event `detail` contains relevant data
 - [ ] Event listeners cleaned up in `disconnectedCallback`
+
+## Accessibility Testing
+
+- [ ] All functional tests call `await checkA11y(el)` at the end (see `docs/a11y-testing-guide.md` for pattern)
+- [ ] axe-core violations resolved OR intentionally suppressed with documented reason
+- [ ] If interactive (modal, dropdown, nav, tabs): create dedicated `ComponentName.a11y.test.js` file with:
+  - Focus management tests (initial focus, focus trap, focus restore)
+  - Keyboard navigation tests (Tab, Escape, Arrow keys)
+  - ARIA attribute tests (role, aria-expanded, aria-checked, etc.)
+- [ ] Component passes WCAG 2.1 AA compliance (see `docs/wcag-compliance.md` for status)
 
 ## WCA Manifest
 

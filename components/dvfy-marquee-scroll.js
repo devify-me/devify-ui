@@ -128,6 +128,7 @@ class DvfyMarqueeScroll extends HTMLElement {
 
   connectedCallback() {
     injectStyles('dvfy-marquee-scroll', STYLES);
+    this.setAttribute('aria-hidden', 'true');
 
     this.#render();
     this.#setupMotionQuery();

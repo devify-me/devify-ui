@@ -1,4 +1,5 @@
 import { fixture, html, expect, oneEvent } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-pagination.js';
 
 describe('dvfy-pagination', () => {
@@ -7,6 +8,7 @@ describe('dvfy-pagination', () => {
       const el = await fixture(html`<dvfy-pagination total="10"></dvfy-pagination>`);
       expect(el.getAttribute('role')).to.equal('navigation');
       expect(el.getAttribute('aria-label')).to.equal('Pagination');
+      await checkA11y(el);
     });
 
     it('renders prev and next buttons', async () => {
@@ -15,6 +17,7 @@ describe('dvfy-pagination', () => {
       // First is prev, last is next
       expect(btns[0].getAttribute('aria-label')).to.equal('Previous page');
       expect(btns[btns.length - 1].getAttribute('aria-label')).to.equal('Next page');
+      await checkA11y(el);
     });
 
     it('renders page buttons between prev and next', async () => {
@@ -22,6 +25,7 @@ describe('dvfy-pagination', () => {
       const btns = el.querySelectorAll('.dvfy-pagination__btn');
       // prev + 5 pages + next = 7
       expect(btns.length).to.equal(7);
+      await checkA11y(el);
     });
 
     it('marks current page with aria-current', async () => {
@@ -29,12 +33,14 @@ describe('dvfy-pagination', () => {
       const current = el.querySelector('[aria-current="page"]');
       expect(current).to.exist;
       expect(current.textContent).to.equal('3');
+      await checkA11y(el);
     });
 
     it('renders ellipsis for large page counts', async () => {
       const el = await fixture(html`<dvfy-pagination total="20" current="10" max-visible="5"></dvfy-pagination>`);
       const ellipses = el.querySelectorAll('.dvfy-pagination__ellipsis');
       expect(ellipses.length).to.be.greaterThan(0);
+      await checkA11y(el);
     });
   });
 
@@ -43,6 +49,7 @@ describe('dvfy-pagination', () => {
       const el = await fixture(html`<dvfy-pagination total="10"></dvfy-pagination>`);
       const current = el.querySelector('[aria-current="page"]');
       expect(current.textContent).to.equal('1');
+      await checkA11y(el);
     });
 
     it('defaults total to 1 when not set', async () => {
@@ -50,12 +57,14 @@ describe('dvfy-pagination', () => {
       const btns = el.querySelectorAll('.dvfy-pagination__btn');
       // prev + 1 page + next = 3
       expect(btns.length).to.equal(3);
+      await checkA11y(el);
     });
 
     it('clamps current to total', async () => {
       const el = await fixture(html`<dvfy-pagination total="5" current="10"></dvfy-pagination>`);
       const current = el.querySelector('[aria-current="page"]');
       expect(current.textContent).to.equal('5');
+      await checkA11y(el);
     });
 
     it('re-renders when total changes', async () => {
@@ -64,6 +73,7 @@ describe('dvfy-pagination', () => {
       const btns = el.querySelectorAll('.dvfy-pagination__btn');
       // prev + 5 pages + next = 7
       expect(btns.length).to.equal(7);
+      await checkA11y(el);
     });
 
     it('re-renders when current changes', async () => {
@@ -71,6 +81,7 @@ describe('dvfy-pagination', () => {
       el.setAttribute('current', '3');
       const current = el.querySelector('[aria-current="page"]');
       expect(current.textContent).to.equal('3');
+      await checkA11y(el);
     });
 
     it('respects max-visible attribute', async () => {
@@ -78,6 +89,7 @@ describe('dvfy-pagination', () => {
       // Should show fewer page buttons (plus ellipsis)
       const pageButtons = el.querySelectorAll('.dvfy-pagination__btn:not([aria-label])');
       expect(pageButtons.length).to.be.at.most(5);
+      await checkA11y(el);
     });
   });
 
@@ -86,12 +98,14 @@ describe('dvfy-pagination', () => {
       const el = await fixture(html`<dvfy-pagination total="5" current="1"></dvfy-pagination>`);
       const prev = el.querySelector('[aria-label="Previous page"]');
       expect(prev.disabled).to.be.true;
+      await checkA11y(el);
     });
 
     it('disables next button on last page', async () => {
       const el = await fixture(html`<dvfy-pagination total="5" current="5"></dvfy-pagination>`);
       const next = el.querySelector('[aria-label="Next page"]');
       expect(next.disabled).to.be.true;
+      await checkA11y(el);
     });
 
     it('enables both buttons on middle page', async () => {
@@ -100,6 +114,7 @@ describe('dvfy-pagination', () => {
       const next = el.querySelector('[aria-label="Next page"]');
       expect(prev.disabled).to.be.false;
       expect(next.disabled).to.be.false;
+      await checkA11y(el);
     });
   });
 
@@ -110,6 +125,7 @@ describe('dvfy-pagination', () => {
       setTimeout(() => page2Btn.click());
       const event = await oneEvent(el, 'page-change');
       expect(event.detail.page).to.equal(2);
+      await checkA11y(el);
     });
 
     it('fires page-change on next button click', async () => {
@@ -118,6 +134,7 @@ describe('dvfy-pagination', () => {
       setTimeout(() => next.click());
       const event = await oneEvent(el, 'page-change');
       expect(event.detail.page).to.equal(2);
+      await checkA11y(el);
     });
 
     it('fires page-change on prev button click', async () => {
@@ -126,6 +143,7 @@ describe('dvfy-pagination', () => {
       setTimeout(() => prev.click());
       const event = await oneEvent(el, 'page-change');
       expect(event.detail.page).to.equal(2);
+      await checkA11y(el);
     });
 
     it('updates current attribute after page-change', async () => {
@@ -134,6 +152,7 @@ describe('dvfy-pagination', () => {
       setTimeout(() => page3Btn.click());
       await oneEvent(el, 'page-change');
       expect(el.getAttribute('current')).to.equal('3');
+      await checkA11y(el);
     });
   });
 
@@ -144,6 +163,7 @@ describe('dvfy-pagination', () => {
       btns[0].focus();
       el.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', bubbles: true }));
       expect(document.activeElement).to.equal(btns[1]);
+      await checkA11y(el);
     });
 
     it('navigates left with ArrowLeft', async () => {
@@ -152,6 +172,7 @@ describe('dvfy-pagination', () => {
       btns[1].focus();
       el.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft', bubbles: true }));
       expect(document.activeElement).to.equal(btns[0]);
+      await checkA11y(el);
     });
 
     it('jumps to first with Home', async () => {
@@ -160,6 +181,7 @@ describe('dvfy-pagination', () => {
       btns[3].focus();
       el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home', bubbles: true }));
       expect(document.activeElement).to.equal(btns[0]);
+      await checkA11y(el);
     });
 
     it('jumps to last with End', async () => {
@@ -168,6 +190,7 @@ describe('dvfy-pagination', () => {
       btns[0].focus();
       el.dispatchEvent(new KeyboardEvent('keydown', { key: 'End', bubbles: true }));
       expect(document.activeElement).to.equal(btns[btns.length - 1]);
+      await checkA11y(el);
     });
   });
 
@@ -175,11 +198,13 @@ describe('dvfy-pagination', () => {
     it('sets role=navigation', async () => {
       const el = await fixture(html`<dvfy-pagination total="5"></dvfy-pagination>`);
       expect(el.getAttribute('role')).to.equal('navigation');
+      await checkA11y(el);
     });
 
     it('sets aria-label=Pagination', async () => {
       const el = await fixture(html`<dvfy-pagination total="5"></dvfy-pagination>`);
       expect(el.getAttribute('aria-label')).to.equal('Pagination');
+      await checkA11y(el);
     });
   });
 });

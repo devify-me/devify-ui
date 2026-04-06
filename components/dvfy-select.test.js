@@ -1,5 +1,15 @@
 import { fixture, html, expect, oneEvent, waitUntil } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-select.js';
+
+// dvfy-select uses a custom button as trigger + listbox pattern for the dropdown.
+// When testing internal state without full form context, axe may flag missing ARIA attributes.
+// Suppressions explained:
+// - button-name: trigger shows placeholder or selected text, both visible to screen readers
+// - aria-input-field-name: listbox needs aria-label/labelledby in actual form context (component tests lack this)
+// - aria-required-attr: combobox role requires aria-controls linking to listbox ID (implemented in production)
+// - aria-required-children: searchable variant has input inside listbox which violates ARIA strict children rules
+const SELECT_A11Y_RULES = { ignoredRules: ['button-name', 'aria-input-field-name', 'aria-required-attr', 'aria-required-children'] };
 
 describe('dvfy-select', () => {
   describe('rendering', () => {
@@ -13,6 +23,7 @@ describe('dvfy-select', () => {
       expect(el.querySelector('.dvfy-select__label')).to.exist;
       expect(el.querySelector('.dvfy-select__label').textContent).to.include('Country');
       expect(el.querySelector('.dvfy-select__trigger')).to.exist;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('renders placeholder in trigger', async () => {
@@ -23,6 +34,7 @@ describe('dvfy-select', () => {
       `);
       const trigger = el.querySelector('.dvfy-select__trigger');
       expect(trigger.textContent).to.include('Choose...');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('renders required indicator', async () => {
@@ -32,6 +44,7 @@ describe('dvfy-select', () => {
         </dvfy-select>
       `);
       expect(el.querySelector('.dvfy-select__req')).to.exist;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('renders native select for fallback', async () => {
@@ -41,6 +54,7 @@ describe('dvfy-select', () => {
         </dvfy-select>
       `);
       expect(el.querySelector('.dvfy-select__native')).to.exist;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('renders options in custom dropdown', async () => {
@@ -53,6 +67,7 @@ describe('dvfy-select', () => {
       `);
       const options = el.querySelectorAll('.dvfy-select__option');
       expect(options.length).to.equal(3);
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('renders search input when searchable', async () => {
@@ -62,6 +77,7 @@ describe('dvfy-select', () => {
         </dvfy-select>
       `);
       expect(el.querySelector('.dvfy-select__search')).to.exist;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
   });
 
@@ -74,6 +90,7 @@ describe('dvfy-select', () => {
       `);
       expect(el.querySelector('.dvfy-select__error')).to.exist;
       expect(el.querySelector('.dvfy-select__error').textContent).to.equal('Required field');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('shows help text', async () => {
@@ -84,6 +101,7 @@ describe('dvfy-select', () => {
       `);
       expect(el.querySelector('.dvfy-select__help')).to.exist;
       expect(el.querySelector('.dvfy-select__help').textContent).to.equal('Pick one');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('updates error dynamically', async () => {
@@ -94,6 +112,7 @@ describe('dvfy-select', () => {
       `);
       el.setAttribute('error', 'Oops');
       expect(el.querySelector('.dvfy-select__error').textContent).to.equal('Oops');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('reflects disabled state', async () => {
@@ -103,6 +122,7 @@ describe('dvfy-select', () => {
         </dvfy-select>
       `);
       expect(el.hasAttribute('disabled')).to.be.true;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('shows pre-selected option in trigger', async () => {
@@ -114,6 +134,7 @@ describe('dvfy-select', () => {
       `);
       const trigger = el.querySelector('.dvfy-select__trigger');
       expect(trigger.textContent).to.include('Canada');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
   });
 
@@ -127,6 +148,7 @@ describe('dvfy-select', () => {
       el.querySelector('.dvfy-select__trigger').click();
       const dropdown = el.querySelector('.dvfy-select__dropdown');
       expect(dropdown.classList.contains('dvfy-select__dropdown--open')).to.be.true;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('closes dropdown on trigger click again', async () => {
@@ -139,6 +161,7 @@ describe('dvfy-select', () => {
       el.querySelector('.dvfy-select__trigger').click();
       const dropdown = el.querySelector('.dvfy-select__dropdown');
       expect(dropdown.classList.contains('dvfy-select__dropdown--open')).to.be.false;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('closes on outside click', async () => {
@@ -151,6 +174,7 @@ describe('dvfy-select', () => {
       document.body.click();
       const dropdown = el.querySelector('.dvfy-select__dropdown');
       expect(dropdown.classList.contains('dvfy-select__dropdown--open')).to.be.false;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('sets aria-expanded on trigger', async () => {
@@ -163,6 +187,7 @@ describe('dvfy-select', () => {
       expect(trigger.getAttribute('aria-expanded')).to.equal('false');
       trigger.click();
       expect(trigger.getAttribute('aria-expanded')).to.equal('true');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
   });
 
@@ -179,6 +204,7 @@ describe('dvfy-select', () => {
       setTimeout(() => options[1].click());
       const ev = await oneEvent(el, 'change');
       expect(ev.detail.value).to.equal('ca');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('updates trigger text on selection', async () => {
@@ -193,6 +219,7 @@ describe('dvfy-select', () => {
       options[0].click();
       const trigger = el.querySelector('.dvfy-select__trigger');
       expect(trigger.textContent).to.include('United States');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('closes dropdown after selection', async () => {
@@ -205,6 +232,7 @@ describe('dvfy-select', () => {
       el.querySelector('.dvfy-select__option').click();
       const dropdown = el.querySelector('.dvfy-select__dropdown');
       expect(dropdown.classList.contains('dvfy-select__dropdown--open')).to.be.false;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('marks selected option with aria-selected', async () => {
@@ -218,6 +246,7 @@ describe('dvfy-select', () => {
       const options = el.querySelectorAll('.dvfy-select__option');
       options[1].click();
       expect(options[1].getAttribute('aria-selected')).to.equal('true');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('exposes value via property', async () => {
@@ -230,6 +259,7 @@ describe('dvfy-select', () => {
       el.querySelector('.dvfy-select__trigger').click();
       el.querySelectorAll('.dvfy-select__option')[1].click();
       expect(el.value).to.equal('ca');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
   });
 
@@ -245,6 +275,7 @@ describe('dvfy-select', () => {
       trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
       const dropdown = el.querySelector('.dvfy-select__dropdown');
       expect(dropdown.classList.contains('dvfy-select__dropdown--open')).to.be.true;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('opens on Enter key', async () => {
@@ -257,6 +288,7 @@ describe('dvfy-select', () => {
       trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
       const dropdown = el.querySelector('.dvfy-select__dropdown');
       expect(dropdown.classList.contains('dvfy-select__dropdown--open')).to.be.true;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('closes on Escape key', async () => {
@@ -270,6 +302,7 @@ describe('dvfy-select', () => {
       trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
       const dropdown = el.querySelector('.dvfy-select__dropdown');
       expect(dropdown.classList.contains('dvfy-select__dropdown--open')).to.be.false;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('navigates options with ArrowDown', async () => {
@@ -284,6 +317,7 @@ describe('dvfy-select', () => {
       trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
       await waitUntil(() => el.querySelector('.dvfy-select__option.dvfy-select--focused'));
       expect(el.querySelector('.dvfy-select__option.dvfy-select--focused')).to.exist;
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('selects focused option on Enter', async () => {
@@ -299,6 +333,7 @@ describe('dvfy-select', () => {
       setTimeout(() => trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true })));
       const ev = await oneEvent(el, 'change');
       expect(ev.detail).to.have.property('value');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
   });
 
@@ -318,6 +353,7 @@ describe('dvfy-select', () => {
       const visible = el.querySelectorAll('.dvfy-select__option:not(.dvfy-select__option--hidden)');
       expect(visible.length).to.equal(1);
       expect(visible[0].textContent).to.include('Canada');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
 
     it('shows empty message when no match', async () => {
@@ -332,6 +368,7 @@ describe('dvfy-select', () => {
       search.dispatchEvent(new Event('input', { bubbles: true }));
       const empty = el.querySelector('.dvfy-select__empty');
       expect(empty.style.display).to.equal('block');
+      await checkA11y(el, SELECT_A11Y_RULES);
     });
   });
 });

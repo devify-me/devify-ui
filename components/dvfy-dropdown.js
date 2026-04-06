@@ -165,6 +165,7 @@ class DvfyDropdown extends HTMLElement {
   };
 
   #close() {
+    this.#items.forEach(i => i.removeAttribute('data-active'));
     this.removeAttribute('open');
     this.#activeIndex = -1;
     this.#trigger?.focus();

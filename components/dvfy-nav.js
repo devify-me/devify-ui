@@ -106,6 +106,7 @@ class DvfyNav extends HTMLElement {
     if (name === 'href') link.href = sanitizeHref(this.getAttribute('href'));
     if (name === 'icon') this.#updateIcon(link);
     if (name === 'label') this.#updateLabel(link);
+    if (name === 'active') this.#updateAriaCurrent(link);
     if (name === 'active' || name === 'href') this.#detectActive();
   }
 
@@ -131,6 +132,7 @@ class DvfyNav extends HTMLElement {
     label.textContent = this.getAttribute('label') || slotText || '';
     link.appendChild(label);
 
+    this.#updateAriaCurrent(link);
     this.appendChild(link);
   }
 
@@ -154,6 +156,14 @@ class DvfyNav extends HTMLElement {
     if (labelEl) labelEl.textContent = this.getAttribute('label') || '';
   }
 
+  #updateAriaCurrent(link) {
+    if (this.hasAttribute('active')) {
+      link.setAttribute('aria-current', 'page');
+    } else {
+      link.removeAttribute('aria-current');
+    }
+  }
+
   #detectActive() {
     // If active is explicitly set by the user (not auto-detection), respect it
     if (this.hasAttribute('active') && !this.#autoActive) return;
@@ -171,6 +181,9 @@ class DvfyNav extends HTMLElement {
       this.#autoActive = false;
       this.removeAttribute('active');
     }
+
+    const link = this.querySelector('.dvfy-nav__link');
+    if (link) this.#updateAriaCurrent(link);
   }
 }
 
