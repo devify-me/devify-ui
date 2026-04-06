@@ -37,27 +37,27 @@ Add validation states (error, warning, success) to form controls + new dvfy-fiel
 **Pattern documented in FORM_VALIDATION_PATTERN.md — identical 6-step pattern for all 4 components**
 
 - [x] dvfy-input: Add state attribute + Light DOM slots + tests (COMPLETE, reviewed, tested)
-- [ ] dvfy-select: Apply pattern (fix token from --dvfy-danger-border to --dvfy-input-error)
-- [ ] dvfy-textarea: Apply pattern (identical to dvfy-input)
-- [ ] dvfy-date-picker: Apply pattern (state styling on trigger button)
-- [ ] Verify Phase 1: All form controls passing tests, lint, contrast
+- [x] dvfy-select: Apply pattern (fixed token from --dvfy-danger-border to --dvfy-input-error, 5abb2f3)
+- [x] dvfy-textarea: Apply pattern (identical to dvfy-input, 6cc2e91)
+- [x] dvfy-date-picker: Apply pattern (state styling on trigger button, d701448)
+- [x] Verify Phase 1: All form controls passing tests, lint, contrast (1370 tests pass, 90/90 WCAG AA)
 
 **Reference:** See FORM_VALIDATION_PATTERN.md for 6-step checklist (observedAttributes → attributeChangedCallback → #build() preservation → #appendMessages() branches → CSS → JSDoc → tests)
 
 ### Phase 2: dvfy-field-group (New Component)
 
-- [ ] Create dvfy-field-group.js (<fieldset> + <legend> structure)
-- [ ] Add dvfy-field-group to barrel export (devify.js)
-- [ ] Create dvfy-field-group.test.js (functional tests)
-- [ ] Create dvfy-field-group.a11y.test.js (a11y tests)
-- [ ] Add dvfy-field-group to catalog
-- [ ] Verify Phase 2: Field-group tests pass, lint, analyze
+- [x] Create dvfy-field-group.js (<fieldset> + <legend> structure, 2221ad3)
+- [x] Add dvfy-field-group to barrel export (devify.js, 2221ad3)
+- [x] Create dvfy-field-group.test.js (functional tests, 24 tests, 2221ad3)
+- [x] Create dvfy-field-group.a11y.test.js (a11y tests, 31 tests, 3e255f7)
+- [x] Add dvfy-field-group to catalog (registered in catalog/data.js, 2221ad3)
+- [x] Verify Phase 2: Field-group tests pass, lint, analyze (1350 tests, WCA manifest updated)
 
 ### Phase 3: Integration & Testing
 
-- [ ] Full test suite (npm test — all pass)
-- [ ] Contrast audit (npm run contrast:ci — 90/90 WCAG AA)
-- [ ] Lint & build (npm run lint, npm run build)
+- [x] Full test suite (npm test — 1370 tests pass)
+- [x] Contrast audit (npm run contrast:ci — 90/90 WCAG AA)
+- [x] Lint & build (npm run lint clean, npm run build 500.6 KB)
 - [ ] Manual verification (keyboard nav, screen reader)
 
 ### Phase 4: Documentation
