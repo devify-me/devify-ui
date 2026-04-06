@@ -1,4 +1,5 @@
 import { fixture, html, expect, oneEvent } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-table.js';
 
 const TABLE_HTML = html`
@@ -20,22 +21,26 @@ describe('dvfy-table', () => {
       const el = await fixture(TABLE_HTML);
       expect(el.querySelector('.dvfy-table__wrapper')).to.exist;
       expect(el.querySelector('table')).to.exist;
+      await checkA11y(el);
     });
 
     it('preserves original rows', async () => {
       const el = await fixture(TABLE_HTML);
       const rows = el.querySelectorAll('tbody tr');
       expect(rows.length).to.equal(3);
+      await checkA11y(el);
     });
 
     it('applies striped attribute', async () => {
       const el = await fixture(TABLE_HTML);
       expect(el.hasAttribute('striped')).to.be.true;
+      await checkA11y(el);
     });
 
     it('applies hoverable attribute', async () => {
       const el = await fixture(TABLE_HTML);
       expect(el.hasAttribute('hoverable')).to.be.true;
+      await checkA11y(el);
     });
 
     it('accepts compact attribute', async () => {
@@ -45,6 +50,7 @@ describe('dvfy-table', () => {
         </dvfy-table>
       `);
       expect(el.hasAttribute('compact')).to.be.true;
+      await checkA11y(el);
     });
 
     it('accepts responsive attribute with overflow wrapper', async () => {
@@ -55,6 +61,7 @@ describe('dvfy-table', () => {
       `);
       expect(el.hasAttribute('responsive')).to.be.true;
       expect(el.querySelector('.dvfy-table__wrapper')).to.exist;
+      await checkA11y(el);
     });
   });
 
@@ -63,6 +70,7 @@ describe('dvfy-table', () => {
       const el = await fixture(TABLE_HTML);
       const indicators = el.querySelectorAll('.dvfy-table__sort');
       expect(indicators.length).to.equal(2);
+      await checkA11y(el);
     });
 
     it('fires sort event on header click', async () => {
@@ -72,6 +80,7 @@ describe('dvfy-table', () => {
       const ev = await oneEvent(el, 'sort');
       expect(ev.detail).to.have.property('column');
       expect(ev.detail).to.have.property('direction');
+      await checkA11y(el);
     });
 
     it('toggles sort direction on repeated clicks', async () => {
@@ -82,6 +91,7 @@ describe('dvfy-table', () => {
       th.click();
       const dir2 = th.getAttribute('data-sort');
       expect(dir1).to.not.equal(dir2);
+      await checkA11y(el);
     });
 
     it('sorts rows alphabetically', async () => {
@@ -91,6 +101,7 @@ describe('dvfy-table', () => {
       const rows = el.querySelectorAll('tbody tr');
       const names = Array.from(rows).map(r => r.cells[0].textContent);
       expect(names).to.deep.equal(['Alice', 'Bob', 'Carol']);
+      await checkA11y(el);
     });
 
     it('resets other column sort indicators', async () => {
@@ -99,6 +110,7 @@ describe('dvfy-table', () => {
       headers[0].click();
       headers[1].click();
       expect(headers[0].getAttribute('data-sort')).to.not.be.oneOf(['asc', 'desc']);
+      await checkA11y(el);
     });
   });
 
@@ -116,6 +128,7 @@ describe('dvfy-table', () => {
       expect(headerCb).to.exist;
       const rowCbs = el.querySelectorAll('td.dvfy-table__checkbox input[type="checkbox"]');
       expect(rowCbs.length).to.equal(2);
+      await checkA11y(el);
     });
 
     it('fires selection-change event on row select', async () => {
@@ -134,6 +147,7 @@ describe('dvfy-table', () => {
       });
       const ev = await oneEvent(el, 'selection-change');
       expect(ev.detail.selected).to.deep.equal([0]);
+      await checkA11y(el);
     });
 
     it('selects all via header checkbox', async () => {
@@ -152,6 +166,7 @@ describe('dvfy-table', () => {
       });
       const ev = await oneEvent(el, 'selection-change');
       expect(ev.detail.selected).to.deep.equal([0, 1]);
+      await checkA11y(el);
     });
 
     it('applies selected class to checked rows', async () => {
@@ -168,6 +183,7 @@ describe('dvfy-table', () => {
       rowCb.dispatchEvent(new Event('change', { bubbles: true }));
       const row = el.querySelector('tbody tr');
       expect(row.classList.contains('dvfy-table__row--selected')).to.be.true;
+      await checkA11y(el);
     });
   });
 
@@ -184,6 +200,7 @@ describe('dvfy-table', () => {
       const search = el.querySelector('.dvfy-table__search input');
       expect(search).to.exist;
       expect(search.getAttribute('aria-label')).to.equal('Search table');
+      await checkA11y(el);
     });
 
     it('filters rows based on search input', async () => {
@@ -201,6 +218,7 @@ describe('dvfy-table', () => {
       const rows = el.querySelectorAll('tbody tr');
       const visible = Array.from(rows).filter(r => r.style.display !== 'none');
       expect(visible.length).to.equal(1);
+      await checkA11y(el);
     });
 
     it('shows all rows when search is cleared', async () => {
@@ -220,6 +238,7 @@ describe('dvfy-table', () => {
       const rows = el.querySelectorAll('tbody tr');
       const visible = Array.from(rows).filter(r => r.style.display !== 'none');
       expect(visible.length).to.equal(2);
+      await checkA11y(el);
     });
   });
 
@@ -238,6 +257,7 @@ describe('dvfy-table', () => {
       `);
       const filterIcon = el.querySelector('.dvfy-table__filter-icon');
       expect(filterIcon).to.exist;
+      await checkA11y(el);
     });
 
     it('opens filter panel on icon click', async () => {
@@ -256,6 +276,7 @@ describe('dvfy-table', () => {
       filterIcon.click();
       const panel = el.querySelector('.dvfy-table__filter-panel');
       expect(panel).to.exist;
+      await checkA11y(el);
     });
 
     it('fires filter-change event when filter is applied', async () => {
@@ -280,6 +301,7 @@ describe('dvfy-table', () => {
       const ev = await oneEvent(el, 'filter-change');
       expect(ev.detail).to.have.property('column');
       expect(ev.detail).to.have.property('values');
+      await checkA11y(el);
     });
   });
 });
