@@ -44,6 +44,7 @@ import { injectStyles } from '../utils/styles.js';
 const STYLES = `
 dvfy-table {
   display: block;
+  width: 100%;
   font-family: var(--dvfy-font-sans);
   color: var(--dvfy-text-primary);
   container-type: inline-size;
@@ -56,6 +57,20 @@ dvfy-table {
 dvfy-table[responsive] .dvfy-table__wrapper {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
+}
+
+/* Narrow (< 48rem): enable horizontal scroll via container query */
+@container dvfy-table (max-width: 47.99rem) {
+  .dvfy-table__wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--dvfy-border-default);
+    border-radius: var(--dvfy-radius-lg);
+  }
+
+  dvfy-table table {
+    min-width: 100%;
+  }
 }
 
 .dvfy-table__search {
@@ -118,10 +133,27 @@ dvfy-table th[data-sort] {
 dvfy-table th[data-sort]:hover {
   background: var(--dvfy-hover-bg);
 }
-dvfy-table th[data-sort] .dvfy-table__sort {
-  font-size: var(--dvfy-text-xs);
-  color: var(--dvfy-text-muted);
+dvfy-table th[data-sort]:focus {
+  outline: 2px solid var(--dvfy-border-focus);
+  outline-offset: -2px;
+  border-radius: var(--dvfy-radius-sm);
+}
+
+/* Sort indicator triangle */
+.dvfy-table__sort {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
   margin-left: var(--dvfy-space-1);
+  font-size: 0.75rem;
+  line-height: 1;
+  color: var(--dvfy-text-muted);
+  flex-shrink: 0;
+  transition: color var(--dvfy-duration-fast) var(--dvfy-ease-out);
+}
+
+.dvfy-table__sort--active {
+  color: var(--dvfy-primary-bg);
 }
 
 /* Header cell content layout */
@@ -167,6 +199,11 @@ dvfy-table th[data-sort] .dvfy-table__sort {
 }
 .dvfy-table__filter-icon:hover .dvfy-table__filter-line {
   background: var(--dvfy-text-primary);
+}
+.dvfy-table__filter-icon:focus-visible {
+  outline: 2px solid var(--dvfy-border-focus);
+  outline-offset: -2px;
+  border-radius: var(--dvfy-radius-sm);
 }
 .dvfy-table__filter-icon--active {
   background: var(--dvfy-primary-bg);
@@ -816,9 +853,11 @@ class DvfyTable extends HTMLElement {
     if (checkedValues.size === filterState.allValues.length) {
       filterState.checkedValues = null;
       filterState.icon.classList.remove('dvfy-table__filter-icon--active');
+      filterState.icon.setAttribute('aria-label', `Filter column`);
     } else {
       filterState.checkedValues = checkedValues;
       filterState.icon.classList.add('dvfy-table__filter-icon--active');
+      filterState.icon.setAttribute('aria-label', `Filter column (${checkedValues.size} selected)`);
     }
 
     this.#applyAllFilters();
@@ -898,10 +937,20 @@ class DvfyTable extends HTMLElement {
     const headers = table.querySelectorAll('th[data-sort]');
     for (const th of headers) {
       this.#addSortIndicator(th);
+      th.setAttribute('tabindex', '0');
+      th.setAttribute('aria-sort', 'none');
       th.addEventListener('click', (e) => {
         // Don't sort if clicking the filter icon
         if (e.target.closest('.dvfy-table__filter-icon')) return;
         this.#handleSort(th, table);
+      });
+      th.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          // Don't sort if the filter icon is focused
+          if (e.target.closest('.dvfy-table__filter-icon')) return;
+          this.#handleSort(th, table);
+        }
       });
     }
   }
@@ -922,6 +971,13 @@ class DvfyTable extends HTMLElement {
     }
     const dir = th.getAttribute('data-sort');
     indicator.textContent = dir === 'asc' ? '\u25B2' : dir === 'desc' ? '\u25BC' : '\u25B4';
+
+    // Update active class based on sort state
+    if (dir === 'asc' || dir === 'desc') {
+      indicator.classList.add('dvfy-table__sort--active');
+    } else {
+      indicator.classList.remove('dvfy-table__sort--active');
+    }
   }
 
   #handleSort(th, table) {
@@ -933,12 +989,17 @@ class DvfyTable extends HTMLElement {
     for (const s of siblings) {
       if (s !== th) {
         s.removeAttribute('data-sort');
+        s.setAttribute('aria-sort', 'none');
         const ind = s.querySelector('.dvfy-table__sort');
-        if (ind) ind.textContent = '';
+        if (ind) {
+          ind.textContent = '';
+          ind.classList.remove('dvfy-table__sort--active');
+        }
       }
     }
 
     th.setAttribute('data-sort', next);
+    th.setAttribute('aria-sort', next === 'asc' ? 'ascending' : 'descending');
     this.#addSortIndicator(th);
 
     const tbody = table.querySelector('tbody') || table;

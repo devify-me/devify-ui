@@ -454,6 +454,98 @@ describe('dvfy-table — accessibility', () => {
     });
   });
 
+  // ─── Keyboard Navigation ──────────────────────────────────────────────────
+
+  describe('keyboard navigation — sortable headers', () => {
+    it('sortable headers have tabindex=0 for keyboard focus', async () => {
+      const el = await fixture(SORT_TABLE);
+      const headers = el.querySelectorAll('th[data-sort]');
+      expect(headers.length).to.be.greaterThan(0);
+      for (const th of headers) {
+        expect(th.getAttribute('tabindex')).to.equal('0');
+      }
+    });
+
+    it('firing Enter key on sortable header triggers sort', async () => {
+      const el = await fixture(SORT_TABLE);
+      const th = el.querySelector('th[data-sort]');
+      const initialSort = th.getAttribute('data-sort');
+      pressKeyOn(th, 'Enter');
+      const newSort = th.getAttribute('data-sort');
+      expect(newSort).to.be.oneOf(['asc', 'desc']);
+    });
+
+    it('firing Space key on sortable header triggers sort', async () => {
+      const el = await fixture(SORT_TABLE);
+      const th = el.querySelector('th[data-sort]');
+      const initialSort = th.getAttribute('data-sort');
+      pressKeyOn(th, ' ');
+      const newSort = th.getAttribute('data-sort');
+      expect(newSort).to.be.oneOf(['asc', 'desc']);
+    });
+
+    it('repeated keyboard presses toggle sort direction', async () => {
+      const el = await fixture(SORT_TABLE);
+      const th = el.querySelector('th[data-sort]');
+      pressKeyOn(th, 'Enter');
+      const dir1 = th.getAttribute('data-sort');
+      pressKeyOn(th, 'Enter');
+      const dir2 = th.getAttribute('data-sort');
+      expect(dir1).to.not.equal(dir2);
+    });
+
+    it('sortable header is focusable and receives focus', async () => {
+      const el = await fixture(SORT_TABLE);
+      const th = el.querySelector('th[data-sort]');
+      // Verify the element can receive focus
+      th.focus();
+      expect(document.activeElement === th).to.be.true;
+    });
+  });
+
+  describe('keyboard navigation — filter icons', () => {
+    it('filter icons have tabindex=0 for keyboard focus', async () => {
+      const el = await fixture(FILTERABLE_TABLE);
+      const icons = el.querySelectorAll('.dvfy-table__filter-icon');
+      expect(icons.length).to.be.greaterThan(0);
+      for (const icon of icons) {
+        expect(icon.getAttribute('tabindex')).to.equal('0');
+      }
+    });
+
+    it('firing Enter key on filter icon opens filter panel', async () => {
+      const el = await fixture(FILTERABLE_TABLE);
+      const icon = el.querySelector('.dvfy-table__filter-icon');
+      expect(el.querySelector('.dvfy-table__filter-panel')).to.be.null;
+      pressKeyOn(icon, 'Enter');
+      expect(el.querySelector('.dvfy-table__filter-panel')).to.exist;
+    });
+
+    it('firing Space key on filter icon opens filter panel', async () => {
+      const el = await fixture(FILTERABLE_TABLE);
+      const icon = el.querySelector('.dvfy-table__filter-icon');
+      expect(el.querySelector('.dvfy-table__filter-panel')).to.be.null;
+      pressKeyOn(icon, ' ');
+      expect(el.querySelector('.dvfy-table__filter-panel')).to.exist;
+    });
+
+    it('pressing Escape closes filter panel opened by keyboard', async () => {
+      const el = await fixture(FILTERABLE_TABLE);
+      const icon = el.querySelector('.dvfy-table__filter-icon');
+      pressKeyOn(icon, 'Enter');
+      expect(el.querySelector('.dvfy-table__filter-panel')).to.exist;
+      pressKeyDoc('Escape');
+      expect(el.querySelector('.dvfy-table__filter-panel')).to.be.null;
+    });
+
+    it('filter icon is focusable and receives focus', async () => {
+      const el = await fixture(FILTERABLE_TABLE);
+      const icon = el.querySelector('.dvfy-table__filter-icon');
+      icon.focus();
+      expect(document.activeElement === icon).to.be.true;
+    });
+  });
+
   // ─── Keyboard Listener Lifecycle ───────────────────────────────────────────
 
   describe('keyboard listener lifecycle', () => {

@@ -112,6 +112,109 @@ describe('dvfy-table', () => {
       expect(headers[0].getAttribute('data-sort')).to.not.be.oneOf(['asc', 'desc']);
       await checkA11y(el);
     });
+
+    it('maintains stable sort indicator size when sorting', async () => {
+      const el = await fixture(TABLE_HTML);
+      const th = el.querySelector('th[data-sort]');
+      const indicator = th.querySelector('.dvfy-table__sort');
+
+      // Get initial dimensions
+      const rect1 = indicator.getBoundingClientRect();
+      const initialWidth = rect1.width;
+      const initialHeight = rect1.height;
+
+      // Click to sort
+      th.click();
+      const rect2 = indicator.getBoundingClientRect();
+      expect(rect2.width).to.equal(initialWidth);
+      expect(rect2.height).to.equal(initialHeight);
+
+      // Click again to reverse sort
+      th.click();
+      const rect3 = indicator.getBoundingClientRect();
+      expect(rect3.width).to.equal(initialWidth);
+      expect(rect3.height).to.equal(initialHeight);
+
+      await checkA11y(el);
+    });
+
+    it('applies --active class to sorted indicator', async () => {
+      const el = await fixture(TABLE_HTML);
+      const th = el.querySelector('th[data-sort]');
+      const indicator = th.querySelector('.dvfy-table__sort');
+
+      // Initially no active class
+      expect(indicator.classList.contains('dvfy-table__sort--active')).to.be.false;
+
+      // Click to sort
+      th.click();
+      expect(indicator.classList.contains('dvfy-table__sort--active')).to.be.true;
+
+      await checkA11y(el);
+    });
+
+    it('removes --active class from inactive indicators when switching columns', async () => {
+      const el = await fixture(TABLE_HTML);
+      const headers = el.querySelectorAll('th[data-sort]');
+      const indicator1 = headers[0].querySelector('.dvfy-table__sort');
+      const indicator2 = headers[1].querySelector('.dvfy-table__sort');
+
+      // Sort first column
+      headers[0].click();
+      expect(indicator1.classList.contains('dvfy-table__sort--active')).to.be.true;
+      expect(indicator2.classList.contains('dvfy-table__sort--active')).to.be.false;
+
+      // Sort second column
+      headers[1].click();
+      expect(indicator1.classList.contains('dvfy-table__sort--active')).to.be.false;
+      expect(indicator2.classList.contains('dvfy-table__sort--active')).to.be.true;
+
+      await checkA11y(el);
+    });
+
+    it('fires sort event on header Enter key', async () => {
+      const el = await fixture(TABLE_HTML);
+      const th = el.querySelector('th[data-sort]');
+      setTimeout(() => {
+        th.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      });
+      const ev = await oneEvent(el, 'sort');
+      expect(ev.detail).to.have.property('column');
+      expect(ev.detail).to.have.property('direction');
+      await checkA11y(el);
+    });
+
+    it('fires sort event on header Space key', async () => {
+      const el = await fixture(TABLE_HTML);
+      const th = el.querySelector('th[data-sort]');
+      setTimeout(() => {
+        th.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+      });
+      const ev = await oneEvent(el, 'sort');
+      expect(ev.detail).to.have.property('column');
+      expect(ev.detail).to.have.property('direction');
+      await checkA11y(el);
+    });
+
+    it('makes sortable headers keyboard focusable with tabindex', async () => {
+      const el = await fixture(TABLE_HTML);
+      const headers = el.querySelectorAll('th[data-sort]');
+      for (const th of headers) {
+        expect(th.getAttribute('tabindex')).to.equal('0');
+      }
+      await checkA11y(el);
+    });
+
+    it('toggles sort direction on repeated Enter presses', async () => {
+      const el = await fixture(TABLE_HTML);
+      const th = el.querySelector('th[data-sort]');
+      th.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      const dir1 = th.getAttribute('data-sort');
+      th.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      const dir2 = th.getAttribute('data-sort');
+      expect(dir1).to.not.equal(dir2);
+      await checkA11y(el);
+    });
   });
 
   describe('selectable', () => {
@@ -301,6 +404,122 @@ describe('dvfy-table', () => {
       const ev = await oneEvent(el, 'filter-change');
       expect(ev.detail).to.have.property('column');
       expect(ev.detail).to.have.property('values');
+      await checkA11y(el);
+    });
+
+    it('hides rows when filter checkbox is unchecked', async () => {
+      const el = await fixture(html`
+        <dvfy-table filterable>
+          <table>
+            <thead><tr><th data-filter>Role</th></tr></thead>
+            <tbody>
+              <tr><td>Engineer</td></tr>
+              <tr><td>Designer</td></tr>
+            </tbody>
+          </table>
+        </dvfy-table>
+      `);
+      const filterIcon = el.querySelector('.dvfy-table__filter-icon');
+      filterIcon.click();
+      const checkboxes = el.querySelectorAll('.dvfy-table__filter-item input[type="checkbox"]');
+      // Sorted alphabetically: ["Designer", "Engineer"]
+      // Uncheck "Designer" (index 0) to hide Designer rows, leaving only Engineer
+      checkboxes[0].checked = false;
+      checkboxes[0].dispatchEvent(new Event('change', { bubbles: true }));
+      const rows = el.querySelectorAll('tbody tr');
+      const visible = Array.from(rows).filter(r => r.style.display !== 'none');
+      expect(visible.length).to.equal(1);
+      expect(visible[0].cells[0].textContent).to.equal('Engineer');
+      await checkA11y(el);
+    });
+
+    it('shows all rows when all filters are cleared using Select All button', async () => {
+      const el = await fixture(html`
+        <dvfy-table filterable>
+          <table>
+            <thead><tr><th data-filter>Role</th></tr></thead>
+            <tbody>
+              <tr><td>Engineer</td></tr>
+              <tr><td>Designer</td></tr>
+            </tbody>
+          </table>
+        </dvfy-table>
+      `);
+      const filterIcon = el.querySelector('.dvfy-table__filter-icon');
+      filterIcon.click();
+      const checkboxes = el.querySelectorAll('.dvfy-table__filter-item input[type="checkbox"]');
+      // Uncheck "Designer" (index 0)
+      checkboxes[0].checked = false;
+      checkboxes[0].dispatchEvent(new Event('change', { bubbles: true }));
+      // Verify row is hidden
+      let rows = el.querySelectorAll('tbody tr');
+      let visible = Array.from(rows).filter(r => r.style.display !== 'none');
+      expect(visible.length).to.equal(1);
+      // Click Select All button to restore all
+      const selectAllBtn = el.querySelector('.dvfy-table__filter-actions-top button:first-child');
+      selectAllBtn.click();
+      // Verify all rows are visible again
+      rows = el.querySelectorAll('tbody tr');
+      visible = Array.from(rows).filter(r => r.style.display !== 'none');
+      expect(visible.length).to.equal(2);
+      await checkA11y(el);
+    });
+
+    it('applies filter icon active class when filters are active', async () => {
+      const el = await fixture(html`
+        <dvfy-table filterable>
+          <table>
+            <thead><tr><th data-filter>Role</th></tr></thead>
+            <tbody>
+              <tr><td>Engineer</td></tr>
+              <tr><td>Designer</td></tr>
+            </tbody>
+          </table>
+        </dvfy-table>
+      `);
+      const filterIcon = el.querySelector('.dvfy-table__filter-icon');
+      expect(filterIcon.classList.contains('dvfy-table__filter-icon--active')).to.be.false;
+      filterIcon.click();
+      const checkboxes = el.querySelectorAll('.dvfy-table__filter-item input[type="checkbox"]');
+      // Uncheck one to make filter active
+      checkboxes[0].checked = false;
+      checkboxes[0].dispatchEvent(new Event('change', { bubbles: true }));
+      expect(filterIcon.classList.contains('dvfy-table__filter-icon--active')).to.be.true;
+      await checkA11y(el);
+    });
+
+    it('works with multiple filter columns (AND logic)', async () => {
+      const el = await fixture(html`
+        <dvfy-table filterable>
+          <table>
+            <thead><tr><th data-filter>Name</th><th data-filter>Role</th></tr></thead>
+            <tbody>
+              <tr><td>Alice</td><td>Engineer</td></tr>
+              <tr><td>Bob</td><td>Designer</td></tr>
+              <tr><td>Carol</td><td>Engineer</td></tr>
+            </tbody>
+          </table>
+        </dvfy-table>
+      `);
+      const filterIcons = el.querySelectorAll('.dvfy-table__filter-icon');
+      // Filter by name: only Alice. Names sorted: ["Alice", "Bob", "Carol"]
+      filterIcons[0].click();
+      let checkboxes = el.querySelectorAll('.dvfy-table__filter-item input[type="checkbox"]');
+      checkboxes[1].checked = false; // uncheck Bob
+      checkboxes[2].checked = false; // uncheck Carol
+      checkboxes[1].dispatchEvent(new Event('change', { bubbles: true }));
+      // Close name filter and open role filter
+      filterIcons[0].click();
+      filterIcons[1].click();
+      // Roles sorted: ["Designer", "Engineer"]
+      checkboxes = el.querySelectorAll('.dvfy-table__filter-item input[type="checkbox"]');
+      checkboxes[0].checked = false; // uncheck Designer
+      checkboxes[0].dispatchEvent(new Event('change', { bubbles: true }));
+      // Should show only Alice (name=Alice AND role=Engineer)
+      const rows = el.querySelectorAll('tbody tr');
+      const visible = Array.from(rows).filter(r => r.style.display !== 'none');
+      expect(visible.length).to.equal(1);
+      expect(visible[0].cells[0].textContent).to.equal('Alice');
       await checkA11y(el);
     });
   });
