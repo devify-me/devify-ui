@@ -135,7 +135,7 @@ describe('dvfy-dropdown — accessibility', () => {
         </dvfy-dropdown>
       `);
       let clicked = null;
-      getItems(el).forEach(item => { item.addEventListener('click', () => { clicked = item.id; }); });
+      getItems(el).forEach((item) => { item.addEventListener('click', () => { clicked = item.id; }); });
       pressKey(el, 'ArrowDown'); // focus First
       pressKey(el, 'Enter');
       expect(clicked).to.equal('first');
@@ -150,7 +150,7 @@ describe('dvfy-dropdown — accessibility', () => {
         </dvfy-dropdown>
       `);
       let clicked = null;
-      getItems(el).forEach(item => { item.addEventListener('click', () => { clicked = item.id; }); });
+      getItems(el).forEach((item) => { item.addEventListener('click', () => { clicked = item.id; }); });
       pressKey(el, 'ArrowDown'); // focus First
       pressKey(el, ' ');
       expect(clicked).to.equal('first');
@@ -166,7 +166,7 @@ describe('dvfy-dropdown — accessibility', () => {
         </dvfy-dropdown>
       `);
       const clicks = [];
-      getItems(el).forEach(item => { item.addEventListener('click', () => { clicks.push(item.id); }); });
+      getItems(el).forEach((item) => { item.addEventListener('click', () => { clicks.push(item.id); }); });
       pressKey(el, 'ArrowDown'); // First (0)
       pressKey(el, 'ArrowDown'); // Second (1)
       pressKey(el, 'Enter');
