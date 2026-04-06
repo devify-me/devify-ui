@@ -299,14 +299,17 @@ class DvfySelect extends HTMLElement {
   #open = false;
   #focusedIndex = -1;
   #built = false;
-
   #id = null;
+  #slottedChildren = [];
 
   connectedCallback() {
     injectStyles('dvfy-select', STYLES);
 
     // Generate ID for aria attributes
     this.#id = this.getAttribute('name') || `dvfy-select-${Math.random().toString(36).slice(2, 8)}`;
+
+    // Preserve slotted message children before clearing
+    this.#slottedChildren = Array.from(this.children).filter(el => el.hasAttribute('slot'));
 
     // Read options from child <option> elements
     this.#options = Array.from(this.querySelectorAll('option')).map(o => ({
@@ -386,16 +389,9 @@ class DvfySelect extends HTMLElement {
   }
 
   #buildUI() {
-    // Preserve slotted children before clearing
-    const slottedChildren = Array.from(this.children).filter(el => el.hasAttribute('slot'));
-
     const label = this.getAttribute('label');
     const placeholder = this.getAttribute('placeholder') || 'Select...';
-    const error = this.getAttribute('error');
-    const help = this.getAttribute('help');
     const required = this.hasAttribute('required');
-
-    this.textContent = '';
 
     // Label
     if (label) {
@@ -413,7 +409,7 @@ class DvfySelect extends HTMLElement {
     this.appendChild(custom);
 
     // Re-attach slotted children before appending messages
-    slottedChildren.forEach(el => this.appendChild(el));
+    this.#slottedChildren.forEach(el => this.appendChild(el));
 
     // Messages
     this.#appendMessages();

@@ -88,8 +88,8 @@ describe('dvfy-select', () => {
           <option value="a">A</option>
         </dvfy-select>
       `);
-      expect(el.querySelector('.dvfy-select__error')).to.exist;
-      expect(el.querySelector('.dvfy-select__error').textContent).to.equal('Required field');
+      expect(el.querySelector('.dvfy-select__error-msg')).to.exist;
+      expect(el.querySelector('.dvfy-select__error-msg').textContent).to.equal('Required field');
       await checkA11y(el, SELECT_A11Y_RULES);
     });
 
@@ -111,7 +111,7 @@ describe('dvfy-select', () => {
         </dvfy-select>
       `);
       el.setAttribute('error', 'Oops');
-      expect(el.querySelector('.dvfy-select__error').textContent).to.equal('Oops');
+      expect(el.querySelector('.dvfy-select__error-msg').textContent).to.equal('Oops');
       await checkA11y(el, SELECT_A11Y_RULES);
     });
 
@@ -429,17 +429,15 @@ describe('dvfy-select', () => {
         <dvfy-select label="Country" name="country" state="error">
           <option value="us">United States</option>
           <span slot="error-message">Error 1</span>
+          <span slot="warning-message">Warning 1</span>
         </dvfy-select>
       `);
       expect(el.querySelector('.dvfy-select__error-msg')?.textContent).to.equal('Error 1');
+      expect(el.querySelector('.dvfy-select__warning-msg')).to.not.exist;
 
       el.setAttribute('state', 'warning');
-      el.querySelector('[slot="error-message"]')?.remove();
-      const warningMsg = document.createElement('span');
-      warningMsg.slot = 'warning-message';
-      warningMsg.textContent = 'Warning 1';
-      el.appendChild(warningMsg);
 
+      expect(el.querySelector('.dvfy-select__error-msg')).to.not.exist;
       expect(el.querySelector('.dvfy-select__warning-msg')?.textContent).to.equal('Warning 1');
       await checkA11y(el, SELECT_A11Y_RULES);
     });
