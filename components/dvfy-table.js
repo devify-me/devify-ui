@@ -59,6 +59,20 @@ dvfy-table[responsive] .dvfy-table__wrapper {
   -webkit-overflow-scrolling: touch;
 }
 
+/* Narrow (< 48rem): enable horizontal scroll via container query */
+@container dvfy-table (max-width: 47.99rem) {
+  .dvfy-table__wrapper {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border: 1px solid var(--dvfy-border-default);
+    border-radius: var(--dvfy-radius-lg);
+  }
+
+  dvfy-table table {
+    min-width: 100%;
+  }
+}
+
 .dvfy-table__search {
   margin-bottom: var(--dvfy-space-3);
 }
