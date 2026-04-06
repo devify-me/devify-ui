@@ -303,5 +303,121 @@ describe('dvfy-table', () => {
       expect(ev.detail).to.have.property('values');
       await checkA11y(el);
     });
+
+    it('hides rows when filter checkbox is unchecked', async () => {
+      const el = await fixture(html`
+        <dvfy-table filterable>
+          <table>
+            <thead><tr><th data-filter>Role</th></tr></thead>
+            <tbody>
+              <tr><td>Engineer</td></tr>
+              <tr><td>Designer</td></tr>
+            </tbody>
+          </table>
+        </dvfy-table>
+      `);
+      const filterIcon = el.querySelector('.dvfy-table__filter-icon');
+      filterIcon.click();
+      const checkboxes = el.querySelectorAll('.dvfy-table__filter-item input[type="checkbox"]');
+      // Sorted alphabetically: ["Designer", "Engineer"]
+      // Uncheck "Designer" (index 0) to hide Designer rows, leaving only Engineer
+      checkboxes[0].checked = false;
+      checkboxes[0].dispatchEvent(new Event('change', { bubbles: true }));
+      const rows = el.querySelectorAll('tbody tr');
+      const visible = Array.from(rows).filter(r => r.style.display !== 'none');
+      expect(visible.length).to.equal(1);
+      expect(visible[0].cells[0].textContent).to.equal('Engineer');
+      await checkA11y(el);
+    });
+
+    it('shows all rows when all filters are cleared using Select All button', async () => {
+      const el = await fixture(html`
+        <dvfy-table filterable>
+          <table>
+            <thead><tr><th data-filter>Role</th></tr></thead>
+            <tbody>
+              <tr><td>Engineer</td></tr>
+              <tr><td>Designer</td></tr>
+            </tbody>
+          </table>
+        </dvfy-table>
+      `);
+      const filterIcon = el.querySelector('.dvfy-table__filter-icon');
+      filterIcon.click();
+      const checkboxes = el.querySelectorAll('.dvfy-table__filter-item input[type="checkbox"]');
+      // Uncheck "Designer" (index 0)
+      checkboxes[0].checked = false;
+      checkboxes[0].dispatchEvent(new Event('change', { bubbles: true }));
+      // Verify row is hidden
+      let rows = el.querySelectorAll('tbody tr');
+      let visible = Array.from(rows).filter(r => r.style.display !== 'none');
+      expect(visible.length).to.equal(1);
+      // Click Select All button to restore all
+      const selectAllBtn = el.querySelector('.dvfy-table__filter-actions-top button:first-child');
+      selectAllBtn.click();
+      // Verify all rows are visible again
+      rows = el.querySelectorAll('tbody tr');
+      visible = Array.from(rows).filter(r => r.style.display !== 'none');
+      expect(visible.length).to.equal(2);
+      await checkA11y(el);
+    });
+
+    it('applies filter icon active class when filters are active', async () => {
+      const el = await fixture(html`
+        <dvfy-table filterable>
+          <table>
+            <thead><tr><th data-filter>Role</th></tr></thead>
+            <tbody>
+              <tr><td>Engineer</td></tr>
+              <tr><td>Designer</td></tr>
+            </tbody>
+          </table>
+        </dvfy-table>
+      `);
+      const filterIcon = el.querySelector('.dvfy-table__filter-icon');
+      expect(filterIcon.classList.contains('dvfy-table__filter-icon--active')).to.be.false;
+      filterIcon.click();
+      const checkboxes = el.querySelectorAll('.dvfy-table__filter-item input[type="checkbox"]');
+      // Uncheck one to make filter active
+      checkboxes[0].checked = false;
+      checkboxes[0].dispatchEvent(new Event('change', { bubbles: true }));
+      expect(filterIcon.classList.contains('dvfy-table__filter-icon--active')).to.be.true;
+      await checkA11y(el);
+    });
+
+    it('works with multiple filter columns (AND logic)', async () => {
+      const el = await fixture(html`
+        <dvfy-table filterable>
+          <table>
+            <thead><tr><th data-filter>Name</th><th data-filter>Role</th></tr></thead>
+            <tbody>
+              <tr><td>Alice</td><td>Engineer</td></tr>
+              <tr><td>Bob</td><td>Designer</td></tr>
+              <tr><td>Carol</td><td>Engineer</td></tr>
+            </tbody>
+          </table>
+        </dvfy-table>
+      `);
+      const filterIcons = el.querySelectorAll('.dvfy-table__filter-icon');
+      // Filter by name: only Alice. Names sorted: ["Alice", "Bob", "Carol"]
+      filterIcons[0].click();
+      let checkboxes = el.querySelectorAll('.dvfy-table__filter-item input[type="checkbox"]');
+      checkboxes[1].checked = false; // uncheck Bob
+      checkboxes[2].checked = false; // uncheck Carol
+      checkboxes[1].dispatchEvent(new Event('change', { bubbles: true }));
+      // Close name filter and open role filter
+      filterIcons[0].click();
+      filterIcons[1].click();
+      // Roles sorted: ["Designer", "Engineer"]
+      checkboxes = el.querySelectorAll('.dvfy-table__filter-item input[type="checkbox"]');
+      checkboxes[0].checked = false; // uncheck Designer
+      checkboxes[0].dispatchEvent(new Event('change', { bubbles: true }));
+      // Should show only Alice (name=Alice AND role=Engineer)
+      const rows = el.querySelectorAll('tbody tr');
+      const visible = Array.from(rows).filter(r => r.style.display !== 'none');
+      expect(visible.length).to.equal(1);
+      expect(visible[0].cells[0].textContent).to.equal('Alice');
+      await checkA11y(el);
+    });
   });
 });
