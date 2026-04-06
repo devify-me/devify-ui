@@ -853,9 +853,11 @@ class DvfyTable extends HTMLElement {
     if (checkedValues.size === filterState.allValues.length) {
       filterState.checkedValues = null;
       filterState.icon.classList.remove('dvfy-table__filter-icon--active');
+      filterState.icon.setAttribute('aria-label', `Filter column`);
     } else {
       filterState.checkedValues = checkedValues;
       filterState.icon.classList.add('dvfy-table__filter-icon--active');
+      filterState.icon.setAttribute('aria-label', `Filter column (${checkedValues.size} selected)`);
     }
 
     this.#applyAllFilters();
@@ -936,6 +938,7 @@ class DvfyTable extends HTMLElement {
     for (const th of headers) {
       this.#addSortIndicator(th);
       th.setAttribute('tabindex', '0');
+      th.setAttribute('aria-sort', 'none');
       th.addEventListener('click', (e) => {
         // Don't sort if clicking the filter icon
         if (e.target.closest('.dvfy-table__filter-icon')) return;
@@ -986,6 +989,7 @@ class DvfyTable extends HTMLElement {
     for (const s of siblings) {
       if (s !== th) {
         s.removeAttribute('data-sort');
+        s.setAttribute('aria-sort', 'none');
         const ind = s.querySelector('.dvfy-table__sort');
         if (ind) {
           ind.textContent = '';
@@ -995,6 +999,7 @@ class DvfyTable extends HTMLElement {
     }
 
     th.setAttribute('data-sort', next);
+    th.setAttribute('aria-sort', next === 'asc' ? 'ascending' : 'descending');
     this.#addSortIndicator(th);
 
     const tbody = table.querySelector('tbody') || table;
