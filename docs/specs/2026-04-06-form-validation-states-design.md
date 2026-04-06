@@ -19,9 +19,9 @@ Current form components (dvfy-input, dvfy-select) support error display but lack
 - dvfy-input and dvfy-select expose `state` attribute (error | warning | success) with message slots
 - New dvfy-field-group component wraps label + inputs + error display
 - All states meet WCAG 2.1 AA color contrast requirements
-- devify-cc#408 subscription form uses field-group with validation states
-- Form submitting empty required field shows inline error without JavaScript
+- devify-cc#408 subscription form uses field-group with validation states (app sets `state` via JavaScript on validation)
 - Form passes axe-core with zero a11y violations
+- Keyboard-only and screen reader navigation works with all state combinations
 
 ---
 
@@ -40,10 +40,10 @@ Current form components (dvfy-input, dvfy-select) support error display but lack
 - Optional group-level `state` and messages for cross-field validation
 - Renders as `<fieldset>` + `<legend>` for accessibility
 
-**3. Token Reuse**
+**3. Token Reuse + New Input-Specific Tokens**
 - Use existing semantic tokens (--dvfy-danger-*, --dvfy-warning-*, --dvfy-success-*)
+- Add two new input-specific border tokens (see "Tokens Required" section)
 - Already WCAG AA compliant from accessibility audit (#311)
-- No new tokens needed
 
 ---
 
@@ -57,31 +57,60 @@ Current form components (dvfy-input, dvfy-select) support error display but lack
 |-----------|------|--------|---------|---------|
 | `state` | string | `"error"` \| `"warning"` \| `"success"` | none | Validation state |
 
-#### New Slots
+#### Message Display Mechanism (Light DOM)
+
+**Light DOM Attribute Approach** (vs. Shadow DOM slots):
+
+Components use Light DOM without Shadow DOM. Message display uses named child elements:
+
+```html
+<dvfy-input label="Email" name="email" state="error">
+  <span slot="error-message">Invalid email format</span>
+</dvfy-input>
+```
+
+**Implementation:**
+- Component's `#build()` preserves child elements with `slot` attribute (does NOT call `textContent = ''`)
+- Component queries for `[slot="error-message"]`, `[slot="warning-message"]`, `[slot="success-message"]` children
+- Moves matched child to message display area during render (or shows/hides based on `state`)
+- If no matching child element exists, no message is displayed
+
+**Alternative: Attribute-Based Messages** (simpler, considered):
+```html
+<dvfy-input label="Email" name="email" state="error" error-message="Invalid email format"></dvfy-input>
+```
+- Pros: simpler implementation, easier to update programmatically
+- Cons: breaks pattern consistency with other slot-based components
+- **Decision:** Use Light DOM child elements (slots) to match existing component patterns (labels, icons already use slots)
+
+#### New Slots (Light DOM Child Elements)
 
 | Slot Name | Purpose |
 |-----------|---------|
-| `error-message` | Error message text (displayed when `state="error"`) |
-| `warning-message` | Warning message text (displayed when `state="warning"`) |
-| `success-message` | Success message text (displayed when `state="success"`) |
+| `error-message` | Child element with this slot attribute contains error text (displayed when `state="error"`) |
+| `warning-message` | Child element with this slot attribute contains warning text (displayed when `state="warning"`) |
+| `success-message` | Child element with this slot attribute contains success text (displayed when `state="success"`) |
 
 #### Visual Changes
 
-**Border Color:**
-- Error: `--dvfy-input-error` (red)
-- Warning: derived from `--dvfy-warning-bg` (yellow, new token)
-- Success: derived from `--dvfy-success-bg` (green, new token)
+**Border Color (Consistent Across All Form Controls):**
+- Error: `--dvfy-input-error` (red) — existing token used by dvfy-input
+- Warning: `--dvfy-warning-border` (amber) — existing token used by other components
+- Success: `--dvfy-success-border` (green) — existing token used by other components
 - Focus ring: matches state color (or uses base ring color if no state)
+
+**Note:** dvfy-select currently uses `--dvfy-danger-border` for errors. This will be updated to `--dvfy-input-error` for consistency with dvfy-input and other form controls as part of this work.
 
 **Text Color:**
 - Error message: `--dvfy-danger-text`
 - Warning message: `--dvfy-warning-text`
 - Success message: `--dvfy-success-text`
 
-**Optional Visual Indicator:**
-- Icon next to field (✗, ⚠, ✓) via CSS `::before` pseudo-element or icon slot
-- Icon color matches message text color
-- Configurable via CSS custom property (--dvfy-show-state-icon)
+**Visual Indicator (Optional, Deferred):**
+- Icons (✗, ⚠, ✓) are visual enhancement, not required for MVP
+- Can be added in future via CSS-only `::before` pseudo-element approach
+- Deferred to allow focus on core functionality (state attribute + message display)
+- If implemented later: icon color matches state text color, icon placed right side of field
 
 #### Example Usage
 
@@ -130,6 +159,11 @@ Keep existing `error` attribute working:
 #### Purpose
 
 Wrapper component that groups related form fields (label, help text, inputs, error display) for consistent styling and accessibility.
+
+**Message Display Strategy:**
+- **Child Input Errors:** Children handle their own message display (via their `[slot="error-message"]` etc. elements)
+- **Group-Level Errors:** Field-group can display its own messages for cross-field validation (e.g., "dates don't overlap")
+- No message duplication — child displays its message, group displays group-level message in separate area below inputs
 
 #### Attributes
 
@@ -225,48 +259,48 @@ Wrapper component that groups related form fields (label, help text, inputs, err
 
 ## Tokens Required
 
-### New Color Tokens
+### Token Strategy: Reuse Existing Border Tokens
 
-For warning/success state styling in inputs, derive from existing palette:
+**Use existing border tokens** (already defined in token system):
+- Error: `--dvfy-input-error` (existing, red-500/400)
+- Warning: `--dvfy-warning-border` (existing, amber-200 light / amber-700 dark)
+- Success: `--dvfy-success-border` (existing, green-200 light / green-700 dark)
 
-| Token | Value | Purpose |
-|-------|-------|---------|
-| `--dvfy-input-warning` | yellow-600 equivalent | Border color for warning state |
-| `--dvfy-input-success` | green-600 equivalent | Border color for success state |
+**Rationale:** Other components (dvfy-tag, dvfy-alert, dvfy-badge, dvfy-toast) already use `--dvfy-*-border` tokens for border colors. Reusing this pattern maintains consistency across the library. No new tokens required.
 
-**Rationale:** Error already has `--dvfy-input-error`. Warning and success need border tokens for consistency.
-
-These are derived from existing `--dvfy-warning-bg` and `--dvfy-success-bg` (already WCAG AA compliant).
+**Token Resolution (Light/Dark Themes):**
+All tokens resolve via `tokens/light.css`, `tokens/dark.css`, and brand theme files. No theme generator changes needed — tokens already exist.
 
 ---
 
 ## Implementation Plan
 
-### Phase 1: dvfy-input Updates
-- Add `state` attribute + slots to component
-- Update CSS for state colors and focus rings
-- Update JSDoc with new attributes and slots
+### Phase 1: Form Control Updates (dvfy-input, dvfy-select, dvfy-textarea, dvfy-date-picker)
+**For dvfy-input, dvfy-select, dvfy-textarea, dvfy-date-picker:**
+- Add `state` to `observedAttributes` array
+- Add `state` case in `attributeChangedCallback` (triggers re-render)
+- Update Light DOM build: preserve child elements with `slot="*-message"` attributes
+- Update CSS for state colors and focus rings (use `--dvfy-warning-border`, `--dvfy-success-border`)
+- Update JSDoc with new `state` attribute and slot names
 - Add tests for all three states + message display
-- Verify backward compatibility with `error` attribute
+- Verify backward compatibility with existing `error` attributes
 
-### Phase 2: dvfy-select Updates
-- Same as input (add `state`, slots, CSS, tests)
-- Handle state styling on custom trigger button
+**Rationale:** All four components support the `error` attribute and use `--dvfy-input-error` token. Validation states should be consistent across all form controls. dvfy-textarea is semantically equivalent to dvfy-input; dvfy-date-picker is semantically a select. Both participate in form validation.
 
-### Phase 3: dvfy-field-group (New Component)
+### Phase 2: dvfy-field-group (New Component)
 - Create component with `<fieldset>` + `<legend>` structure
 - Implement label, help, default slot
 - Implement group-level error/warning/success slots
 - Style with semantic tokens + gap between inputs
 - Add to barrel export (devify.js) + catalog
 
-### Phase 4: Integration & Testing
+### Phase 3: Integration & Testing
 - Add deep a11y test suite (dvfy-field-group.a11y.test.js)
 - Test: fieldset accessibility, message announcements, keyboard nav
 - Add functional tests for state + message display
 - Update component review checklist
 
-### Phase 5: Documentation
+### Phase 4: Documentation
 - Update `docs/a11y-testing-guide.md` with form validation patterns
 - Update `docs/wcag-compliance.md` with new tokens
 - Add example form to catalog playground
@@ -349,15 +383,29 @@ Subscription form using field-group + validation states:
 </form>
 
 <script>
-  document.getElementById('subscription-form').addEventListener('submit', (e) => {
+  const form = document.getElementById('subscription-form');
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
-    // Validate form
-    if (!form.email.value) {
-      const emailField = form.querySelector('[name="email"]');
+    
+    // Validate email field
+    const emailField = form.querySelector('[name="email"]');
+    if (!emailField.value.trim()) {
       emailField.setAttribute('state', 'error');
-      emailField.querySelector('[slot="error-message"]').textContent = 'Email is required';
+      let errorMsg = emailField.querySelector('[slot="error-message"]');
+      if (!errorMsg) {
+        errorMsg = document.createElement('span');
+        errorMsg.slot = 'error-message';
+        emailField.appendChild(errorMsg);
+      }
+      errorMsg.textContent = 'Email is required';
+      return;
+    } else {
+      emailField.removeAttribute('state');
     }
-    // ... more validation
+    
+    // ... validate other fields
+    // If all valid, submit form
+    console.log('Form is valid, submitting...');
   });
 </script>
 ```
