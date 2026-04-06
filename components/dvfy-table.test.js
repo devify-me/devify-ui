@@ -171,6 +171,50 @@ describe('dvfy-table', () => {
 
       await checkA11y(el);
     });
+
+    it('fires sort event on header Enter key', async () => {
+      const el = await fixture(TABLE_HTML);
+      const th = el.querySelector('th[data-sort]');
+      setTimeout(() => {
+        th.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      });
+      const ev = await oneEvent(el, 'sort');
+      expect(ev.detail).to.have.property('column');
+      expect(ev.detail).to.have.property('direction');
+      await checkA11y(el);
+    });
+
+    it('fires sort event on header Space key', async () => {
+      const el = await fixture(TABLE_HTML);
+      const th = el.querySelector('th[data-sort]');
+      setTimeout(() => {
+        th.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true }));
+      });
+      const ev = await oneEvent(el, 'sort');
+      expect(ev.detail).to.have.property('column');
+      expect(ev.detail).to.have.property('direction');
+      await checkA11y(el);
+    });
+
+    it('makes sortable headers keyboard focusable with tabindex', async () => {
+      const el = await fixture(TABLE_HTML);
+      const headers = el.querySelectorAll('th[data-sort]');
+      for (const th of headers) {
+        expect(th.getAttribute('tabindex')).to.equal('0');
+      }
+      await checkA11y(el);
+    });
+
+    it('toggles sort direction on repeated Enter presses', async () => {
+      const el = await fixture(TABLE_HTML);
+      const th = el.querySelector('th[data-sort]');
+      th.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      const dir1 = th.getAttribute('data-sort');
+      th.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+      const dir2 = th.getAttribute('data-sort');
+      expect(dir1).to.not.equal(dir2);
+      await checkA11y(el);
+    });
   });
 
   describe('selectable', () => {

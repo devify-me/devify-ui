@@ -133,6 +133,11 @@ dvfy-table th[data-sort] {
 dvfy-table th[data-sort]:hover {
   background: var(--dvfy-hover-bg);
 }
+dvfy-table th[data-sort]:focus {
+  outline: 2px solid var(--dvfy-border-focus);
+  outline-offset: -2px;
+  border-radius: var(--dvfy-radius-sm);
+}
 
 /* Sort indicator triangle */
 .dvfy-table__sort {
@@ -925,10 +930,19 @@ class DvfyTable extends HTMLElement {
     const headers = table.querySelectorAll('th[data-sort]');
     for (const th of headers) {
       this.#addSortIndicator(th);
+      th.setAttribute('tabindex', '0');
       th.addEventListener('click', (e) => {
         // Don't sort if clicking the filter icon
         if (e.target.closest('.dvfy-table__filter-icon')) return;
         this.#handleSort(th, table);
+      });
+      th.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          // Don't sort if the filter icon is focused
+          if (e.target.closest('.dvfy-table__filter-icon')) return;
+          this.#handleSort(th, table);
+        }
       });
     }
   }
