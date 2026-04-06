@@ -1,4 +1,5 @@
 import { fixture, html, expect, waitUntil } from '@open-wc/testing';
+import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-button.js';
 import './dvfy-dropdown.js';
 
@@ -17,6 +18,7 @@ describe('dvfy-dropdown', () => {
       expect(menu.getAttribute('role')).to.equal('menu');
       const items = menu.querySelectorAll('.dvfy-dropdown__item');
       expect(items.length).to.equal(2);
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('assigns menuitem role to items', async () => {
@@ -29,6 +31,7 @@ describe('dvfy-dropdown', () => {
       const item = el.querySelector('.dvfy-dropdown__item');
       expect(item.getAttribute('role')).to.equal('menuitem');
       expect(item.getAttribute('tabindex')).to.equal('-1');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
   });
 
@@ -43,6 +46,7 @@ describe('dvfy-dropdown', () => {
       expect(el.hasAttribute('open')).to.be.false;
       el.querySelector('dvfy-button').click();
       expect(el.hasAttribute('open')).to.be.true;
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('closes when trigger is clicked again', async () => {
@@ -54,6 +58,7 @@ describe('dvfy-dropdown', () => {
       `);
       el.querySelector('dvfy-button').click();
       expect(el.hasAttribute('open')).to.be.false;
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('closes on click outside', async () => {
@@ -65,6 +70,7 @@ describe('dvfy-dropdown', () => {
       `);
       document.body.click();
       expect(el.hasAttribute('open')).to.be.false;
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
   });
 
@@ -82,6 +88,7 @@ describe('dvfy-dropdown', () => {
       await waitUntil(() => el.querySelector('.dvfy-dropdown__item[data-active]'));
       const active = el.querySelector('.dvfy-dropdown__item[data-active]');
       expect(active.textContent).to.equal('First');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('navigates items with ArrowDown/ArrowUp', async () => {
@@ -97,6 +104,7 @@ describe('dvfy-dropdown', () => {
       await waitUntil(() => el.querySelector('.dvfy-dropdown__item[data-active]'));
       const active = el.querySelector('.dvfy-dropdown__item[data-active]');
       expect(active.textContent).to.equal('Second');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('closes on Escape and returns focus to trigger', async () => {
@@ -108,6 +116,7 @@ describe('dvfy-dropdown', () => {
       `);
       el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
       expect(el.hasAttribute('open')).to.be.false;
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
 
     it('wraps around when navigating past last item', async () => {
@@ -125,6 +134,7 @@ describe('dvfy-dropdown', () => {
       await waitUntil(() => el.querySelector('.dvfy-dropdown__item[data-active]'));
       const active = el.querySelector('.dvfy-dropdown__item[data-active]');
       expect(active.textContent).to.equal('First');
+      await checkA11y(el, { ignoredRules: ['color-contrast'] });
     });
   });
 });
