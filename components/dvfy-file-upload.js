@@ -20,7 +20,7 @@ dvfy-file-upload .dvfy-fu__zone {
   padding: var(--dvfy-space-8) var(--dvfy-space-6);
   border: var(--dvfy-border-2) dashed var(--dvfy-border-default);
   border-radius: var(--dvfy-radius-xl);
-  background: var(--dvfy-surface-secondary);
+  background: var(--dvfy-surface-muted);
   cursor: pointer;
   transition:
     border-color var(--dvfy-duration-fast) var(--dvfy-ease-out),
@@ -33,23 +33,23 @@ dvfy-file-upload .dvfy-fu__zone {
 dvfy-file-upload .dvfy-fu__zone:hover,
 dvfy-file-upload .dvfy-fu__zone:focus-visible {
   border-color: var(--dvfy-primary-text);
-  background: var(--dvfy-primary-subtle);
+  background: var(--dvfy-primary-bg-subtle);
 }
 
 dvfy-file-upload[state="dragover"] .dvfy-fu__zone {
   border-color: var(--dvfy-primary-text);
-  background: var(--dvfy-primary-subtle);
+  background: var(--dvfy-primary-bg-subtle);
   box-shadow: 0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-ring-color) 35%, transparent);
 }
 
 dvfy-file-upload[state="error"] .dvfy-fu__zone {
   border-color: var(--dvfy-danger-text);
-  background: var(--dvfy-danger-subtle);
+  background: var(--dvfy-danger-bg-subtle);
 }
 
 dvfy-file-upload[state="success"] .dvfy-fu__zone {
   border-color: var(--dvfy-success-text);
-  background: var(--dvfy-success-subtle);
+  background: var(--dvfy-success-bg-subtle);
 }
 
 dvfy-file-upload[disabled] .dvfy-fu__zone {
@@ -151,7 +151,7 @@ dvfy-file-upload .dvfy-fu__file {
   gap: var(--dvfy-space-2);
   padding: var(--dvfy-space-2) var(--dvfy-space-3);
   border-radius: var(--dvfy-radius-lg);
-  background: var(--dvfy-surface-secondary);
+  background: var(--dvfy-surface-muted);
   border: var(--dvfy-border-1) solid var(--dvfy-border-muted);
 }
 
@@ -202,7 +202,7 @@ dvfy-file-upload .dvfy-fu__file-remove {
 
 dvfy-file-upload .dvfy-fu__file-remove:hover {
   color: var(--dvfy-danger-text);
-  background: var(--dvfy-danger-subtle);
+  background: var(--dvfy-danger-bg-subtle);
 }
 
 dvfy-file-upload .dvfy-fu__file-remove:focus-visible {

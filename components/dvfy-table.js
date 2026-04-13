@@ -212,7 +212,7 @@ dvfy-table th[data-sort]:focus {
   background: var(--dvfy-primary-text, var(--dvfy-text-inverse, #fff));
 }
 .dvfy-table__filter-icon--active:hover {
-  background: var(--dvfy-primary-hover);
+  background: var(--dvfy-primary-bg-hover);
 }
 .dvfy-table__filter-icon--active:hover .dvfy-table__filter-line {
   background: var(--dvfy-primary-text, var(--dvfy-text-inverse, #fff));
@@ -273,7 +273,7 @@ dvfy-table th[data-sort]:focus {
   text-decoration: underline;
 }
 .dvfy-table__filter-actions-top button:hover {
-  color: var(--dvfy-primary-hover);
+  color: var(--dvfy-primary-bg-hover);
 }
 
 /* Filter value list */

@@ -99,9 +99,9 @@ dvfy-button[variant="gradient"] {
   color: var(--dvfy-text-inverse);
   border-color: transparent;
   transition:
-    --dvfy-btn-grad-from var(--dvfy-duration-base) var(--dvfy-ease-out),
-    --dvfy-btn-grad-to var(--dvfy-duration-base) var(--dvfy-ease-out),
-    --dvfy-btn-grad-angle var(--dvfy-duration-base) var(--dvfy-ease-out);
+    --dvfy-btn-grad-from var(--dvfy-duration-normal) var(--dvfy-ease-out),
+    --dvfy-btn-grad-to var(--dvfy-duration-normal) var(--dvfy-ease-out),
+    --dvfy-btn-grad-angle var(--dvfy-duration-normal) var(--dvfy-ease-out);
 }
 dvfy-button[variant="gradient"]:hover:not([disabled]):not([loading]) {
   animation: dvfy-gradient-spin 3s linear infinite;

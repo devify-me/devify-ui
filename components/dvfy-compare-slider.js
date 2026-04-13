@@ -12,7 +12,7 @@ dvfy-compare-slider {
 }
 
 dvfy-compare-slider:focus-visible {
-  outline: 2px solid var(--dvfy-focus-ring, var(--dvfy-accent-brand, #7c3aed));
+  outline: 2px solid var(--dvfy-ring-color);
   outline-offset: 2px;
 }
 
@@ -56,7 +56,7 @@ dvfy-compare-slider [slot="after"] {
   bottom: 0.75rem;
   padding: 0.2rem 0.5rem;
   background: var(--dvfy-compare-slider-label-bg, rgba(15, 23, 42, 0.7));
-  color: var(--dvfy-text-on-dark, #f8fafc);
+  color: var(--dvfy-text-inverse);
   font-size: var(--dvfy-text-xs, 0.75rem);
   font-family: var(--dvfy-font-sans, system-ui, sans-serif);
   font-weight: var(--dvfy-weight-medium, 500);
@@ -77,7 +77,7 @@ dvfy-compare-slider [slot="after"] {
   bottom: 0;
   left: 50%;
   width: 2px;
-  background: var(--dvfy-compare-slider-divider-color, var(--dvfy-surface-inverse, #f8fafc));
+  background: var(--dvfy-compare-slider-divider-color, var(--dvfy-surface-overlay));
   transform: translateX(-50%);
   pointer-events: none;
   box-shadow: 0 0 6px var(--dvfy-shadow-sm);
@@ -92,7 +92,7 @@ dvfy-compare-slider [slot="after"] {
   transform: translate(-50%, -50%);
   width: 2.5rem;
   height: 2.5rem;
-  background: var(--dvfy-compare-slider-handle-bg, var(--dvfy-surface-light, #f8fafc));
+  background: var(--dvfy-compare-slider-handle-bg, var(--dvfy-surface-overlay));
   border-radius: 50%;
   display: flex;
   align-items: center;

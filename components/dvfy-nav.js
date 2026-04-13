@@ -31,7 +31,7 @@ dvfy-nav a.dvfy-nav__link:hover {
   border-bottom-color: var(--dvfy-border-strong);
 }
 dvfy-nav a.dvfy-nav__link:focus-visible {
-  outline: 2px solid var(--dvfy-focus-ring);
+  outline: 2px solid var(--dvfy-ring-color);
   outline-offset: -2px;
   border-radius: var(--dvfy-radius-sm);
 }
