@@ -62,6 +62,7 @@ describe('dvfy-gradient-card', () => {
         clientY: rect.top + 50,
         bubbles: true,
       }));
+      await new Promise(resolve => requestAnimationFrame(resolve));
       expect(el.style.getPropertyValue('--x')).to.equal('100px');
       expect(el.style.getPropertyValue('--y')).to.equal('50px');
     });
