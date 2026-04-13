@@ -27,3 +27,16 @@ function fallbackCopy(text) {
   ta.remove();
   return Promise.resolve();
 }
+
+/**
+ * Copy text to clipboard and show "Copied!" feedback.
+ * @param {HTMLElement} el — Element to show "Copied!" in
+ * @param {string} text — Text to copy
+ * @param {string} resetText — Text to restore after delay
+ * @param {number} delay — How long to show "Copied!" (default: 1500ms)
+ */
+export function copyWithReset(el, text, resetText, delay = 1500) {
+  copyToClipboard(text);
+  el.textContent = 'Copied!';
+  setTimeout(() => { el.textContent = resetText; }, delay);
+}
