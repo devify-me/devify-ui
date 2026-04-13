@@ -1,4 +1,4 @@
-import { sanitizeHref } from '../utils/url.js';
+import { sanitizeHref, sanitizeSrc } from '../utils/url.js';
 import { injectStyles } from '../utils/styles.js';
 
 let _navBarIdCounter = 0;
@@ -235,7 +235,7 @@ class DvfyNavBar extends HTMLElement {
     }
     if (name === 'logo') {
       const img = this.querySelector('.dvfy-nav-bar__logo');
-      if (img) img.src = this.getAttribute('logo') || '';
+      if (img) img.src = sanitizeSrc(this.getAttribute('logo')) || '';
     }
   }
 

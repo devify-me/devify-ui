@@ -1,3 +1,4 @@
+import { sanitizeSrc } from '../utils/url.js';
 import { injectStyles } from '../utils/styles.js';
 
 /**
@@ -170,7 +171,7 @@ class DvfyLoader extends HTMLElement {
       if (iconSrc) {
         const img = document.createElement('img');
         img.className = 'dvfy-loader__icon';
-        img.src = iconSrc;
+        img.src = sanitizeSrc(iconSrc);
         img.alt = '';
         img.setAttribute('aria-hidden', 'true');
         wrap.appendChild(img);

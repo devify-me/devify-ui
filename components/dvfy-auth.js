@@ -1,4 +1,4 @@
-import { sanitizeHref } from '../utils/url.js';
+import { sanitizeHref, sanitizeSrc } from '../utils/url.js';
 import { injectStyles } from '../utils/styles.js';
 
 /**
@@ -288,7 +288,7 @@ class DvfyAuth extends HTMLElement {
     if (logoUrl) {
       const img = document.createElement('img');
       img.className = 'dvfy-auth__logo';
-      img.src = logoUrl;
+      img.src = sanitizeSrc(logoUrl);
       img.alt = brand || 'Logo';
       card.appendChild(img);
     } else if (brand) {
@@ -329,7 +329,7 @@ class DvfyAuth extends HTMLElement {
     const isSignUp = mode === 'signup';
     const form = document.createElement('form');
     form.className = 'dvfy-auth__form';
-    form.action = this.#attr('action');
+    form.action = sanitizeHref(this.#attr('action'));
     form.method = this.#attr('method') || 'post';
     this.#copyHxAttrs(form);
     form.addEventListener('submit', e => this.#handleSubmit(e, form));
