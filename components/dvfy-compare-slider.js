@@ -190,6 +190,7 @@ class DvfyCompareSlider extends HTMLElement {
   /** @type {HTMLElement|null} */
   #divider = null;
   #observer = null;
+  #pointerRafId = 0;
 
   connectedCallback() {
     injectStyles('dvfy-compare-slider', STYLES);
@@ -207,6 +208,7 @@ class DvfyCompareSlider extends HTMLElement {
   }
 
   disconnectedCallback() {
+    if (this.#pointerRafId) { cancelAnimationFrame(this.#pointerRafId); this.#pointerRafId = 0; }
     this.removeEventListener('pointerdown', this.#onPointerDown);
     this.removeEventListener('keydown', this.#onKeyDown);
     this.#observer?.disconnect();
@@ -310,10 +312,16 @@ class DvfyCompareSlider extends HTMLElement {
   };
 
   #onPointerMove = (e) => {
-    this.#updateFromPointer(e);
+    if (!this.#pointerRafId) {
+      this.#pointerRafId = requestAnimationFrame(() => {
+        this.#updateFromPointer(e);
+        this.#pointerRafId = 0;
+      });
+    }
   };
 
   #onPointerUp = (e) => {
+    if (this.#pointerRafId) { cancelAnimationFrame(this.#pointerRafId); this.#pointerRafId = 0; }
     this.releasePointerCapture(e.pointerId);
     this.toggleAttribute('dragging', false);
     this.removeEventListener('pointermove',   this.#onPointerMove);
