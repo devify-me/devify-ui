@@ -1,5 +1,8 @@
 import { injectStyles } from '../utils/styles.js';
 
+// Module-level registry of open dropdown instances to avoid document.querySelectorAll
+const openDropdowns = new Set();
+
 /**
  * <dvfy-dropdown> — Dropdown menu
  *
@@ -111,6 +114,7 @@ class DvfyDropdown extends HTMLElement {
   }
 
   disconnectedCallback() {
+    openDropdowns.delete(this);
     this.removeEventListener('keydown', this.#onKey);
     document.removeEventListener('click', this.#onOutside);
   }
@@ -118,8 +122,13 @@ class DvfyDropdown extends HTMLElement {
   static get observedAttributes() { return ['open', 'align']; }
 
   attributeChangedCallback(name) {
-    if (name === 'open' && this.#menu) {
-      if (!this.hasAttribute('open')) this.#activeIndex = -1;
+    if (name === 'open') {
+      if (this.hasAttribute('open')) {
+        openDropdowns.add(this);
+      } else {
+        openDropdowns.delete(this);
+        if (this.#menu) this.#activeIndex = -1;
+      }
     }
   }
 
@@ -157,7 +166,7 @@ class DvfyDropdown extends HTMLElement {
       this.removeAttribute('open');
     } else {
       // Close all other open dropdowns first
-      document.querySelectorAll('dvfy-dropdown[open]').forEach((d) => {
+      openDropdowns.forEach((d) => {
         if (d !== this) d.removeAttribute('open');
       });
       this.setAttribute('open', '');
