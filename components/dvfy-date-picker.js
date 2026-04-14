@@ -128,7 +128,7 @@ dvfy-date-picker .dvfy-date-picker__nav {
               color var(--dvfy-duration-fast) var(--dvfy-ease-out);
 }
 dvfy-date-picker .dvfy-date-picker__nav:hover {
-  background: var(--dvfy-surface-hover);
+  background: var(--dvfy-surface-muted);
   color: var(--dvfy-text-primary);
 }
 dvfy-date-picker .dvfy-date-picker__nav:focus-visible {
@@ -149,7 +149,7 @@ dvfy-date-picker .dvfy-date-picker__heading {
   font-family: inherit;
   transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
 }
-dvfy-date-picker .dvfy-date-picker__heading:hover { background: var(--dvfy-surface-hover); }
+dvfy-date-picker .dvfy-date-picker__heading:hover { background: var(--dvfy-surface-muted); }
 dvfy-date-picker .dvfy-date-picker__heading:focus-visible {
   outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);
   outline-offset: var(--dvfy-ring-offset);
@@ -192,7 +192,7 @@ dvfy-date-picker .dvfy-date-picker__day {
   transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out),
               color var(--dvfy-duration-fast) var(--dvfy-ease-out);
 }
-dvfy-date-picker .dvfy-date-picker__day:hover:not(:disabled) { background: var(--dvfy-surface-hover); }
+dvfy-date-picker .dvfy-date-picker__day:hover:not(:disabled) { background: var(--dvfy-surface-muted); }
 dvfy-date-picker .dvfy-date-picker__day:focus-visible {
   outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);
   outline-offset: 1px;
@@ -279,7 +279,7 @@ dvfy-date-picker .dvfy-date-picker__footer-btn {
               color var(--dvfy-duration-fast) var(--dvfy-ease-out);
 }
 dvfy-date-picker .dvfy-date-picker__footer-btn:hover {
-  background: var(--dvfy-surface-hover);
+  background: var(--dvfy-surface-muted);
   color: var(--dvfy-text-primary);
 }
 dvfy-date-picker .dvfy-date-picker__footer-btn:focus-visible {
@@ -305,7 +305,7 @@ dvfy-date-picker .dvfy-date-picker__month-item {
   text-align: center;
   transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
 }
-dvfy-date-picker .dvfy-date-picker__month-item:hover { background: var(--dvfy-surface-hover); }
+dvfy-date-picker .dvfy-date-picker__month-item:hover { background: var(--dvfy-surface-muted); }
 dvfy-date-picker .dvfy-date-picker__month-item--active {
   background: var(--dvfy-date-picker-selected-bg, var(--dvfy-primary-bg));
   color: var(--dvfy-date-picker-selected-text, #fff);
@@ -336,7 +336,7 @@ dvfy-date-picker .dvfy-date-picker__year-item {
   text-align: center;
   transition: background var(--dvfy-duration-fast) var(--dvfy-ease-out);
 }
-dvfy-date-picker .dvfy-date-picker__year-item:hover { background: var(--dvfy-surface-hover); }
+dvfy-date-picker .dvfy-date-picker__year-item:hover { background: var(--dvfy-surface-muted); }
 dvfy-date-picker .dvfy-date-picker__year-item--active {
   background: var(--dvfy-date-picker-selected-bg, var(--dvfy-primary-bg));
   color: var(--dvfy-date-picker-selected-text, #fff);

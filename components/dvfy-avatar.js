@@ -1,3 +1,4 @@
+import { sanitizeSrc } from '../utils/url.js';
 import { injectStyles } from '../utils/styles.js';
 
 /**
@@ -207,7 +208,7 @@ class DvfyAvatar extends HTMLElement {
     if (src) {
       const img = document.createElement('img');
       img.className = 'dvfy-avatar__img';
-      img.src = src;
+      img.src = sanitizeSrc(src);
       img.alt = name;
       img.addEventListener('error', () => {
         img.remove();

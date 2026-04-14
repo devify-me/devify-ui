@@ -1,6 +1,13 @@
 import { sanitizeHref } from '../utils/url.js';
 import { injectStyles } from '../utils/styles.js';
 
+// Module-level registry and shared listener to deduplicate global window listeners
+const navInstances = new Set();
+
+const sharedHashChangeHandler = () => {
+  navInstances.forEach(nav => nav._notifyHashChange?.());
+};
+
 const STYLES = `
 dvfy-nav {
   display: inline-flex;
@@ -31,7 +38,7 @@ dvfy-nav a.dvfy-nav__link:hover {
   border-bottom-color: var(--dvfy-border-strong);
 }
 dvfy-nav a.dvfy-nav__link:focus-visible {
-  outline: 2px solid var(--dvfy-focus-ring);
+  outline: 2px solid var(--dvfy-ring-color);
   outline-offset: -2px;
   border-radius: var(--dvfy-radius-sm);
 }
@@ -89,13 +96,24 @@ class DvfyNav extends HTMLElement {
     }
     this.#build();
     this.#detectActive();
-    window.addEventListener('hashchange', this.#onHashChange);
-    window.addEventListener('popstate', this.#onHashChange);
+
+    // Register this instance for shared window listener
+    navInstances.add(this);
+    this._notifyHashChange = () => this.#detectActive();
+    if (navInstances.size === 1) {
+      // Add shared listener only for first instance
+      window.addEventListener('hashchange', sharedHashChangeHandler);
+      window.addEventListener('popstate', sharedHashChangeHandler);
+    }
   }
 
   disconnectedCallback() {
-    window.removeEventListener('hashchange', this.#onHashChange);
-    window.removeEventListener('popstate', this.#onHashChange);
+    navInstances.delete(this);
+    if (navInstances.size === 0) {
+      // Remove shared listener when last instance disconnects
+      window.removeEventListener('hashchange', sharedHashChangeHandler);
+      window.removeEventListener('popstate', sharedHashChangeHandler);
+    }
   }
 
   attributeChangedCallback(name) {
@@ -109,8 +127,6 @@ class DvfyNav extends HTMLElement {
     if (name === 'active') this.#updateAriaCurrent(link);
     if (name === 'active' || name === 'href') this.#detectActive();
   }
-
-  #onHashChange = () => this.#detectActive();
 
   #build() {
     while (this.firstChild && !this.firstChild._dvfyBuilt) {

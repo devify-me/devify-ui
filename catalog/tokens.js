@@ -3,7 +3,7 @@
  *
  * Reads live computed values via getComputedStyle for accuracy with active theme.
  */
-import { copyToClipboard } from './clipboard.js';
+import { copyToClipboard, copyWithReset } from './clipboard.js';
 import { TOKEN_GROUPS } from './data.js';
 
 const cs = () => getComputedStyle(document.documentElement);
