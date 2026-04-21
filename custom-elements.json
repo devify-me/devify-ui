@@ -3706,30 +3706,8 @@
       ]
     },
     {
-      "name": "dvfy-tree-view",
-      "path": "./components/dvfy-tree-view.js",
-      "description": "Interactive tree view for hierarchical navigation (VS Code file explorer style).",
-      "events": [
-        {
-          "name": "select"
-        }
-      ],
-      "cssProperties": [
-        {
-          "name": "--dvfy-hover-bg",
-          "description": "Row hover background",
-          "type": "color"
-        },
-        {
-          "name": "--dvfy-active-bg",
-          "description": "Selected row background",
-          "type": "color"
-        }
-      ]
-    },
-    {
       "name": "dvfy-tree-node",
-      "path": "./components/dvfy-tree-view.js",
+      "path": "./components/dvfy-tree-node.js",
       "description": "A node within a tree view. Can be a branch (has children) or leaf (has href).",
       "attributes": [
         {
@@ -3774,6 +3752,28 @@
         {
           "name": "",
           "description": "Child dvfy-tree-node elements for branch nodes"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-tree-view",
+      "path": "./components/dvfy-tree-view.js",
+      "description": "Interactive tree view for hierarchical navigation (VS Code file explorer style).",
+      "events": [
+        {
+          "name": "select"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-hover-bg",
+          "description": "Row hover background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-active-bg",
+          "description": "Selected row background",
+          "type": "color"
         }
       ]
     },
