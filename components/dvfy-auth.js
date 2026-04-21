@@ -246,6 +246,11 @@ const STYLES = `
  * @cssprop {color} --dvfy-surface-raised - Card background
  */
 class DvfyAuth extends HTMLElement {
+  static #STRUCTURAL = new Set(['mode', 'modal']);
+
+  #pendingRender = false;
+  #initialized = false;
+
   static get observedAttributes() {
     return ['mode', 'action', 'method', 'brand', 'logo', 'modal', 'forgot-url',
             'signup-url', 'signin-url', 'oauth-google', 'oauth-github'];
@@ -258,6 +263,7 @@ class DvfyAuth extends HTMLElement {
       this.setAttribute('aria-label', 'Authentication');
     }
     this.#render();
+    this.#initialized = true;
   }
 
   disconnectedCallback() {
@@ -266,8 +272,77 @@ class DvfyAuth extends HTMLElement {
     this.textContent = '';
   }
 
-  attributeChangedCallback() {
-    if (this.isConnected) this.#render();
+  #scheduleRender() {
+    if (!this.#pendingRender) {
+      this.#pendingRender = true;
+      queueMicrotask(() => {
+        this.#pendingRender = false;
+        this.#render();
+        this.#initialized = true;
+      });
+    }
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (!this.isConnected) return;
+    if (!this.#initialized) return;
+
+    if (DvfyAuth.#STRUCTURAL.has(name)) {
+      this.#scheduleRender();
+      return;
+    }
+
+    // Presence toggle (null↔value) means the element must be added or removed → rebuild
+    const wasPresent = oldValue !== null;
+    const isPresent = newValue !== null;
+    if (wasPresent !== isPresent) {
+      this.#scheduleRender();
+      return;
+    }
+
+    // Both present (value update) → in-place
+    switch (name) {
+      case 'action': {
+        const form = this.querySelector('form.dvfy-auth__form');
+        if (form) form.action = sanitizeHref(newValue);
+        break;
+      }
+      case 'method': {
+        const form = this.querySelector('form.dvfy-auth__form');
+        if (form) form.method = newValue || 'post';
+        break;
+      }
+      case 'brand': {
+        const h = this.querySelector('.dvfy-auth__brand');
+        if (h) h.textContent = newValue;
+        const img = this.querySelector('.dvfy-auth__logo');
+        if (img) img.alt = newValue;
+        break;
+      }
+      case 'logo': {
+        const img = this.querySelector('.dvfy-auth__logo');
+        if (img) img.src = sanitizeSrc(newValue);
+        break;
+      }
+      case 'forgot-url': {
+        const a = this.querySelector('.dvfy-auth__forgot');
+        if (a) a.href = sanitizeHref(newValue);
+        break;
+      }
+      case 'signup-url':
+      case 'signin-url': {
+        const a = this.querySelector('.dvfy-auth__footer .dvfy-auth__link');
+        if (a) a.href = sanitizeHref(newValue);
+        break;
+      }
+      case 'oauth-google':
+      case 'oauth-github': {
+        const provider = name === 'oauth-google' ? 'google' : 'github';
+        const a = this.querySelector(`[data-provider="${provider}"]`);
+        if (a) a.href = sanitizeHref(newValue);
+        break;
+      }
+    }
   }
 
   #attr(name) { return this.getAttribute(name) || ''; }
@@ -489,6 +564,7 @@ class DvfyAuth extends HTMLElement {
     const a = document.createElement('a');
     a.className = 'dvfy-auth__btn--oauth';
     a.href = url;
+    a.dataset.provider = type;
 
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
     svg.setAttribute('viewBox', '0 0 24 24');

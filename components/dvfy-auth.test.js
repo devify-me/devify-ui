@@ -344,7 +344,62 @@ describe('dvfy-auth', () => {
       expect(el.querySelector('.dvfy-auth__btn').textContent).to.equal('Sign in');
 
       el.setAttribute('mode', 'signup');
+      await Promise.resolve();
       expect(el.querySelector('.dvfy-auth__btn').textContent).to.equal('Create account');
+    });
+  });
+
+  describe('stability', () => {
+    it('preserves email input reference when forgot-url changes', async () => {
+      const el = await fixture(
+        html`<dvfy-auth action="/login" forgot-url="/forgot"></dvfy-auth>`
+      );
+      const input = el.querySelector('#dvfy-auth-email');
+      input.value = 'typed@example.com';
+
+      el.setAttribute('forgot-url', '/recover');
+      expect(el.querySelector('#dvfy-auth-email')).to.equal(input);
+      expect(input.value).to.equal('typed@example.com');
+
+      const forgot = el.querySelector('.dvfy-auth__forgot');
+      expect(forgot.href).to.include('/recover');
+    });
+
+    it('preserves form node when action changes', async () => {
+      const el = await fixture(
+        html`<dvfy-auth action="/login"></dvfy-auth>`
+      );
+      const form = el.querySelector('form.dvfy-auth__form');
+
+      el.setAttribute('action', '/auth/submit');
+      expect(el.querySelector('form.dvfy-auth__form')).to.equal(form);
+      expect(form.action).to.include('/auth/submit');
+    });
+
+    it('preserves inputs and OAuth anchor when oauth-google URL changes', async () => {
+      const el = await fixture(
+        html`<dvfy-auth action="/login" oauth-google="/auth/google"></dvfy-auth>`
+      );
+      const emailInput = el.querySelector('#dvfy-auth-email');
+      const anchor = el.querySelector('[data-provider="google"]');
+      emailInput.value = 'persist@example.com';
+
+      el.setAttribute('oauth-google', '/auth/google-v2');
+      expect(el.querySelector('#dvfy-auth-email')).to.equal(emailInput);
+      expect(emailInput.value).to.equal('persist@example.com');
+      expect(el.querySelector('[data-provider="google"]')).to.equal(anchor);
+      expect(anchor.href).to.include('/auth/google-v2');
+    });
+
+    it('preserves brand text node when brand changes', async () => {
+      const el = await fixture(
+        html`<dvfy-auth action="/login" brand="Devify"></dvfy-auth>`
+      );
+      const brand = el.querySelector('.dvfy-auth__brand');
+
+      el.setAttribute('brand', 'Acme');
+      expect(el.querySelector('.dvfy-auth__brand')).to.equal(brand);
+      expect(brand.textContent).to.equal('Acme');
     });
   });
 });
