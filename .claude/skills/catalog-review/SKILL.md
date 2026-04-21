@@ -1,5 +1,6 @@
 ---
 name: catalog-review
+model: sonnet
 description: Review the @devify/ui component catalog for UX, visual, and performance issues
 allowed-tools: ["Bash", "Read", "WebFetch", "WebSearch", "Agent", "mcp__plugin_playwright_playwright__*"]
 ---
