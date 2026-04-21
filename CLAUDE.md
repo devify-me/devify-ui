@@ -52,7 +52,12 @@ devify-ui/
     ├── data.js            # Taxonomy (TIERS, DOMAINS, COMPONENT_REGISTRY), tokens, patterns
     ├── tokens.js          # Token showcase renderers (colors, typography, etc.)
     ├── brand.js           # Live-editable brand settings sandbox
-    └── overview.js        # Landing page renderer
+    ├── brand-state.js     # Brand settings state management
+    ├── palette.js         # Palette visualization
+    ├── storage.js         # Persistence logic
+    ├── clipboard.js       # Copy-to-clipboard utility
+    ├── overview.js        # Landing page renderer
+    └── manifest.json      # PWA manifest
 ```
 
 ## Conventions
@@ -158,7 +163,7 @@ Keep `CHANGELOG.md` updated: move `[Unreleased]` items to a new version section 
 # Analyze components and generate custom-elements.json
 npm run analyze
 
-# Serve catalog locally (with api-viewer playground)
+# Serve catalog locally
 npm run serve
 
 # Build CDN-ready minified bundles (dist/devify.min.js + dist/devify.min.css)
@@ -166,9 +171,16 @@ npm run build
 
 # Run unit tests (Chromium via @web/test-runner)
 npm test
+npm run test:watch        # Watch mode
 
 # Lint JS + CSS
-npm run lint
+npm run lint              # Both JS and CSS
+npm run lint:js           # JS only (eslint)
+npm run lint:css          # CSS only (stylelint)
+
+# Check color contrast compliance
+npm run contrast
+npm run contrast:ci       # CI mode (non-zero exit on failure)
 ```
 
 ## Catalog Service
