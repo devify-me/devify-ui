@@ -88,6 +88,31 @@ describe('dvfy-avatar', () => {
     });
   });
 
+  describe('stability', () => {
+    it('preserves visual element reference on size change', async () => {
+      const el = await fixture(html`<dvfy-avatar name="A B" size="md"></dvfy-avatar>`);
+      const visual = el.querySelector('.dvfy-avatar__visual');
+      el.setAttribute('size', 'lg');
+      expect(el.querySelector('.dvfy-avatar__visual')).to.equal(visual);
+    });
+
+    it('preserves initials element reference on name change', async () => {
+      const el = await fixture(html`<dvfy-avatar name="Jane Doe"></dvfy-avatar>`);
+      const initials = el.querySelector('.dvfy-avatar__initials');
+      el.setAttribute('name', 'Alice Bob');
+      expect(el.querySelector('.dvfy-avatar__initials')).to.equal(initials);
+      expect(initials.textContent).to.equal('AB');
+    });
+
+    it('preserves visual element reference when adding status dot', async () => {
+      const el = await fixture(html`<dvfy-avatar name="A"></dvfy-avatar>`);
+      const visual = el.querySelector('.dvfy-avatar__visual');
+      el.setAttribute('status', 'online');
+      expect(el.querySelector('.dvfy-avatar__visual')).to.equal(visual);
+      expect(el.querySelector('.dvfy-avatar__status').dataset.status).to.equal('online');
+    });
+  });
+
   describe('interactive mode', () => {
     it('sets role=button and tabindex=0 when interactive', async () => {
       const el = await fixture(html`<dvfy-avatar name="Test" interactive></dvfy-avatar>`);
