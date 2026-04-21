@@ -173,15 +173,94 @@ dvfy-avatar-group .dvfy-avatar-group__overflow {
  * @cssprop {color} --dvfy-danger-text - Busy status dot color
  */
 class DvfyAvatar extends HTMLElement {
+  static #STRUCTURAL = new Set(['src', 'interactive']);
+
+  #pendingRender = false;
+  #initialized = false;
+
   connectedCallback() {
     injectStyles('dvfy-avatar', STYLES);
     this.#build();
+    this.#initialized = true;
   }
 
   static get observedAttributes() { return ['src', 'name', 'size', 'status', 'interactive', 'label', 'label-position']; }
 
-  attributeChangedCallback() {
-    if (this.isConnected) this.#build();
+  #scheduleRender() {
+    if (!this.#pendingRender) {
+      this.#pendingRender = true;
+      queueMicrotask(() => {
+        this.#pendingRender = false;
+        this.#build();
+        this.#initialized = true;
+      });
+    }
+  }
+
+  attributeChangedCallback(name) {
+    if (!this.isConnected) return;
+    if (!this.#initialized) return;
+
+    if (DvfyAvatar.#STRUCTURAL.has(name)) {
+      this.#scheduleRender();
+      return;
+    }
+
+    switch (name) {
+      case 'name':
+        this.#updateName();
+        break;
+      case 'status':
+        this.#updateStatus();
+        break;
+      case 'label':
+        this.#updateLabel();
+        break;
+      case 'size':
+      case 'label-position':
+        // Handled entirely by CSS attribute selectors
+        break;
+    }
+  }
+
+  #updateName() {
+    const name = this.getAttribute('name') || '';
+    const initials = this.querySelector('.dvfy-avatar__initials');
+    if (initials) initials.textContent = this.#getInitials(name);
+    const img = this.querySelector('.dvfy-avatar__img');
+    if (img) img.alt = name;
+    if (this.hasAttribute('interactive') && !this.getAttribute('aria-label')?.length) {
+      this.setAttribute('aria-label', this.getAttribute('label') || name || 'User avatar');
+    }
+  }
+
+  #updateStatus() {
+    const status = this.getAttribute('status');
+    const visual = this.querySelector('.dvfy-avatar__visual');
+    if (!visual) { this.#scheduleRender(); return; }
+    const existing = visual.querySelector('.dvfy-avatar__status');
+    if (!status) {
+      if (existing) existing.remove();
+      return;
+    }
+    if (existing) {
+      existing.dataset.status = status;
+    } else {
+      const dot = document.createElement('span');
+      dot.className = 'dvfy-avatar__status';
+      dot.dataset.status = status;
+      visual.appendChild(dot);
+    }
+  }
+
+  #updateLabel() {
+    const label = this.getAttribute('label');
+    const existing = this.querySelector('.dvfy-avatar__label');
+    if (label && existing) {
+      existing.textContent = label;
+    } else {
+      this.#scheduleRender();
+    }
   }
 
   #build() {

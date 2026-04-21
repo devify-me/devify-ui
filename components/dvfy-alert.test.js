@@ -112,6 +112,24 @@ describe('dvfy-alert', () => {
     });
   });
 
+  describe('stability', () => {
+    it('preserves body element reference on status change', async () => {
+      const el = await fixture(html`<dvfy-alert status="info">Hello</dvfy-alert>`);
+      const body = el.querySelector('.dvfy-alert__body');
+      el.setAttribute('status', 'success');
+      expect(el.querySelector('.dvfy-alert__body')).to.equal(body);
+      expect(el.querySelector('.dvfy-alert__icon').textContent).to.equal('✓');
+    });
+
+    it('preserves body element reference on title text change', async () => {
+      const el = await fixture(html`<dvfy-alert title="Old">Body</dvfy-alert>`);
+      const body = el.querySelector('.dvfy-alert__body');
+      el.setAttribute('title', 'New');
+      expect(el.querySelector('.dvfy-alert__body')).to.equal(body);
+      expect(el.querySelector('.dvfy-alert__title').textContent).to.equal('New');
+    });
+  });
+
   describe('ARIA', () => {
     it('sets role="alert"', async () => {
       const el = await fixture(html`<dvfy-alert>ARIA test</dvfy-alert>`);

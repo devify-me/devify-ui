@@ -1,9 +1,11 @@
 import { labelPositionCSS } from '../utils/label-position.js';
+import { appendFormMessages } from '../utils/form-messages.js';
 import { injectStyles } from '../utils/styles.js';
 
 const STYLES = `
 dvfy-checkbox {
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: var(--dvfy-space-2);
   font-family: var(--dvfy-font-sans);
@@ -73,6 +75,25 @@ dvfy-checkbox .dvfy-checkbox__label {
 }
 dvfy-checkbox[disabled] .dvfy-checkbox__label { color: var(--dvfy-disabled-text); }
 
+/* Message styles (shared shape with dvfy-input) */
+dvfy-checkbox .dvfy-checkbox__messages {
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--dvfy-space-0-5);
+  margin-top: var(--dvfy-space-1);
+}
+dvfy-checkbox .dvfy-checkbox__messages:empty { display: none; }
+dvfy-checkbox .dvfy-checkbox__help-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted); }
+dvfy-checkbox .dvfy-checkbox__error-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-input-error); }
+dvfy-checkbox .dvfy-checkbox__warning-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-warning-text); }
+dvfy-checkbox .dvfy-checkbox__success-msg { font-size: var(--dvfy-text-xs); color: var(--dvfy-success-text); }
+
+/* State-based input border */
+dvfy-checkbox[state="error"] .dvfy-checkbox__input { border-color: var(--dvfy-input-error); }
+dvfy-checkbox[state="warning"] .dvfy-checkbox__input { border-color: var(--dvfy-warning-border); }
+dvfy-checkbox[state="success"] .dvfy-checkbox__input { border-color: var(--dvfy-success-border); }
+
 /* Size: xs — 0.75rem input */
 dvfy-checkbox[size="xs"] { gap: var(--dvfy-space-1-5); }
 dvfy-checkbox[size="xs"] .dvfy-checkbox__input { width: 0.75rem; height: 0.75rem; border-width: var(--dvfy-border-1); }
@@ -107,7 +128,7 @@ ${labelPositionCSS('dvfy-checkbox', { layout: 'inline', label: '.dvfy-checkbox__
 `;
 
 /**
- * Checkbox input with label, tri-state cycling, and size variants.
+ * Checkbox input with label, tri-state cycling, size variants, and validation messages.
  *
  * When the `indeterminate` attribute is set at initialization, clicking
  * cycles: indeterminate → checked → unchecked → indeterminate → ...
@@ -123,24 +144,35 @@ ${labelPositionCSS('dvfy-checkbox', { layout: 'inline', label: '.dvfy-checkbox__
  * @attr {string} value - Form field value (default: "on")
  * @attr {string} label - Label text
  * @attr {string} label-position - Label placement: top | right | bottom | left (default: "right")
+ * @attr {string} state - Validation state: error | warning | success
+ * @attr {string} error - Error message text (takes precedence over state)
+ * @attr {string} warning - Warning message text
+ * @attr {string} help - Help text shown below the control
  *
  * @event {CustomEvent} change - Checkbox state changed, detail: { checked, indeterminate }
  *
  * @cssprop {color} --dvfy-primary-bg - Checked/indeterminate background
  * @cssprop {color} --dvfy-input-border - Unchecked border color
+ * @cssprop {color} --dvfy-input-error - Error message color
  *
  * @example
  * <dvfy-checkbox label="Accept terms" name="terms"></dvfy-checkbox>
  * <dvfy-checkbox label="Select all" indeterminate></dvfy-checkbox>
  * <dvfy-checkbox label="Large option" size="lg" checked></dvfy-checkbox>
+ * <dvfy-checkbox label="Agree" error="You must agree to continue"></dvfy-checkbox>
  */
 class DvfyCheckbox extends HTMLElement {
+  static #STRUCTURAL = new Set(['indeterminate', 'label']);
+
   #tristate = false;
   #state = 'unchecked'; // 'unchecked' | 'checked' | 'indeterminate'
+  #pendingRender = false;
+  #initialized = false;
+  #muted = false;
+  #id = '';
 
   connectedCallback() {
     injectStyles('dvfy-checkbox', STYLES);
-    // Determine tri-state mode before first build
     this.#tristate = this.hasAttribute('indeterminate');
     if (this.hasAttribute('indeterminate')) {
       this.#state = 'indeterminate';
@@ -151,46 +183,126 @@ class DvfyCheckbox extends HTMLElement {
     }
     this.setAttribute('role', 'checkbox');
     this.#build();
+    this.#initialized = true;
   }
 
   disconnectedCallback() {
     this.textContent = '';
   }
 
-  static get observedAttributes() { return ['checked', 'disabled', 'indeterminate', 'label', 'size', 'label-position']; }
+  static get observedAttributes() {
+    return ['checked', 'disabled', 'indeterminate', 'label', 'size', 'label-position',
+            'error', 'warning', 'help', 'state'];
+  }
 
-  attributeChangedCallback() {
-    if (this.isConnected) this.#build();
+  #scheduleRender() {
+    if (!this.#pendingRender) {
+      this.#pendingRender = true;
+      queueMicrotask(() => {
+        this.#pendingRender = false;
+        this.#tristate = this.hasAttribute('indeterminate');
+        if (this.hasAttribute('indeterminate')) this.#state = 'indeterminate';
+        else if (this.hasAttribute('checked')) this.#state = 'checked';
+        else this.#state = 'unchecked';
+        this.#build();
+        this.#initialized = true;
+      });
+    }
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (!this.isConnected) return;
+    if (!this.#initialized) return;
+    if (this.#muted) return;
+
+    // Presence toggle on structural attrs requires full rebuild
+    if (DvfyCheckbox.#STRUCTURAL.has(name)) {
+      const wasPresent = oldValue !== null;
+      const isPresent = newValue !== null;
+      if (wasPresent !== isPresent) { this.#scheduleRender(); return; }
+      // Both present → in-place for label text; indeterminate has no value
+      if (name === 'label') { this.#updateLabel(); return; }
+    }
+
+    switch (name) {
+      case 'checked': this.#updateChecked(); break;
+      case 'disabled': this.#updateDisabled(); break;
+      case 'error':
+      case 'warning':
+      case 'help':
+      case 'state':
+        this.#updateMessages();
+        break;
+      // size, label-position: CSS-only
+    }
+  }
+
+  #updateChecked() {
+    const input = this.querySelector('.dvfy-checkbox__input');
+    if (!input) { this.#scheduleRender(); return; }
+    const isChecked = this.hasAttribute('checked');
+    if (this.#state === 'indeterminate') return;
+    this.#state = isChecked ? 'checked' : 'unchecked';
+    this.#syncInput(input);
+    this.#syncAria();
+  }
+
+  #updateDisabled() {
+    const input = this.querySelector('.dvfy-checkbox__input');
+    if (!input) { this.#scheduleRender(); return; }
+    input.disabled = this.hasAttribute('disabled');
+  }
+
+  #updateLabel() {
+    const existing = this.querySelector('.dvfy-checkbox__label');
+    const newLabel = this.getAttribute('label');
+    if (existing && newLabel) existing.textContent = newLabel;
+    else this.#scheduleRender();
+  }
+
+  #updateMessages() {
+    const input = this.querySelector('.dvfy-checkbox__input');
+    if (!input) { this.#scheduleRender(); return; }
+    this.querySelector('.dvfy-checkbox__messages')?.remove();
+    input.removeAttribute('aria-describedby');
+    this.#appendMessages(input);
+  }
+
+  #appendMessages(input) {
+    const error = this.getAttribute('error');
+    const warning = this.getAttribute('warning');
+    const help = this.getAttribute('help');
+    const state = this.getAttribute('state');
+    if (!error && !warning && !help && !state) return;
+
+    const container = appendFormMessages(this, 'dvfy-checkbox', input, {
+      error, warning, help, state,
+    });
+    if (container.childElementCount > 0) this.appendChild(container);
   }
 
   #build() {
     this.textContent = '';
-    const id = this.getAttribute('name') || `dvfy-cb-${Math.random().toString(36).slice(2, 8)}`;
+    this.#id = this.getAttribute('name') || `dvfy-cb-${Math.random().toString(36).slice(2, 8)}`;
 
     const input = document.createElement('input');
     input.type = 'checkbox';
     input.className = 'dvfy-checkbox__input';
-    input.id = id;
+    input.id = this.#id;
     input.name = this.getAttribute('name') || '';
     input.value = this.getAttribute('value') || 'on';
     if (this.hasAttribute('disabled')) input.disabled = true;
     if (this.hasAttribute('required')) input.required = true;
 
-    // Sync native input to internal state
     this.#syncInput(input);
 
     if (this.#tristate) {
       input.addEventListener('click', (e) => {
         e.preventDefault();
         if (input.disabled) return;
-        // Cycle: indeterminate → checked → unchecked → indeterminate
-        if (this.#state === 'indeterminate') {
-          this.#state = 'checked';
-        } else if (this.#state === 'checked') {
-          this.#state = 'unchecked';
-        } else {
-          this.#state = 'indeterminate';
-        }
+        if (this.#state === 'indeterminate') this.#state = 'checked';
+        else if (this.#state === 'checked') this.#state = 'unchecked';
+        else this.#state = 'indeterminate';
         this.#syncInput(input);
         this.#syncAttributes();
         this.dispatchEvent(new CustomEvent('change', {
@@ -215,10 +327,12 @@ class DvfyCheckbox extends HTMLElement {
     if (label) {
       const lbl = document.createElement('label');
       lbl.className = 'dvfy-checkbox__label';
-      lbl.setAttribute('for', id);
+      lbl.setAttribute('for', this.#id);
       lbl.textContent = label;
       this.appendChild(lbl);
     }
+
+    this.#appendMessages(input);
     this.#syncAttributes();
   }
 
@@ -227,20 +341,23 @@ class DvfyCheckbox extends HTMLElement {
     input.indeterminate = this.#state === 'indeterminate';
   }
 
-  #syncAttributes() {
-    if (this.#state === 'checked') {
-      this.setAttribute('checked', '');
-    } else {
-      this.removeAttribute('checked');
-    }
-    if (this.#state === 'indeterminate') {
-      this.setAttribute('indeterminate', '');
-    } else {
-      this.removeAttribute('indeterminate');
-    }
+  #syncAria() {
     const ariaVal = this.#state === 'indeterminate' ? 'mixed'
       : this.#state === 'checked' ? 'true' : 'false';
     this.setAttribute('aria-checked', ariaVal);
+  }
+
+  #syncAttributes() {
+    this.#muted = true;
+    try {
+      if (this.#state === 'checked') this.setAttribute('checked', '');
+      else this.removeAttribute('checked');
+      if (this.#state === 'indeterminate') this.setAttribute('indeterminate', '');
+      else this.removeAttribute('indeterminate');
+    } finally {
+      this.#muted = false;
+    }
+    this.#syncAria();
   }
 
   get checked() { return this.querySelector('input')?.checked ?? false; }

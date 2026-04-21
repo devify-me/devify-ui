@@ -113,24 +113,72 @@ const STATUS_ICONS = {
  * @cssprop {color} --dvfy-danger-bg-subtle - Danger status background
  */
 class DvfyAlert extends HTMLElement {
+  static #STRUCTURAL = new Set(['dismissible']);
+
+  #pendingRender = false;
+  #initialized = false;
+  #content = '';
+
   connectedCallback() {
     injectStyles('dvfy-alert', STYLES);
     this.setAttribute('role', 'alert');
+    this.#content = this.textContent.trim();
     this.#build();
+    this.#initialized = true;
   }
 
   disconnectedCallback() {}
 
   static get observedAttributes() { return ['status', 'title', 'dismissible']; }
 
-  attributeChangedCallback() {
-    if (this.isConnected) this.#build();
+  #scheduleRender() {
+    if (!this.#pendingRender) {
+      this.#pendingRender = true;
+      queueMicrotask(() => {
+        this.#pendingRender = false;
+        this.#build();
+        this.#initialized = true;
+      });
+    }
+  }
+
+  attributeChangedCallback(name) {
+    if (!this.isConnected) return;
+    if (!this.#initialized) return;
+
+    if (DvfyAlert.#STRUCTURAL.has(name)) {
+      this.#scheduleRender();
+      return;
+    }
+
+    if (name === 'status') {
+      this.#updateStatus();
+    } else if (name === 'title') {
+      this.#updateTitle();
+    }
+  }
+
+  #updateStatus() {
+    const icon = this.querySelector('.dvfy-alert__icon');
+    if (!icon) { this.#scheduleRender(); return; }
+    const status = this.getAttribute('status') || 'info';
+    icon.textContent = STATUS_ICONS[status] || STATUS_ICONS.info;
+  }
+
+  #updateTitle() {
+    const newTitle = this.getAttribute('title');
+    const existing = this.querySelector('.dvfy-alert__title');
+    if (newTitle && existing) {
+      existing.textContent = newTitle;
+    } else {
+      this.#scheduleRender();
+    }
   }
 
   #build() {
-    // Capture light DOM content before clearing
-    const content = this._contentCache ?? this.textContent.trim();
-    this._contentCache = content;
+    const existingBody = this.querySelector('.dvfy-alert__body');
+    const existingContentNode = existingBody?.querySelector('.dvfy-alert__content');
+    const content = existingContentNode ? existingContentNode.textContent : this.#content;
     this.textContent = '';
 
     const status = this.getAttribute('status') || 'info';
