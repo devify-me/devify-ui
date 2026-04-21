@@ -100,4 +100,108 @@ describe('dvfy-checkbox', () => {
       await checkA11y(el, { ignoredRules: ['nested-interactive', 'aria-toggle-field-name', 'label'] });
     });
   });
+
+  describe('messages (error/warning/help/state)', () => {
+    it('renders error message with role=alert', async () => {
+      const el = await fixture(html`<dvfy-checkbox label="Agree" error="Required"></dvfy-checkbox>`);
+      const msg = el.querySelector('.dvfy-checkbox__error-msg');
+      expect(msg).to.exist;
+      expect(msg.textContent).to.equal('Required');
+      expect(msg.getAttribute('role')).to.equal('alert');
+    });
+
+    it('renders warning message', async () => {
+      const el = await fixture(html`<dvfy-checkbox label="Agree" warning="Be careful"></dvfy-checkbox>`);
+      const msg = el.querySelector('.dvfy-checkbox__warning-msg');
+      expect(msg).to.exist;
+      expect(msg.textContent).to.equal('Be careful');
+    });
+
+    it('renders help text', async () => {
+      const el = await fixture(html`<dvfy-checkbox label="Agree" help="Optional"></dvfy-checkbox>`);
+      const msg = el.querySelector('.dvfy-checkbox__help-msg');
+      expect(msg).to.exist;
+      expect(msg.textContent).to.equal('Optional');
+    });
+
+    it('wires aria-describedby from input to error message', async () => {
+      const el = await fixture(html`<dvfy-checkbox label="Agree" error="Required"></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+      const msg = el.querySelector('.dvfy-checkbox__error-msg');
+      expect(input.getAttribute('aria-describedby')).to.equal(msg.id);
+    });
+
+    it('prioritises error over warning when both set', async () => {
+      const el = await fixture(html`<dvfy-checkbox label="Agree" error="Err" warning="Warn"></dvfy-checkbox>`);
+      expect(el.querySelector('.dvfy-checkbox__error-msg')).to.exist;
+      expect(el.querySelector('.dvfy-checkbox__warning-msg')).to.not.exist;
+    });
+
+    it('shows help alongside error', async () => {
+      const el = await fixture(html`<dvfy-checkbox label="Agree" error="Err" help="Hint"></dvfy-checkbox>`);
+      expect(el.querySelector('.dvfy-checkbox__error-msg')).to.exist;
+      expect(el.querySelector('.dvfy-checkbox__help-msg')).to.exist;
+    });
+  });
+
+  describe('stability', () => {
+    it('preserves input reference and checked state when label changes', async () => {
+      const el = await fixture(html`<dvfy-checkbox label="Old" checked></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+      expect(input.checked).to.be.true;
+
+      el.setAttribute('label', 'New');
+      expect(el.querySelector('.dvfy-checkbox__input')).to.equal(input);
+      expect(input.checked).to.be.true;
+      expect(el.querySelector('.dvfy-checkbox__label').textContent).to.equal('New');
+    });
+
+    it('preserves input reference when disabled changes', async () => {
+      const el = await fixture(html`<dvfy-checkbox label="Test"></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+
+      el.setAttribute('disabled', '');
+      expect(el.querySelector('.dvfy-checkbox__input')).to.equal(input);
+      expect(input.disabled).to.be.true;
+
+      el.removeAttribute('disabled');
+      expect(input.disabled).to.be.false;
+    });
+
+    it('preserves input reference when error text changes', async () => {
+      const el = await fixture(html`<dvfy-checkbox label="Agree" error="First"></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+
+      el.setAttribute('error', 'Second');
+      expect(el.querySelector('.dvfy-checkbox__input')).to.equal(input);
+      expect(el.querySelector('.dvfy-checkbox__error-msg').textContent).to.equal('Second');
+    });
+
+    it('preserves input reference when error is removed', async () => {
+      const el = await fixture(html`<dvfy-checkbox label="Agree" error="Err"></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+
+      el.removeAttribute('error');
+      expect(el.querySelector('.dvfy-checkbox__input')).to.equal(input);
+      expect(el.querySelector('.dvfy-checkbox__error-msg')).to.not.exist;
+    });
+
+    it('does not rebuild on each click in tri-state mode', async () => {
+      const el = await fixture(html`<dvfy-checkbox label="All" indeterminate></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+
+      input.click(); // indeterminate → checked
+      await Promise.resolve();
+      expect(el.querySelector('.dvfy-checkbox__input')).to.equal(input);
+
+      input.click(); // checked → unchecked
+      await Promise.resolve();
+      expect(el.querySelector('.dvfy-checkbox__input')).to.equal(input);
+
+      input.click(); // unchecked → indeterminate
+      await Promise.resolve();
+      expect(el.querySelector('.dvfy-checkbox__input')).to.equal(input);
+      expect(input.indeterminate).to.be.true;
+    });
+  });
 });
