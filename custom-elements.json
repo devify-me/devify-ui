@@ -540,7 +540,7 @@
     {
       "name": "dvfy-checkbox",
       "path": "./components/dvfy-checkbox.js",
-      "description": "Checkbox input with label, tri-state cycling, and size variants.\n\nWhen the `indeterminate` attribute is set at initialization, clicking\ncycles: indeterminate → checked → unchecked → indeterminate → ...\nWithout `indeterminate`, standard binary toggle applies.",
+      "description": "Checkbox input with label, tri-state cycling, size variants, and validation messages.\n\nWhen the `indeterminate` attribute is set at initialization, clicking\ncycles: indeterminate → checked → unchecked → indeterminate → ...\nWithout `indeterminate`, standard binary toggle applies.",
       "attributes": [
         {
           "name": "checked",
@@ -581,6 +581,26 @@
           "name": "label-position",
           "description": "Label placement: top | right | bottom | left (default: \"right\")",
           "type": "string"
+        },
+        {
+          "name": "error",
+          "description": "Error message text (takes precedence over state)",
+          "type": "string"
+        },
+        {
+          "name": "warning",
+          "description": "Warning message text",
+          "type": "string"
+        },
+        {
+          "name": "help",
+          "description": "Help text shown below the control",
+          "type": "string"
+        },
+        {
+          "name": "state",
+          "description": "Validation state: error | warning | success",
+          "type": "string"
         }
       ],
       "properties": [
@@ -611,6 +631,11 @@
         {
           "name": "--dvfy-input-border",
           "description": "Unchecked border color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-input-error",
+          "description": "Error message color",
           "type": "color"
         }
       ]
