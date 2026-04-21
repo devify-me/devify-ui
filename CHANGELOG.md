@@ -11,6 +11,14 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- `dvfy-checkbox` — `error`, `warning`, `help`, and `state` attributes wired through the shared form-messages helper with `aria-describedby` for screen readers.
+
+### Fixed
+
+- `dvfy-alert`, `dvfy-avatar`, `dvfy-auth`, `dvfy-checkbox` — no longer rebuild their internal DOM on every observed attribute change. Non-structural changes (`status`, `title`, `name`, `label`, `action`, `checked`, `disabled`, OAuth URLs, etc.) now update in place, preserving focus, typed input values, and element references. Fixes flicker during rapid attribute updates such as theme switches or live-edit sandboxes.
+
 ---
 
 ## [0.2.0] — 2026-04-02
