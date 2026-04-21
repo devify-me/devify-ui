@@ -40,6 +40,7 @@ import './components/dvfy-nav.js';
 import './components/dvfy-nav-menu.js';
 import './components/dvfy-nav-bar.js';
 import './components/dvfy-sidebar.js';
+import './components/dvfy-tree-node.js';
 import './components/dvfy-tree-view.js';
 
 // Wave 3: Functional + Interactive
