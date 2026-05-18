@@ -1,0 +1,212 @@
+[
+  {
+    "file": "components/dvfy-alert.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-auth.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-auth.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-carousel.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-carousel.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-carousel.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-component-playground.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-component-playground.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-component-playground.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-drawer.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-drawer.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-file-upload.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-hamburger.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-input.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-input.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-modal.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-pagination.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-select.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-sidebar.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-stepper.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-table.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-table.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-tabs.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-tag.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-theme-switcher.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "components/dvfy-theme-switcher.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "patterns/dvfy-confirm.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "patterns/dvfy-confirm.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "patterns/dvfy-htmx-form.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "patterns/dvfy-htmx-form.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  },
+  {
+    "file": "patterns/dvfy-htmx-table.js",
+    "native": "button",
+    "reason": "see #332 \u2014 tracked button cleanup"
+  }
+]

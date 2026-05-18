@@ -26,6 +26,12 @@ jobs:
       - name: Lint CSS
         run: npm run lint:css
 
+      - name: Check no-hardcoded color literals
+        run: npm run check:tokens
+
+      - name: Check dvfy-* preference
+        run: npm run check:dvfy-pref
+
   test:
     name: Test
     runs-on: ubuntu-latest

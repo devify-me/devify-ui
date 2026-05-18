@@ -16,6 +16,8 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `dvfy-checkbox` — `error`, `warning`, `help`, and `state` attributes wired through the shared form-messages helper with `aria-describedby` for screen readers.
 - `dvfy-section-hero` — opinionated landing-page hero section with `align`, `padding`, `tone` attributes and `trust` slot. Tier 1 layout primitive, mobile-first, token-driven.
 - `dvfy-component-playground` — WIP mode. New `src` attribute dynamically imports a component module before rendering; new `tag` attribute (preferred name; `component` retained as alias). Companion `catalog/wip.html` route reads `?src&tag&manifest` from the URL for shareable preview links. Enables previewing project-local and authoring-in-progress components through the same UI as the library catalog. See `docs/conventions.md` for the three modes.
+- `scripts/check-no-hardcoded.mjs` — static check for raw color literals (hex, rgb, hsl) in component CSS. Wired into `npm run lint` and CI. Pre-existing violations tracked in `scripts/.hardcoded-allowlist.json` for cleanup in #331.
+- `scripts/check-dvfy-preference.mjs` — static check that components prefer `<dvfy-button>` over `document.createElement('button')` (and similarly for `select`). Wired into `npm run lint` and CI. Pre-existing violations tracked in `scripts/.dvfy-preference-allowlist.json` for cleanup in #332.
 
 ### Changed (breaking, pre-1.0)
 

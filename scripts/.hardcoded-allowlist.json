@@ -1,0 +1,277 @@
+[
+  {
+    "file": "components/dvfy-button.js",
+    "value": "#7c3aed",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-button.js",
+    "value": "#2563eb",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-card-glow.js",
+    "value": "rgba(124, 58, 237, 0.2)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-card.js",
+    "value": "rgba(255, 255, 255, 0.06)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-card.js",
+    "value": "rgba(255, 255, 255, 0.15)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-carousel.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-carousel.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-command-palette.js",
+    "value": "rgba(0, 0, 0, 0.5)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-compare-slider.js",
+    "value": "rgba(15, 23, 42, 0.7)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-date-picker.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-drawer.js",
+    "value": "#888",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-drawer.js",
+    "value": "#666",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-drawer.js",
+    "value": "#f0f0f0",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-drawer.js",
+    "value": "#666",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-drawer.js",
+    "value": "#f0f0f0",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-gradient-card.js",
+    "value": "rgba(99, 102, 241, 0.15)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-modal.js",
+    "value": "rgba(0, 0, 0, 0.75)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-nav-bar.js",
+    "value": "rgba(0, 0, 0, 0.3)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-scramble-hover.js",
+    "value": "#7c3aed",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-scroll-progress.js",
+    "value": "#0ea5e9",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 0% / 0.25)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 100% / 0.05)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 0% / 0.3)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 0% / 0.15)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 100% / 0.15)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 0% / 0.3)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 0% / 0.15)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 100% / 0.15)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 0% / 0.3)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 0% / 0.15)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 100% / 0.15)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 0% / 0.3)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 0% / 0.15)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-slider.js",
+    "value": "hsl(0 0% 100% / 0.15)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-spotlight-card.js",
+    "value": "rgba(255, 255, 255, 0.04)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-spotlight-card.js",
+    "value": "rgba(255, 255, 255, 0.12)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-stepper.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-stepper.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-stepper.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-table.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-table.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-tree-node.js",
+    "value": "#666",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-tree-node.js",
+    "value": "#222",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-tree-node.js",
+    "value": "#222",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-tree-node.js",
+    "value": "#999",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-tree-node.js",
+    "value": "rgba(0,0,0,0.04)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-tree-node.js",
+    "value": "rgba(0,0,0,0.08)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-tree-node.js",
+    "value": "rgba(0,0,0,0.1)",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "components/dvfy-tree-view.js",
+    "value": "#0ea5e9",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "patterns/dvfy-confirm.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  },
+  {
+    "file": "patterns/dvfy-htmx-table.js",
+    "value": "#fff",
+    "reason": "see #331 \u2014 tracked color cleanup"
+  }
+]
