@@ -64,6 +64,7 @@ import './components/dvfy-auth.js';
 import './components/dvfy-hamburger.js';
 import './components/dvfy-drawer.js';
 import './components/dvfy-section.js';
+import './components/dvfy-section-hero.js';
 import './components/dvfy-component-playground.js';
 import './components/dvfy-accordion.js';
 import './components/dvfy-carousel.js';
