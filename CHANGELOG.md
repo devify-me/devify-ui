@@ -15,6 +15,11 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - `dvfy-checkbox` — `error`, `warning`, `help`, and `state` attributes wired through the shared form-messages helper with `aria-describedby` for screen readers.
 - `dvfy-section-hero` — opinionated landing-page hero section with `align`, `padding`, `tone` attributes and `trust` slot. Tier 1 layout primitive, mobile-first, token-driven.
+- `dvfy-component-playground` — WIP mode. New `src` attribute dynamically imports a component module before rendering; new `tag` attribute (preferred name; `component` retained as alias). Companion `catalog/wip.html` route reads `?src&tag&manifest` from the URL for shareable preview links. Enables previewing project-local and authoring-in-progress components through the same UI as the library catalog. See `docs/conventions.md` for the three modes.
+
+### Changed (breaking, pre-1.0)
+
+- `dvfy-component-playground` — the `src` attribute no longer points to the manifest. It now points to a component JS module to dynamically import. Use the new `manifest` attribute for the manifest path. Internal catalog router updated accordingly; external consumers using the playground directly must rename `src="..../custom-elements.json"` → `manifest="..../custom-elements.json"`.
 
 ### Fixed
 

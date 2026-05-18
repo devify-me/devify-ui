@@ -130,7 +130,7 @@ function renderComponentView(mainEl, tagName) {
 
   const playground = document.createElement('dvfy-component-playground');
   playground.setAttribute('component', tagName);
-  playground.setAttribute('src', '../custom-elements.json');
+  playground.setAttribute('manifest', '../custom-elements.json');
   if (reg?.layout) playground.setAttribute('layout', reg.layout);
   mainEl.appendChild(playground);
 }

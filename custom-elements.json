@@ -815,16 +815,26 @@
     {
       "name": "dvfy-component-playground",
       "path": "./components/dvfy-component-playground.js",
-      "description": "<dvfy-component-playground> — Interactive component playground\n\nLoads the WCA custom-elements.json manifest, renders a component picker,\nauto-generates controls from attribute metadata, and provides live Preview,\nCode, and API tabs.",
+      "description": "<dvfy-component-playground> — Interactive component playground.\n\nThree modes:\n\n1. **Library catalog** — `manifest` + `component`/`tag`. The tag is already\n   defined globally (via the `devify.js` barrel); the manifest drives picker\n   and controls. This is what the catalog uses.\n2. **Project (registered)** — `manifest` + `src` + `tag`. Dynamically imports\n   the component module, then uses the project-local manifest for controls.\n3. **WIP / sandbox** — `src` + `tag`, no `manifest`. Dynamically imports the\n   module and renders the preview only; controls drawer is hidden. Use this\n   while authoring a component before it has a manifest entry.",
       "attributes": [
         {
           "name": "component",
-          "description": "Tag name to showcase (shows picker if omitted)",
+          "description": "Legacy alias for `tag`. Retained for back-compat with the catalog router.",
+          "type": "string"
+        },
+        {
+          "name": "tag",
+          "description": "Tag name to render. Preferred over `component`.",
           "type": "string"
         },
         {
           "name": "src",
-          "description": "Path to custom-elements.json (default: \"../custom-elements.json\")",
+          "description": "Optional path to a component JS module to dynamically import before rendering. Required for WIP/project components not in the global registry.",
+          "type": "string"
+        },
+        {
+          "name": "manifest",
+          "description": "Path to custom-elements.json (drives controls and API docs). Default: \"../custom-elements.json\" when neither manifest nor src is set; otherwise no manifest is loaded unless explicitly provided.",
           "type": "string"
         }
       ],

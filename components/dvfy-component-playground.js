@@ -556,16 +556,25 @@ function esc(s) {
 }
 
 /**
- * <dvfy-component-playground> — Interactive component playground
+ * <dvfy-component-playground> — Interactive component playground.
  *
- * Loads the WCA custom-elements.json manifest, renders a component picker,
- * auto-generates controls from attribute metadata, and provides live Preview,
- * Code, and API tabs.
+ * Three modes:
+ *
+ * 1. **Library catalog** — `manifest` + `component`/`tag`. The tag is already
+ *    defined globally (via the `devify.js` barrel); the manifest drives picker
+ *    and controls. This is what the catalog uses.
+ * 2. **Project (registered)** — `manifest` + `src` + `tag`. Dynamically imports
+ *    the component module, then uses the project-local manifest for controls.
+ * 3. **WIP / sandbox** — `src` + `tag`, no `manifest`. Dynamically imports the
+ *    module and renders the preview only; controls drawer is hidden. Use this
+ *    while authoring a component before it has a manifest entry.
  *
  * @element dvfy-component-playground
  *
- * @attr {string} component - Tag name to showcase (shows picker if omitted)
- * @attr {string} src - Path to custom-elements.json (default: "../custom-elements.json")
+ * @attr {string} manifest - Path to custom-elements.json (drives controls and API docs). Default: "../custom-elements.json" when neither manifest nor src is set; otherwise no manifest is loaded unless explicitly provided.
+ * @attr {string} src - Optional path to a component JS module to dynamically import before rendering. Required for WIP/project components not in the global registry.
+ * @attr {string} tag - Tag name to render. Preferred over `component`.
+ * @attr {string} component - Legacy alias for `tag`. Retained for back-compat with the catalog router.
  *
  * @slot - Not used
  *
@@ -586,7 +595,7 @@ class DvfyComponentPlayground extends HTMLElement {
 
   connectedCallback() {
     injectStyles('dvfy-component-playground', STYLES);
-    this.#loadManifest();
+    this.#bootstrap();
   }
 
   disconnectedCallback() {
@@ -597,42 +606,116 @@ class DvfyComponentPlayground extends HTMLElement {
     this.textContent = '';
   }
 
-  static get observedAttributes() { return ['component', 'src']; }
+  static get observedAttributes() { return ['component', 'tag', 'src', 'manifest']; }
 
   attributeChangedCallback(name) {
-    if (!this.isConnected || !this.#manifest) return;
-    if (name === 'component') {
-      const tagName = this.getAttribute('component');
-      const tag = this.#tags.find(t => t.name === tagName);
+    if (!this.isConnected) return;
+    if (name === 'component' || name === 'tag') {
+      if (!this.#manifest) return;
+      const tagName = this.#getTagAttr();
+      const tag = this.#tags.find(t => t.name === tagName)
+        || (this.#currentTag?.name === tagName ? this.#currentTag : null);
       if (tag) this.#selectComponent(tag);
     }
-    if (name === 'src') this.#loadManifest();
+    if (name === 'src' || name === 'manifest') this.#bootstrap();
+  }
+
+  #getTagAttr() {
+    return this.getAttribute('tag') || this.getAttribute('component') || '';
+  }
+
+  async #bootstrap() {
+    // Step 1: dynamic-import the component module if src is set.
+    // Resolve relative to the page (document.baseURI), not this module's URL,
+    // so consumers pass paths relative to where the playground is *used*.
+    const moduleSrc = this.getAttribute('src');
+    if (moduleSrc) {
+      try {
+        const resolved = new URL(moduleSrc, document.baseURI).href;
+        await import(/* @vite-ignore */ resolved);
+      } catch (e) {
+        this.#showError('Failed to import module', `${moduleSrc}: ${e.message}`);
+        return;
+      }
+    }
+    // Step 2: load the manifest (or run in no-manifest preview-only mode)
+    await this.#loadManifest();
   }
 
   async #loadManifest() {
-    const src = this.getAttribute('src') || '../custom-elements.json';
+    const explicitManifest = this.getAttribute('manifest');
+    const hasModuleSrc = this.hasAttribute('src');
+
+    // No-manifest preview-only mode: src is set but no manifest provided
+    if (!explicitManifest && hasModuleSrc) {
+      this.#manifest = { tags: [] };
+      this.#tags = [];
+      this.#buildPreviewOnly();
+      return;
+    }
+
+    const manifestPath = explicitManifest || '../custom-elements.json';
     try {
-      const res = await fetch(src);
+      const res = await fetch(manifestPath);
       this.#manifest = await res.json();
       this.#tags = (this.#manifest.tags || [])
         .filter(t => !SKIP_TAGS.has(t.name))
         .sort((a, b) => a.name.localeCompare(b.name));
       this.#build();
     } catch (e) {
-      this.textContent = '';
-      const err = document.createElement('dvfy-alert');
-      err.setAttribute('status', 'danger');
-      err.setAttribute('title', 'Failed to load manifest');
-      err.textContent = `Could not fetch ${src}: ${e.message}`;
-      this.appendChild(err);
+      this.#showError('Failed to load manifest', `${manifestPath}: ${e.message}`);
     }
+  }
+
+  #showError(title, detail) {
+    this.textContent = '';
+    const err = document.createElement('dvfy-alert');
+    err.setAttribute('status', 'danger');
+    err.setAttribute('title', title);
+    err.textContent = detail;
+    this.appendChild(err);
+  }
+
+  /**
+   * Preview-only build for no-manifest WIP mode. Skips picker, tabs, and the
+   * controls drawer; renders the named tag in a minimal preview area.
+   */
+  #buildPreviewOnly() {
+    const tagName = this.#getTagAttr();
+    if (!tagName) {
+      this.#showError('Missing tag', 'Set the `tag` attribute (or `component`) to the custom element name to render.');
+      return;
+    }
+    this.textContent = '';
+
+    const body = document.createElement('div');
+    body.className = 'sc__body';
+    body.style.gridTemplateColumns = '1fr';
+
+    const previewCol = document.createElement('div');
+    previewCol.className = 'sc__preview-col';
+
+    const previewWrap = document.createElement('div');
+    previewWrap.className = 'sc__preview-wrap';
+
+    const previewArea = document.createElement('div');
+    previewArea.className = 'sc__preview-area';
+    previewArea.setAttribute('data-sc-preview', '');
+
+    const el = document.createElement(tagName);
+    previewArea.appendChild(el);
+
+    previewWrap.appendChild(previewArea);
+    previewCol.appendChild(previewWrap);
+    body.appendChild(previewCol);
+    this.appendChild(body);
   }
 
   #build() {
     this.textContent = '';
 
     // ── Picker (hidden when component attr is set — sidebar navigates instead) ──
-    const hasComponentAttr = this.hasAttribute('component');
+    const hasComponentAttr = this.hasAttribute('component') || this.hasAttribute('tag');
     if (!hasComponentAttr) {
       const pickerWrap = document.createElement('div');
       pickerWrap.className = 'sc__picker';
@@ -665,7 +748,7 @@ class DvfyComponentPlayground extends HTMLElement {
     this.appendChild(body);
 
     // Auto-select if component attr is set
-    const initial = this.getAttribute('component');
+    const initial = this.#getTagAttr();
     if (initial) {
       const tag = this.#tags.find(t => t.name === initial);
       if (tag) this.#selectComponent(tag);

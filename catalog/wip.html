@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>@devify/ui — WIP Component Playground</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../devify.css">
+  <script type="module" src="../devify.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--dvfy-font-sans);
+      background: var(--dvfy-surface-page);
+      color: var(--dvfy-text-primary);
+      line-height: var(--dvfy-leading-normal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    header {
+      padding: var(--dvfy-space-4) var(--dvfy-space-6);
+      border-bottom: var(--dvfy-border-1) solid var(--dvfy-border-muted);
+      display: flex;
+      flex-direction: column;
+      gap: var(--dvfy-space-1);
+    }
+    header h1 {
+      font-size: var(--dvfy-text-base);
+      font-weight: var(--dvfy-weight-semibold);
+      margin: 0;
+    }
+    header code {
+      font-family: ui-monospace, monospace;
+      font-size: var(--dvfy-text-xs);
+      color: var(--dvfy-text-secondary);
+    }
+    main {
+      flex: 1;
+      padding: var(--dvfy-space-6);
+    }
+    .wip-empty {
+      max-width: 40rem;
+      margin: var(--dvfy-space-10) auto;
+      padding: var(--dvfy-space-6);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>WIP Playground</h1>
+    <code id="wip-info"></code>
+  </header>
+  <main id="wip-mount"></main>
+
+  <script type="module">
+    const params = new URLSearchParams(location.search);
+    const src = params.get('src');
+    const tag = params.get('tag');
+    const manifest = params.get('manifest');
+    const mount = document.getElementById('wip-mount');
+    const info = document.getElementById('wip-info');
+
+    if (!tag) {
+      mount.innerHTML = '<div class="wip-empty"><dvfy-alert status="info" title="No tag specified">Pass <code>?tag=&lt;custom-element&gt;</code> (and optionally <code>src=...&amp;manifest=...</code>) to preview a component.</dvfy-alert></div>';
+      info.textContent = 'tag=(none)';
+    } else {
+      const playground = document.createElement('dvfy-component-playground');
+      playground.setAttribute('tag', tag);
+      if (src) playground.setAttribute('src', src);
+      if (manifest) playground.setAttribute('manifest', manifest);
+      mount.appendChild(playground);
+
+      const parts = [`tag=${tag}`];
+      if (src) parts.push(`src=${src}`);
+      if (manifest) parts.push(`manifest=${manifest}`);
+      info.textContent = parts.join(' · ');
+    }
+  </script>
+</body>
+</html>
