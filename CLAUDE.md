@@ -4,13 +4,9 @@ HTML Web Component library with design tokens, HTMX patterns, and PWA support.
 
 ## Goal & Purpose
 
-**Goal:** Provide a complete, tier-structured component library that enables any Devify product to ship a production-ready, accessible, themeable frontend using only HTML attributes — no framework, no build step, no client-side state management required.
+**Goal:** Tier-structured component library so any product ships a production-ready, accessible, themeable frontend with HTML attributes alone — no framework, no build, no client state.
 
-**Purpose:** @devify/ui is the shared visual language and UI engineering layer across all Devify products. It exists to:
-1. **Eliminate per-product UI engineering** — products compose components, they don't build UI from scratch
-2. **Enforce consistency** across the portfolio without mandating a frontend framework
-3. **Complement the server-first architecture** (Go + Templ + HTMX) by keeping the frontend thin and declarative
-4. **Enable AI-assisted development** by providing a predictable, attribute-driven API that Claude can generate, modify, and reason about reliably
+**Purpose:** Shared visual + UI engineering layer across Devify — eliminate per-product UI work, enforce portfolio consistency, complement the Go+Templ+HTMX server-first stack, and stay AI-generatable.
 
 **Litmus test:** Does this decision make it faster for a Devify product (built by humans + AI) to go from zero to production-ready frontend?
 
