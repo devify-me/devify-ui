@@ -31,7 +31,7 @@ HTMX: Orthogonal. Set server: true in registry. Classify by composition depth ab
 
 | Tier | Name       | Rule                          | Allowed deps    | Count |
 |------|------------|-------------------------------|-----------------|-------|
-| 1    | Primitive  | Zero dvfy-* deps              | None            | 51    |
+| 1    | Primitive  | Zero dvfy-* deps              | None            | 52    |
 | 2    | Composite  | ≥1 Tier 1 dep, only Tier 1    | Tier 1 only     | 13    |
 | 3    | Organism   | ≥1 Tier 2 dep                 | Tier 1 + Tier 2 | 4     |
 | 4    | Widget     | ≥1 Tier 3 dep, self-contained | Tier 1–3        | 0     |
