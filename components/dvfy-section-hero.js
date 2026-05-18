@@ -9,8 +9,8 @@ dvfy-section-hero {
   color: var(--dvfy-text-primary);
   font-family: var(--dvfy-font-sans);
   text-align: center;
-  padding-block: var(--dvfy-space-12);
-  padding-inline: var(--dvfy-space-5);
+  padding-block: clamp(var(--dvfy-space-12), 6vw, var(--dvfy-space-20));
+  padding-inline: clamp(var(--dvfy-space-5), 3vw, var(--dvfy-space-8));
   box-sizing: border-box;
 }
 
@@ -18,17 +18,10 @@ dvfy-section-hero {
 dvfy-section-hero[align="left"]  { text-align: left; }
 dvfy-section-hero[align="center"] { text-align: center; }
 
-/* Padding scale (mobile-first; container-query bumps at wider widths) */
-dvfy-section-hero[padding="md"] { padding-block: var(--dvfy-space-8); }
-dvfy-section-hero[padding="lg"] { padding-block: var(--dvfy-space-10); }
-dvfy-section-hero[padding="xl"] { padding-block: var(--dvfy-space-12); }
-
-@container (min-width: 640px) {
-  dvfy-section-hero            { padding-inline: var(--dvfy-space-8); }
-  dvfy-section-hero[padding="md"] { padding-block: var(--dvfy-space-12); }
-  dvfy-section-hero[padding="lg"] { padding-block: var(--dvfy-space-16); }
-  dvfy-section-hero[padding="xl"] { padding-block: var(--dvfy-space-20); }
-}
+/* Padding scale — fluid via clamp so it grows with viewport width */
+dvfy-section-hero[padding="md"] { padding-block: clamp(var(--dvfy-space-8),  4vw, var(--dvfy-space-12)); }
+dvfy-section-hero[padding="lg"] { padding-block: clamp(var(--dvfy-space-10), 5vw, var(--dvfy-space-16)); }
+dvfy-section-hero[padding="xl"] { padding-block: clamp(var(--dvfy-space-12), 6vw, var(--dvfy-space-20)); }
 
 /* Tone */
 dvfy-section-hero[tone="brand"] {
