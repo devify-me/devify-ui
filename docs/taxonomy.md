@@ -74,7 +74,7 @@ The catalog groups server components via the "Server Required" banner and sideba
 
 ## Classification Reference
 
-### Tier 1 — Primitives (51)
+### Tier 1 — Primitives (52)
 
 | Component             | Domain     | Server |
 |----------------------|------------|--------|
@@ -119,6 +119,7 @@ The catalog groups server components via the "Server Required" banner and sideba
 | dvfy-sidebar         | Navigation |        |
 | dvfy-command-palette | Navigation |        |
 | dvfy-section         | Layout     |        |
+| dvfy-section-hero    | Layout     |        |
 | dvfy-stepper         | Layout     |        |
 | dvfy-tooltip         | Utility    |        |
 | dvfy-popover         | Utility    |        |
