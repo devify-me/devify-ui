@@ -96,7 +96,8 @@ export const COMPONENT_REGISTRY = {
   'dvfy-tree-view':  { tier: 1, domain: 'navigation', deps: [] },
   'dvfy-sidebar':    { tier: 1, domain: 'navigation', deps: [] },
   // Layout
-  'dvfy-section': { tier: 1, domain: 'layout', deps: [] },
+  'dvfy-section':      { tier: 1, domain: 'layout', deps: [] },
+  'dvfy-section-hero': { tier: 1, domain: 'layout', deps: [] },
   // Utility
   'dvfy-tooltip':         { tier: 1, domain: 'utility', deps: [] },
   'dvfy-scroll-reveal':   { tier: 1, domain: 'utility', deps: [] },

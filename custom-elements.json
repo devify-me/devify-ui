@@ -2586,6 +2586,55 @@
       ]
     },
     {
+      "name": "dvfy-section-hero",
+      "path": "./components/dvfy-section-hero.js",
+      "description": "Opinionated landing-page hero section: large heading, supporting body, primary CTA, optional trust strip.",
+      "attributes": [
+        {
+          "name": "align",
+          "description": "Text alignment: left | center (default center)",
+          "type": "string"
+        },
+        {
+          "name": "padding",
+          "description": "Vertical padding scale: md | lg | xl (default xl)",
+          "type": "string"
+        },
+        {
+          "name": "tone",
+          "description": "Background tone: default | brand | muted (default default)",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Hero content (heading + body + CTAs)"
+        },
+        {
+          "name": "trust",
+          "description": "Optional trust-strip line below CTAs (e.g. \"Trusted by 1,000+ teams\")"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-page",
+          "description": "Default tone background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-bg-subtle",
+          "description": "Brand tone background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-surface-muted",
+          "description": "Muted tone background",
+          "type": "color"
+        }
+      ]
+    },
+    {
       "name": "dvfy-section",
       "path": "./components/dvfy-section.js",
       "description": "Collapsible section with summary header and toggle animation.",

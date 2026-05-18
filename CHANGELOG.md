@@ -14,6 +14,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 
 - `dvfy-checkbox` — `error`, `warning`, `help`, and `state` attributes wired through the shared form-messages helper with `aria-describedby` for screen readers.
+- `dvfy-section-hero` — opinionated landing-page hero section with `align`, `padding`, `tone` attributes and `trust` slot. Tier 1 layout primitive, mobile-first, token-driven.
 
 ### Fixed
 
