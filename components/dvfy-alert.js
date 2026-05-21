@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 /**
  * <dvfy-alert> — Alert/notification banner
@@ -213,7 +214,8 @@ class DvfyAlert extends HTMLElement {
 
     // Dismiss button
     if (this.hasAttribute('dismissible')) {
-      const btn = document.createElement('button');
+      const btn = document.createElement('dvfy-button');
+      btn.setAttribute('variant', 'ghost');
       btn.className = 'dvfy-alert__close';
       btn.setAttribute('aria-label', 'Dismiss');
       btn.textContent = '\u00D7'; // multiplication sign (x)

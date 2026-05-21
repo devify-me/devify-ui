@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 /**
  * <dvfy-sidebar> — Side navigation
@@ -152,7 +153,8 @@ class DvfySidebar extends HTMLElement {
     const children = Array.from(this.childNodes);
 
     // Toggle button
-    this.#toggle = document.createElement('button');
+    this.#toggle = document.createElement('dvfy-button');
+    this.#toggle.setAttribute('variant', 'ghost');
     this.#toggle.className = 'dvfy-sidebar__toggle';
     this.#toggle.setAttribute('aria-label', 'Toggle sidebar');
     this.#toggle.setAttribute('aria-expanded', String(!this.hasAttribute('collapsed')));

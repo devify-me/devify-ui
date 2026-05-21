@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 /**
  * <dvfy-pagination> — Page navigation
@@ -136,11 +137,13 @@ class DvfyPagination extends HTMLElement {
   }
 
   #makeBtn(text, page, opts = {}) {
-    const btn = document.createElement('button');
+    const btn = document.createElement('dvfy-button');
+    btn.setAttribute('variant', 'ghost');
+    btn.setAttribute('size', 'sm');
     btn.className = 'dvfy-pagination__btn';
     btn.textContent = text;
     if (opts.disabled) {
-      btn.disabled = true;
+      btn.setAttribute('disabled', '');
     } else {
       btn.addEventListener('click', () => this.#goTo(page));
     }

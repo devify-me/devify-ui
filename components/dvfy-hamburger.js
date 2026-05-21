@@ -284,7 +284,7 @@ class DvfyHamburger extends HTMLElement {
       this.appendChild(lbl);
     }
 
-    this.#btn = document.createElement('button');
+    this.#btn = document.createElement('button'); // allow-dvfy-pref: dvfy-hamburger IS itself the button primitive
     this.#btn.className = 'dvfy-hb__btn';
     this.#btn.setAttribute('type', 'button');
     this.#btn.setAttribute('aria-label', labelText || 'Toggle menu');

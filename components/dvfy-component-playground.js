@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 const STYLES = `
 dvfy-component-playground {
@@ -831,7 +832,9 @@ class DvfyComponentPlayground extends HTMLElement {
     this.#widthReadout = readout;
 
     for (const p of presets) {
-      const btn = document.createElement('button');
+      const btn = document.createElement('dvfy-button');
+      btn.setAttribute('variant', 'ghost');
+      btn.setAttribute('size', 'xs');
       btn.className = 'sc__preset-btn';
       btn.textContent = p.label;
       btn.addEventListener('click', () => {
@@ -896,7 +899,8 @@ class DvfyComponentPlayground extends HTMLElement {
     drawer.setAttribute('data-sc-drawer', '');
 
     // Re-open tab (visible when collapsed)
-    const reopen = document.createElement('button');
+    const reopen = document.createElement('dvfy-button');
+    reopen.setAttribute('variant', 'ghost');
     reopen.className = 'sc__drawer-reopen';
     reopen.textContent = 'Controls';
     reopen.setAttribute('aria-label', 'Open controls panel');
@@ -913,7 +917,8 @@ class DvfyComponentPlayground extends HTMLElement {
     title.textContent = 'Controls';
     drawerHeader.appendChild(title);
 
-    const toggle = document.createElement('button');
+    const toggle = document.createElement('dvfy-button');
+    toggle.setAttribute('variant', 'ghost');
     toggle.className = 'sc__drawer-toggle';
     toggle.setAttribute('aria-label', 'Collapse controls panel');
     toggle.setAttribute('title', 'Collapse controls');

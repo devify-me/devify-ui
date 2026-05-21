@@ -108,7 +108,7 @@ class DvfyTabs extends HTMLElement {
     this.#list.setAttribute('role', 'tablist');
 
     this.#tabs.forEach((tab, i) => {
-      const btn = document.createElement('button');
+      const btn = document.createElement('button'); // allow-dvfy-pref: tab trigger has role=tab, parent dvfy-tabs manages keyboard nav and styling
       btn.className = 'dvfy-tabs__trigger';
       btn.setAttribute('role', 'tab');
       btn.setAttribute('tabindex', i === this.#activeIndex ? '0' : '-1');

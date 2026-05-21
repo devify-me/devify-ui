@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 /**
  * <dvfy-modal> — Modal dialog
@@ -159,7 +160,8 @@ class DvfyModal extends HTMLElement {
     const title = document.createElement('h2');
     title.className = 'dvfy-modal__title';
     title.textContent = this.getAttribute('title') || '';
-    const closeBtn = document.createElement('button');
+    const closeBtn = document.createElement('dvfy-button');
+    closeBtn.setAttribute('variant', 'ghost');
     closeBtn.className = 'dvfy-modal__close';
     closeBtn.setAttribute('aria-label', 'Close');
     closeBtn.textContent = '\u00d7';

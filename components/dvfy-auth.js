@@ -1,5 +1,6 @@
 import { sanitizeHref, sanitizeSrc } from '../utils/url.js';
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 /**
  * <dvfy-auth> — Authentication forms (sign-in, sign-up)
@@ -431,8 +432,9 @@ class DvfyAuth extends HTMLElement {
     }
 
     // Submit button
-    const btn = document.createElement('button');
-    btn.type = 'submit';
+    const btn = document.createElement('dvfy-button');
+    btn.setAttribute('type', 'submit');
+    btn.setAttribute('variant', 'primary');
     btn.className = 'dvfy-auth__btn';
     btn.textContent = isSignUp ? 'Create account' : 'Sign in';
     form.appendChild(btn);
@@ -510,8 +512,9 @@ class DvfyAuth extends HTMLElement {
     if (type === 'password') {
       input.style.paddingRight = '2.5rem';
       inputWrap.appendChild(input);
-      const toggle = document.createElement('button');
-      toggle.type = 'button';
+      const toggle = document.createElement('dvfy-button');
+      toggle.setAttribute('type', 'button');
+      toggle.setAttribute('variant', 'ghost');
       toggle.style.cssText = 'position:absolute;right:0.5rem;top:50%;transform:translateY(-50%);background:none;border:none;padding:0.25rem;cursor:pointer;color:var(--dvfy-text-muted);line-height:1';
       toggle.setAttribute('aria-label', 'Show password');
       toggle.setAttribute('tabindex', '-1');

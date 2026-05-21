@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import '../components/dvfy-button.js';
 
 /**
  * <dvfy-htmx-form> — Enhanced form with HTMX submission, validation, loading state, success/error feedback.
@@ -365,8 +366,9 @@ class DvfyHtmxForm extends HTMLElement {
     const actions = document.createElement('div');
     actions.style.cssText = 'display: flex; gap: var(--dvfy-space-3); justify-content: flex-end;';
 
-    const cancelBtn = document.createElement('button');
-    cancelBtn.type = 'button';
+    const cancelBtn = document.createElement('dvfy-button');
+    cancelBtn.setAttribute('type', 'button');
+    cancelBtn.setAttribute('variant', 'ghost');
     cancelBtn.textContent = 'Cancel';
     cancelBtn.style.cssText = [
       'padding: var(--dvfy-space-2) var(--dvfy-space-4)',
@@ -383,8 +385,9 @@ class DvfyHtmxForm extends HTMLElement {
       setTimeout(() => this.#confirmModal.remove(), 200);
     });
 
-    const confirmBtn = document.createElement('button');
-    confirmBtn.type = 'button';
+    const confirmBtn = document.createElement('dvfy-button');
+    confirmBtn.setAttribute('type', 'button');
+    confirmBtn.setAttribute('variant', 'ghost');
     confirmBtn.textContent = 'Confirm';
     confirmBtn.style.cssText = [
       'padding: var(--dvfy-space-2) var(--dvfy-space-4)',

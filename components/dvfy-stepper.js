@@ -231,7 +231,7 @@ class DvfyStepper extends HTMLElement {
         this.#nav.appendChild(connector);
       }
 
-      const btn = document.createElement('button');
+      const btn = document.createElement('button'); // allow-dvfy-pref: step header has role=tab, same tablist pattern as dvfy-tabs
       btn.className = 'dvfy-stepper__header';
       btn.setAttribute('role', 'tab');
       btn.setAttribute('tabindex', i + 1 === this.#activeIndex ? '0' : '-1');

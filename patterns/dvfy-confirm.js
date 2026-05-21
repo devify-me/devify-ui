@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import '../components/dvfy-button.js';
 
 /**
  * <dvfy-confirm> — Confirmation modal that intercepts an action.
@@ -233,8 +234,9 @@ class DvfyConfirm extends HTMLElement {
     actions.className = 'dvfy-confirm__actions';
 
     // Cancel button
-    const cancelBtn = document.createElement('button');
-    cancelBtn.type = 'button';
+    const cancelBtn = document.createElement('dvfy-button');
+    cancelBtn.setAttribute('type', 'button');
+    cancelBtn.setAttribute('variant', 'ghost');
     cancelBtn.className = 'dvfy-confirm__btn dvfy-confirm__btn--cancel';
     cancelBtn.textContent = cancelText;
     cancelBtn.addEventListener('click', () => {
@@ -243,8 +245,9 @@ class DvfyConfirm extends HTMLElement {
     });
 
     // Confirm button
-    const confirmBtn = document.createElement('button');
-    confirmBtn.type = 'button';
+    const confirmBtn = document.createElement('dvfy-button');
+    confirmBtn.setAttribute('type', 'button');
+    confirmBtn.setAttribute('variant', 'ghost');
     const btnClass = variant === 'danger'
       ? 'dvfy-confirm__btn dvfy-confirm__btn--danger'
       : 'dvfy-confirm__btn dvfy-confirm__btn--confirm';
