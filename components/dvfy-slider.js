@@ -68,9 +68,11 @@ dvfy-slider .dvfy-slider__track {
   transform: translateY(-50%);
   border-radius: var(--_track-radius);
   background: var(--dvfy-surface-overlay, var(--dvfy-surface-muted));
+  /* allow-hardcoded-start: slider track depth shadow — tightly tuned literal hsl() values for embossed-track look */
   box-shadow:
     inset 0 1px 3px hsl(0 0% 0% / 0.25),
     0 1px 0 hsl(0 0% 100% / 0.05);
+  /* allow-hardcoded-end */
   border: 1px solid var(--dvfy-border-muted);
   pointer-events: none;
 }
@@ -129,10 +131,12 @@ dvfy-slider input[type="range"]::-webkit-slider-thumb {
     var(--dvfy-text-muted),
     var(--dvfy-border-strong)
   );
+  /* allow-hardcoded-start: slider thumb depth shadow — tightly tuned literal hsl() values for metallic knob look */
   box-shadow:
     0 1px 3px hsl(0 0% 0% / 0.3),
     0 2px 6px hsl(0 0% 0% / 0.15),
     inset 0 0 0 1.5px hsl(0 0% 100% / 0.15);
+  /* allow-hardcoded-end */
   border: none;
   margin-top: calc((var(--_track-h) - var(--_thumb-d)) / 2);
   transition: box-shadow var(--dvfy-duration-fast) var(--dvfy-ease-out);
@@ -151,28 +155,34 @@ dvfy-slider input[type="range"]::-moz-range-thumb {
     var(--dvfy-text-muted),
     var(--dvfy-border-strong)
   );
+  /* allow-hardcoded-start: slider thumb depth shadow (Firefox) — same metallic knob look as WebKit thumb */
   box-shadow:
     0 1px 3px hsl(0 0% 0% / 0.3),
     0 2px 6px hsl(0 0% 0% / 0.15),
     inset 0 0 0 1.5px hsl(0 0% 100% / 0.15);
+  /* allow-hardcoded-end */
   border: none;
   box-sizing: border-box;
 }
 
 /* ── Focus ring ─────────────────────────────────── */
 dvfy-slider input[type="range"]:focus-visible::-webkit-slider-thumb {
+  /* allow-hardcoded-start: slider focus-thumb depth shadow + ring — base shadow same as thumb, ring stacked on top */
   box-shadow:
     0 1px 3px hsl(0 0% 0% / 0.3),
     0 2px 6px hsl(0 0% 0% / 0.15),
     inset 0 0 0 1.5px hsl(0 0% 100% / 0.15),
     0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-ring-color) 25%, transparent);
+  /* allow-hardcoded-end */
 }
 dvfy-slider input[type="range"]:focus-visible::-moz-range-thumb {
+  /* allow-hardcoded-start: slider focus-thumb depth shadow + ring (Firefox) */
   box-shadow:
     0 1px 3px hsl(0 0% 0% / 0.3),
     0 2px 6px hsl(0 0% 0% / 0.15),
     inset 0 0 0 1.5px hsl(0 0% 100% / 0.15),
     0 0 0 var(--dvfy-ring-width) color-mix(in srgb, var(--dvfy-ring-color) 25%, transparent);
+  /* allow-hardcoded-end */
 }
 
 /* ── Disabled ───────────────────────────────────── */

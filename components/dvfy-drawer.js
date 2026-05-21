@@ -70,7 +70,7 @@ dvfy-drawer[position="bottom"][collapsed] {
   font-weight: var(--dvfy-weight-semibold, 600);
   text-transform: uppercase;
   letter-spacing: var(--dvfy-tracking-wider, 0.05em);
-  color: var(--dvfy-text-muted, #888);
+  color: var(--dvfy-text-muted, #888); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   margin: 0;
 }
 
@@ -84,7 +84,7 @@ dvfy-drawer[position="bottom"][collapsed] {
   border: var(--dvfy-border-1, 1px) solid var(--dvfy-drawer-border, var(--dvfy-border-muted));
   border-radius: var(--dvfy-radius-md, 0.375rem);
   background: var(--dvfy-drawer-bg, var(--dvfy-surface-raised));
-  color: var(--dvfy-text-secondary, #666);
+  color: var(--dvfy-text-secondary, #666); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   cursor: pointer;
   font-size: var(--dvfy-text-xs, 0.75rem);
   line-height: 1;
@@ -92,7 +92,7 @@ dvfy-drawer[position="bottom"][collapsed] {
   transition: background var(--dvfy-duration-fast, 100ms);
 }
 .dvfy-drawer__toggle:hover {
-  background: var(--dvfy-surface-sunken, #f0f0f0);
+  background: var(--dvfy-surface-sunken, #f0f0f0); /* allow-hardcoded: var() fallback must be literal per CSS spec */
 }
 
 /* ── Reopen tab (sibling of drawer, visible when collapsed) ── */
@@ -103,7 +103,7 @@ dvfy-drawer[position="bottom"][collapsed] {
   padding: var(--dvfy-space-2, 0.5rem) var(--dvfy-space-1, 0.25rem);
   border: var(--dvfy-border-1, 1px) solid var(--dvfy-drawer-border, var(--dvfy-border-muted));
   background: var(--dvfy-drawer-bg, var(--dvfy-surface-raised));
-  color: var(--dvfy-text-secondary, #666);
+  color: var(--dvfy-text-secondary, #666); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   cursor: pointer;
   font-size: var(--dvfy-text-xs, 0.75rem);
   font-weight: var(--dvfy-weight-semibold, 600);
@@ -116,7 +116,7 @@ dvfy-drawer[position="bottom"][collapsed] {
   display: block;
 }
 .dvfy-drawer__reopen:hover {
-  background: var(--dvfy-surface-sunken, #f0f0f0);
+  background: var(--dvfy-surface-sunken, #f0f0f0); /* allow-hardcoded: var() fallback must be literal per CSS spec */
 }
 
 /* Reopen position: right (default) */

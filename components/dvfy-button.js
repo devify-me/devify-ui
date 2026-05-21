@@ -6,12 +6,12 @@ const STYLES = `
 @property --dvfy-btn-grad-from {
   syntax: "<color>";
   inherits: false;
-  initial-value: #7c3aed;
+  initial-value: #7c3aed; /* allow-hardcoded: CSS spec @property initial-value must be a literal color */
 }
 @property --dvfy-btn-grad-to {
   syntax: "<color>";
   inherits: false;
-  initial-value: #2563eb;
+  initial-value: #2563eb; /* allow-hardcoded: CSS spec @property initial-value must be a literal color */
 }
 @property --dvfy-btn-grad-angle {
   syntax: "<angle>";

@@ -16,6 +16,11 @@
   --dvfy-surface-sunken:    var(--dvfy-neutral-50);
   --dvfy-surface-muted:     var(--dvfy-neutral-100);
 
+  /* ─── Overlay scrims (dim layers above page; same values in both themes) ─── */
+  --dvfy-overlay-bg-subtle: rgb(0 0 0 / 0.3);   /* mobile nav backdrop */
+  --dvfy-overlay-bg:        rgb(0 0 0 / 0.5);   /* command palette / dialog */
+  --dvfy-overlay-bg-strong: rgb(0 0 0 / 0.75);  /* modal */
+
   /* ─── Text ─── */
   --dvfy-text-primary:      var(--dvfy-neutral-900);
   --dvfy-text-secondary:    var(--dvfy-neutral-600);

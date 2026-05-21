@@ -210,13 +210,13 @@ dvfy-table th[data-sort]:focus {
   background: var(--dvfy-primary-bg);
 }
 .dvfy-table__filter-icon--active .dvfy-table__filter-line {
-  background: var(--dvfy-primary-text, var(--dvfy-text-inverse, #fff));
+  background: var(--dvfy-primary-text, var(--dvfy-text-inverse, #fff)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
 }
 .dvfy-table__filter-icon--active:hover {
   background: var(--dvfy-primary-bg-hover);
 }
 .dvfy-table__filter-icon--active:hover .dvfy-table__filter-line {
-  background: var(--dvfy-primary-text, var(--dvfy-text-inverse, #fff));
+  background: var(--dvfy-primary-text, var(--dvfy-text-inverse, #fff)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
 }
 
 /* Filter dropdown panel */

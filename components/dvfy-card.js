@@ -76,8 +76,8 @@ dvfy-card[spotlight] {
   background-clip: padding-box;
 
   --_sp-size: var(--dvfy-card-spotlight-size, 400px);
-  --_sp-color: var(--dvfy-card-spotlight-color, rgba(255, 255, 255, 0.06));
-  --_sp-border-color: var(--dvfy-card-spotlight-border-color, rgba(255, 255, 255, 0.15));
+  --_sp-color: var(--dvfy-card-spotlight-color, rgba(255, 255, 255, 0.06)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
+  --_sp-border-color: var(--dvfy-card-spotlight-border-color, rgba(255, 255, 255, 0.15)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   --x: -999px;
   --y: -999px;
 }

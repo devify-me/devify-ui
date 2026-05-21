@@ -12,6 +12,11 @@
   --dvfy-surface-sunken:    var(--dvfy-neutral-1000);
   --dvfy-surface-muted:     var(--dvfy-neutral-800);
 
+  /* ─── Overlay scrims (dim layers above page) ─── */
+  --dvfy-overlay-bg-subtle: rgb(0 0 0 / 0.3);
+  --dvfy-overlay-bg:        rgb(0 0 0 / 0.5);
+  --dvfy-overlay-bg-strong: rgb(0 0 0 / 0.75);
+
   /* ─── Elevation Surfaces (progressive lightening) ─── */
   --dvfy-elevation-2xs-bg:  var(--dvfy-neutral-950);
   --dvfy-elevation-xs-bg:   color-mix(in oklch, var(--dvfy-neutral-900) 70%, var(--dvfy-neutral-800));
@@ -126,6 +131,9 @@
     --dvfy-surface-overlay:   var(--dvfy-neutral-800);
     --dvfy-surface-sunken:    var(--dvfy-neutral-1000);
     --dvfy-surface-muted:     var(--dvfy-neutral-800);
+    --dvfy-overlay-bg-subtle: rgb(0 0 0 / 0.3);
+    --dvfy-overlay-bg:        rgb(0 0 0 / 0.5);
+    --dvfy-overlay-bg-strong: rgb(0 0 0 / 0.75);
     --dvfy-elevation-2xs-bg:  var(--dvfy-neutral-950);
     --dvfy-elevation-xs-bg:   color-mix(in oklch, var(--dvfy-neutral-900) 70%, var(--dvfy-neutral-800));
     --dvfy-elevation-sm-bg:   var(--dvfy-neutral-900);

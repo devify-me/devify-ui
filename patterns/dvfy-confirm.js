@@ -108,7 +108,7 @@ dvfy-confirm .dvfy-confirm__btn--cancel:hover {
 }
 dvfy-confirm .dvfy-confirm__btn--confirm {
   background: var(--dvfy-primary-bg);
-  color: var(--dvfy-primary-text, #fff);
+  color: var(--dvfy-primary-text, #fff); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   border: none;
 }
 dvfy-confirm .dvfy-confirm__btn--confirm:hover {

@@ -32,7 +32,7 @@ dvfy-modal[open] {
 dvfy-modal .dvfy-modal__backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: var(--dvfy-overlay-bg-strong);
   z-index: var(--dvfy-z-modal);
   display: flex;
   align-items: center;

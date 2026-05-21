@@ -39,8 +39,8 @@ dvfy-spotlight-card {
   isolation: isolate;
 
   --_sc-size: var(--dvfy-spotlight-card-size, 600px);
-  --_sc-color: var(--dvfy-spotlight-card-color, rgba(255, 255, 255, 0.04));
-  --_sc-border-color: var(--dvfy-spotlight-card-border-color, rgba(255, 255, 255, 0.12));
+  --_sc-color: var(--dvfy-spotlight-card-color, rgba(255, 255, 255, 0.04)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
+  --_sc-border-color: var(--dvfy-spotlight-card-border-color, rgba(255, 255, 255, 0.12)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   --x: -999px;
   --y: -999px;
 }

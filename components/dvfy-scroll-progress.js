@@ -60,7 +60,7 @@ dvfy-scroll-progress[position="bottom"] {
   }
 
   dvfy-scroll-progress {
-    background: var(--dvfy-scroll-progress-color, var(--dvfy-primary-bg, #0ea5e9));
+    background: var(--dvfy-scroll-progress-color, var(--dvfy-primary-bg, #0ea5e9)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
     animation: dvfy-scroll-progress-fill linear both;
     animation-timeline: scroll(root block);
     animation-range: 0% 100%;

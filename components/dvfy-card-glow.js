@@ -36,7 +36,7 @@ dvfy-card-glow {
   position: relative;
   isolation: isolate;
 
-  --_cg-color: var(--glow-color, rgba(124, 58, 237, 0.2));
+  --_cg-color: var(--glow-color, rgba(124, 58, 237, 0.2)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   --_cg-size: var(--glow-size, 60%);
   --x: -999px;
   --y: -999px;

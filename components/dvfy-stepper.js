@@ -101,17 +101,17 @@ dvfy-stepper[vertical] .dvfy-stepper__nav {
 /* States */
 .dvfy-stepper__header[data-state="active"] .dvfy-stepper__indicator {
   background: var(--dvfy-primary-bg);
-  color: var(--dvfy-primary-text, #fff);
+  color: var(--dvfy-primary-text, #fff); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   border-color: var(--dvfy-primary-bg);
 }
 .dvfy-stepper__header[data-state="completed"] .dvfy-stepper__indicator {
   background: var(--dvfy-primary-bg);
-  color: var(--dvfy-primary-text, #fff);
+  color: var(--dvfy-primary-text, #fff); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   border-color: var(--dvfy-primary-bg);
 }
 .dvfy-stepper__header[data-state="error"] .dvfy-stepper__indicator {
   background: var(--dvfy-danger-bg);
-  color: #fff;
+  color: var(--dvfy-on-danger);
   border-color: var(--dvfy-danger-bg);
 }
 

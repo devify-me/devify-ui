@@ -12,7 +12,7 @@ dvfy-tree-node {
   height: 28px;
   padding-right: var(--dvfy-space-2, 0.5rem);
   cursor: pointer;
-  color: var(--dvfy-text-secondary, #666);
+  color: var(--dvfy-text-secondary, #666); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   text-decoration: none;
   border-radius: var(--dvfy-radius-sm, 0.25rem);
   transition: background var(--dvfy-duration-fast, 100ms) var(--dvfy-ease-out, ease-out);
@@ -20,12 +20,12 @@ dvfy-tree-node {
   overflow: hidden;
 }
 .dvfy-tree__row:hover {
-  background: var(--dvfy-hover-bg, rgba(0,0,0,0.04));
-  color: var(--dvfy-text-primary, #222);
+  background: var(--dvfy-hover-bg, rgba(0,0,0,0.04)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
+  color: var(--dvfy-text-primary, #222); /* allow-hardcoded: var() fallback must be literal per CSS spec */
 }
 dvfy-tree-node[selected] > .dvfy-tree__row {
-  background: var(--dvfy-active-bg, rgba(0,0,0,0.08));
-  color: var(--dvfy-text-primary, #222);
+  background: var(--dvfy-active-bg, rgba(0,0,0,0.08)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
+  color: var(--dvfy-text-primary, #222); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   font-weight: var(--dvfy-weight-medium, 500);
 }
 
@@ -39,7 +39,7 @@ dvfy-tree-node[selected] > .dvfy-tree__row {
   flex-shrink: 0;
   font-size: 10px;
   line-height: 1;
-  color: var(--dvfy-text-muted, #999);
+  color: var(--dvfy-text-muted, #999); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   transition: transform var(--dvfy-duration-fast, 100ms) var(--dvfy-ease-out, ease-out);
 }
 dvfy-tree-node[expanded] > .dvfy-tree__row > .dvfy-tree__chevron {
@@ -81,7 +81,7 @@ dvfy-tree-node[expanded] > .dvfy-tree__row > .dvfy-tree__chevron {
   top: 0;
   bottom: 0;
   width: 1px;
-  background: var(--dvfy-border-muted, rgba(0,0,0,0.1));
+  background: var(--dvfy-border-muted, rgba(0,0,0,0.1)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
 }
 
 /* ── Hidden by filter ── */

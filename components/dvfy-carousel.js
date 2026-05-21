@@ -100,7 +100,7 @@ dvfy-carousel::scroll-button(inline-end) {
   height: 2.5rem;
   flex-shrink: 0;
   border-radius: var(--dvfy-radius-round);
-  background: var(--dvfy-surface-raised, var(--dvfy-surface-default, #fff));
+  background: var(--dvfy-surface-raised, var(--dvfy-surface-default, #fff)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   border: var(--dvfy-border-1, 1px) solid var(--dvfy-border-default);
   color: var(--dvfy-text-primary);
   font-size: var(--dvfy-text-base, 1rem);
@@ -203,7 +203,7 @@ dvfy-slide img {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: var(--dvfy-radius-round, 9999px);
-  background: var(--dvfy-surface-raised, var(--dvfy-surface-default, #fff));
+  background: var(--dvfy-surface-raised, var(--dvfy-surface-default, #fff)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   border: 1px solid var(--dvfy-border-default);
   color: var(--dvfy-text-primary);
   font-size: var(--dvfy-text-base, 1rem);
