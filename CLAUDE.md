@@ -77,6 +77,7 @@ When creating or modifying components:
 7. Add entry to `COMPONENT_REGISTRY` in `catalog/data.js` with tier (1-5), domain, deps, and `server: true` if HTMX (see `docs/taxonomy.md` for classification rules)
 8. Add `DEFAULT_CONTENT` entry in `components/dvfy-component-playground.js`
 9. Run `npm run analyze` to regenerate manifest
+10. If the component creates another `<dvfy-*>` element internally (`createElement('dvfy-X')`), source-import that element's module (`import './dvfy-X.js'`) — otherwise it won't be registered when the component is loaded standalone (without the barrel), breaking role/keyboard handlers and triggering axe a11y violations.
 
 ## Tooling Roadmap
 
