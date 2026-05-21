@@ -97,7 +97,7 @@ dvfy-nav-bar[sticky] .dvfy-nav-bar__bar {
 .dvfy-nav-bar__overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
+  background: var(--dvfy-overlay-bg-subtle);
   z-index: calc(var(--dvfy-z-modal) - 1);
   opacity: 0;
   pointer-events: none;

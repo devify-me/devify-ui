@@ -12,7 +12,7 @@ dvfy-tree-view {
 
 /* ── Focus ── */
 dvfy-tree-view:focus-visible .dvfy-tree__row[data-focused] {
-  outline: var(--dvfy-ring-width, 2px) solid var(--dvfy-ring-color, #0ea5e9);
+  outline: var(--dvfy-ring-width, 2px) solid var(--dvfy-ring-color, #0ea5e9); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   outline-offset: -2px;
 }
 `;

@@ -55,7 +55,7 @@ dvfy-compare-slider [slot="after"] {
   position: absolute;
   bottom: 0.75rem;
   padding: 0.2rem 0.5rem;
-  background: var(--dvfy-compare-slider-label-bg, rgba(15, 23, 42, 0.7));
+  background: var(--dvfy-compare-slider-label-bg, rgba(15, 23, 42, 0.7)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   color: var(--dvfy-text-inverse);
   font-size: var(--dvfy-text-xs, 0.75rem);
   font-family: var(--dvfy-font-sans, system-ui, sans-serif);

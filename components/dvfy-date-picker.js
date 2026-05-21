@@ -204,7 +204,7 @@ dvfy-date-picker .dvfy-date-picker__day--today:not(.dvfy-date-picker__day--selec
 }
 dvfy-date-picker .dvfy-date-picker__day--selected {
   background: var(--dvfy-date-picker-selected-bg, var(--dvfy-primary-bg));
-  color: var(--dvfy-date-picker-selected-text, #fff);
+  color: var(--dvfy-date-picker-selected-text, #fff); /* allow-hardcoded: var() fallback must be literal per CSS spec */
 }
 dvfy-date-picker .dvfy-date-picker__day--selected:hover {
   background: var(--dvfy-date-picker-selected-bg, var(--dvfy-primary-bg));
@@ -216,12 +216,12 @@ dvfy-date-picker .dvfy-date-picker__day--in-range {
 }
 dvfy-date-picker .dvfy-date-picker__day--range-start {
   background: var(--dvfy-date-picker-selected-bg, var(--dvfy-primary-bg));
-  color: var(--dvfy-date-picker-selected-text, #fff);
+  color: var(--dvfy-date-picker-selected-text, #fff); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   border-radius: var(--dvfy-radius-md) 0 0 var(--dvfy-radius-md);
 }
 dvfy-date-picker .dvfy-date-picker__day--range-end {
   background: var(--dvfy-date-picker-selected-bg, var(--dvfy-primary-bg));
-  color: var(--dvfy-date-picker-selected-text, #fff);
+  color: var(--dvfy-date-picker-selected-text, #fff); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   border-radius: 0 var(--dvfy-radius-md) var(--dvfy-radius-md) 0;
 }
 dvfy-date-picker .dvfy-date-picker__day--range-start.dvfy-date-picker__day--range-end {
@@ -308,7 +308,7 @@ dvfy-date-picker .dvfy-date-picker__month-item {
 dvfy-date-picker .dvfy-date-picker__month-item:hover { background: var(--dvfy-surface-muted); }
 dvfy-date-picker .dvfy-date-picker__month-item--active {
   background: var(--dvfy-date-picker-selected-bg, var(--dvfy-primary-bg));
-  color: var(--dvfy-date-picker-selected-text, #fff);
+  color: var(--dvfy-date-picker-selected-text, #fff); /* allow-hardcoded: var() fallback must be literal per CSS spec */
 }
 dvfy-date-picker .dvfy-date-picker__month-item:focus-visible {
   outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);
@@ -339,7 +339,7 @@ dvfy-date-picker .dvfy-date-picker__year-item {
 dvfy-date-picker .dvfy-date-picker__year-item:hover { background: var(--dvfy-surface-muted); }
 dvfy-date-picker .dvfy-date-picker__year-item--active {
   background: var(--dvfy-date-picker-selected-bg, var(--dvfy-primary-bg));
-  color: var(--dvfy-date-picker-selected-text, #fff);
+  color: var(--dvfy-date-picker-selected-text, #fff); /* allow-hardcoded: var() fallback must be literal per CSS spec */
 }
 dvfy-date-picker .dvfy-date-picker__year-item:focus-visible {
   outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);

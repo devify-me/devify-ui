@@ -45,7 +45,7 @@ dvfy-command-palette[open] {
 dvfy-command-palette .dvfy-cmd__backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--dvfy-overlay-bg);
   backdrop-filter: blur(4px);
 }
 

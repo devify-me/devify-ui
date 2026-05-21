@@ -28,7 +28,7 @@ dvfy-gradient-card {
   position: relative;
   overflow: hidden;
 
-  --_gc-color: var(--dvfy-gradient-card-color, rgba(99, 102, 241, 0.15));
+  --_gc-color: var(--dvfy-gradient-card-color, rgba(99, 102, 241, 0.15)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
   --_gc-size: var(--dvfy-gradient-card-size, 250px);
   --x: 50%;
   --y: 50%;

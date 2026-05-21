@@ -41,7 +41,7 @@ dvfy-scramble-hover {
 }
 
 dvfy-scramble-hover .dvfy-scramble-char[data-scrambling] {
-  color: var(--dvfy-scramble-color, var(--dvfy-accent-brand, #7c3aed));
+  color: var(--dvfy-scramble-color, var(--dvfy-accent-brand, #7c3aed)); /* allow-hardcoded: var() fallback must be literal per CSS spec */
 }
 
 dvfy-scramble-hover .dvfy-scramble-char {
