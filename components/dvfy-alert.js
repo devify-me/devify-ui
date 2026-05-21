@@ -16,6 +16,7 @@ import './dvfy-button.js';
 
 const STYLES = `
 dvfy-alert {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: var(--dvfy-space-3);
@@ -25,6 +26,10 @@ dvfy-alert {
   font-family: var(--dvfy-font-sans);
   font-size: var(--dvfy-text-sm);
   line-height: var(--dvfy-leading-normal);
+}
+dvfy-alert[dismissible] {
+  /* reserve room so body text never runs under the absolutely-positioned close button */
+  padding-right: calc(var(--dvfy-space-4) + var(--dvfy-space-6));
 }
 
 /* Status icons via ::before on the icon span */
@@ -43,7 +48,12 @@ dvfy-alert .dvfy-alert__title {
 dvfy-alert .dvfy-alert__content { color: inherit; opacity: 0.9; }
 
 dvfy-alert .dvfy-alert__close {
-  flex-shrink: 0;
+  position: absolute;
+  top: var(--dvfy-space-2);
+  right: var(--dvfy-space-2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   cursor: pointer;
@@ -51,10 +61,10 @@ dvfy-alert .dvfy-alert__close {
   border-radius: var(--dvfy-radius-sm);
   color: inherit;
   opacity: 0.6;
-  font-size: var(--dvfy-text-lg);
   line-height: 1;
   transition: opacity var(--dvfy-duration-fast) var(--dvfy-ease-out);
 }
+dvfy-alert .dvfy-alert__close svg { display: block; }
 dvfy-alert .dvfy-alert__close:hover { opacity: 1; }
 dvfy-alert .dvfy-alert__close:focus-visible {
   outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);
@@ -98,6 +108,26 @@ const STATUS_ICONS = {
   warning: '\u26A0',  // warning sign
   danger: '\u2716',   // heavy x
 };
+
+function buildCloseIcon() {
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  const svg = document.createElementNS(SVG_NS, 'svg');
+  svg.setAttribute('width', '16');
+  svg.setAttribute('height', '16');
+  svg.setAttribute('viewBox', '0 0 24 24');
+  svg.setAttribute('fill', 'none');
+  svg.setAttribute('stroke', 'currentColor');
+  svg.setAttribute('stroke-width', '2');
+  svg.setAttribute('stroke-linecap', 'round');
+  svg.setAttribute('aria-hidden', 'true');
+  for (const [x1, y1, x2, y2] of [[18, 6, 6, 18], [6, 6, 18, 18]]) {
+    const line = document.createElementNS(SVG_NS, 'line');
+    line.setAttribute('x1', x1); line.setAttribute('y1', y1);
+    line.setAttribute('x2', x2); line.setAttribute('y2', y2);
+    svg.appendChild(line);
+  }
+  return svg;
+}
 
 /**
  * Alert/notification banner with status-based styling.
@@ -218,7 +248,7 @@ class DvfyAlert extends HTMLElement {
       btn.setAttribute('variant', 'ghost');
       btn.className = 'dvfy-alert__close';
       btn.setAttribute('aria-label', 'Dismiss');
-      btn.textContent = '\u00D7'; // multiplication sign (x)
+      btn.appendChild(buildCloseIcon());
       btn.addEventListener('click', () => this.remove());
       this.appendChild(btn);
     }
