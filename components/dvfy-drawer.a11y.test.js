@@ -23,7 +23,7 @@ function pressKey(el, key, options = {}) {
 // Get all focusable elements inside the drawer
 function focusableIn(el) {
   return Array.from(el.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    'button, dvfy-button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
   ));
 }
 
@@ -103,10 +103,10 @@ describe('dvfy-drawer — accessibility', () => {
       expect(toggle.getAttribute('title')).to.equal('Collapse');
     });
 
-    it('collapse toggle button is a native <button>', async () => {
+    it('collapse toggle is a <dvfy-button>', async () => {
       const el = await createDrawer();
       const toggle = el.querySelector('.dvfy-drawer__toggle');
-      expect(toggle.tagName.toLowerCase()).to.equal('button');
+      expect(toggle.tagName.toLowerCase()).to.equal('dvfy-button');
     });
 
     it('reopen tab has an aria-label describing the panel name', async () => {
@@ -116,10 +116,10 @@ describe('dvfy-drawer — accessibility', () => {
       expect(reopen.getAttribute('aria-label')).to.equal('Open settings');
     });
 
-    it('reopen tab is a native <button>', async () => {
+    it('reopen tab is a <dvfy-button>', async () => {
       const container = await fixture(html`<div style="position:relative"><dvfy-drawer><p>Content</p></dvfy-drawer></div>`);
       const reopen = container.querySelector('.dvfy-drawer__reopen');
-      expect(reopen.tagName.toLowerCase()).to.equal('button');
+      expect(reopen.tagName.toLowerCase()).to.equal('dvfy-button');
     });
 
     it('header title is present and reflects header attribute', async () => {

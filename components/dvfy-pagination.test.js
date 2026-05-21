@@ -97,14 +97,14 @@ describe('dvfy-pagination', () => {
     it('disables prev button on first page', async () => {
       const el = await fixture(html`<dvfy-pagination total="5" current="1"></dvfy-pagination>`);
       const prev = el.querySelector('[aria-label="Previous page"]');
-      expect(prev.disabled).to.be.true;
+      expect(prev.hasAttribute('disabled')).to.be.true;
       await checkA11y(el);
     });
 
     it('disables next button on last page', async () => {
       const el = await fixture(html`<dvfy-pagination total="5" current="5"></dvfy-pagination>`);
       const next = el.querySelector('[aria-label="Next page"]');
-      expect(next.disabled).to.be.true;
+      expect(next.hasAttribute('disabled')).to.be.true;
       await checkA11y(el);
     });
 
@@ -112,8 +112,8 @@ describe('dvfy-pagination', () => {
       const el = await fixture(html`<dvfy-pagination total="5" current="3"></dvfy-pagination>`);
       const prev = el.querySelector('[aria-label="Previous page"]');
       const next = el.querySelector('[aria-label="Next page"]');
-      expect(prev.disabled).to.be.false;
-      expect(next.disabled).to.be.false;
+      expect(prev.hasAttribute('disabled')).to.be.false;
+      expect(next.hasAttribute('disabled')).to.be.false;
       await checkA11y(el);
     });
   });

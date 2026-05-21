@@ -148,7 +148,7 @@ describe('dvfy-modal', () => {
       await new Promise(r => requestAnimationFrame(r));
       const closeBtn = el.querySelector('.dvfy-modal__close');
       // Focus may be on close button or another focusable
-      const focusable = el.querySelector('.dvfy-modal__dialog button, .dvfy-modal__dialog [href], .dvfy-modal__dialog input');
+      const focusable = el.querySelector('.dvfy-modal__dialog button, .dvfy-modal__dialog dvfy-button, .dvfy-modal__dialog [href], .dvfy-modal__dialog input');
       expect(focusable).to.exist;
       await checkA11y(el, { ignoredRules: ['aria-dialog-name', 'color-contrast'] });
     });

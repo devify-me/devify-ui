@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 /**
  * <dvfy-table> — Enhanced data table wrapper
@@ -780,12 +781,16 @@ class DvfyTable extends HTMLElement {
     const actionsTop = document.createElement('div');
     actionsTop.className = 'dvfy-table__filter-actions-top';
 
-    const selectAllBtn = document.createElement('button');
-    selectAllBtn.type = 'button';
+    const selectAllBtn = document.createElement('dvfy-button');
+    selectAllBtn.setAttribute('type', 'button');
+    selectAllBtn.setAttribute('variant', 'outline');
+    selectAllBtn.setAttribute('size', 'sm');
     selectAllBtn.textContent = 'Select All';
 
-    const clearAllBtn = document.createElement('button');
-    clearAllBtn.type = 'button';
+    const clearAllBtn = document.createElement('dvfy-button');
+    clearAllBtn.setAttribute('type', 'button');
+    clearAllBtn.setAttribute('variant', 'outline');
+    clearAllBtn.setAttribute('size', 'sm');
     clearAllBtn.textContent = 'Clear All';
 
     selectAllBtn.addEventListener('click', () => {

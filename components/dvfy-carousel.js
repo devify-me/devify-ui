@@ -1,5 +1,6 @@
 import { sanitizeSrc } from '../utils/url.js';
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 /**
  * <dvfy-carousel> — Native CSS carousel with JS fallback.
@@ -532,12 +533,14 @@ class DvfyCarousel extends HTMLElement {
     const nav = document.createElement('div');
     nav.className = 'dvfy-carousel-nav';
 
-    const prev = document.createElement('button');
+    const prev = document.createElement('dvfy-button');
+    prev.setAttribute('variant', 'ghost');
     prev.className = 'dvfy-carousel-nav__btn';
     prev.setAttribute('aria-label', 'Previous slide');
     prev.textContent = '◀';
 
-    const next = document.createElement('button');
+    const next = document.createElement('dvfy-button');
+    next.setAttribute('variant', 'ghost');
     next.className = 'dvfy-carousel-nav__btn';
     next.setAttribute('aria-label', 'Next slide');
     next.textContent = '▶';
@@ -580,7 +583,7 @@ class DvfyCarousel extends HTMLElement {
     this.#dots.textContent = '';
     const slides = Array.from(this.querySelectorAll(':scope > dvfy-slide'));
     slides.forEach((slide, i) => {
-      const btn = document.createElement('button');
+      const btn = document.createElement('button'); // allow-dvfy-pref: dot has role=tab in a tablist, tight circular custom styling
       btn.className = 'dvfy-carousel-dots__dot';
       btn.setAttribute('role', 'tab');
       btn.setAttribute('aria-label', `Slide ${i + 1} of ${slides.length}`);

@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import '../components/dvfy-button.js';
 
 /**
  * <dvfy-htmx-table> — Server-side sorted, filtered, paginated table via HTMX.
@@ -590,12 +591,14 @@ class DvfyHtmxTable extends HTMLElement {
   }
 
   #createPageBtn(text, page, disabled) {
-    const btn = document.createElement('button');
+    const btn = document.createElement('dvfy-button');
+    btn.setAttribute('variant', 'ghost');
+    btn.setAttribute('size', 'sm');
     btn.className = 'dvfy-htmx-table__page-btn';
-    btn.type = 'button';
+    btn.setAttribute('type', 'button');
     btn.textContent = text;
     if (disabled) {
-      btn.disabled = true;
+      btn.setAttribute('disabled', '');
     } else {
       btn.addEventListener('click', () => {
         if (page < 1 || page > this.#totalPages || page === this.#currentPage) return;

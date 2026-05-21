@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 const STYLES = `
 dvfy-drawer {
@@ -280,7 +281,8 @@ class DvfyDrawer extends HTMLElement {
       header.appendChild(title);
 
       if (collapsible) {
-        const toggle = document.createElement('button');
+        const toggle = document.createElement('dvfy-button');
+        toggle.setAttribute('variant', 'ghost');
         toggle.className = 'dvfy-drawer__toggle';
         toggle.setAttribute('aria-label', 'Collapse panel');
         toggle.setAttribute('title', 'Collapse');
@@ -313,7 +315,8 @@ class DvfyDrawer extends HTMLElement {
         this.parentElement.style.position = 'relative';
       }
 
-      this.#reopen = document.createElement('button');
+      this.#reopen = document.createElement('dvfy-button');
+      this.#reopen.setAttribute('variant', 'ghost');
       this.#reopen.className = 'dvfy-drawer__reopen';
       this.#reopen.setAttribute('data-position', position);
       this.#reopen.textContent = headerText;

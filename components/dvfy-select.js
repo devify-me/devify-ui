@@ -462,7 +462,7 @@ class DvfySelect extends HTMLElement {
   }
 
   #buildTrigger(placeholder) {
-    const trigger = document.createElement('button');
+    const trigger = document.createElement('button'); // allow-dvfy-pref: role=combobox with custom keyboard semantics (Enter/Space/ArrowDown open, ArrowUp/Down/Enter navigate options) — dvfy-button's Enter→click would double-fire and close the dropdown
     trigger.className = 'dvfy-select__trigger';
     trigger.setAttribute('type', 'button');
     trigger.setAttribute('role', 'combobox');

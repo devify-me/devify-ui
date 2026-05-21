@@ -184,7 +184,7 @@ class DvfyTag extends HTMLElement {
     if (existing) existing.remove();
 
     if (this.hasAttribute('removable')) {
-      const btn = document.createElement('button');
+      const btn = document.createElement('button'); // allow-dvfy-pref: tiny X removal icon tightly integrated inline within tag chip
       btn.className = 'dvfy-tag__remove';
       btn.setAttribute('type', 'button');
       btn.setAttribute('aria-label', 'Remove');

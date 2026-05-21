@@ -456,7 +456,7 @@ describe('dvfy-table', () => {
       let visible = Array.from(rows).filter(r => r.style.display !== 'none');
       expect(visible.length).to.equal(1);
       // Click Select All button to restore all
-      const selectAllBtn = el.querySelector('.dvfy-table__filter-actions-top button:first-child');
+      const selectAllBtn = el.querySelector('.dvfy-table__filter-actions-top > *:first-child');
       selectAllBtn.click();
       // Verify all rows are visible again
       rows = el.querySelectorAll('tbody tr');

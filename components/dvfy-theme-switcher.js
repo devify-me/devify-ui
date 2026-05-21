@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 /**
  * <dvfy-theme-switcher> — Theme dropdown + dark/light toggle
@@ -288,7 +289,7 @@ class DvfyThemeSwitcher extends HTMLElement {
     }
 
     // Dark/light toggle
-    const toggle = document.createElement('button');
+    const toggle = document.createElement('button'); // allow-dvfy-pref: role=switch with custom thumb child element — not a button-shaped control
     toggle.className = 'dvfy-ts__toggle';
     toggle.setAttribute('role', 'switch');
     toggle.setAttribute('aria-checked', String(this.#currentMode === 'dark'));
@@ -351,7 +352,9 @@ class DvfyThemeSwitcher extends HTMLElement {
     dd.appendChild(trigger);
 
     for (const theme of this.#themes) {
-      const item = document.createElement('button');
+      const item = document.createElement('dvfy-button');
+      item.setAttribute('variant', 'ghost');
+      item.setAttribute('size', 'sm');
       item.setAttribute('data-value', theme.value);
       item.textContent = theme.label;
       if (theme.value === this.#currentTheme) {

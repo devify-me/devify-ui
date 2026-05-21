@@ -670,7 +670,7 @@ class DvfyDatePicker extends HTMLElement {
     wrapper.appendChild(input);
 
     // Calendar icon toggle
-    const toggleBtn = document.createElement('button');
+    const toggleBtn = document.createElement('button'); // allow-dvfy-pref: internal sub-button of date primitive — parent manages keyboard nav and tight grid/icon styling
     toggleBtn.type = 'button';
     toggleBtn.className = 'dvfy-date-picker__toggle';
     toggleBtn.setAttribute('aria-label', 'Open date picker');
@@ -730,7 +730,7 @@ class DvfyDatePicker extends HTMLElement {
     header.className = 'dvfy-date-picker__header';
 
     const makeNav = (label, text, handler) => {
-      const btn = document.createElement('button');
+      const btn = document.createElement('button'); // allow-dvfy-pref: internal sub-button of date primitive — parent manages keyboard nav and tight grid/icon styling
       btn.type = 'button';
       btn.className = 'dvfy-date-picker__nav';
       btn.setAttribute('aria-label', label);
@@ -739,7 +739,7 @@ class DvfyDatePicker extends HTMLElement {
       return btn;
     };
 
-    const heading = document.createElement('button');
+    const heading = document.createElement('button'); // allow-dvfy-pref: internal sub-button of date primitive — parent manages keyboard nav and tight grid/icon styling
     heading.type = 'button';
     heading.className = 'dvfy-date-picker__heading';
     heading.setAttribute('aria-live', 'polite');
@@ -813,7 +813,7 @@ class DvfyDatePicker extends HTMLElement {
       const isDisabled = this.#isDisabled(date);
       const dNum = this.#dateNum(date);
 
-      const btn = document.createElement('button');
+      const btn = document.createElement('button'); // allow-dvfy-pref: internal sub-button of date primitive — parent manages keyboard nav and tight grid/icon styling
       btn.type = 'button';
       btn.className = 'dvfy-date-picker__day';
       btn.textContent = date.getDate();
@@ -887,7 +887,7 @@ class DvfyDatePicker extends HTMLElement {
     const footer = document.createElement('div');
     footer.className = 'dvfy-date-picker__footer';
 
-    const todayBtn = document.createElement('button');
+    const todayBtn = document.createElement('button'); // allow-dvfy-pref: internal sub-button of date primitive — parent manages keyboard nav and tight grid/icon styling
     todayBtn.type = 'button';
     todayBtn.className = 'dvfy-date-picker__footer-btn';
     todayBtn.textContent = 'Today';
@@ -903,7 +903,7 @@ class DvfyDatePicker extends HTMLElement {
       }
     });
 
-    const clearBtn = document.createElement('button');
+    const clearBtn = document.createElement('button'); // allow-dvfy-pref: internal sub-button of date primitive — parent manages keyboard nav and tight grid/icon styling
     clearBtn.type = 'button';
     clearBtn.className = 'dvfy-date-picker__footer-btn';
     clearBtn.textContent = 'Clear';
@@ -939,7 +939,7 @@ class DvfyDatePicker extends HTMLElement {
     header.className = 'dvfy-date-picker__header';
 
     const makeNav = (label, text, handler) => {
-      const btn = document.createElement('button');
+      const btn = document.createElement('button'); // allow-dvfy-pref: internal sub-button of date primitive — parent manages keyboard nav and tight grid/icon styling
       btn.type = 'button';
       btn.className = 'dvfy-date-picker__nav';
       btn.setAttribute('aria-label', label);
@@ -948,7 +948,7 @@ class DvfyDatePicker extends HTMLElement {
       return btn;
     };
 
-    const yearBtn = document.createElement('button');
+    const yearBtn = document.createElement('button'); // allow-dvfy-pref: internal sub-button of date primitive — parent manages keyboard nav and tight grid/icon styling
     yearBtn.type = 'button';
     yearBtn.className = 'dvfy-date-picker__heading';
     yearBtn.textContent = String(this.#year);
@@ -971,7 +971,7 @@ class DvfyDatePicker extends HTMLElement {
     }
 
     monthNames.forEach((name, idx) => {
-      const btn = document.createElement('button');
+      const btn = document.createElement('button'); // allow-dvfy-pref: internal sub-button of date primitive — parent manages keyboard nav and tight grid/icon styling
       btn.type = 'button';
       btn.className = 'dvfy-date-picker__month-item';
       if (idx === this.#month) btn.classList.add('dvfy-date-picker__month-item--active');
@@ -1000,7 +1000,7 @@ class DvfyDatePicker extends HTMLElement {
 
     const header = document.createElement('div');
     header.className = 'dvfy-date-picker__header';
-    const backBtn = document.createElement('button');
+    const backBtn = document.createElement('button'); // allow-dvfy-pref: internal sub-button of date primitive — parent manages keyboard nav and tight grid/icon styling
     backBtn.type = 'button';
     backBtn.className = 'dvfy-date-picker__heading';
     backBtn.textContent = `${yStart} \u2013 ${yEnd}`;
@@ -1012,7 +1012,7 @@ class DvfyDatePicker extends HTMLElement {
     grid.className = 'dvfy-date-picker__year-grid';
 
     for (let y = yStart; y <= yEnd; y++) {
-      const btn = document.createElement('button');
+      const btn = document.createElement('button'); // allow-dvfy-pref: internal sub-button of date primitive — parent manages keyboard nav and tight grid/icon styling
       btn.type = 'button';
       btn.className = 'dvfy-date-picker__year-item';
       if (y === this.#year) btn.classList.add('dvfy-date-picker__year-item--active');

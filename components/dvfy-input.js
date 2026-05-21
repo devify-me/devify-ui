@@ -1,5 +1,6 @@
 import { labelPositionCSS } from '../utils/label-position.js';
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 /**
  * <dvfy-input> — Text input with label, validation state, and help text
@@ -394,8 +395,9 @@ class DvfyInput extends HTMLElement {
   }
 
   #appendPasswordToggle(wrapper, input) {
-    const toggle = document.createElement('button');
-    toggle.type = 'button';
+    const toggle = document.createElement('dvfy-button');
+    toggle.setAttribute('type', 'button');
+    toggle.setAttribute('variant', 'ghost');
     toggle.className = 'dvfy-input__toggle';
     toggle.setAttribute('aria-label', this.#passwordVisible ? 'Hide password' : 'Show password');
     toggle.setAttribute('tabindex', '0');
@@ -449,8 +451,9 @@ class DvfyInput extends HTMLElement {
   }
 
   #appendClearButton(wrapper, input) {
-    const clearBtn = document.createElement('button');
-    clearBtn.type = 'button';
+    const clearBtn = document.createElement('dvfy-button');
+    clearBtn.setAttribute('type', 'button');
+    clearBtn.setAttribute('variant', 'ghost');
     clearBtn.className = 'dvfy-input__clear';
     clearBtn.setAttribute('aria-label', 'Clear input');
     clearBtn.setAttribute('tabindex', '-1');

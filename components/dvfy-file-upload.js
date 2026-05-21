@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import './dvfy-button.js';
 
 const STYLES = `
 dvfy-file-upload {
@@ -506,8 +507,9 @@ class DvfyFileUpload extends HTMLElement {
     info.appendChild(size);
     li.appendChild(info);
 
-    const removeBtn = document.createElement('button');
-    removeBtn.type = 'button';
+    const removeBtn = document.createElement('dvfy-button');
+    removeBtn.setAttribute('type', 'button');
+    removeBtn.setAttribute('variant', 'ghost');
     removeBtn.className = 'dvfy-fu__file-remove';
     removeBtn.setAttribute('aria-label', `Remove ${file.name}`);
     removeBtn.appendChild(this.#buildXIcon());
