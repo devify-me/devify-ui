@@ -306,27 +306,48 @@ export function renderOverviewStart(mainEl) {
   mainEl.appendChild(heading('5. Generate a Custom Theme from Your Brand', 2));
   mainEl.appendChild(para('Instead of hand-picking every semantic token, use the catalog’s built-in palette + theme generators to derive a full themed token set from just your brand colors:'));
 
-  const themeWorkflow = document.createElement('ol');
-  themeWorkflow.style.cssText = 'list-style: decimal inside; font-size: var(--dvfy-text-sm); color: var(--dvfy-text-secondary); line-height: var(--dvfy-leading-relaxed); margin-bottom: var(--dvfy-space-4); max-width: 52rem;';
-  for (const [label, hash] of [
-    ['Open Tokens → Colors. Set your primary, accent, and (optionally) secondary brand colors. Status colors auto-generate at canonical hues; support colors fill the rest of the wheel.', '#tokens/colors'],
-    ['Open Tokens → Themes. Live-preview each semantic token across light/dark modes. Generate a new theme from your palette — the system derives surfaces, text colors, borders, and interactive states for both modes.', '#tokens/themes'],
-    ['Export the generated theme as a CSS block. Paste it into your app’s stylesheet. Apply it via [data-theme="name"] (next step).', null],
-  ]) {
-    const li = document.createElement('li');
-    li.style.cssText = 'margin-bottom: var(--dvfy-space-2);';
-    if (hash) {
+  const themeStepper = document.createElement('dvfy-stepper');
+  themeStepper.setAttribute('active', '1');
+  themeStepper.style.cssText = 'margin-bottom: var(--dvfy-space-4); max-width: 52rem;';
+  const themeSteps = [
+    {
+      label: 'Pick brand colors',
+      description: 'Tokens → Colors',
+      hash: '#tokens/colors',
+      body: 'Set your primary, accent, and (optionally) secondary brand colors. Status colors auto-generate at canonical hues; support colors fill the rest of the wheel.',
+    },
+    {
+      label: 'Generate a theme',
+      description: 'Tokens → Themes',
+      hash: '#tokens/themes',
+      body: 'Live-preview each semantic token across light/dark modes. Generate a new theme from your palette — the system derives surfaces, text colors, borders, and interactive states for both modes.',
+    },
+    {
+      label: 'Export + paste',
+      description: 'Add to your app CSS',
+      hash: null,
+      body: 'Export the generated theme as a CSS block. Paste it into your app’s stylesheet. Apply it via [data-theme="name"] (next step).',
+    },
+  ];
+  for (const step of themeSteps) {
+    const dvfyStep = document.createElement('dvfy-step');
+    dvfyStep.setAttribute('label', step.label);
+    dvfyStep.setAttribute('description', step.description);
+    const p = document.createElement('p');
+    p.style.cssText = 'font-size: var(--dvfy-text-sm); color: var(--dvfy-text-secondary); line-height: var(--dvfy-leading-relaxed); margin: 0 0 var(--dvfy-space-2);';
+    if (step.hash) {
       const a = document.createElement('a');
-      a.textContent = label;
-      a.href = hash;
+      a.textContent = step.body;
+      a.href = step.hash;
       a.style.cssText = 'color: var(--dvfy-text-link);';
-      li.appendChild(a);
+      p.appendChild(a);
     } else {
-      li.textContent = label;
+      p.textContent = step.body;
     }
-    themeWorkflow.appendChild(li);
+    dvfyStep.appendChild(p);
+    themeStepper.appendChild(dvfyStep);
   }
-  mainEl.appendChild(themeWorkflow);
+  mainEl.appendChild(themeStepper);
 
   const tip = document.createElement('dvfy-alert');
   tip.setAttribute('status', 'info');
