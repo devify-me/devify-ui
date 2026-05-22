@@ -47,6 +47,64 @@ describe('dvfy-hamburger', () => {
     });
   });
 
+  describe('state-based API (#353)', () => {
+    it('defaults to data-state="hamburger"', async () => {
+      const el = await fixture(html`<dvfy-hamburger></dvfy-hamburger>`);
+      expect(el.getAttribute('data-state')).to.equal('hamburger');
+    });
+
+    it('mirrors explicit state attribute to data-state', async () => {
+      const el = await fixture(html`<dvfy-hamburger state="chevron-left"></dvfy-hamburger>`);
+      expect(el.getAttribute('data-state')).to.equal('chevron-left');
+    });
+
+    it('updates data-state when state attribute changes', async () => {
+      const el = await fixture(html`<dvfy-hamburger state="hamburger"></dvfy-hamburger>`);
+      el.setAttribute('state', 'chevron-right');
+      expect(el.getAttribute('data-state')).to.equal('chevron-right');
+    });
+
+    it('open=true defaults to data-state="x" when no state/animation set', async () => {
+      const el = await fixture(html`<dvfy-hamburger open></dvfy-hamburger>`);
+      expect(el.getAttribute('data-state')).to.equal('x');
+    });
+
+    it('open=true + animation="chevron-left" maps to data-state="chevron-left" (back-compat)', async () => {
+      const el = await fixture(html`<dvfy-hamburger animation="chevron-left" open></dvfy-hamburger>`);
+      expect(el.getAttribute('data-state')).to.equal('chevron-left');
+    });
+
+    it('open=true + animation="x-rotate-r" maps to data-state="x" with direction="right" (legacy)', async () => {
+      const el = await fixture(html`<dvfy-hamburger animation="x-rotate-r" open></dvfy-hamburger>`);
+      expect(el.getAttribute('data-state')).to.equal('x');
+      expect(el.getAttribute('direction')).to.equal('right');
+    });
+
+    it('explicit state takes precedence over open/animation', async () => {
+      const el = await fixture(html`<dvfy-hamburger state="minus" animation="x" open></dvfy-hamburger>`);
+      expect(el.getAttribute('data-state')).to.equal('minus');
+    });
+
+    it('aria-expanded reflects "not in resting state"', async () => {
+      const el = await fixture(html`<dvfy-hamburger></dvfy-hamburger>`);
+      const btn = el.querySelector('.dvfy-hb__btn');
+      expect(btn.getAttribute('aria-expanded')).to.equal('false');
+      el.setAttribute('state', 'x');
+      expect(btn.getAttribute('aria-expanded')).to.equal('true');
+      el.setAttribute('state', 'hamburger');
+      expect(btn.getAttribute('aria-expanded')).to.equal('false');
+    });
+
+    it('toggle event detail includes both open and state', async () => {
+      const el = await fixture(html`<dvfy-hamburger></dvfy-hamburger>`);
+      const btn = el.querySelector('.dvfy-hb__btn');
+      setTimeout(() => btn.click(), 0);
+      const evt = await oneEvent(el, 'toggle');
+      expect(evt.detail.open).to.be.true;
+      expect(evt.detail.state).to.equal('x');
+    });
+  });
+
   describe('attributes', () => {
     it('accepts size attribute', async () => {
       const el = await fixture(html`<dvfy-hamburger size="lg"></dvfy-hamburger>`);

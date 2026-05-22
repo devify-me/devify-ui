@@ -1387,12 +1387,17 @@
     {
       "name": "dvfy-hamburger",
       "path": "./components/dvfy-hamburger.js",
-      "description": "Animated hamburger icon button — a Tier 1 primitive for menu toggles.\n\nSix animation variants transform three bars into different shapes on toggle.\nComposable into nav, header, and sidebar components.",
+      "description": "State-driven animated icon button — a Tier 1 primitive for menu toggles\nand other binary/multi-state controls.\n\nFive visual states (hamburger, x, chevron-left, chevron-right, minus) are\ndriven by the `state` attribute. CSS transitions interpolate between any\ntwo states automatically; consumers set the state, the component animates.\n\nComposable into nav, header, drawer, sidebar, stepper, and modal components.",
       "attributes": [
         {
           "name": "open",
-          "description": "Toggle state (reflected)",
+          "description": "DEPRECATED for new code. Convenience toggle: when true (and `state` is unset), maps to state=\"x\" (or whatever `animation` specifies).",
           "type": "boolean"
+        },
+        {
+          "name": "direction",
+          "description": "Optional 180° button rotation flavor: left | right (mirrors legacy x-rotate-l / x-rotate-r)",
+          "type": "string"
         },
         {
           "name": "label",
@@ -1405,8 +1410,13 @@
           "type": "string"
         },
         {
+          "name": "state",
+          "description": "Visual state: hamburger | x | chevron-left | chevron-right | minus (default: \"hamburger\")",
+          "type": "string"
+        },
+        {
           "name": "animation",
-          "description": "x | x-rotate-r | x-rotate-l | chevron-left | chevron-right | minus",
+          "description": "DEPRECATED. Use `state` (and optionally `direction`). When `state` is unset, `animation` maps to the open-state target for backwards compat.",
           "type": "string"
         },
         {
@@ -1434,7 +1444,7 @@
         {
           "name": "open",
           "attribute": "open",
-          "description": "Toggle state (reflected)",
+          "description": "DEPRECATED for new code. Convenience toggle: when true (and `state` is unset), maps to state=\"x\" (or whatever `animation` specifies).",
           "type": "boolean"
         }
       ],

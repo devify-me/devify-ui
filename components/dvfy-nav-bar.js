@@ -361,13 +361,15 @@ class DvfyNavBar extends HTMLElement {
     this.#hamburger.className = 'dvfy-nav-bar__hamburger';
     this.#hamburger.setAttribute('size', 'sm');
     this.#hamburger.setAttribute('aria-label', 'Open menu');
+    // Pick rotation direction based on drawer side. `animation` attribute still
+    // accepted as a back-compat override (mapped to state+direction internally).
     const animation = this.getAttribute('animation');
     if (animation) {
       this.#hamburger.setAttribute('animation', animation);
     } else {
       const pos = this.getAttribute('drawer-position') || 'right';
-      const defaultAnim = (pos === 'left' || pos === 'bottom') ? 'x-rotate-r' : 'x-rotate-l';
-      this.#hamburger.setAttribute('animation', defaultAnim);
+      const direction = (pos === 'left' || pos === 'bottom') ? 'right' : 'left';
+      this.#hamburger.setAttribute('direction', direction);
     }
     this.#hamburger.addEventListener('toggle', (e) => {
       if (e.detail.open) this.#openMenu();
@@ -397,8 +399,7 @@ class DvfyNavBar extends HTMLElement {
 
     const closeBtn = document.createElement('dvfy-hamburger');
     closeBtn.setAttribute('size', 'sm');
-    closeBtn.setAttribute('animation', animation || 'x');
-    closeBtn.open = true;
+    closeBtn.setAttribute('state', 'x');
     closeBtn.addEventListener('toggle', () => this.#closeMenu());
     drawerHeader.appendChild(closeBtn);
 
