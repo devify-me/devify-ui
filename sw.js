@@ -7,7 +7,7 @@
  *  - Everything else: network-first with cache fallback
  */
 
-const CACHE_NAME = 'dvfy-v17';
+const CACHE_NAME = 'dvfy-v18';
 
 // Critical app shell — precached on install
 const PRECACHE_URLS = [
@@ -34,6 +34,8 @@ const PRECACHE_URLS = [
   '/tokens/layout.css',
   '/tokens/themes/light.css',
   '/tokens/themes/dark.css',
+  '/tokens/themes/devify-cyan.css',
+  '/tokens/themes/devify-pink.css',
   // Components
   '/components/dvfy-accordion.js',
   '/components/dvfy-alert.js',
@@ -42,33 +44,51 @@ const PRECACHE_URLS = [
   '/components/dvfy-badge.js',
   '/components/dvfy-breadcrumb.js',
   '/components/dvfy-button.js',
+  '/components/dvfy-card-glow.js',
   '/components/dvfy-card.js',
   '/components/dvfy-carousel.js',
   '/components/dvfy-checkbox.js',
+  '/components/dvfy-command-palette.js',
+  '/components/dvfy-compare-slider.js',
   '/components/dvfy-component-playground.js',
+  '/components/dvfy-date-picker.js',
+  '/components/dvfy-description-list.js',
   '/components/dvfy-drawer.js',
   '/components/dvfy-dropdown.js',
   '/components/dvfy-empty.js',
+  '/components/dvfy-field-group.js',
+  '/components/dvfy-file-upload.js',
   '/components/dvfy-gradient-card.js',
   '/components/dvfy-hamburger.js',
   '/components/dvfy-hovercard.js',
   '/components/dvfy-input.js',
+  '/components/dvfy-invoice-list.js',
   '/components/dvfy-loader.js',
+  '/components/dvfy-marquee-scroll.js',
   '/components/dvfy-modal.js',
   '/components/dvfy-nav.js',
   '/components/dvfy-nav-menu.js',
   '/components/dvfy-nav-bar.js',
   '/components/dvfy-page-transition.js',
   '/components/dvfy-pagination.js',
+  '/components/dvfy-payment-methods.js',
+  '/components/dvfy-payment-setup.js',
+  '/components/dvfy-plan-picker.js',
+  '/components/dvfy-popover.js',
   '/components/dvfy-progress.js',
   '/components/dvfy-radio.js',
   '/components/dvfy-scramble-hover.js',
   '/components/dvfy-scroll-progress.js',
+  '/components/dvfy-scroll-reveal.js',
+  '/components/dvfy-section-hero.js',
   '/components/dvfy-section.js',
   '/components/dvfy-select.js',
   '/components/dvfy-sidebar.js',
   '/components/dvfy-slider.js',
   '/components/dvfy-spotlight-card.js',
+  '/components/dvfy-stagger-enter.js',
+  '/components/dvfy-stepper.js',
+  '/components/dvfy-subscription-card.js',
   '/components/dvfy-switch.js',
   '/components/dvfy-table.js',
   '/components/dvfy-tabs.js',
@@ -78,7 +98,16 @@ const PRECACHE_URLS = [
   '/components/dvfy-theme-switcher.js',
   '/components/dvfy-toast.js',
   '/components/dvfy-tooltip.js',
+  '/components/dvfy-transition-root.js',
+  '/components/dvfy-tree-node.js',
   '/components/dvfy-tree-view.js',
+  '/components/dvfy-usage-meter.js',
+  // Patterns (HTMX server components)
+  '/patterns/dvfy-confirm.js',
+  '/patterns/dvfy-htmx-form.js',
+  '/patterns/dvfy-htmx-table.js',
+  '/patterns/dvfy-infinite-scroll.js',
+  '/patterns/dvfy-live-search.js',
 ];
 
 // ─── Install: precache app shell ───────────────────────────────────────────
