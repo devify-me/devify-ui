@@ -41,6 +41,8 @@ const STYLES = `
 dvfy-stepper {
   display: block;
   font-family: var(--dvfy-font-sans);
+  container-type: inline-size;
+  container-name: dvfy-stepper;
 }
 
 /* ── Step header row ─────────────────────────────────────────────── */
@@ -53,6 +55,25 @@ dvfy-stepper {
 dvfy-stepper[vertical] .dvfy-stepper__nav {
   flex-direction: column;
   margin-bottom: 0;
+}
+
+/* Auto-vertical at narrow widths. 48rem matches --dvfy-screen-md;
+   @container parentheses don't accept var() per spec, so the breakpoint
+   is hardcoded with the token noted in comment (same pattern as dvfy-nav-bar). */
+@container dvfy-stepper (max-width: 48rem) {
+  .dvfy-stepper__nav {
+    flex-direction: column;
+    margin-bottom: 0;
+  }
+  .dvfy-stepper__connector {
+    width: 2px;
+    height: var(--dvfy-space-6, 1.5rem);
+    min-width: 0;
+    margin-top: 0;
+    margin-left: calc(1rem - 1px);
+    align-self: flex-start;
+    flex: none;
+  }
 }
 
 /* Individual step header */
