@@ -208,7 +208,9 @@ describe('dvfy-theme-switcher', () => {
       // The mode toggle is wrapped in the first menu row
       expect(dropdown.querySelector('.dvfy-ts__mode-row .dvfy-ts__toggle')).to.exist;
       // Theme items follow after the divider
-      expect(dropdown.querySelector('.dvfy-ts__divider')).to.exist;
+      const sectionLabel = dropdown.querySelector('.dvfy-ts__section-label');
+      expect(sectionLabel).to.exist;
+      expect(sectionLabel.textContent).to.equal('Themes');
       expect(dropdown.querySelectorAll('dvfy-button[data-value]').length).to.equal(2);
       await checkA11y(el);
     });

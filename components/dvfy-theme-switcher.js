@@ -100,13 +100,17 @@ dvfy-theme-switcher dvfy-dropdown .dvfy-dropdown__item[aria-selected="true"]:hov
 /* Mode-toggle row inside the palette dropdown */
 dvfy-theme-switcher .dvfy-ts__mode-row {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   padding: var(--dvfy-space-2);
 }
-dvfy-theme-switcher .dvfy-ts__divider {
-  border: 0;
+dvfy-theme-switcher .dvfy-ts__section-label {
+  padding: var(--dvfy-space-1) var(--dvfy-space-3);
+  font-size: var(--dvfy-text-xs);
+  font-weight: var(--dvfy-weight-semibold);
+  color: var(--dvfy-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
   border-top: var(--dvfy-border-1) solid var(--dvfy-border-muted);
-  margin: 0;
 }
 
 /* Round shape */
@@ -346,10 +350,11 @@ class DvfyThemeSwitcher extends HTMLElement {
     modeRow.appendChild(modeToggle);
     dd.appendChild(modeRow);
 
-    // Divider between mode toggle and theme list
-    const divider = document.createElement('hr');
-    divider.className = 'dvfy-ts__divider';
-    dd.appendChild(divider);
+    // Section label introducing the theme list
+    const sectionLabel = document.createElement('div');
+    sectionLabel.className = 'dvfy-ts__section-label';
+    sectionLabel.textContent = 'Themes';
+    dd.appendChild(sectionLabel);
 
     for (const theme of this.#themes) {
       const item = document.createElement('dvfy-button');
