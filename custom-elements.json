@@ -1873,10 +1873,15 @@
           "type": "string"
         }
       ],
+      "events": [
+        {
+          "name": "menu-toggle"
+        }
+      ],
       "slots": [
         {
           "name": "",
-          "description": "dvfy-nav-menu for links, other elements treated as actions"
+          "description": "dvfy-nav-menu for links; other elements treated as right-aligned actions. Slotted dvfy-hamburger is intentionally ignored; listen to the `menu-toggle` event instead."
         }
       ],
       "cssProperties": [

@@ -85,6 +85,7 @@ dvfy-nav-bar[sticky] .dvfy-nav-bar__bar {
   align-items: center;
   gap: var(--dvfy-space-2);
   flex-shrink: 0;
+  margin-left: auto;
 }
 
 /* ── Hamburger (mobile only) ── */
@@ -180,7 +181,9 @@ const NAV_BAR_RESPONSIVE_FN = (id, bp) => `
  * @attr {number} breakpoint - Pixel width for mobile collapse (default: 768)
  * @attr {string} animation - Hamburger animation: x | x-rotate-r | x-rotate-l | chevron-left | chevron-right | minus
  *
- * @slot - dvfy-nav-menu for links, other elements treated as actions
+ * @slot - dvfy-nav-menu for links; other elements treated as right-aligned actions. Slotted dvfy-hamburger is intentionally ignored; listen to the `menu-toggle` event instead.
+ *
+ * @event {CustomEvent} menu-toggle - Fires when the mobile menu opens/closes. detail: { open: boolean }
  *
  * @cssprop {color} --dvfy-nav-bg - Nav background (default: var(--dvfy-surface-raised))
  * @cssprop {color} --dvfy-nav-border - Bottom border color (default: var(--dvfy-border-default))
@@ -240,15 +243,25 @@ class DvfyNavBar extends HTMLElement {
   }
 
   #build() {
-    // Categorize children: dvfy-nav-menu vs action items
+    // Categorize children: dvfy-nav-menu vs action items.
+    // Slotted dvfy-hamburger elements are dropped — dvfy-nav-bar manages its
+    // own hamburger and a second one would reproject into the mobile drawer,
+    // producing hamburgers-inside-hamburgers. Listen to the bar's `menu-toggle`
+    // event for app-level drawer wiring instead.
     const menus = [];
     const actionItems = [];
+    let droppedHamburger = false;
     for (const child of Array.from(this.children)) {
       if (child.tagName === 'DVFY-NAV-MENU') {
         menus.push(child);
+      } else if (child.tagName === 'DVFY-HAMBURGER') {
+        droppedHamburger = true;
       } else {
         actionItems.push(child);
       }
+    }
+    if (droppedHamburger) {
+      console.warn('[dvfy-nav-bar] ignoring slotted <dvfy-hamburger>; listen to the bar\'s `menu-toggle` event to drive app-level drawers.');
     }
     while (this.firstChild) this.removeChild(this.firstChild);
 
@@ -426,6 +439,7 @@ class DvfyNavBar extends HTMLElement {
     if (drawerWrap) drawerWrap.setAttribute('data-open', '');
     this.#overlay.setAttribute('data-open', '');
     this.#hamburger.open = true;
+    this.dispatchEvent(new CustomEvent('menu-toggle', { detail: { open: true }, bubbles: true }));
   }
 
   #closeMenu() {
@@ -433,6 +447,7 @@ class DvfyNavBar extends HTMLElement {
     if (drawerWrap) drawerWrap.removeAttribute('data-open');
     this.#overlay.removeAttribute('data-open');
     this.#hamburger.open = false;
+    this.dispatchEvent(new CustomEvent('menu-toggle', { detail: { open: false }, bubbles: true }));
   }
 }
 

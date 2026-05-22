@@ -107,6 +107,19 @@ describe('dvfy-nav-bar', () => {
       expect(actions).to.exist;
       expect(actions.querySelector('button')).to.exist;
     });
+
+    it('drops slotted dvfy-hamburger and does not reproject it', async () => {
+      const el = await fixture(html`
+        <dvfy-nav-bar brand="Test">
+          <dvfy-hamburger label="App menu"></dvfy-hamburger>
+        </dvfy-nav-bar>
+      `);
+      const actions = el.querySelector('.dvfy-nav-bar__actions');
+      // No actions container should exist because the slotted hamburger was dropped
+      expect(actions).to.be.null;
+      // The bar's own auto-hamburger is still the only one present
+      expect(el.querySelectorAll('dvfy-hamburger').length).to.equal(2); // bar hamburger + drawer-header close hamburger
+    });
   });
 
   describe('mobile drawer', () => {
@@ -133,6 +146,16 @@ describe('dvfy-nav-bar', () => {
       const el = await fixture(html`<dvfy-nav-bar brand="Test" animation="x-rotate-r"></dvfy-nav-bar>`);
       const hamburger = el.querySelector('.dvfy-nav-bar__hamburger');
       expect(hamburger.getAttribute('animation')).to.equal('x-rotate-r');
+    });
+
+    it('dispatches menu-toggle event on its element when menu opens/closes', async () => {
+      const el = await fixture(html`<dvfy-nav-bar brand="Test"></dvfy-nav-bar>`);
+      const events = [];
+      el.addEventListener('menu-toggle', e => events.push(e.detail.open));
+      const hamburger = el.querySelector('.dvfy-nav-bar__hamburger');
+      hamburger.dispatchEvent(new CustomEvent('toggle', { detail: { open: true } }));
+      hamburger.dispatchEvent(new CustomEvent('toggle', { detail: { open: false } }));
+      expect(events).to.deep.equal([true, false]);
     });
   });
 
