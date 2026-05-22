@@ -12,7 +12,7 @@
 import { generatePalette, hexToOklch, hueToName, STATUS_HUES } from '../tokens/palette-generator.js';
 import { CURATED_FONTS, TOKEN_GROUPS } from './data.js';
 import { renderTypography } from './tokens.js';
-import { copyToClipboard } from './clipboard.js';
+import { copyToClipboard } from '../utils/clipboard.js';
 import { getPalette, setPalette, getFonts, setFonts } from './storage.js';
 import { setActiveOverrides, applyActiveOverrides } from './brand-state.js';
 
