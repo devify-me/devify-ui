@@ -90,19 +90,15 @@ onRouteChange((hash) => {
 // Initialize router (renders initial view)
 initRouter(mainContent);
 
-// Wire hamburger to toggle drawer
-const toggle = document.getElementById('nav-toggle');
-toggle?.addEventListener('toggle', (e) => {
+// Drive the catalog sidebar drawer off the nav-bar's own mobile-menu toggle
+// (no second hamburger needed — see devify-ui#345)
+const navBar = document.getElementById('catalog-nav-bar');
+navBar?.addEventListener('menu-toggle', (e) => {
   if (e.detail.open) {
     drawer.setAttribute('open', '');
   } else {
     drawer.removeAttribute('open');
   }
-});
-
-// Sync hamburger state when drawer closes via its own close button
-drawer.addEventListener('close', () => {
-  if (toggle) toggle.open = false;
 });
 
 // Add all themes to the theme-switcher and set default
