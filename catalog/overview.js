@@ -261,23 +261,95 @@ export function renderOverviewStart(mainEl) {
   Your account has been created.
 </dvfy-alert>`));
 
-  // Step 4: Theming
-  mainEl.appendChild(heading('4. Apply a Theme', 2));
-  mainEl.appendChild(para('Themes are CSS files that override semantic tokens. Set the data-theme attribute on any container:'));
-  mainEl.appendChild(codeBlock(`<!-- Use a built-in theme -->
-<body data-theme="devify-cyan">
+  // Step 4: Customize tokens
+  mainEl.appendChild(heading('4. Customize Tokens (Optional)', 2));
+  mainEl.appendChild(para('@devify/ui uses a three-tier design token system so you can rebrand without touching component code:'));
 
-<!-- Or define your own by overriding CSS custom properties -->
+  const tokenTiers = document.createElement('div');
+  tokenTiers.style.cssText = 'display: grid; gap: var(--dvfy-space-3); margin-bottom: var(--dvfy-space-4);';
+  for (const [tier, what, file] of [
+    ['Tier 1 — Primitives', 'Raw value scales (colors 50–950, spacing 0–24, text-xs through text-6xl, etc.)', 'tokens/colors.css, tokens/typography.css, …'],
+    ['Tier 2 — Semantics', 'Role-based aliases that map primitives to roles (--dvfy-primary-bg, --dvfy-text-secondary, --dvfy-surface-raised, …)', 'tokens/themes/light.css, dark.css, …'],
+    ['Tier 3 — Component overrides', 'Per-component tweaks scoped to one element (--dvfy-btn-grad-from, --dvfy-hamburger-color, …)', 'Set inline or in your app CSS'],
+  ]) {
+    const card = document.createElement('dvfy-card');
+    card.style.cssText = 'padding: var(--dvfy-space-3);';
+    const t = document.createElement('div');
+    t.textContent = tier;
+    t.style.cssText = 'font-size: var(--dvfy-text-sm); font-weight: var(--dvfy-weight-semibold); color: var(--dvfy-primary-bg); margin-bottom: var(--dvfy-space-1);';
+    card.appendChild(t);
+    const w = document.createElement('div');
+    w.textContent = what;
+    w.style.cssText = 'font-size: var(--dvfy-text-sm); color: var(--dvfy-text-secondary); margin-bottom: var(--dvfy-space-1);';
+    card.appendChild(w);
+    const f = document.createElement('div');
+    f.textContent = file;
+    f.style.cssText = 'font-size: var(--dvfy-text-xs); color: var(--dvfy-text-muted); font-family: var(--dvfy-font-mono);';
+    card.appendChild(f);
+    tokenTiers.appendChild(card);
+  }
+  mainEl.appendChild(tokenTiers);
+
+  mainEl.appendChild(para('To change the brand, override only the SEMANTIC tokens — components pick up the new values automatically. Never override primitives.'));
+  mainEl.appendChild(codeBlock(`<!-- Override semantic tokens for your brand -->
 <style>
   [data-theme="my-brand"] {
-    --dvfy-primary-bg: #6366f1;
-    --dvfy-primary-text: #ffffff;
-    --dvfy-accent-bg: #f59e0b;
+    --dvfy-primary-bg:        #6366f1;
+    --dvfy-primary-text:      #ffffff;
+    --dvfy-primary-bg-hover:  #4f46e5;
+    --dvfy-accent-bg:         #f59e0b;
   }
 </style>`));
+  mainEl.appendChild(para('Browse all available tokens in the sidebar under Tokens → Colors, Typography, Spacing, Elevation, etc.'));
 
-  // Step 5: HTMX
-  mainEl.appendChild(heading('5. Add Interactivity with HTMX', 2));
+  // Step 5: Generate a theme
+  mainEl.appendChild(heading('5. Generate a Custom Theme from Your Brand', 2));
+  mainEl.appendChild(para('Instead of hand-picking every semantic token, use the catalog’s built-in palette + theme generators to derive a full themed token set from just your brand colors:'));
+
+  const themeWorkflow = document.createElement('ol');
+  themeWorkflow.style.cssText = 'list-style: decimal inside; font-size: var(--dvfy-text-sm); color: var(--dvfy-text-secondary); line-height: var(--dvfy-leading-relaxed); margin-bottom: var(--dvfy-space-4); max-width: 52rem;';
+  for (const [label, hash] of [
+    ['Open Tokens → Colors. Set your primary, accent, and (optionally) secondary brand colors. Status colors auto-generate at canonical hues; support colors fill the rest of the wheel.', '#tokens/colors'],
+    ['Open Tokens → Themes. Live-preview each semantic token across light/dark modes. Generate a new theme from your palette — the system derives surfaces, text colors, borders, and interactive states for both modes.', '#tokens/themes'],
+    ['Export the generated theme as a CSS block. Paste it into your app’s stylesheet. Apply it via [data-theme="name"] (next step).', null],
+  ]) {
+    const li = document.createElement('li');
+    li.style.cssText = 'margin-bottom: var(--dvfy-space-2);';
+    if (hash) {
+      const a = document.createElement('a');
+      a.textContent = label;
+      a.href = hash;
+      a.style.cssText = 'color: var(--dvfy-text-link);';
+      li.appendChild(a);
+    } else {
+      li.textContent = label;
+    }
+    themeWorkflow.appendChild(li);
+  }
+  mainEl.appendChild(themeWorkflow);
+
+  const tip = document.createElement('dvfy-alert');
+  tip.setAttribute('status', 'info');
+  tip.setAttribute('title', 'Tip');
+  tip.textContent = 'Theme settings persist in your browser, so you can keep iterating across sessions without losing work.';
+  tip.style.marginBottom = 'var(--dvfy-space-4)';
+  mainEl.appendChild(tip);
+
+  // Step 6: Apply a theme
+  mainEl.appendChild(heading('6. Apply a Theme', 2));
+  mainEl.appendChild(para('Set the data-theme attribute on any container — typically <body> for app-wide theming, or a section element for scoped theming:'));
+  mainEl.appendChild(codeBlock(`<!-- Apply your generated theme app-wide -->
+<body data-theme="my-brand">
+  ...
+</body>
+
+<!-- Or scope it to a section -->
+<section data-theme="my-brand-dark">
+  <dvfy-card>I'm rendered with the dark variant only here.</dvfy-card>
+</section>`));
+
+  // Step 7: HTMX
+  mainEl.appendChild(heading('7. Add Interactivity with HTMX', 2));
   mainEl.appendChild(para('For dynamic behavior, add HTMX. Server components like dvfy-htmx-form handle AJAX, validation, and loading states automatically:'));
   mainEl.appendChild(codeBlock(`<script src="https://unpkg.com/htmx.org@2"></script>
 
