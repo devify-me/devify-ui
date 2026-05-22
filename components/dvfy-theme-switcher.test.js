@@ -50,9 +50,9 @@ describe('dvfy-theme-switcher', () => {
           <option value="green">Green</option>
         </dvfy-theme-switcher>
       `);
-      // With multiple themes, a select or dropdown should appear
-      const select = el.querySelector('dvfy-select');
-      expect(select).to.exist;
+      // With ≥1 custom themes, the palette dropdown is rendered
+      const dropdown = el.querySelector('dvfy-dropdown');
+      expect(dropdown).to.exist;
       await checkA11y(el);
     });
 
@@ -140,9 +140,9 @@ describe('dvfy-theme-switcher', () => {
       const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
       el.addTheme('custom', 'Custom Theme');
       el.addTheme('another', 'Another Theme');
-      // After adding 2 themes, select should appear
-      const select = el.querySelector('dvfy-select');
-      expect(select).to.exist;
+      // After adding themes, palette dropdown appears
+      const dropdown = el.querySelector('dvfy-dropdown');
+      expect(dropdown).to.exist;
       await checkA11y(el);
     });
 
@@ -151,9 +151,22 @@ describe('dvfy-theme-switcher', () => {
       el.addTheme('custom', 'Custom');
       el.addTheme('custom', 'Custom Duplicate');
       el.addTheme('second', 'Second');
-      const options = el.querySelectorAll('dvfy-select option');
-      expect(options.length).to.equal(2);
+      // Theme items in dropdown: one per registered theme (dark/light row is in dvfy-ts__mode-row)
+      const themeItems = el.querySelectorAll('dvfy-dropdown dvfy-button[data-value]');
+      expect(themeItems.length).to.equal(2);
       await checkA11y(el);
+    });
+
+    it('transitions from switch-only to palette dropdown when first theme is added', async () => {
+      const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
+      // Initially: just the dark/light toggle, no dropdown
+      expect(el.querySelector('dvfy-dropdown')).to.be.null;
+      expect(el.querySelector('.dvfy-ts__toggle')).to.exist;
+      // After first addTheme: palette dropdown appears
+      el.addTheme('custom', 'Custom Theme');
+      expect(el.querySelector('dvfy-dropdown')).to.exist;
+      // Mode toggle moved into the dropdown's mode-row
+      expect(el.querySelector('.dvfy-ts__mode-row .dvfy-ts__toggle')).to.exist;
     });
   });
 
@@ -173,28 +186,30 @@ describe('dvfy-theme-switcher', () => {
     });
   });
 
-  describe('variant attribute', () => {
-    it('uses select variant by default', async () => {
+  describe('adaptive UI', () => {
+    it('renders only the dark/light toggle when no custom themes are registered', async () => {
+      const el = await fixture(html`<dvfy-theme-switcher></dvfy-theme-switcher>`);
+      // No dropdown, no select — just the mode toggle directly on the element
+      expect(el.querySelector('dvfy-dropdown')).to.be.null;
+      expect(el.querySelector('dvfy-select')).to.be.null;
+      expect(el.querySelector(':scope > .dvfy-ts__toggle')).to.exist;
+      await checkA11y(el);
+    });
+
+    it('renders palette dropdown with mode toggle on top when ≥1 custom themes exist', async () => {
       const el = await fixture(html`
         <dvfy-theme-switcher>
           <option value="a">A</option>
           <option value="b">B</option>
         </dvfy-theme-switcher>
       `);
-      const select = el.querySelector('dvfy-select');
-      expect(select).to.exist;
-      await checkA11y(el);
-    });
-
-    it('uses dropdown variant when specified', async () => {
-      const el = await fixture(html`
-        <dvfy-theme-switcher variant="dropdown">
-          <option value="a">A</option>
-          <option value="b">B</option>
-        </dvfy-theme-switcher>
-      `);
       const dropdown = el.querySelector('dvfy-dropdown');
       expect(dropdown).to.exist;
+      // The mode toggle is wrapped in the first menu row
+      expect(dropdown.querySelector('.dvfy-ts__mode-row .dvfy-ts__toggle')).to.exist;
+      // Theme items follow after the divider
+      expect(dropdown.querySelector('.dvfy-ts__divider')).to.exist;
+      expect(dropdown.querySelectorAll('dvfy-button[data-value]').length).to.equal(2);
       await checkA11y(el);
     });
   });
@@ -205,7 +220,8 @@ describe('dvfy-theme-switcher', () => {
       expect(observed).to.include('default-theme');
       expect(observed).to.include('default-mode');
       expect(observed).to.include('round');
-      expect(observed).to.include('variant');
+      // `variant` was removed in favor of auto-adapt
+      expect(observed).to.not.include('variant');
     });
   });
 });
