@@ -324,8 +324,13 @@ const SKIP_TAGS = new Set([
   'dvfy-tab',
   'dvfy-sidebar-section',
   'dvfy-avatar-group',
-  'dvfy-component-playground',
+  // dvfy-component-playground is NOT skipped — its preview special-cases to an
+  // inner instance demoing dvfy-button (see #updatePreview). The `inner`
+  // marker attribute prevents infinite recursion.
 ]);
+
+/* The component the outer playground demos when the user navigates to itself */
+const SELF_DEMO_TAG = 'dvfy-button';
 
 /*
  * ── Default innerHTML per component ──
@@ -1140,6 +1145,18 @@ class DvfyComponentPlayground extends HTMLElement {
     if (!area || !this.#currentTag) return;
     area.textContent = '';
     area.removeAttribute('style'); // reset any per-component overrides
+
+    // Self-demo: when the user navigates to dvfy-component-playground itself,
+    // render an inner playground instance demoing dvfy-button instead of
+    // trying to recurse into the same component. The `inner` marker prevents
+    // the inner instance from doing the same self-demo path.
+    if (this.#currentTag.name === 'dvfy-component-playground' && !this.hasAttribute('inner')) {
+      const inner = document.createElement('dvfy-component-playground');
+      inner.setAttribute('component', SELF_DEMO_TAG);
+      inner.setAttribute('inner', '');
+      area.appendChild(inner);
+      return;
+    }
 
     const el = document.createElement(this.#currentTag.name);
 
