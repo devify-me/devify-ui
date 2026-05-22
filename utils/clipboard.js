@@ -1,8 +1,11 @@
 /**
- * catalog/clipboard.js — Clipboard utility with fallback
+ * utils/clipboard.js — Clipboard utility with fallback
  *
  * navigator.clipboard requires Secure Context (HTTPS or localhost).
  * Falls back to execCommand('copy') for HTTP contexts like Tailscale URLs.
+ *
+ * Used by both the catalog views and components that expose copy actions
+ * (e.g. dvfy-component-playground's Code-tab Copy button).
  */
 
 /**
@@ -33,9 +36,10 @@ function fallbackCopy(text) {
  * @param {HTMLElement} el — Element to show "Copied!" in
  * @param {string} text — Text to copy
  * @param {string} resetText — Text to restore after delay
- * @param {number} delay — How long to show "Copied!" (default: 1500ms)
+ * @param {number} delay — How long to show "Copied!" (default: 2000ms)
  */
-export function copyWithReset(el, text, resetText, delay = 1500) {
+export function copyWithReset(el, text, resetText, delay = 2000) {
+  if (!text) return;
   copyToClipboard(text);
   el.textContent = 'Copied!';
   setTimeout(() => { el.textContent = resetText; }, delay);

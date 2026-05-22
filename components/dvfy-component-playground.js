@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import { copyWithReset } from '../utils/clipboard.js';
 import './dvfy-button.js';
 
 const STYLES = `
@@ -877,12 +878,7 @@ class DvfyComponentPlayground extends HTMLElement {
     copyBtn.textContent = 'Copy';
     copyBtn.addEventListener('click', () => {
       const code = this.querySelector('[data-sc-code]');
-      if (code) {
-        navigator.clipboard.writeText(code.textContent).then(() => {
-          copyBtn.textContent = 'Copied!';
-          setTimeout(() => { copyBtn.textContent = 'Copy'; }, 2000);
-        });
-      }
+      copyWithReset(copyBtn, code?.textContent ?? '', 'Copy');
     });
     codeWrap.appendChild(copyBtn);
     const codeBlock = document.createElement('pre');

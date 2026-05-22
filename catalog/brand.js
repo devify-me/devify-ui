@@ -7,7 +7,7 @@
  * with data-theme attributes to read computed values simultaneously.
  */
 import { SEMANTIC_TOKENS, THEMES } from './data.js';
-import { copyToClipboard } from './clipboard.js';
+import { copyToClipboard } from '../utils/clipboard.js';
 import { hexToOklch } from '../tokens/palette-generator.js';
 import { generateTheme, injectThemeStyle, removeThemeStyle } from '../tokens/theme-generator.js';
 import { generatePalette, hueToName } from '../tokens/palette-generator.js';
