@@ -105,121 +105,132 @@ dvfy-hamburger[float="bottom-left"]  { bottom: var(--dvfy-space-4); left: var(--
 dvfy-hamburger[float="bottom-right"] { bottom: var(--dvfy-space-4); right: var(--dvfy-space-4); }
 
 /* ════════════════════════════════════════════════
-   Animation variants — [open] state transforms
+   Visual states — [data-state="X"] transforms
+   The component derives data-state from the public
+   API (state | open + animation) and applies the
+   end-state transforms here. CSS transitions on the
+   bars interpolate smoothly between any two states.
    ════════════════════════════════════════════════ */
 
-/* ── 1. x (default) ── */
-dvfy-hamburger:not([animation])[open] .dvfy-hb__bar--top,
-dvfy-hamburger[animation="x"][open] .dvfy-hb__bar--top {
+/* ── hamburger (default — no transform) ── */
+/* All bars are in their resting position. */
+
+/* ── x ── */
+dvfy-hamburger[data-state="x"] .dvfy-hb__bar--top {
   transform: translateY(calc(var(--_gap) + var(--_h))) rotate(45deg);
 }
-dvfy-hamburger:not([animation])[open] .dvfy-hb__bar--mid,
-dvfy-hamburger[animation="x"][open] .dvfy-hb__bar--mid {
+dvfy-hamburger[data-state="x"] .dvfy-hb__bar--mid {
   opacity: 0;
   transform: scaleX(0);
 }
-dvfy-hamburger:not([animation])[open] .dvfy-hb__bar--bot,
-dvfy-hamburger[animation="x"][open] .dvfy-hb__bar--bot {
+dvfy-hamburger[data-state="x"] .dvfy-hb__bar--bot {
   transform: translateY(calc(-1 * (var(--_gap) + var(--_h)))) rotate(-45deg);
 }
 
-/* ── 2. x-rotate-r (X with clockwise rotation) ── */
-dvfy-hamburger[animation="x-rotate-r"][open] .dvfy-hb__btn {
+/* ── direction modifier: rotates the whole button when in any non-resting state ── */
+dvfy-hamburger[direction="right"][data-state]:not([data-state="hamburger"]) .dvfy-hb__btn {
   transform: rotate(180deg);
 }
-dvfy-hamburger[animation="x-rotate-r"][open] .dvfy-hb__bar--top {
-  transform: translateY(calc(var(--_gap) + var(--_h))) rotate(45deg);
-}
-dvfy-hamburger[animation="x-rotate-r"][open] .dvfy-hb__bar--mid {
-  opacity: 0;
-  transform: scaleX(0);
-}
-dvfy-hamburger[animation="x-rotate-r"][open] .dvfy-hb__bar--bot {
-  transform: translateY(calc(-1 * (var(--_gap) + var(--_h)))) rotate(-45deg);
-}
-
-/* ── 3. x-rotate-l (X with counter-clockwise rotation) ── */
-dvfy-hamburger[animation="x-rotate-l"][open] .dvfy-hb__btn {
+dvfy-hamburger[direction="left"][data-state]:not([data-state="hamburger"]) .dvfy-hb__btn {
   transform: rotate(-180deg);
 }
-dvfy-hamburger[animation="x-rotate-l"][open] .dvfy-hb__bar--top {
-  transform: translateY(calc(var(--_gap) + var(--_h))) rotate(45deg);
-}
-dvfy-hamburger[animation="x-rotate-l"][open] .dvfy-hb__bar--mid {
-  opacity: 0;
-  transform: scaleX(0);
-}
-dvfy-hamburger[animation="x-rotate-l"][open] .dvfy-hb__bar--bot {
-  transform: translateY(calc(-1 * (var(--_gap) + var(--_h)))) rotate(-45deg);
-}
 
-/* ── 4. chevron-left (<) ── */
-dvfy-hamburger[animation="chevron-left"][open] .dvfy-hb__bar--top {
+/* ── chevron-left (<) ── */
+dvfy-hamburger[data-state="chevron-left"] .dvfy-hb__bar--top {
   transform: translateY(calc(var(--_gap) + var(--_h))) rotate(-45deg) scaleX(0.6);
   transform-origin: left center;
 }
-dvfy-hamburger[animation="chevron-left"][open] .dvfy-hb__bar--mid {
+dvfy-hamburger[data-state="chevron-left"] .dvfy-hb__bar--mid {
   opacity: 0;
   transform: scaleX(0);
 }
-dvfy-hamburger[animation="chevron-left"][open] .dvfy-hb__bar--bot {
+dvfy-hamburger[data-state="chevron-left"] .dvfy-hb__bar--bot {
   transform: translateY(calc(-1 * (var(--_gap) + var(--_h)))) rotate(45deg) scaleX(0.6);
   transform-origin: left center;
 }
 
-/* ── 5. chevron-right (>) ── */
-dvfy-hamburger[animation="chevron-right"][open] .dvfy-hb__bar--top {
+/* ── chevron-right (>) ── */
+dvfy-hamburger[data-state="chevron-right"] .dvfy-hb__bar--top {
   transform: translateY(calc(var(--_gap) + var(--_h))) rotate(45deg) scaleX(0.6);
   transform-origin: right center;
 }
-dvfy-hamburger[animation="chevron-right"][open] .dvfy-hb__bar--mid {
+dvfy-hamburger[data-state="chevron-right"] .dvfy-hb__bar--mid {
   opacity: 0;
   transform: scaleX(0);
 }
-dvfy-hamburger[animation="chevron-right"][open] .dvfy-hb__bar--bot {
+dvfy-hamburger[data-state="chevron-right"] .dvfy-hb__bar--bot {
   transform: translateY(calc(-1 * (var(--_gap) + var(--_h)))) rotate(-45deg) scaleX(0.6);
   transform-origin: right center;
 }
 
-/* ── 6. minus ── */
-dvfy-hamburger[animation="minus"][open] .dvfy-hb__bar--top {
+/* ── minus (−) ── */
+dvfy-hamburger[data-state="minus"] .dvfy-hb__bar--top {
   opacity: 0;
   transform: scaleX(0);
 }
-dvfy-hamburger[animation="minus"][open] .dvfy-hb__bar--bot {
+dvfy-hamburger[data-state="minus"] .dvfy-hb__bar--bot {
   opacity: 0;
   transform: scaleX(0);
 }
 `;
 
+/* Valid state values (used for back-compat mapping + validation) */
+const VALID_STATES = new Set(['hamburger', 'x', 'chevron-left', 'chevron-right', 'minus']);
+/* Legacy animation values that map directly to a state value */
+const LEGACY_ANIMATION_TO_STATE = {
+  'x': 'x',
+  'x-rotate-r': 'x',          // x + direction=right
+  'x-rotate-l': 'x',          // x + direction=left
+  'chevron-left': 'chevron-left',
+  'chevron-right': 'chevron-right',
+  'minus': 'minus',
+};
+const LEGACY_ANIMATION_TO_DIRECTION = {
+  'x-rotate-r': 'right',
+  'x-rotate-l': 'left',
+};
+
 /**
- * Animated hamburger icon button — a Tier 1 primitive for menu toggles.
+ * State-driven animated icon button — a Tier 1 primitive for menu toggles
+ * and other binary/multi-state controls.
  *
- * Six animation variants transform three bars into different shapes on toggle.
- * Composable into nav, header, and sidebar components.
+ * Five visual states (hamburger, x, chevron-left, chevron-right, minus) are
+ * driven by the `state` attribute. CSS transitions interpolate between any
+ * two states automatically; consumers set the state, the component animates.
+ *
+ * Composable into nav, header, drawer, sidebar, stepper, and modal components.
  *
  * @element dvfy-hamburger
  *
+ * @attr {string} state - Visual state: hamburger | x | chevron-left | chevron-right | minus (default: "hamburger")
+ * @attr {string} direction - Optional 180° button rotation flavor: left | right (mirrors legacy x-rotate-l / x-rotate-r)
  * @attr {string} label - Visible text label
  * @attr {string} label-position - top | right | bottom | left
- * @attr {string} animation - x | x-rotate-r | x-rotate-l | chevron-left | chevron-right | minus
+ * @attr {string} animation - DEPRECATED. Use `state` (and optionally `direction`). When `state` is unset, `animation` maps to the open-state target for backwards compat.
  * @attr {string} size - xs | sm | md | lg | xl
- * @attr {boolean} open - Toggle state (reflected)
+ * @attr {boolean} open - DEPRECATED for new code. Convenience toggle: when true (and `state` is unset), maps to state="x" (or whatever `animation` specifies).
  * @attr {boolean} disabled - Disables the button
  * @attr {boolean} bordered - Adds a rounded border
  * @attr {string} float - top-left | top-right | mid-top | mid-right | mid-bottom | mid-left | center | bottom-left | bottom-right
  *
- * @event {CustomEvent} toggle - Fires when toggled, detail: { open: boolean }
+ * @event {CustomEvent} toggle - Fires on click, detail: { open: boolean, state: string }
  *
  * @cssprop {color} --dvfy-hamburger-color - Top and bottom bar + border color (default: var(--dvfy-primary-bg))
  * @cssprop {color} --dvfy-hamburger-accent - Middle bar color (default: var(--dvfy-accent-bg))
  * @cssprop {color} --dvfy-hamburger-bg - Button background (default: transparent)
  *
  * @example
+ * <!-- New state-based API -->
+ * <dvfy-hamburger state="x"></dvfy-hamburger>
+ * <dvfy-hamburger state="chevron-left"></dvfy-hamburger>
+ * <dvfy-hamburger state="x" direction="left"></dvfy-hamburger>
+ *
+ * @example
+ * <!-- Legacy open/animation API (still supported) -->
  * <dvfy-hamburger animation="x" size="md" bordered></dvfy-hamburger>
  */
 class DvfyHamburger extends HTMLElement {
-  static get observedAttributes() { return ['label', 'label-position', 'animation', 'size', 'open', 'disabled', 'bordered', 'float']; }
+  static get observedAttributes() { return ['label', 'label-position', 'state', 'animation', 'size', 'open', 'disabled', 'bordered', 'float']; }
 
   /** @type {HTMLButtonElement} */
   #btn = null;
@@ -229,6 +240,7 @@ class DvfyHamburger extends HTMLElement {
   connectedCallback() {
     injectStyles('dvfy-hamburger', STYLES);
     this.#build();
+    this.#syncDataState();
 
     this.#clickHandler = () => this.#toggle();
     this.#keyHandler = (e) => {
@@ -251,8 +263,8 @@ class DvfyHamburger extends HTMLElement {
 
   attributeChangedCallback(name) {
     if (!this.#btn) return;
-    if (name === 'open') {
-      this.#btn.setAttribute('aria-expanded', String(this.open));
+    if (name === 'open' || name === 'state' || name === 'animation') {
+      this.#syncDataState();
     } else if (name === 'disabled') {
       this.#btn.setAttribute('aria-disabled', String(this.hasAttribute('disabled')));
     } else if (name === 'label') {
@@ -274,6 +286,39 @@ class DvfyHamburger extends HTMLElement {
 
   get open() { return this.hasAttribute('open'); }
   set open(v) { v ? this.setAttribute('open', '') : this.removeAttribute('open'); }
+
+  /**
+   * Derive the effective visual state from the public API, in priority order:
+   *   1. `state` attr — explicit, takes precedence
+   *   2. `open` + `animation` — legacy: animation value is the open-state target
+   *   3. `open` alone — defaults to "x"
+   *   4. none of the above — "hamburger"
+   * The result is mirrored to `data-state` for CSS targeting.
+   */
+  #syncDataState() {
+    const explicit = this.getAttribute('state');
+    let next;
+    if (explicit && VALID_STATES.has(explicit)) {
+      next = explicit;
+    } else if (this.open) {
+      const anim = this.getAttribute('animation');
+      next = (anim && LEGACY_ANIMATION_TO_STATE[anim]) || 'x';
+      // Mirror legacy x-rotate-r/l direction onto the public direction attribute
+      const dir = LEGACY_ANIMATION_TO_DIRECTION[anim];
+      if (dir && !this.hasAttribute('direction')) this.setAttribute('direction', dir);
+    } else {
+      next = 'hamburger';
+    }
+    if (this.getAttribute('data-state') !== next) {
+      this.setAttribute('data-state', next);
+    }
+    // Mirror "is the icon in a non-resting state" to aria-expanded so
+    // assistive tech sees the toggle correctly regardless of whether the
+    // consumer drives `open` or `state`.
+    if (this.#btn) {
+      this.#btn.setAttribute('aria-expanded', String(next !== 'hamburger'));
+    }
+  }
 
   #build() {
     // Idempotent: clear any prior content (e.g. when a parent like dvfy-drawer
@@ -318,7 +363,7 @@ class DvfyHamburger extends HTMLElement {
     this.open = !this.open;
     this.dispatchEvent(new CustomEvent('toggle', {
       bubbles: true,
-      detail: { open: this.open }
+      detail: { open: this.open, state: this.getAttribute('data-state') }
     }));
   }
 }
