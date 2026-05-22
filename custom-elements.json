@@ -3614,7 +3614,7 @@
     {
       "name": "dvfy-theme-switcher",
       "path": "./components/dvfy-theme-switcher.js",
-      "description": "Theme dropdown and dark/light toggle. Hides dropdown when only one theme is available.",
+      "description": "Theme switcher that adapts to available themes.\n\n- No custom themes registered → renders only the dark/light mode switch\n- One or more custom themes → renders a palette icon button that opens a\n  dropdown containing the dark/light switch on top + the theme list below",
       "attributes": [
         {
           "name": "default-theme",
@@ -3630,11 +3630,6 @@
           "name": "round",
           "description": "Use fully rounded track and thumb (pill shape)",
           "type": "boolean"
-        },
-        {
-          "name": "variant",
-          "description": "Selector style: select | dropdown (default: \"select\")",
-          "type": "string"
         }
       ],
       "slots": [

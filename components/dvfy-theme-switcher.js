@@ -97,6 +97,18 @@ dvfy-theme-switcher dvfy-dropdown .dvfy-dropdown__item[aria-selected="true"]:hov
   background: var(--dvfy-selected-bg);
 }
 
+/* Mode-toggle row inside the palette dropdown */
+dvfy-theme-switcher .dvfy-ts__mode-row {
+  display: flex;
+  justify-content: center;
+  padding: var(--dvfy-space-2);
+}
+dvfy-theme-switcher .dvfy-ts__divider {
+  border: 0;
+  border-top: var(--dvfy-border-1) solid var(--dvfy-border-muted);
+  margin: 0;
+}
+
 /* Round shape */
 dvfy-theme-switcher[round] .dvfy-ts__toggle { border-radius: var(--dvfy-radius-full); }
 dvfy-theme-switcher[round] .dvfy-ts__thumb { border-radius: var(--dvfy-radius-round); }
@@ -130,13 +142,16 @@ dvfy-theme-switcher[data-mode="dark"] .dvfy-ts__toggle {
 const PALETTE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>`;
 
 /**
- * Theme dropdown and dark/light toggle. Hides dropdown when only one theme is available.
+ * Theme switcher that adapts to available themes.
+ *
+ * - No custom themes registered → renders only the dark/light mode switch
+ * - One or more custom themes → renders a palette icon button that opens a
+ *   dropdown containing the dark/light switch on top + the theme list below
  *
  * @element dvfy-theme-switcher
  *
  * @attr {string} default-theme - Initial theme name (default: first option's value)
  * @attr {string} default-mode - Initial mode: light | dark (default: "light")
- * @attr {string} variant - Selector style: select | dropdown (default: "select")
  * @attr {boolean} round - Use fully rounded track and thumb (pill shape)
  *
  * @slot - <option value="theme-name">Label</option> elements defining available themes
@@ -150,13 +165,12 @@ class DvfyThemeSwitcher extends HTMLElement {
   #currentMode = 'light';
   #toggleEl = null;
   #toggleHandler = null;
-  #selectEl = null;
   #dropdownEl = null;
 
   #pendingTheme = null; // Persisted theme waiting for addTheme()
   #connected = false;
 
-  static get observedAttributes() { return ['default-theme', 'default-mode', 'round', 'variant']; }
+  static get observedAttributes() { return ['default-theme', 'default-mode', 'round']; }
 
   attributeChangedCallback(name, oldVal, newVal) {
     if (!this.#connected || oldVal === newVal) return;
@@ -173,7 +187,6 @@ class DvfyThemeSwitcher extends HTMLElement {
       this.#build();
     }
     // round is CSS-only, no JS needed
-    if (name === 'variant') this.#build();
   }
 
   connectedCallback() {
@@ -271,7 +284,6 @@ class DvfyThemeSwitcher extends HTMLElement {
       this.#toggleEl = null;
       this.#toggleHandler = null;
     }
-    this.#selectEl = null;
     this.#dropdownEl = null;
   }
 
@@ -279,16 +291,19 @@ class DvfyThemeSwitcher extends HTMLElement {
     this.textContent = '';
     this.setAttribute('data-mode', this.#currentMode);
 
-    // Theme selector (only if multiple themes)
-    if (this.#themes.length > 1) {
-      if (this.getAttribute('variant') === 'dropdown') {
-        this.#buildDropdown();
-      } else {
-        this.#buildSelect();
-      }
-    }
+    // Build the dark/light mode toggle — rendered standalone (no custom themes)
+    // or as the first row of the palette dropdown.
+    const toggle = this.#buildModeToggle();
+    this.#toggleEl = toggle;
 
-    // Dark/light toggle
+    if (this.#themes.length === 0) {
+      this.appendChild(toggle);
+    } else {
+      this.#buildDropdown(toggle);
+    }
+  }
+
+  #buildModeToggle() {
     const toggle = document.createElement('button'); // allow-dvfy-pref: role=switch with custom thumb child element — not a button-shaped control
     toggle.className = 'dvfy-ts__toggle';
     toggle.setAttribute('role', 'switch');
@@ -308,37 +323,10 @@ class DvfyThemeSwitcher extends HTMLElement {
       this.#apply();
     };
     toggle.addEventListener('click', this.#toggleHandler);
-    this.#toggleEl = toggle;
-
-    this.appendChild(toggle);
+    return toggle;
   }
 
-  #buildSelect() {
-    const sel = document.createElement('dvfy-select');
-    sel.setAttribute('aria-label', 'Theme');
-    sel.setAttribute('size', 'xs');
-
-    for (const theme of this.#themes) {
-      const opt = document.createElement('option');
-      opt.value = theme.value;
-      opt.textContent = theme.label;
-      if (theme.value === this.#currentTheme) opt.setAttribute('selected', '');
-      sel.appendChild(opt);
-    }
-
-    sel.addEventListener('change', (e) => {
-      const value = e.detail?.value;
-      if (value) {
-        this.#currentTheme = value;
-        this.#apply();
-      }
-    });
-
-    this.#selectEl = sel;
-    this.appendChild(sel);
-  }
-
-  #buildDropdown() {
+  #buildDropdown(modeToggle) {
     const dd = document.createElement('dvfy-dropdown');
     dd.setAttribute('align', 'right');
 
@@ -350,6 +338,18 @@ class DvfyThemeSwitcher extends HTMLElement {
     // PALETTE_SVG is a trusted constant — safe to use innerHTML
     trigger.innerHTML = PALETTE_SVG;
     dd.appendChild(trigger);
+
+    // First menu row: dark/light mode toggle, wrapped so the dropdown gives it
+    // its own row and clicks inside don't bubble up to the menu-item handlers.
+    const modeRow = document.createElement('div');
+    modeRow.className = 'dvfy-ts__mode-row';
+    modeRow.appendChild(modeToggle);
+    dd.appendChild(modeRow);
+
+    // Divider between mode toggle and theme list
+    const divider = document.createElement('hr');
+    divider.className = 'dvfy-ts__divider';
+    dd.appendChild(divider);
 
     for (const theme of this.#themes) {
       const item = document.createElement('dvfy-button');
