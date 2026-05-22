@@ -276,6 +276,15 @@ class DvfyHamburger extends HTMLElement {
   set open(v) { v ? this.setAttribute('open', '') : this.removeAttribute('open'); }
 
   #build() {
+    // Idempotent: clear any prior content (e.g. when a parent like dvfy-drawer
+    // tears down + re-mounts us via its own #build cycle, our connectedCallback
+    // fires again and would otherwise stack stale buttons).
+    if (this.#btn && this.#clickHandler) {
+      this.#btn.removeEventListener('click', this.#clickHandler);
+      this.#btn.removeEventListener('keydown', this.#keyHandler);
+    }
+    this.textContent = '';
+
     const labelText = this.getAttribute('label');
     if (labelText) {
       const lbl = document.createElement('span');
