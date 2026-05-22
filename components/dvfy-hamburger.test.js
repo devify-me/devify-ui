@@ -31,6 +31,20 @@ describe('dvfy-hamburger', () => {
       const lbl = el.querySelector('.dvfy-hb__label');
       expect(lbl).to.not.exist;
     });
+
+    it('renders exactly one button after multiple disconnect/reconnect cycles (regression for #351)', async () => {
+      const host = await fixture(html`<div></div>`);
+      const el = document.createElement('dvfy-hamburger');
+      host.appendChild(el);
+      // Disconnect and reconnect a few times — simulates dvfy-drawer's rebuild churn
+      // that re-mounts our children whenever a drawer attribute changes
+      for (let i = 0; i < 4; i++) {
+        el.remove();
+        host.appendChild(el);
+      }
+      expect(el.querySelectorAll('button').length).to.equal(1);
+      expect(el.querySelectorAll('.dvfy-hb__bar').length).to.equal(3);
+    });
   });
 
   describe('attributes', () => {
