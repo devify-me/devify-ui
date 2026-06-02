@@ -26,6 +26,17 @@ The catalog showcases every component with:
 - Responsive previews
 - **Interactive API Viewer** — prop playground, live documentation, source code view (powered by `<api-viewer>` and `custom-elements.json`)
 
+## Devify Integration and Scope
+
+This is a tool in the `~/devify/` company boundary (see root `devify/README.md` for the full structure: studio/ OS, tools/ platform, projects/ portfolio, jobs/ + reports/ for recurrent company-wide ops).
+
+- **Scope**: Per `studio/shared/sergio-layout.md` "Scope Rules for Layers", this is "tools work" or "platform work" (development/maintenance of shared tooling). It is *not* automatically "studio work" (to avoid scope creep into the standards layer). Studio coordination happens when changes impact VEmployee consistency, standards, or company ops (via learn/ proposals, devify-hr, or executive/ orchestration). Studio-scoped VEmployees can be assigned *into* this tools/ context while loading studio/ standards.
+- **Standards**: Governed by `studio/` (the enduring OS / Corporate HQ). Load relevant standards from `studio/docs/operating-model/`, department docs when working here. All work should follow Operational DNA (G&P, Verification Before Completion, tasks/todo.md, learn synthesis, etc.).
+- **VEmployee Model**: Studio-scoped personas can be reliably assigned here because of consistent internal structures. See `studio/docs/operating-model/vemployee-operating-model.md`.
+- **Recurrent company work**: See root `jobs/` (e.g. for cross-tool analysis, cleanups) and `reports/`. Use `studio/skills/learn/SKILL.md` for upward synthesis to studio/ when broadly applicable.
+
+See `studio/` for the full constitution and `devify/jobs/README.md` for company ops.
+
 ## Quick Start
 
 ### Via npm
