@@ -2,6 +2,17 @@
 
 Guide for projects that use @devify/ui as their frontend component library.
 
+## Your brand is a separate input — author it here first
+
+An outstanding app starts from an outstanding, on-standard **design foundation** (colors, typography, spacing, corners, elevation, motion). That foundation is **a separate input you author in `@devify/ui` and consume as tokens — not something you invent per project.** Hand-rolled, per-project styling (raw hex, ad-hoc utility classes, copied component CSS) is the anti-pattern that drifts off-brand and breaks the enforced token loop.
+
+**Author your brand here:**
+
+- **Today** — run the live catalog (`npm run serve` → `http://localhost:8090/catalog/`) and use the **Colors**, **Typography**, and **Themes** editors to pick brand colors, fonts, and generate a theme. Consume the resulting `--dvfy-*` tokens (the `tokens/` CSS + your generated theme) in your project.
+- **Forthcoming** — a standardized, deterministic **Brand Book generator** turns a small brand brief into a complete, read-only token set (the factory's primary input). See the design spec: `docs/specs/2026-06-06-brand-book-generator-design.md`. When it ships, generating your brand book here and providing it as your project's pinned brand input becomes the supported path (per the studio *Tool Interface Contracts* standard).
+
+Consume the brand as tokens; theme via `data-theme` on `<html>`. Everything below is how you then use the components against that foundation.
+
 ## Component API Discovery
 
 The `custom-elements.json` manifest is the source of truth for all component APIs. It's auto-generated from JSDoc annotations by `npm run analyze` and vendored with the library.
