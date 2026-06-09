@@ -1,0 +1,143 @@
+/*
+ * @devify/ui — Renting Ideal Theme (renting-ideal)
+ *
+ * "Renting Ideal — Tu asesor de confianza".
+ * Generated, read-only. DO NOT hand-edit.
+ * Regenerate: node scripts/generate-named-theme.mjs renting-ideal
+ * Source of truth: tokens/themes/renting-ideal.brand.json (seed #5A7E65).
+ *
+ * Faithful port of rueda's existing sage-green brand (was a local fork in projects/rueda/static/css/tokens/themes/rueda.css, generated from brand #5A7E65). Lifted into @devify/ui as a first-class named theme per the Tool Interface Contracts standard (brands are author-time artifacts, consumed by name). devify-ui#366.
+ *
+ * Activate with data-theme="renting-ideal" (light) or data-theme="renting-ideal-dark" (dark).
+ * Full semantic layer (light != dark), self-contained concrete values.
+ */
+
+[data-theme="renting-ideal"] {
+  --dvfy-surface-page: #fdfdfd;
+  --dvfy-surface-raised: #fdfdfd;
+  --dvfy-surface-overlay: #fdfdfd;
+  --dvfy-surface-sunken: #f1f7f3;
+  --dvfy-surface-muted: #e5e6e5;
+  --dvfy-text-primary: #202020;
+  --dvfy-text-secondary: #4e4f4e;
+  --dvfy-text-muted: #878a88;
+  --dvfy-text-disabled: #878a88;
+  --dvfy-text-inverse: #fdfdfd;
+  --dvfy-text-link: #3e4741;
+  --dvfy-text-link-hover: #303331;
+  --dvfy-border-default: #cdcfce;
+  --dvfy-border-strong: #afb1af;
+  --dvfy-border-muted: #e1eae4;
+  --dvfy-border-focus: #5a7e65;
+  --dvfy-primary-bg: #5a7e65;
+  --dvfy-primary-bg-hover: #4e6153;
+  --dvfy-primary-bg-active: #3e4741;
+  --dvfy-primary-bg-subtle: #f1f7f3;
+  --dvfy-primary-text: #0f0f0f;
+  --dvfy-primary-border: #5a7e65;
+  --dvfy-accent-bg: #7b6c8f;
+  --dvfy-accent-bg-hover: #5f576b;
+  --dvfy-accent-bg-subtle: #f6f4f9;
+  --dvfy-accent-text: #46424b;
+  --dvfy-accent-border: #d7cfe3;
+  --dvfy-success-bg: #536052;
+  --dvfy-success-bg-subtle: #f2f6f2;
+  --dvfy-success-text: #313331;
+  --dvfy-success-border: #cad8ca;
+  --dvfy-warning-bg: #866f55;
+  --dvfy-warning-bg-subtle: #f8f4f0;
+  --dvfy-warning-text: #232322;
+  --dvfy-warning-border: #ded1c3;
+  --dvfy-danger-bg: #6a5654;
+  --dvfy-danger-bg-subtle: #f9f3f3;
+  --dvfy-danger-text: #343131;
+  --dvfy-danger-border: #e3cdcb;
+  --dvfy-info-bg: #4c5f68;
+  --dvfy-info-bg-subtle: #f1f6f9;
+  --dvfy-info-text: #303334;
+  --dvfy-info-border: #c4d7e0;
+  --dvfy-hover-bg: #e5e6e5;
+  --dvfy-active-bg: #cdcfce;
+  --dvfy-selected-bg: #f1f7f3;
+  --dvfy-disabled-bg: #e5e6e5;
+  --dvfy-disabled-text: #878a88;
+  --dvfy-ring-color: #5a7e65;
+  --dvfy-input-bg: #fdfdfd;
+  --dvfy-input-border: #afb1af;
+  --dvfy-input-border-hover: #878a88;
+  --dvfy-input-border-focus: #5a7e65;
+  --dvfy-input-placeholder: #878a88;
+  --dvfy-input-error: #8e6966;
+  --dvfy-on-success: #0f0f0f;
+  --dvfy-on-warning: #0f0f0f;
+  --dvfy-on-danger: #fdfdfd;
+  --dvfy-on-info: #0f0f0f;
+  --dvfy-tooltip-bg: #3b3c3b;
+  --dvfy-tooltip-text: #e5e6e5;
+  --dvfy-tooltip-border: #4e4f4e;
+}
+
+[data-theme="renting-ideal-dark"] {
+  --dvfy-surface-page: #0f0f0f;
+  --dvfy-surface-raised: #202020;
+  --dvfy-surface-overlay: #2c2d2c;
+  --dvfy-surface-sunken: #000000;
+  --dvfy-surface-muted: #2c2d2c;
+  --dvfy-text-primary: #f5f5f5;
+  --dvfy-text-secondary: #afb1af;
+  --dvfy-text-muted: #616462;
+  --dvfy-text-disabled: #4e4f4e;
+  --dvfy-text-inverse: #202020;
+  --dvfy-text-link: #7ca187;
+  --dvfy-text-link-hover: #a3c2ab;
+  --dvfy-border-default: #3b3c3b;
+  --dvfy-border-strong: #4e4f4e;
+  --dvfy-border-muted: #2c2d2c;
+  --dvfy-border-focus: #7ca187;
+  --dvfy-primary-bg: #5a7e65;
+  --dvfy-primary-bg-hover: #7ca187;
+  --dvfy-primary-bg-active: #a3c2ab;
+  --dvfy-primary-bg-subtle: #0f0f0f;
+  --dvfy-primary-text: #0f0f0f;
+  --dvfy-primary-border: #5a7e65;
+  --dvfy-accent-bg: #7b6c8f;
+  --dvfy-accent-bg-hover: #9e8eb3;
+  --dvfy-accent-bg-subtle: #0f0f10;
+  --dvfy-accent-text: #bfb2d2;
+  --dvfy-accent-border: #46424b;
+  --dvfy-success-bg: #536052;
+  --dvfy-success-bg-subtle: #0f0f0f;
+  --dvfy-success-text: #aac0aa;
+  --dvfy-success-border: #404640;
+  --dvfy-warning-bg: #66594b;
+  --dvfy-warning-bg-subtle: #100f0f;
+  --dvfy-warning-text: #cab59e;
+  --dvfy-warning-border: #49433d;
+  --dvfy-danger-bg: #6a5654;
+  --dvfy-danger-bg-subtle: #100f0f;
+  --dvfy-danger-text: #d1afac;
+  --dvfy-danger-border: #4b4241;
+  --dvfy-info-bg: #4c5f68;
+  --dvfy-info-bg-subtle: #0f0f10;
+  --dvfy-info-text: #a0bece;
+  --dvfy-info-border: #3e464a;
+  --dvfy-hover-bg: #2c2d2c;
+  --dvfy-active-bg: #3b3c3b;
+  --dvfy-selected-bg: #0f0f0f;
+  --dvfy-disabled-bg: #2c2d2c;
+  --dvfy-disabled-text: #4e4f4e;
+  --dvfy-ring-color: #7ca187;
+  --dvfy-input-bg: #202020;
+  --dvfy-input-border: #4e4f4e;
+  --dvfy-input-border-hover: #616462;
+  --dvfy-input-border-focus: #7ca187;
+  --dvfy-input-placeholder: #616462;
+  --dvfy-input-error: #b28b88;
+  --dvfy-on-success: #0f0f0f;
+  --dvfy-on-warning: #0f0f0f;
+  --dvfy-on-danger: #fdfdfd;
+  --dvfy-on-info: #0f0f0f;
+  --dvfy-tooltip-bg: #cdcfce;
+  --dvfy-tooltip-text: #202020;
+  --dvfy-tooltip-border: #afb1af;
+}

@@ -166,6 +166,12 @@ function loadThemes() {
   const cyanDarkVars  = extractSelectorVars(cyanCss, '[data-theme="devify-cyan-dark"]');
   const pinkVars      = extractSelectorVars(pinkCss, '[data-theme="devify-pink"]');
   const pinkDarkVars  = extractSelectorVars(pinkCss, '[data-theme="devify-pink-dark"]');
+  // NOTE: renting-ideal is intentionally NOT registered in this gating check yet.
+  // The faithful port of the #5A7E65 sage brand inherits WCAG AA failures from the
+  // shared theme-generator's status-on rules (--dvfy-on-success/warning/info and the
+  // dark primary-text pair) — the same failures the original rueda fork carried.
+  // Fixing them is a brand/generator decision surfaced in devify-ui#366, not a port
+  // task. Register here once that remediation lands (Session 3 / Engineering).
 
   // Merge strategy: primitives (:root) → light semantic base → theme overrides.
   // Partial brand themes (cyan/pink) only override their accent colours;

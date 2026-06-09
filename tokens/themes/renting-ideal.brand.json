@@ -1,0 +1,16 @@
+{
+  "name": "renting-ideal",
+  "label": "Renting Ideal",
+  "tagline": "Tu asesor de confianza",
+  "intent": "Trustworthy, impartial, calm car-renting advisor. The sage/forest green reads as trust, calm, and impartiality (the honest trust strip is 'Impartial · Transparent · Free').",
+  "seed": {
+    "brandColors": ["#5A7E65"],
+    "brandIndex": 0,
+    "supportCount": 6,
+    "prefix": "--brand"
+  },
+  "provenance": "Faithful port of rueda's existing sage-green brand (was a local fork in projects/rueda/static/css/tokens/themes/rueda.css, generated from brand #5A7E65). Lifted into @devify/ui as a first-class named theme per the Tool Interface Contracts standard (brands are author-time artifacts, consumed by name). devify-ui#366.",
+  "generator": "tokens/theme-generator.js generateTheme(generatePalette(seed), brandIndex)",
+  "outputs": ["renting-ideal.css"],
+  "readonly": true
+}
