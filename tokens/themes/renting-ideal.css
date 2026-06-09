@@ -33,7 +33,7 @@
   --dvfy-primary-bg-hover: #4e6153;
   --dvfy-primary-bg-active: #3e4741;
   --dvfy-primary-bg-subtle: #f1f7f3;
-  --dvfy-primary-text: #0f0f0f;
+  --dvfy-primary-text: #000000;
   --dvfy-primary-border: #5a7e65;
   --dvfy-accent-bg: #7b6c8f;
   --dvfy-accent-bg-hover: #5f576b;
@@ -68,10 +68,10 @@
   --dvfy-input-border-focus: #5a7e65;
   --dvfy-input-placeholder: #878a88;
   --dvfy-input-error: #8e6966;
-  --dvfy-on-success: #0f0f0f;
-  --dvfy-on-warning: #0f0f0f;
+  --dvfy-on-success: #fdfdfd;
+  --dvfy-on-warning: #fdfdfd;
   --dvfy-on-danger: #fdfdfd;
-  --dvfy-on-info: #0f0f0f;
+  --dvfy-on-info: #fdfdfd;
   --dvfy-tooltip-bg: #3b3c3b;
   --dvfy-tooltip-text: #e5e6e5;
   --dvfy-tooltip-border: #4e4f4e;
@@ -98,7 +98,7 @@
   --dvfy-primary-bg-hover: #7ca187;
   --dvfy-primary-bg-active: #a3c2ab;
   --dvfy-primary-bg-subtle: #0f0f0f;
-  --dvfy-primary-text: #0f0f0f;
+  --dvfy-primary-text: #000000;
   --dvfy-primary-border: #5a7e65;
   --dvfy-accent-bg: #7b6c8f;
   --dvfy-accent-bg-hover: #9e8eb3;
@@ -133,10 +133,10 @@
   --dvfy-input-border-focus: #7ca187;
   --dvfy-input-placeholder: #616462;
   --dvfy-input-error: #b28b88;
-  --dvfy-on-success: #0f0f0f;
-  --dvfy-on-warning: #0f0f0f;
+  --dvfy-on-success: #fdfdfd;
+  --dvfy-on-warning: #fdfdfd;
   --dvfy-on-danger: #fdfdfd;
-  --dvfy-on-info: #0f0f0f;
+  --dvfy-on-info: #fdfdfd;
   --dvfy-tooltip-bg: #cdcfce;
   --dvfy-tooltip-text: #202020;
   --dvfy-tooltip-border: #afb1af;

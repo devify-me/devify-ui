@@ -9,6 +9,82 @@
  */
 import { hexToOklch, oklchToHex, generateScale } from './palette-generator.js';
 
+// ── WCAG contrast helpers (mirrors scripts/check-contrast.js) ─────────
+// On-color / text selection is AA-correct BY CONSTRUCTION: the foreground is
+// chosen by measured contrast ratio against the *actual* background, never a
+// fixed near-black/near-white assumption. This only ever changes the
+// foreground (text/on-color) — the brand background hue is never touched.
+
+const AA_NORMAL = 4.5;
+
+function _hexToRgb(hex) {
+  hex = hex.trim().replace(/^#/, '');
+  if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+  const n = parseInt(hex, 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+}
+
+function _linearize(c) {
+  c /= 255;
+  return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+}
+
+function _luminance(hex) {
+  const [r, g, b] = _hexToRgb(hex);
+  return 0.2126 * _linearize(r) + 0.7152 * _linearize(g) + 0.0722 * _linearize(b);
+}
+
+function contrastRatio(hex1, hex2) {
+  const l1 = _luminance(hex1);
+  const l2 = _luminance(hex2);
+  return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+}
+
+/**
+ * Pick a foreground color that meets WCAG AA against `bgHex`.
+ *
+ * Tries the theme's two extreme neutrals (darkest text / lightest text)
+ * first and returns whichever clears AA. If both somehow fail (very
+ * mid-luminance background), it walks the neutral scale outward from each
+ * extreme to the nearest tier that passes, then falls back to whichever
+ * extreme has the higher ratio (best effort). The background is never
+ * altered — only the foreground is chosen.
+ *
+ * @param {string} bgHex            - background color
+ * @param {string} darkFg           - the theme's darkest neutral (e.g. n.scale.get(950))
+ * @param {string} lightFg          - the theme's lightest neutral (e.g. n.scale.get(0))
+ * @param {Map<number,string>} neutralScale - full neutral scale for tier fallback
+ * @returns {string} foreground hex that best meets AA
+ */
+function pickOnColor(bgHex, darkFg, lightFg, neutralScale) {
+  const darkR = contrastRatio(darkFg, bgHex);
+  const lightR = contrastRatio(lightFg, bgHex);
+
+  // Prefer whichever extreme passes; if both pass, prefer the higher ratio.
+  const darkPass = darkR >= AA_NORMAL;
+  const lightPass = lightR >= AA_NORMAL;
+  if (darkPass && lightPass) return darkR >= lightR ? darkFg : lightFg;
+  if (darkPass) return darkFg;
+  if (lightPass) return lightFg;
+
+  // Neither extreme clears AA (rare, mid-luminance bg). Walk the scale toward
+  // the passing direction: darker tiers (1000→600) for dark text, lighter tiers
+  // (0→400) for light text. Return the first tier that clears AA.
+  const darkTiers = [1000, 950, 900, 800, 700, 600];
+  const lightTiers = [0, 50, 100, 200, 300, 400];
+  for (const step of darkTiers) {
+    const hex = neutralScale.get(step);
+    if (hex && contrastRatio(hex, bgHex) >= AA_NORMAL) return hex;
+  }
+  for (const step of lightTiers) {
+    const hex = neutralScale.get(step);
+    if (hex && contrastRatio(hex, bgHex) >= AA_NORMAL) return hex;
+  }
+
+  // Best effort: the higher-contrast extreme.
+  return darkR >= lightR ? darkFg : lightFg;
+}
+
 /**
  * Generate light and dark semantic token maps from a palette.
  *
@@ -41,6 +117,28 @@ export function generateTheme(paletteResult, brandIndex = 0) {
   const n = neutral;
   const s = status;
 
+  // AA-correct foreground selection. Extremes drawn from the theme's own
+  // neutral scale so on-colors stay tonally on-brand (not pure #000/#fff).
+  const darkFg  = n.scale.get(950);
+  const lightFg = n.scale.get(0);
+  const onColor = bgHex => pickOnColor(bgHex, darkFg, lightFg, n.scale);
+
+  // Status + primary backgrounds (brand-derived — never altered here).
+  const lightStatusBg = {
+    success: s.success.scale.get(600),
+    warning: s.warning.scale.get(500),
+    danger:  s.danger.scale.get(600),
+    info:    s.info.scale.get(600),
+  };
+  const darkStatusBg = {
+    success: s.success.scale.get(600),
+    warning: s.warning.scale.get(600),
+    danger:  s.danger.scale.get(600),
+    info:    s.info.scale.get(600),
+  };
+  const primaryBgLight = primary.scale.get(500);
+  const primaryBgDark  = primary.scale.get(500);
+
   const light = {
     // Surface
     '--dvfy-surface-page':      n.scale.get(0),
@@ -65,11 +163,12 @@ export function generateTheme(paletteResult, brandIndex = 0) {
     '--dvfy-border-focus':      primary.scale.get(500),
 
     // Primary — 500 is the user's actual brand color
-    '--dvfy-primary-bg':        primary.scale.get(500),
+    '--dvfy-primary-bg':        primaryBgLight,
     '--dvfy-primary-bg-hover':  primary.scale.get(600),
     '--dvfy-primary-bg-active': primary.scale.get(700),
     '--dvfy-primary-bg-subtle': primary.scale.get(50),
-    '--dvfy-primary-text':      n.scale.get(950),
+    // AA-correct text on the primary CTA, measured vs the actual brand bg.
+    '--dvfy-primary-text':      onColor(primaryBgLight),
     '--dvfy-primary-border':    primary.scale.get(500),
 
     // Accent
@@ -113,11 +212,12 @@ export function generateTheme(paletteResult, brandIndex = 0) {
     '--dvfy-input-placeholder': n.scale.get(400),
     '--dvfy-input-error':       s.danger.scale.get(500),
 
-    // Status on (text color on solid status backgrounds)
-    '--dvfy-on-success':        n.scale.get(950),
-    '--dvfy-on-warning':        n.scale.get(950),
-    '--dvfy-on-danger':         n.scale.get(0),
-    '--dvfy-on-info':           n.scale.get(950),
+    // Status on (text color on solid status backgrounds) — AA-correct by
+    // construction: foreground chosen by measured contrast vs each status bg.
+    '--dvfy-on-success':        onColor(lightStatusBg.success),
+    '--dvfy-on-warning':        onColor(lightStatusBg.warning),
+    '--dvfy-on-danger':         onColor(lightStatusBg.danger),
+    '--dvfy-on-info':           onColor(lightStatusBg.info),
 
     // Tooltip
     '--dvfy-tooltip-bg':        n.scale.get(700),
@@ -149,12 +249,13 @@ export function generateTheme(paletteResult, brandIndex = 0) {
     '--dvfy-border-muted':      n.scale.get(800),
     '--dvfy-border-focus':      primary.scale.get(400),
 
-    // Primary
-    '--dvfy-primary-bg':        primary.scale.get(500),
+    // Primary — dark-mode CTA button (highest-stakes pair). Text is chosen by
+    // measured contrast vs the actual brand bg so the dark CTA always reads.
+    '--dvfy-primary-bg':        primaryBgDark,
     '--dvfy-primary-bg-hover':  primary.scale.get(400),
     '--dvfy-primary-bg-active': primary.scale.get(300),
     '--dvfy-primary-bg-subtle': primary.scale.get(950),
-    '--dvfy-primary-text':      n.scale.get(950),
+    '--dvfy-primary-text':      onColor(primaryBgDark),
     '--dvfy-primary-border':    primary.scale.get(500),
 
     // Accent
@@ -198,11 +299,12 @@ export function generateTheme(paletteResult, brandIndex = 0) {
     '--dvfy-input-placeholder': n.scale.get(500),
     '--dvfy-input-error':       s.danger.scale.get(400),
 
-    // Status on (text color on solid status backgrounds)
-    '--dvfy-on-success':        n.scale.get(950),
-    '--dvfy-on-warning':        n.scale.get(950),
-    '--dvfy-on-danger':         n.scale.get(0),
-    '--dvfy-on-info':           n.scale.get(950),
+    // Status on (text color on solid status backgrounds) — AA-correct by
+    // construction: foreground chosen by measured contrast vs each status bg.
+    '--dvfy-on-success':        onColor(darkStatusBg.success),
+    '--dvfy-on-warning':        onColor(darkStatusBg.warning),
+    '--dvfy-on-danger':         onColor(darkStatusBg.danger),
+    '--dvfy-on-info':           onColor(darkStatusBg.info),
 
     // Tooltip
     '--dvfy-tooltip-bg':        n.scale.get(200),
