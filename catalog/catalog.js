@@ -35,6 +35,10 @@ if (savedFonts) {
 const DEFAULT_THEMES = [
   { name: 'devify-blue', label: 'Devify Blue', brandColors: ['#00E5E5', '#FF3CAC'], brandIndex: 0 },
   { name: 'devify-pink', label: 'Devify Pink', brandColors: ['#FF3CAC', '#00E5E5'], brandIndex: 0 },
+  // Named brand artifact (devify-ui#366) — also shipped as a static read-only
+  // file (tokens/themes/renting-ideal.css) for by-name consumption. Listed here
+  // so it is selectable in the catalog theme-switcher.
+  { name: 'renting-ideal', label: 'Renting Ideal', brandColors: ['#5A7E65'], brandIndex: 0 },
 ];
 
 // Ensure default themes exist and are up-to-date.

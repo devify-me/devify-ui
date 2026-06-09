@@ -158,6 +158,7 @@ function loadThemes() {
   const darkCss       = readFileSync(join(ROOT, 'tokens/themes/dark.css'), 'utf8');
   const cyanCss       = readFileSync(join(ROOT, 'tokens/themes/devify-cyan.css'), 'utf8');
   const pinkCss       = readFileSync(join(ROOT, 'tokens/themes/devify-pink.css'), 'utf8');
+  const rentingCss    = readFileSync(join(ROOT, 'tokens/themes/renting-ideal.css'), 'utf8');
 
   const primitives    = parseCssVars(primitivesCss);
   const lightVars     = extractSelectorVars(lightCss, ':root');
@@ -166,10 +167,15 @@ function loadThemes() {
   const cyanDarkVars  = extractSelectorVars(cyanCss, '[data-theme="devify-cyan-dark"]');
   const pinkVars      = extractSelectorVars(pinkCss, '[data-theme="devify-pink"]');
   const pinkDarkVars  = extractSelectorVars(pinkCss, '[data-theme="devify-pink-dark"]');
+  const rentingVars     = extractSelectorVars(rentingCss, '[data-theme="renting-ideal"]');
+  const rentingDarkVars = extractSelectorVars(rentingCss, '[data-theme="renting-ideal-dark"]');
 
   // Merge strategy: primitives (:root) → light semantic base → theme overrides.
   // Partial brand themes (cyan/pink) only override their accent colours;
-  // all other tokens cascade from the light base.
+  // all other tokens cascade from the light base. renting-ideal is a FULL
+  // semantic theme (self-contained concrete values), so it stands on its own
+  // over the primitive base — its on-status + primary-text tokens are now
+  // AA-correct by construction (theme-generator.js / devify-ui#369).
   return {
     'light':            { ...primitives, ...lightVars },
     'dark':             { ...primitives, ...lightVars, ...darkVars },
@@ -177,6 +183,8 @@ function loadThemes() {
     'devify-cyan-dark': { ...primitives, ...lightVars, ...cyanDarkVars },
     'devify-pink':      { ...primitives, ...lightVars, ...pinkVars },
     'devify-pink-dark': { ...primitives, ...lightVars, ...pinkDarkVars },
+    'renting-ideal':      { ...primitives, ...rentingVars },
+    'renting-ideal-dark': { ...primitives, ...rentingDarkVars },
   };
 }
 
