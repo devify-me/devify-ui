@@ -1385,6 +1385,41 @@
       ]
     },
     {
+      "name": "dvfy-grid",
+      "path": "./components/dvfy-grid.js",
+      "description": "Responsive equal-column grid that collapses to one column below the md breakpoint.",
+      "attributes": [
+        {
+          "name": "cols",
+          "description": "Equal columns at full width: 1 | 2 | 3 | 4 (default 1)",
+          "type": "string"
+        },
+        {
+          "name": "gap",
+          "description": "Gutter between cells: sm | md | lg (default md)",
+          "type": "string"
+        },
+        {
+          "name": "min",
+          "description": "Auto-fit track minimum length (e.g. \"16rem\"); overrides cols when set",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Grid cells"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-grid-min",
+          "description": "Minimum track size for auto-fit mode (default 16rem)",
+          "type": "length"
+        }
+      ]
+    },
+    {
       "name": "dvfy-hamburger",
       "path": "./components/dvfy-hamburger.js",
       "description": "State-driven animated icon button — a Tier 1 primitive for menu toggles\nand other binary/multi-state controls.\n\nFive visual states (hamburger, x, chevron-left, chevron-right, minus) are\ndriven by the `state` attribute. CSS transitions interpolate between any\ntwo states automatically; consumers set the state, the component animates.\n\nComposable into nav, header, drawer, sidebar, stepper, and modal components.",
@@ -1468,6 +1503,41 @@
           "name": "--dvfy-hamburger-bg",
           "description": "Button background (default: transparent)",
           "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-heading",
+      "path": "./components/dvfy-heading.js",
+      "description": "Semantic heading bound to the --dvfy-type-h{level}-* role tokens; renders a real\n<h1>/<h2>/<h3> so the document keeps a correct heading outline.",
+      "attributes": [
+        {
+          "name": "level",
+          "description": "Heading level / role token: 1 | 2 | 3 (default 2)",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Heading text"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-type-h1-size",
+          "description": "H1 font size (and family/weight/leading/tracking siblings)",
+          "type": "*"
+        },
+        {
+          "name": "--dvfy-type-h2-size",
+          "description": "H2 font size (and siblings)",
+          "type": "*"
+        },
+        {
+          "name": "--dvfy-type-h3-size",
+          "description": "H3 font size (and siblings)",
+          "type": "*"
         }
       ]
     },
@@ -2018,6 +2088,56 @@
         {
           "name": "--dvfy-nav-link-active",
           "description": "Active link color (default: var(--dvfy-primary-bg))",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-page-section",
+      "path": "./components/dvfy-page-section.js",
+      "description": "Page vertical-rhythm wrapper for landing-page sections.",
+      "attributes": [
+        {
+          "name": "padding",
+          "description": "Vertical rhythm scale: md | lg | xl (default lg)",
+          "type": "string"
+        },
+        {
+          "name": "align",
+          "description": "Content alignment: left | center (default left)",
+          "type": "string"
+        },
+        {
+          "name": "tone",
+          "description": "Background tone: default | muted | brand (default default)",
+          "type": "string"
+        },
+        {
+          "name": "width",
+          "description": "Inner content rail: prose | wide | full (default wide)",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Section content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-page",
+          "description": "Default tone background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-surface-muted",
+          "description": "Muted tone background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-primary-bg-subtle",
+          "description": "Brand tone background",
           "type": "color"
         }
       ]
@@ -3049,6 +3169,39 @@
       ]
     },
     {
+      "name": "dvfy-stack",
+      "path": "./components/dvfy-stack.js",
+      "description": "Flex wrapper with a token-scaled gap; vertical (column) by default.",
+      "attributes": [
+        {
+          "name": "direction",
+          "description": "Main axis: column | row (default column)",
+          "type": "string"
+        },
+        {
+          "name": "gap",
+          "description": "Space between children: sm | md | lg (default md)",
+          "type": "string"
+        },
+        {
+          "name": "justify",
+          "description": "Main-axis distribution: start | center | end | between (default start)",
+          "type": "string"
+        },
+        {
+          "name": "align",
+          "description": "Cross-axis alignment: start | center | end | stretch (default stretch)",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Stack children"
+        }
+      ]
+    },
+    {
       "name": "dvfy-stagger-enter",
       "path": "./components/dvfy-stagger-enter.js",
       "description": "Staggered DOM-enter animation container. Children animate in on mount\nusing",
@@ -3506,6 +3659,46 @@
         {
           "name": "--dvfy-vortex-color",
           "description": "Override text color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-text",
+      "path": "./components/dvfy-text.js",
+      "description": "Body text bound to the --dvfy-type-body-* size roles and --dvfy-text-* color roles;\nrenders a real <p> (or <span> when inline).",
+      "attributes": [
+        {
+          "name": "size",
+          "description": "Body size role: lg | md | sm (default md)",
+          "type": "string"
+        },
+        {
+          "name": "tone",
+          "description": "Text color role: default | muted (default default)",
+          "type": "string"
+        },
+        {
+          "name": "inline",
+          "description": "Render as <span> (inline) instead of <p> (block)",
+          "type": "boolean"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Text content"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-text-primary",
+          "description": "Default tone color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-text-muted",
+          "description": "Muted tone color",
           "type": "color"
         }
       ]

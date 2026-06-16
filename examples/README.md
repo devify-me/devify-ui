@@ -21,6 +21,7 @@
 | [`react/`](react/index.html) | React 18 | CDN demo + `App.jsx` production patterns |
 | [`vue/`](vue/index.html) | Vue 3 | CDN demo + `App.vue` SFC with Vite setup |
 | [`svelte/`](svelte/index.html) | Svelte 5 | CDN demo + `App.svelte` SvelteKit setup |
+| [`composition/`](composition/index.html) | Vanilla HTML | §8 landing page composed only from the page-composition primitives (`dvfy-page-section` / `dvfy-grid` / `dvfy-stack` / `dvfy-heading` / `dvfy-text`) — zero invented utility classes. Verified by `npm run verify:composition`. |
 
 ## Installation
 

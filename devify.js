@@ -72,6 +72,13 @@ import './components/dvfy-description-list.js';
 import './components/dvfy-command-palette.js';
 import './components/dvfy-stepper.js';
 
+// Wave 5: Page Composition (layout + typography primitives)
+import './components/dvfy-page-section.js';
+import './components/dvfy-grid.js';
+import './components/dvfy-stack.js';
+import './components/dvfy-heading.js';
+import './components/dvfy-text.js';
+
 // Wave 4: Billing & Payments
 import './components/dvfy-usage-meter.js';
 import './components/dvfy-invoice-list.js';
