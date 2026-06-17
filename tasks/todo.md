@@ -6,7 +6,22 @@ Follow studio/ standards: G&P, Verification Before Completion, citations to `stu
 
 **Scope note**: This is "tools work" per `studio/shared/sergio-layout.md` Scope Rules. Coordinate with studio/ for VEmployee-impacting changes.
 
-## Current Focus — devify-ui#372: Page-composition primitives (LP-Factory N1 / G2)
+## Current Focus — devify-ui#363: dvfy-button native href navigation
+
+G&P: Give `dvfy-button` first-class `href` support so the host renders/behaves as a real
+link (navigates on click + Enter, `role="link"`, supports `target`/`rel` with safe `rel`
+defaults for `target=_blank`). When `href` is absent, behavior is unchanged (a real button).
+All existing variant/size/state styling (targets the host directly) preserved — no wrapper.
+Removes the `<a pointer-events:none>` hack rueda's N5 rebuild must not carry.
+Branch: `feat/363-button-href`.
+
+- [ ] TDD: tests for href click-nav, Enter-nav, target/rel + _blank rel defaults, a11y role=link, no-href regression
+- [ ] Implement: href → role=link, navigation on click/Enter respecting target; sanitizeHref; disabled/loading suppress nav
+- [ ] JSDoc @attr for href/target/rel
+- [ ] npm run analyze (manifest), test, lint, contrast:ci green
+- [ ] PR Closes #363
+
+## Prior Focus — devify-ui#372: Page-composition primitives (LP-Factory N1 / G2)
 
 G&P: Replace rueda's ~24 invented utility classes with 4 sanctioned, manifest-declared
 light-DOM primitive families bound to EXISTING tokens — the composition vocabulary the
