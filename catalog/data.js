@@ -132,6 +132,11 @@ export const COMPONENT_REGISTRY = {
   'dvfy-auth':       { tier: 3, domain: 'utility',    deps: ['dvfy-modal'] },
   'dvfy-htmx-form':  { tier: 3, domain: 'forms',      deps: ['dvfy-modal'], server: true },
   'dvfy-confirm':    { tier: 3, domain: 'feedback',    deps: ['dvfy-modal'], server: true },
+
+  // ── Tier 5 — Layouts (page-level scaffolds) ───────────────────────────────
+  // No-nav campaign/landing page shell — 1:1 attention ratio by construction
+  // (deliberately omits the nav menu). Scaffolds the §8 page sections it receives.
+  'dvfy-campaign-layout': { tier: 5, domain: 'layout', deps: ['dvfy-section-hero', 'dvfy-page-section'] },
 };
 
 /** Get tags for a given tier number */

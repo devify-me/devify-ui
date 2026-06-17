@@ -6,7 +6,37 @@ Follow studio/ standards: G&P, Verification Before Completion, citations to `stu
 
 **Scope note**: This is "tools work" per `studio/shared/sergio-layout.md` Scope Rules. Coordinate with studio/ for VEmployee-impacting changes.
 
-## Current Focus — devify-ui#375: optional media slot on dvfy-section-hero (WS-2a)
+## Current Focus — devify-ui#377: no-nav campaign page layout (1:1 attention ratio, WS-3b)
+
+G&P: Ship `dvfy-campaign-layout` — a reusable Tier-5 page scaffold for landing/campaign pages
+that is 1:1 attention-ratio *by construction*: a full LP page shell with NO navigation menu, only
+the single conversion path. Optional non-leaking brand mark (unlinked, or a single self-link to
+page top `#`). Theme-able via `data-theme`, composed from the sanctioned vocabulary, zero invented
+classes. Branch: `feat/377-campaign-layout`.
+
+Why: Gardner's attention ratio = clickable links ÷ conversion goals; optimal 1:1. Site nav adds
+escape-route links that leak attention/conversions. This layout is NOT `dvfy-nav-bar` — it
+deliberately OMITS nav-menu/links/hamburger/drawer. Every clickable link on the page therefore
+comes from consumer CTA(s) → the one goal.
+
+Design decision (design-thinking, EXISTING tokens only): light-DOM injectStyles pattern; the shell
+is a `<header>` (optional brand mark) + a `<main id="main-content">` (default slot for §8 sections)
++ optional `<footer>` slot for legal/non-nav fine print. Brand bar uses `--dvfy-surface-raised` /
+`--dvfy-border-default` / `--dvfy-space-*` / `--dvfy-container-7xl` rail — same tokens as nav-bar's
+brand, minus every link. `home-href` (default absent) → brand becomes a single `href="#"`-style
+self-link to the page's own top only.
+
+- [x] Read issue + composition vocabulary + nav-bar + design-thinking skill + tokens
+- [x] TDD: dvfy-campaign-layout.test.js (brand/no-brand, self-link only, footer slot, 0 nav links) — 17 pass
+- [x] Implement components/dvfy-campaign-layout.js (light DOM, tokens only)
+- [x] Register: devify.js barrel + catalog/data.js (Tier 5 Layout) + playground DEFAULT_CONTENT/ATTRS
+- [x] Demo examples/campaign-layout/index.html (themed, §8 slots, CTAs only)
+- [x] e2e proof scripts/verify-campaign-layout.mjs — 4 links: 2 same-page non-escape + 2 CTAs→1 goal, 0 nav
+- [x] npm run analyze (manifest ✓), test (1493 ✓), lint ✓, contrast:ci (120 ✓), verify e2e ✓
+- [x] README documents campaign-vs-site layout (when to use vs dvfy-nav-bar)
+- [ ] PR Closes #377
+
+## Prior Focus — devify-ui#375: optional media slot on dvfy-section-hero (WS-2a)
 
 G&P: Add an optional `media` slot to `dvfy-section-hero` accepting `<img>` / `<dvfy-carousel>` /
 `<dvfy-compare-slider>`, with `media-position` (left|right|above|below) + `aspect-ratio` layout

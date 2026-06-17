@@ -111,7 +111,13 @@ Three-tier token system following [UI Collective](https://uicollective.co/) meth
 `dvfy-dropdown` `dvfy-tooltip` `dvfy-tabs` `dvfy-breadcrumb` `dvfy-pagination` `dvfy-hamburger` `dvfy-sidebar` `dvfy-nav` `dvfy-tree-view` `dvfy-tree-node`
 
 ### Layout
-`dvfy-drawer` `dvfy-section` `dvfy-accordion`
+`dvfy-drawer` `dvfy-section` `dvfy-accordion` `dvfy-page-section` `dvfy-campaign-layout`
+
+> **Campaign vs site layout.** Use `dvfy-campaign-layout` for **landing / campaign pages**: it
+> is the no-nav page shell that honors Gardner's 1:1 attention ratio *by construction* — it
+> deliberately omits the nav menu so the only clickable links are the CTA(s) toward the single
+> goal (optional non-leaking brand mark only). Use `dvfy-nav-bar` for **app pages**, where a
+> multi-link nav menu is the right affordance. A landing page should never carry the site nav.
 
 ### Visual Effects
 `dvfy-scroll-reveal` `dvfy-scramble-hover` `dvfy-text-vortex` `dvfy-page-transition` `dvfy-transition-root`

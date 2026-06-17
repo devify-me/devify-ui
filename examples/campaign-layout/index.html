@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<!--
+  No-nav campaign page layout demo (devify-ui#377 / Marketing Studio WS-3b).
+
+  This page is the acceptance proof for dvfy-campaign-layout: a full §8-shaped landing
+  page built with the layout, rendering with a 1:1 ATTENTION RATIO — zero competing nav
+  links. The only clickable conversion paths are the CTAs toward the single goal
+  ("Empezar"). There is NO nav menu, NO link list, NO hamburger/drawer escape route.
+
+  Contrast with the site layout (dvfy-nav-bar), which carries a multi-link nav menu — an
+  app-page affordance that leaks attention on a landing page.
+
+  Composed only from the sanctioned vocabulary (dvfy-page-section / dvfy-stack / dvfy-grid
+  / dvfy-heading / dvfy-text) + existing library components (dvfy-section-hero,
+  dvfy-card-glow, dvfy-button). Zero invented utility classes.
+
+  Themed via data-theme="renting-ideal" on <html> per the integration KB.
+-->
+<html lang="es" data-theme="renting-ideal">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Renting Ideal — landing 1:1 (demo dvfy-campaign-layout)</title>
+  <meta name="description" content="Demostración de dvfy-campaign-layout: una landing sin menú de navegación, con un único camino de conversión (ratio de atención 1:1).">
+  <link rel="stylesheet" href="../../devify.css">
+  <link rel="stylesheet" href="../../tokens/themes/renting-ideal.css">
+  <script type="module" src="../../devify.js"></script>
+  <style>
+    /* Page reset only — no layout/typography utilities, those are primitives. */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { min-height: 100%; }
+    body { background: var(--dvfy-surface-page); color: var(--dvfy-text-primary); }
+  </style>
+</head>
+<body id="top">
+  <!--
+    The whole page lives inside ONE dvfy-campaign-layout. Note what is ABSENT:
+    no dvfy-nav-bar, no dvfy-nav-menu, no dvfy-nav. The brand mark is a single
+    self-link to #top only (home-href) — not a route to other pages.
+  -->
+  <dvfy-campaign-layout brand="Renting Ideal" home-href="#top">
+
+    <!-- §8 slot 1 — HERO (single primary CTA → the one goal) -->
+    <dvfy-section-hero tone="brand" padding="xl" align="center">
+      <dvfy-heading level="1">Tu mejor renting, sin que ninguna marca te lo venda</dvfy-heading>
+      <dvfy-text size="lg">
+        Puntuamos cada coche con un Chollo Score público 0–10, fórmula determinista y auditable.
+        Gratis, sin compromiso y sin pedirte tus ingresos.
+      </dvfy-text>
+      <dvfy-button variant="primary" size="lg" href="/empezar">Empezar — 6 preguntas, &lt; 2 min</dvfy-button>
+      <div slot="trust">
+        <dvfy-text size="sm" tone="muted" inline>Imparcial · Transparente · Gratis · Sin registro</dvfy-text>
+      </div>
+    </dvfy-section-hero>
+
+    <!-- §8 slot 2 — HOW IT WORKS (no CTA — explanatory only) -->
+    <dvfy-page-section tone="default" padding="xl" align="center" width="wide">
+      <dvfy-stack gap="lg" align="center">
+        <dvfy-heading level="2">Cómo funciona</dvfy-heading>
+        <dvfy-grid cols="3" gap="lg">
+          <dvfy-card-glow padded>
+            <dvfy-heading level="3">1 · Cuéntanos</dvfy-heading>
+            <dvfy-text>Responde 6 preguntas sobre lo que necesitas. Sin registro.</dvfy-text>
+          </dvfy-card-glow>
+          <dvfy-card-glow padded>
+            <dvfy-heading level="3">2 · Puntuamos</dvfy-heading>
+            <dvfy-text>Calculamos el Chollo Score público de cada coche con la misma fórmula.</dvfy-text>
+          </dvfy-card-glow>
+          <dvfy-card-glow padded>
+            <dvfy-heading level="3">3 · Decides</dvfy-heading>
+            <dvfy-text>Te mostramos tu mejor opción. Sin pujas de marca, sin sorpresas.</dvfy-text>
+          </dvfy-card-glow>
+        </dvfy-grid>
+      </dvfy-stack>
+    </dvfy-page-section>
+
+    <!-- §8 slot 3 — OBJECTION / FAQ (no competing links) -->
+    <dvfy-page-section tone="muted" padding="xl" align="left" width="wide">
+      <dvfy-stack gap="lg">
+        <dvfy-heading level="2">¿Dónde está el truco?</dvfy-heading>
+        <dvfy-grid cols="2" gap="md">
+          <dvfy-card-glow padded>
+            <dvfy-heading level="3">¿Sois imparciales?</dvfy-heading>
+            <dvfy-text>Sí. Ninguna marca puja por aparecer. La fórmula es la misma para todos.</dvfy-text>
+          </dvfy-card-glow>
+          <dvfy-card-glow padded>
+            <dvfy-heading level="3">¿Es gratis de verdad?</dvfy-heading>
+            <dvfy-text>Gratis, sin registro y sin compromiso. La comisión la paga el proveedor, nunca tú.</dvfy-text>
+          </dvfy-card-glow>
+        </dvfy-grid>
+      </dvfy-stack>
+    </dvfy-page-section>
+
+    <!-- §8 slot 4 — RISK-REVERSAL + repeat CTA (same goal, same destination) -->
+    <dvfy-page-section tone="brand" padding="xl" align="center" width="prose">
+      <dvfy-stack gap="md" align="center">
+        <dvfy-heading level="2">Encuentra tu renting ideal</dvfy-heading>
+        <dvfy-text size="lg" tone="muted">Gratis · sin compromiso · sin registro</dvfy-text>
+        <dvfy-button variant="primary" size="lg" href="/empezar">Empezar ahora</dvfy-button>
+      </dvfy-stack>
+    </dvfy-page-section>
+
+    <!-- Footer — non-nav fine print ONLY (no links → no escape routes) -->
+    <div slot="footer">
+      <dvfy-text size="sm" tone="muted" inline>
+        © 2026 Renting Ideal · Chollo Score público y auditable · Sin afiliación de marca.
+      </dvfy-text>
+    </div>
+
+  </dvfy-campaign-layout>
+</body>
+</html>

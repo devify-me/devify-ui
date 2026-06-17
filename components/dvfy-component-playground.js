@@ -378,6 +378,7 @@ const DEFAULT_CONTENT = {
   'dvfy-drawer': '<p>Drawer body content. This panel scrolls independently and can be collapsed.</p><p style="margin-top:0.5rem;color:var(--dvfy-text-muted);font-size:var(--dvfy-text-sm)">Try the collapse button in the header.</p>',
   'dvfy-section': '<p>Section content here.</p>',
   'dvfy-section-hero': '<h1>Ship production-ready frontend, faster.</h1><p>Tier-structured Web Components with design tokens, HTMX patterns, and zero build step.</p><div style="display:flex;gap:var(--dvfy-space-3);justify-content:center;flex-wrap:wrap"><dvfy-button variant="primary" size="lg">Get started</dvfy-button><dvfy-button variant="ghost" size="lg">View on GitHub</dvfy-button></div><div slot="trust">Trusted by Devify products in production</div>',
+  'dvfy-campaign-layout': '<dvfy-section-hero tone="brand" align="center"><dvfy-heading level="1">One page, one goal</dvfy-heading><dvfy-text size="lg">A no-nav campaign shell: 1:1 attention ratio by construction — only the conversion path, no nav escape routes.</dvfy-text><dvfy-button variant="primary" size="lg">Get started</dvfy-button></dvfy-section-hero><div slot="footer"><dvfy-text size="sm" tone="muted">© 2026 Devify · Privacy · Terms</dvfy-text></div>',
   'dvfy-theme-switcher': '<option value="devify-cyan">Cyan</option><option value="devify-pink">Pink</option>',
   'dvfy-accordion': '<dvfy-section label="Section One" open><p>First section content.</p></dvfy-section><dvfy-section label="Section Two" collapsed><p>Second section content.</p></dvfy-section><dvfy-section label="Section Three" collapsed><p>Third section content.</p></dvfy-section>',
   'dvfy-carousel': '',
@@ -412,6 +413,10 @@ const DEFAULT_CONTENT = {
 
 /** Default attribute values per component — applied when selected in the playground. */
 const DEFAULT_ATTRS = {
+  'dvfy-campaign-layout': {
+    brand: 'Renting Ideal',
+    'home-href': '#top',
+  },
   'dvfy-carousel': {
     images: JSON.stringify([
       { src: '../catalog/assets/Grob.png', alt: 'Grob' },
