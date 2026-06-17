@@ -240,6 +240,14 @@ class DvfyStepper extends HTMLElement {
   }
 
   #build() {
+    // Idempotent + bfcache-safe: a rebuild must REPLACE, not append. On
+    // disconnect→reconnect (incl. browser back/forward bfcache page restore,
+    // which re-fires connectedCallback) #build() runs again — without this,
+    // a fresh nav rail stacks on top of the previous one(s).
+    this.#nav?.removeEventListener('keydown', this.#onKey);
+    this.#nav?.remove();
+    this.querySelectorAll(':scope > .dvfy-stepper__nav').forEach(n => n.remove());
+
     this.#nav = document.createElement('div');
     this.#nav.className = 'dvfy-stepper__nav';
     this.#nav.setAttribute('role', 'tablist');
