@@ -1,4 +1,5 @@
 import { injectStyles } from '../utils/styles.js';
+import { sanitizeHref } from '../utils/url.js';
 
 /* <dvfy-button> — Button component */
 
@@ -161,6 +162,9 @@ dvfy-button[loading]::after {
  * @attr {boolean} disabled - Disable button and prevent interaction
  * @attr {boolean} loading - Show loading state with spinner indicator
  * @attr {string} type - HTML button type: button | submit | reset (default: "button")
+ * @attr {string} href - When set, the button behaves as a link (role="link") and navigates on click/Enter
+ * @attr {string} target - Link target for href navigation (e.g. "_blank"); only applies when href is set
+ * @attr {string} rel - Link relationship for href navigation; defaults to "noopener noreferrer" when target="_blank"
  * @attr {string} from - Gradient start color for variant="gradient" (default: "#7c3aed")
  * @attr {string} to - Gradient end color for variant="gradient" (default: "#2563eb")
  *
@@ -177,7 +181,7 @@ class DvfyButton extends HTMLElement {
     if (this.hasAttribute('from')) this.style.setProperty('--dvfy-btn-grad-from', this.getAttribute('from'));
     if (this.hasAttribute('to')) this.style.setProperty('--dvfy-btn-grad-to', this.getAttribute('to'));
 
-    if (!this.getAttribute('role')) this.setAttribute('role', 'button');
+    this.#syncRole();
     if (!this.getAttribute('tabindex') && !this.hasAttribute('disabled')) {
       this.setAttribute('tabindex', '0');
     }
@@ -193,13 +197,23 @@ class DvfyButton extends HTMLElement {
   }
 
   #onKey = (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
+    // Links activate on Enter only (native anchor semantics); buttons also on Space.
+    const isLink = this.hasAttribute('href');
+    if (e.key === 'Enter' || (!isLink && e.key === ' ')) {
       e.preventDefault();
       this.click();
     }
   };
 
-  #onClick = () => {
+  #onClick = (e) => {
+    if (this.hasAttribute('disabled') || this.hasAttribute('loading')) return;
+
+    // Link behavior takes precedence: navigate when href is present.
+    if (this.hasAttribute('href')) {
+      this.#navigateFromHref(e);
+      return;
+    }
+
     const type = this.getAttribute('type');
     if (!type || type === 'button') return;
     const form = this.closest('form');
@@ -208,7 +222,25 @@ class DvfyButton extends HTMLElement {
     else if (type === 'reset') form.reset();
   };
 
-  static get observedAttributes() { return ['disabled', 'loading', 'from', 'to']; }
+  #navigateFromHref(e) {
+    const url = sanitizeHref(this.getAttribute('href'));
+    const target = this.getAttribute('target');
+    if (target === '_blank') {
+      // Safe defaults: opener-isolated + no referrer unless the author overrides rel.
+      const features = this.getAttribute('rel') || 'noopener noreferrer';
+      this._openTab(url, features);
+    } else {
+      this._navigate(url);
+    }
+    // A synthetic .click() has no default to prevent; guard for real events.
+    e?.preventDefault?.();
+  }
+
+  // Overridable seams (kept on the instance so tests can stub navigation).
+  _navigate(url) { window.location.assign(url); }
+  _openTab(url, features) { window.open(url, '_blank', features); }
+
+  static get observedAttributes() { return ['disabled', 'loading', 'from', 'to', 'href']; }
 
   attributeChangedCallback(name, _old, value) {
     if (name === 'disabled') {
@@ -219,11 +251,23 @@ class DvfyButton extends HTMLElement {
     if (name === 'loading') {
       this.setAttribute('aria-busy', String(this.hasAttribute('loading')));
     }
+    if (name === 'href') {
+      this.#syncRole();
+    }
     if (name === 'from') {
       this.style.setProperty('--dvfy-btn-grad-from', value ?? '');
     }
     if (name === 'to') {
       this.style.setProperty('--dvfy-btn-grad-to', value ?? '');
+    }
+  }
+
+  #syncRole() {
+    const role = this.hasAttribute('href') ? 'link' : 'button';
+    // Respect an author-supplied role only if it isn't the one we manage.
+    const current = this.getAttribute('role');
+    if (current === 'link' || current === 'button' || current === null) {
+      this.setAttribute('role', role);
     }
   }
 

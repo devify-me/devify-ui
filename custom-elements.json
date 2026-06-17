@@ -345,6 +345,16 @@
           "type": "string"
         },
         {
+          "name": "target",
+          "description": "Link target for href navigation (e.g. \"_blank\"); only applies when href is set",
+          "type": "string"
+        },
+        {
+          "name": "rel",
+          "description": "Link relationship for href navigation; defaults to \"noopener noreferrer\" when target=\"_blank\"",
+          "type": "string"
+        },
+        {
           "name": "disabled",
           "description": "Disable button and prevent interaction",
           "type": "boolean"
@@ -362,6 +372,11 @@
         {
           "name": "to",
           "description": "Gradient end color for variant=\"gradient\" (default: \"#2563eb\")",
+          "type": "string"
+        },
+        {
+          "name": "href",
+          "description": "When set, the button behaves as a link (role=\"link\") and navigates on click/Enter",
           "type": "string"
         }
       ],
