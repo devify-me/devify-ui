@@ -78,6 +78,7 @@ import './components/dvfy-grid.js';
 import './components/dvfy-stack.js';
 import './components/dvfy-heading.js';
 import './components/dvfy-text.js';
+import './components/dvfy-campaign-layout.js';
 
 // Wave 4: Billing & Payments
 import './components/dvfy-usage-meter.js';

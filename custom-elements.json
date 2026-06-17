@@ -405,6 +405,65 @@
       ]
     },
     {
+      "name": "dvfy-campaign-layout",
+      "path": "./components/dvfy-campaign-layout.js",
+      "description": "No-nav landing/campaign page scaffold that is 1:1 attention-ratio by construction.",
+      "attributes": [
+        {
+          "name": "brand",
+          "description": "Brand name text shown in the header (header omitted if absent + no logo)",
+          "type": "string"
+        },
+        {
+          "name": "logo",
+          "description": "Logo image URL shown in the header",
+          "type": "string"
+        },
+        {
+          "name": "home-href",
+          "description": "When set, the brand becomes a single self-link to this anchor (page-top only; sanitized)",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Page sections (the §8 landing-page body): dvfy-section-hero, dvfy-page-section, etc."
+        },
+        {
+          "name": "footer",
+          "description": "Non-nav fine print (©, legal). Renders a <footer> landmark."
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-page",
+          "description": "Page background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-nav-bg",
+          "description": "Brand-bar background (default: var(--dvfy-surface-raised))",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-nav-border",
+          "description": "Brand-bar bottom border (default: var(--dvfy-border-default))",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-nav-brand-text",
+          "description": "Brand text color (default: var(--dvfy-text-primary))",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-nav-height",
+          "description": "Brand-bar min height (default: 3.5rem)",
+          "type": "length"
+        }
+      ]
+    },
+    {
       "name": "dvfy-card-glow",
       "path": "./components/dvfy-card-glow.js",
       "description": "Card with a mouse-tracked radial gradient glow that bleeds through the border.",
