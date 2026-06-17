@@ -6,7 +6,27 @@ Follow studio/ standards: G&P, Verification Before Completion, citations to `stu
 
 **Scope note**: This is "tools work" per `studio/shared/sergio-layout.md` Scope Rules. Coordinate with studio/ for VEmployee-impacting changes.
 
-## Current Focus — devify-ui#363: dvfy-button native href navigation
+## Current Focus — devify-ui#375: optional media slot on dvfy-section-hero (WS-2a)
+
+G&P: Add an optional `media` slot to `dvfy-section-hero` accepting `<img>` / `<dvfy-carousel>` /
+`<dvfy-compare-slider>`, with `media-position` (left|right|above|below) + `aspect-ratio` layout
+control — enabling the `hero.media` A/B variant axis. No-media usage renders byte-identical to
+today (text-centric hero). Branch: `feat/375-hero-media-slot`.
+
+Design decision (design-thinking, EXISTING tokens only): CSS-only layout (component logic stays
+injectStyles + an aspect-ratio attr mirror, since CSS can't read attr values inside aspect-ratio).
+Two-column (left/right) collapses to single column below 48rem container width — reuse the
+library's `@container (min-width: 48rem)` convention (same as dvfy-grid). Column gap =
+`--dvfy-space-8` (fluid clamp like the hero's padding); media radius = `--dvfy-radius-lg`;
+aspect mirrored into `--dvfy-hero-media-aspect`.
+
+- [x] TDD: no-media regression, img render, carousel render, position attr, aspect mirror (16 tests)
+- [x] Implement: CSS layout (left|right|above|below) + container-query collapse + aspect mirror
+- [x] JSDoc @slot media + @attr media-position / aspect-ratio + @cssprop
+- [x] npm run analyze (manifest), test (1476 pass), lint, contrast:ci (120 pass) green
+- [ ] PR Closes #375
+
+## Prior Focus — devify-ui#363: dvfy-button native href navigation
 
 G&P: Give `dvfy-button` first-class `href` support so the host renders/behaves as a real
 link (navigates on click + Enter, `role="link"`, supports `target`/`rel` with safe `rel`

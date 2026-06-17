@@ -2748,11 +2748,11 @@
     {
       "name": "dvfy-section-hero",
       "path": "./components/dvfy-section-hero.js",
-      "description": "Opinionated landing-page hero section: large heading, supporting body, primary CTA, optional trust strip.",
+      "description": "Opinionated landing-page hero section: large heading, supporting body, primary CTA, optional\ntrust strip, and an optional media column (image / carousel / before-after compare slider).",
       "attributes": [
         {
           "name": "align",
-          "description": "Text alignment: left | center (default center)",
+          "description": "Text alignment: left | center (default center; media mode defaults to left)",
           "type": "string"
         },
         {
@@ -2764,6 +2764,16 @@
           "name": "tone",
           "description": "Background tone: default | brand | muted (default default)",
           "type": "string"
+        },
+        {
+          "name": "media-position",
+          "description": "Where the media slot sits relative to content: left | right | above | below. Presence of this attribute activates media (two-column) mode.",
+          "type": "string"
+        },
+        {
+          "name": "aspect-ratio",
+          "description": "CSS aspect-ratio for the media cell (e.g. \"16 / 9\"), mirrored into --dvfy-hero-media-aspect for consistent sizing.",
+          "type": "string"
         }
       ],
       "slots": [
@@ -2774,6 +2784,10 @@
         {
           "name": "trust",
           "description": "Optional trust-strip line below CTAs (e.g. \"Trusted by 1,000+ teams\")"
+        },
+        {
+          "name": "media",
+          "description": "Optional hero visual: an <img>, <dvfy-carousel>, or <dvfy-compare-slider>. Composed, not reinvented."
         }
       ],
       "cssProperties": [
@@ -2791,6 +2805,11 @@
           "name": "--dvfy-surface-muted",
           "description": "Muted tone background",
           "type": "color"
+        },
+        {
+          "name": "--dvfy-hero-media-aspect",
+          "description": "Aspect-ratio applied to the media cell (set from the aspect-ratio attribute)",
+          "type": "string"
         }
       ]
     },
