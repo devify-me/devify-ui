@@ -2869,6 +2869,11 @@
           "name": "--dvfy-hero-media-aspect",
           "description": "Aspect-ratio applied to the media cell (set from the aspect-ratio attribute)",
           "type": "string"
+        },
+        {
+          "name": "--dvfy-hero-media-max",
+          "description": "Max-width cap for the media cell so a stacked (above/below) visual reads as a focused hero image rather than a full-bleed banner, and a 2-col cell can't blow up on ultrawide hosts (default --dvfy-container-md, ~28rem; width stays fluid + centered below the cap)",
+          "type": "length"
         }
       ]
     },

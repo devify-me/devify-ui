@@ -92,11 +92,15 @@ dvfy-section-hero[media-position] > .dvfy-hero-grid {
   text-align: left;
 }
 
-/* Media + content cells fill their tracks; allow shrink in grid (min-width:0). */
-dvfy-section-hero[media-position] > .dvfy-hero-grid > .dvfy-hero-content,
-dvfy-section-hero[media-position] > .dvfy-hero-grid > [slot="media"] {
+/* Content cell fills its track; allow shrink in grid (min-width:0).
+   The media cell is sized separately below (capped + centered), so it is not
+   reset to max-width:none here — that reset is what made it span full width. */
+dvfy-section-hero[media-position] > .dvfy-hero-grid > .dvfy-hero-content {
   max-width: none;
   margin-inline: 0;
+  min-width: 0;
+}
+dvfy-section-hero[media-position] > .dvfy-hero-grid > [slot="media"] {
   min-width: 0;
 }
 
@@ -108,10 +112,19 @@ dvfy-section-hero[media-position] .dvfy-hero-content > [slot="trust"] {
   margin-top: var(--dvfy-space-8);
 }
 
-/* Media element sizing — consistent aspect-ratio, token radius, never overflows. */
+/* Media element sizing — consistent aspect-ratio, token radius, never overflows.
+   Bounded: width is fluid (fills its track / stacked column) but capped at
+   --dvfy-hero-media-max so a stacked (above/below) media reads as a focused
+   hero visual, not a full-bleed banner, and a 2-col cell can't blow up on
+   ultrawide hosts. margin-inline:auto centers it within the leftover space
+   once capped. The cap is a consumer-overridable knob (default ~half the
+   56rem text rail) and width:100% keeps it scaling DOWN below the cap on
+   narrow viewports, never overflowing the host content box. */
 dvfy-section-hero[media-position] > .dvfy-hero-grid > [slot="media"] {
   display: block;
   width: 100%;
+  max-width: var(--dvfy-hero-media-max, var(--dvfy-container-md));
+  margin-inline: auto;
   aspect-ratio: var(--dvfy-hero-media-aspect, auto);
   border-radius: var(--dvfy-radius-lg);
   overflow: hidden;
@@ -165,6 +178,7 @@ dvfy-section-hero[media-position][align="center"] > .dvfy-hero-grid { text-align
  * @cssprop {color} --dvfy-primary-bg-subtle - Brand tone background
  * @cssprop {color} --dvfy-surface-muted - Muted tone background
  * @cssprop {string} --dvfy-hero-media-aspect - Aspect-ratio applied to the media cell (set from the aspect-ratio attribute)
+ * @cssprop {length} --dvfy-hero-media-max - Max-width cap for the media cell so a stacked (above/below) visual reads as a focused hero image rather than a full-bleed banner, and a 2-col cell can't blow up on ultrawide hosts (default --dvfy-container-md, ~28rem; width stays fluid + centered below the cap)
  *
  * @example
  * <dvfy-section-hero tone="brand" padding="xl">

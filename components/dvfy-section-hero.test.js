@@ -191,4 +191,108 @@ describe('dvfy-section-hero', () => {
       expect(el.style.getPropertyValue('--dvfy-hero-media-aspect')).to.equal('');
     });
   });
+
+  describe('media sizing — bounded + responsive (regression: rueda full-bleed bug)', () => {
+    // The cap defaults to var(--dvfy-container-md) (28rem = 448px). Tests provide that
+    // token on the wrapper to mirror a themed app (the token bundle isn't auto-loaded
+    // into the bare test page); the component references the real token, not a literal.
+    const MEDIA_MAX_PX = 448;
+    const TOKENS = '--dvfy-container-md: 28rem;';
+
+    it('caps stacked media (media-position="above") to a bounded max-width, not none', async () => {
+      const el = await fixture(html`
+        <div style="width: 80rem; ${TOKENS}">
+          <dvfy-section-hero media-position="above" aspect-ratio="4 / 3">
+            <h1>Title</h1>
+            <img slot="media" src="/hero.jpg" alt="Hero" />
+          </dvfy-section-hero>
+        </div>
+      `);
+      const media = el.querySelector('[slot="media"]');
+      const maxWidth = getComputedStyle(media).maxWidth;
+      expect(maxWidth).to.not.equal('none');
+      // On a very wide host the media must NOT span the full hero width.
+      expect(media.getBoundingClientRect().width).to.be.at.most(MEDIA_MAX_PX + 1);
+    });
+
+    it('caps stacked media (media-position="below") to a bounded max-width, not none', async () => {
+      const el = await fixture(html`
+        <div style="width: 80rem; ${TOKENS}">
+          <dvfy-section-hero media-position="below" aspect-ratio="4 / 3">
+            <h1>Title</h1>
+            <img slot="media" src="/hero.jpg" alt="Hero" />
+          </dvfy-section-hero>
+        </div>
+      `);
+      const media = el.querySelector('[slot="media"]');
+      expect(getComputedStyle(media).maxWidth).to.not.equal('none');
+      expect(media.getBoundingClientRect().width).to.be.at.most(MEDIA_MAX_PX + 1);
+    });
+
+    it('centers the stacked media cell (margin-inline auto)', async () => {
+      const el = await fixture(html`
+        <div style="width: 80rem; ${TOKENS}">
+          <dvfy-section-hero media-position="above">
+            <h1>Title</h1>
+            <img slot="media" src="/hero.jpg" alt="Hero" />
+          </dvfy-section-hero>
+        </div>
+      `);
+      const host = el.querySelector('dvfy-section-hero');
+      const media = el.querySelector('[slot="media"]');
+      // Geometry: a capped cell narrower than its full-width track sits centered,
+      // so the gap to the host's left edge ≈ the gap to its right edge.
+      const hostBox = host.getBoundingClientRect();
+      const mediaBox = media.getBoundingClientRect();
+      const leftGap = mediaBox.left - hostBox.left;
+      const rightGap = hostBox.right - mediaBox.right;
+      expect(leftGap).to.be.greaterThan(0);
+      expect(Math.abs(leftGap - rightGap)).to.be.lessThan(2);
+    });
+
+    it('scales the stacked media DOWN on a narrow viewport without overflowing', async () => {
+      const el = await fixture(html`
+        <div style="width: 20rem; ${TOKENS}">
+          <dvfy-section-hero media-position="above" aspect-ratio="4 / 3">
+            <h1>Title</h1>
+            <img slot="media" src="/hero.jpg" alt="Hero" />
+          </dvfy-section-hero>
+        </div>
+      `);
+      const host = el.querySelector('dvfy-section-hero');
+      const media = el.querySelector('[slot="media"]');
+      // Fluid below the cap: media width tracks down, never exceeding the host content box.
+      expect(media.getBoundingClientRect().width)
+        .to.be.at.most(host.getBoundingClientRect().width + 1);
+    });
+
+    it('bounds the 2-column media cell (media-position="right") so it cannot blow up', async () => {
+      const el = await fixture(html`
+        <div style="width: 80rem; ${TOKENS}">
+          <dvfy-section-hero media-position="right" aspect-ratio="4 / 3">
+            <h1>Title</h1>
+            <img slot="media" src="/hero.jpg" alt="Hero" />
+          </dvfy-section-hero>
+        </div>
+      `);
+      const media = el.querySelector('[slot="media"]');
+      // Even in the half-width column on a very wide host the media stays capped.
+      expect(media.getBoundingClientRect().width).to.be.at.most(MEDIA_MAX_PX + 1);
+    });
+
+    it('exposes --dvfy-hero-media-max as an overridable consumer knob', async () => {
+      const el = await fixture(html`
+        <div style="width: 80rem; ${TOKENS}">
+          <dvfy-section-hero media-position="above" aspect-ratio="4 / 3"
+                             style="--dvfy-hero-media-max: 10rem;">
+            <h1>Title</h1>
+            <img slot="media" src="/hero.jpg" alt="Hero" />
+          </dvfy-section-hero>
+        </div>
+      `);
+      const media = el.querySelector('[slot="media"]');
+      // 10rem override = 160px; media must respect it.
+      expect(media.getBoundingClientRect().width).to.be.at.most(160 + 1);
+    });
+  });
 });
