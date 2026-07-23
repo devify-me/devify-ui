@@ -4,6 +4,7 @@
 import {
   COMPONENT_CATEGORIES, TOKEN_GROUPS,
   TIERS, COMPONENT_REGISTRY, getComponentsByTier,
+  STRATA, getComponentsByStrata,
 } from './data.js';
 
 const SIDEBAR_VIEW_KEY = 'dvfy-catalog-sidebar-view';
@@ -31,8 +32,10 @@ export function buildSidebar(containerEl) {
     background: var(--dvfy-surface-sunken); border-radius: var(--dvfy-radius-md);
     margin: 0 var(--dvfy-space-2) var(--dvfy-space-2);
   `;
+  const btnStrata = createToggleBtn('Strata');
   const btnTier = createToggleBtn('Tier');
   const btnDomain = createToggleBtn('Domain');
+  toggle.appendChild(btnStrata);
   toggle.appendChild(btnTier);
   toggle.appendChild(btnDomain);
 
@@ -74,8 +77,23 @@ export function buildSidebar(containerEl) {
     const componentsNode = createNode(`Components (${totalComponents})`);
     componentsNode.setAttribute('expanded', '');
 
-    if (view === 'tier') {
-      for (const n of [1, 2, 3, 4, 5]) {
+    if (view === 'strata') {
+      // Primary axis: Components / Widgets / Layouts (shown even when empty so
+      // the model is visible while Widgets/Layouts are being populated).
+      for (const key of ['component', 'widget', 'layout']) {
+        const tags = getComponentsByStrata(key).sort();
+        const s = STRATA[key];
+        const sNode = createNode(`${s.name} (${tags.length})`);
+        sNode.setAttribute('expanded', '');
+        for (const tag of tags) {
+          const label = tag.replace('dvfy-', '');
+          const suffix = COMPONENT_REGISTRY[tag]?.server ? ' [server]' : '';
+          sNode.appendChild(createNode(label + suffix, `#components/${tag}`));
+        }
+        componentsNode.appendChild(sNode);
+      }
+    } else if (view === 'tier') {
+      for (const n of [1, 2, 3]) {
         const tags = getComponentsByTier(n).sort();
         if (!tags.length) continue;
         const tier = TIERS[n];
@@ -131,20 +149,16 @@ export function buildSidebar(containerEl) {
     const hash = location.hash || '#overview';
     queueMicrotask(() => tree.selectByHref(hash));
 
-    // Update toggle button styles
-    if (view === 'tier') {
-      btnTier.style.background = 'var(--dvfy-primary-bg)';
-      btnTier.style.color = 'var(--dvfy-primary-text)';
-      btnDomain.style.background = 'transparent';
-      btnDomain.style.color = 'var(--dvfy-text-secondary)';
-    } else {
-      btnDomain.style.background = 'var(--dvfy-primary-bg)';
-      btnDomain.style.color = 'var(--dvfy-primary-text)';
-      btnTier.style.background = 'transparent';
-      btnTier.style.color = 'var(--dvfy-text-secondary)';
+    // Update toggle button styles — highlight the active view.
+    const viewBtns = { strata: btnStrata, tier: btnTier, domain: btnDomain };
+    for (const [v, b] of Object.entries(viewBtns)) {
+      const active = v === view;
+      b.style.background = active ? 'var(--dvfy-primary-bg)' : 'transparent';
+      b.style.color = active ? 'var(--dvfy-primary-text)' : 'var(--dvfy-text-secondary)';
     }
   }
 
+  btnStrata.addEventListener('click', () => setView('strata'));
   btnTier.addEventListener('click', () => setView('tier'));
   btnDomain.addEventListener('click', () => setView('domain'));
 

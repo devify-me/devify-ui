@@ -77,7 +77,7 @@ for (const [tag, meta] of Object.entries(COMPONENT_REGISTRY)) {
 
   // Component tier forcing-function: Tier N (2,3) needs ≥1 Tier N-1 dep.
   if (strata === 'component' && meta.tier > 1) {
-    const hasLowerAdjacent = deps.some((d) => COMPONENT_REGISTRY[d]?.tier === meta.tier - 1);
+    const hasLowerAdjacent = deps.some(d => COMPONENT_REGISTRY[d]?.tier === meta.tier - 1);
     if (!hasLowerAdjacent) fail(tag, `Tier ${meta.tier} component must compose ≥1 Tier ${meta.tier - 1} component`);
   }
 }
