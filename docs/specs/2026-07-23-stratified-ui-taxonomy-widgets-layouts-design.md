@@ -46,7 +46,7 @@ Consequences: a Widget never depends on another Widget (roles are siblings); a L
 
 Classification today is *dependency-derived* and mechanically checked by `/new-component`. Under the new model, **stratum and role/category are human-declared, not derivable** from dependencies — a hero and a footer have similar deps but different roles. Therefore:
 
-- Add declared fields to each component's registry metadata / `custom-elements.json` entry: `stratum` (`component` | `widget` | `layout`), plus `domain`+`tier` (components), `domain`+`role` (widgets), or `category`+`page-role` (layouts).
+- Add declared fields to each component's registry entry in **`catalog/data.js` (`COMPONENT_REGISTRY`)** — NOT `custom-elements.json`, which is a generated API-only manifest: `stratum` (`component` | `widget` | `layout`), plus `domain`+`tier` (components), `domain`+`role` (widgets), or `category`+`page-role` (layouts). Components imply `strata:'component'` via their `tier`.
 - `/new-component` records these declared fields and continues to **auto-derive and enforce the composition-law dependency checks** (Layouts→Widgets→Components, no sideways/up, component sub-tier rules). Only the composition constraints are dependency-derived; stratum/role/category are declared and validated for *presence*, not inferred.
 - **Widget content API:** widgets are manifest symbols whose **attribute/slot content API is declared** in `custom-elements.json`, so a slot's `copy`/`media` variants can be validated against the widget's declared content slots by the existing admission gate.
 

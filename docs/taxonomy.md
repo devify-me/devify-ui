@@ -1,187 +1,95 @@
 # Component Taxonomy
 
-## Design Principle
+`@devify/ui` is organized into **three strata**, each answering a different question:
 
-The taxonomy is a **forcing function**: each tier earns its place by composing at least one component from the tier below. If a component feels too complex for its tier but has zero deps, that's the signal to decompose it — not to create an escape hatch.
+| Stratum | Question it answers | Classified by | Grouping semantics |
+|---------|---------------------|---------------|--------------------|
+| **Components** | *What is it built from?* | **Domain × Tier** (composition depth 1–3) | building material — you **compose** them |
+| **Widgets** | *What section-role does it play?* | **Domain × Role** | **OR-set** — choose / A/B-test **one** (hero-1 vs hero-2) |
+| **Layouts** | *What page/flow is it?* | **Category × Page-role** | **AND-set** — build **all** pages a flow requires |
 
-HTMX server interaction is **orthogonal** — components are classified by composition depth, with a `server: true` flag for those requiring a backend.
+Strata is the **primary axis**; Tier depth applies **only within Components**. Full design rationale: `docs/specs/2026-07-23-stratified-ui-taxonomy-widgets-layouts-design.md`.
 
-## Decision Tree
+## Design principle
+
+The taxonomy is a **forcing function**. Within Components, each Tier earns its place by composing at least one component from the Tier below — a component that feels too complex for its Tier but has zero deps is a signal to decompose, not to create an escape hatch. Across strata, composition flows strictly downward (below).
+
+HTMX server interaction is **orthogonal** — components are classified by composition/role, with a `server: true` flag for those requiring a backend.
+
+## The composition law (strict downward, never sideways/up)
+
+> **Layouts** compose **Widgets** (+ Components for glue). **Widgets** compose **Components** only. **Components** compose lower-Tier **Components** only.
+
+Consequences: a Widget never depends on another Widget (roles are siblings); a Layout never depends on another Layout; nothing depends upward. This preserves an acyclic, clearly-layered dependency graph.
+
+## OR-sets vs AND-sets (why the two role/category groupings differ)
+
+- **Widget groups are OR-sets.** `header-1 / header-2 / header-3` are interchangeable alternatives for one role. You group them **to select — or A/B-test — one.**
+- **Layout groups are AND-sets.** `quiz-landing + quiz-step + quiz-result` are the pages a flow *requires*. You group them **to ensure you build all of them** (a bill-of-materials).
+
+This maps onto funnel onboarding: choosing a Layout-category yields the AND-set of pages to build; choosing a Widget per slot is the OR-set to pick/test.
+
+## Classification decision tree
 
 ```
-Q1: Does it depend on any Tier 3+ component and define page-level spatial layout?
-    YES → Tier 5 (Layout)
-
-Q2: Does it depend on any Tier 3+ component and encapsulate a self-contained UX flow?
-    YES → Tier 4 (Widget)
-
-Q3: Does it depend on any Tier 2 component?
-    YES → Tier 3 (Organism)
-
-Q4: Does it depend on any Tier 1 component (and no Tier 2+)?
-    YES → Tier 2 (Composite)
-
-Q5: Zero dvfy-* dependencies?
-    YES → Tier 1 (Primitive)
-
-HTMX: Orthogonal. Set server: true in registry. Classify by composition depth above.
+Q1: Is it a page/flow scaffold arranging widgets?           → Layout  (declare category + pageRole)
+Q2: Is it a self-contained section serving ONE role,
+    receiving content via an attribute/slot API?            → Widget  (declare domain + role)
+Q3: Otherwise — a generic building block reused
+    structurally across unrelated contexts:                 → Component (declare domain + tier)
+      Q3a: Zero dvfy-* deps?              → Tier 1 (Primitive)
+      Q3b: Composes only Tier 1?         → Tier 2 (Composite)
+      Q3c: Composes ≥1 Tier 2?           → Tier 3 (Organism)
 ```
 
-## Tiers
+Decidable discriminator: a piece is a **Widget** iff (i) it serves **one** page/funnel role AND (ii) it receives its content through an attribute/slot API. It is a **Component** if it is reused structurally across unrelated contexts and is not tied to a single role. It is a **Layout** if it arranges widgets into a page.
 
-| Tier | Name       | Rule                          | Allowed deps    | Count |
-|------|------------|-------------------------------|-----------------|-------|
-| 1    | Primitive  | Zero dvfy-* deps              | None            | 52    |
-| 2    | Composite  | ≥1 Tier 1 dep, only Tier 1    | Tier 1 only     | 13    |
-| 3    | Organism   | ≥1 Tier 2 dep                 | Tier 1 + Tier 2 | 4     |
-| 4    | Widget     | ≥1 Tier 3 dep, self-contained | Tier 1–3        | 0     |
-| 5    | Layout     | ≥1 Tier 3+ dep, page scaffold | Any             | 0     |
+## Registry schema (the single source of truth)
 
-## HTMX / Server Components
+Classification is declared in `catalog/data.js` → `COMPONENT_REGISTRY` (NOT in `custom-elements.json`, which is a generated API manifest). Per-entry fields by stratum:
 
-HTMX server interaction is not a composition tier — it's a property. Components that require a server backend are marked `server: true` in the registry and classified by their actual composition depth.
+| Stratum | Declares | Example |
+|---------|----------|---------|
+| Component | `tier` (1–3), `domain`, `deps[]`, `server?` | `{ tier: 2, domain: 'forms', deps: ['dvfy-input'] }` |
+| Widget | `strata:'widget'`, `domain`, `role`, `deps[]`, `server?` | `{ strata:'widget', domain:'navigation', role:'header', deps:[...] }` |
+| Layout | `strata:'layout'`, `category`, `pageRole`, `domain`, `deps[]` | `{ strata:'layout', category:'landing', pageRole:'landing', deps:[...] }` |
 
-The catalog groups server components via the "Server Required" banner and sidebar indicators. They appear in their functional domain (Forms, Feedback, etc.), not a separate HTMX category.
+Components imply `strata:'component'` (they carry `tier`) — read the effective stratum via `strataOf(meta)`.
 
-**Current server components** (classified by composition depth, not by HTMX usage):
-- `dvfy-infinite-scroll` (Tier 1, Utility) — scroll-triggered loading
-- `dvfy-live-search` (Tier 1, Forms) — debounced search input
-- `dvfy-htmx-table` (Tier 1, Display) — sortable, paginated table
-- `dvfy-htmx-form` (Tier 3, Forms) — AJAX form submission with validation
-- `dvfy-confirm` (Tier 3, Feedback) — confirmation dialog for destructive actions
+## Enforcement
 
-## Domain Assignment
+`scripts/check-taxonomy.mjs` (wired into `npm run lint` as `check:taxonomy`) is a **deterministic gate** validating, from the registry: dependency integrity (every dep is registered), per-stratum presence rules (component→tier, widget→role, layout→category+pageRole), the strict-downward composition law, and the Component Tier forcing-function (Tier N composes ≥1 Tier N-1). Violations fail CI. This replaces the previous manual-only review for Tiers 4/5.
 
-| Domain Key   | Label          | Scope                                        |
-|-------------|----------------|----------------------------------------------|
-| forms       | Forms          | User input, selection, toggles               |
-| display     | Data Display   | Presenting data, content, status              |
-| feedback    | Feedback       | Alerts, loading, toasts, modals               |
-| navigation  | Navigation     | Wayfinding, menus, breadcrumbs, pagination    |
-| layout      | Layout         | Page structure, sections, containers          |
-| utility     | Utility        | Theme, tooltips, auth — cross-cutting concerns|
+`/new-component` records the declared stratum/role/category; the composition-law checks are auto-derived by the gate above.
 
-## Dependency Constraints
+## Domains
 
-| Rule                                          | Enforcement        |
-|-----------------------------------------------|-------------------|
-| Tier 1 must not import any `dvfy-*` component | `/new-component`  |
-| Tier 2 must have ≥1 Tier 1 dep, only Tier 1   | `/new-component`  |
-| Tier 3 must have ≥1 Tier 2 dep                | `/new-component`  |
-| Tier 4 must have ≥1 Tier 3 dep                | Manual review     |
-| Tier 5 must have ≥1 Tier 3+ dep               | Manual review     |
-| No same-tier dependencies at any level         | `/new-component`  |
+`forms` · `display` (Data Display) · `feedback` · `navigation` · `layout` · `utility`. Domains apply to Components and Widgets; Layouts use **Category** (landing, quiz, form, about, dashboard, …) × **Page-role** (landing, step, result, …) instead.
 
-## Classification Reference
+## Current classification
 
-### Tier 1 — Primitives (52)
+The live, authoritative listing is the catalog (Strata / Tier / Domain views) and `COMPONENT_REGISTRY`. Summary:
 
-| Component             | Domain     | Server |
-|----------------------|------------|--------|
-| dvfy-button          | Forms      |        |
-| dvfy-input           | Forms      |        |
-| dvfy-textarea        | Forms      |        |
-| dvfy-checkbox        | Forms      |        |
-| dvfy-radio           | Forms      |        |
-| dvfy-switch          | Forms      |        |
-| dvfy-slider          | Forms      |        |
-| dvfy-select          | Forms      |        |
-| dvfy-file-upload     | Forms      |        |
-| dvfy-date-picker     | Forms      |        |
-| dvfy-live-search     | Forms      | server |
-| dvfy-badge           | Display    |        |
-| dvfy-tag             | Display    |        |
-| dvfy-avatar          | Display    |        |
-| dvfy-progress        | Display    |        |
-| dvfy-card            | Display    |        |
-| dvfy-gradient-card   | Display    |        |
-| dvfy-spotlight-card  | Display    |        |
-| dvfy-compare-slider  | Display    |        |
-| dvfy-empty           | Display    |        |
-| dvfy-carousel        | Display    |        |
-| dvfy-scroll-progress | Display    |        |
-| dvfy-marquee-scroll  | Display    |        |
-| dvfy-description-list | Display   |        |
-| dvfy-htmx-table      | Display    | server |
-| dvfy-alert           | Feedback   |        |
-| dvfy-loader          | Feedback   |        |
-| dvfy-toast           | Feedback   |        |
-| dvfy-hovercard       | Feedback   |        |
-| dvfy-card-glow       | Feedback   |        |
-| dvfy-nav             | Navigation |        |
-| dvfy-hamburger       | Navigation |        |
-| dvfy-breadcrumb      | Navigation |        |
-| dvfy-pagination      | Navigation |        |
-| dvfy-tabs            | Navigation |        |
-| dvfy-dropdown        | Navigation |        |
-| dvfy-tree-node       | Navigation |        |
-| dvfy-tree-view       | Navigation |        |
-| dvfy-sidebar         | Navigation |        |
-| dvfy-command-palette | Navigation |        |
-| dvfy-section         | Layout     |        |
-| dvfy-section-hero    | Layout     |        |
-| dvfy-stepper         | Layout     |        |
-| dvfy-tooltip         | Utility    |        |
-| dvfy-popover         | Utility    |        |
-| dvfy-scroll-reveal   | Utility    |        |
-| dvfy-page-transition | Utility    |        |
-| dvfy-transition-root | Utility    |        |
-| dvfy-text-vortex     | Utility    |        |
-| dvfy-scramble-hover  | Utility    |        |
-| dvfy-stagger-enter   | Utility    |        |
-| dvfy-infinite-scroll | Utility    | server |
+- **Components** — the building blocks, Tiers 1–3 (Primitives / Composites / Organisms) across the six domains. This is the bulk of the library.
+- **Widgets** — *none registered yet.* First movers are pre-decided (pending the audit, #386): `dvfy-nav-bar` → Widget (navigation/header), `dvfy-auth` → Widget (self-contained flow). Renting Ideal's section widgets (hero, how-it-works, trust-strip, faq, footer-cta, quiz-step) land here as they are built.
+- **Layouts** — `dvfy-campaign-layout` (category: landing, page-role: landing) — the no-nav 1:1-attention LP shell; the first Layout.
 
-### Tier 2 — Composites (13)
+> **Audit pending (#386):** re-classify `nav-bar`/`auth` into Widgets and reconcile per-stratum counts. Until then they remain Components in the registry.
 
-| Component                | Domain     | Dependencies                       |
-|-------------------------|------------|------------------------------------|
-| dvfy-drawer             | Layout     | dvfy-button                        |
-| dvfy-table              | Display    | dvfy-checkbox                      |
-| dvfy-modal              | Feedback   | dvfy-button                        |
-| dvfy-nav-menu           | Navigation | dvfy-nav                           |
-| dvfy-theme-switcher     | Utility    | dvfy-dropdown, dvfy-button         |
-| dvfy-accordion          | Layout     | dvfy-section                       |
-| dvfy-component-playground | Utility  | dvfy-button, dvfy-section, dvfy-slider |
-| dvfy-usage-meter        | Display    | dvfy-progress                      |
-| dvfy-invoice-list       | Display    | dvfy-badge                         |
-| dvfy-subscription-card  | Display    | dvfy-badge, dvfy-button            |
-| dvfy-plan-picker        | Display    | dvfy-button, dvfy-badge            |
-| dvfy-payment-methods    | Forms      | dvfy-button                        |
-| dvfy-payment-setup      | Forms      | dvfy-button, dvfy-loader           |
+### HTMX / server components
 
-### Tier 3 — Organisms (4)
+`server: true` is a property, not a stratum. Current: `dvfy-infinite-scroll`, `dvfy-live-search`, `dvfy-htmx-table` (Tier 1), `dvfy-htmx-form`, `dvfy-confirm` (Tier 3). The catalog surfaces these via a "server" suffix; they appear in their functional domain, not a separate HTMX category.
 
-| Component        | Domain     | Dependencies                              | Server |
-|-----------------|------------|-------------------------------------------|--------|
-| dvfy-nav-bar    | Navigation | dvfy-nav-menu, dvfy-hamburger, dvfy-drawer |        |
-| dvfy-auth       | Utility    | dvfy-modal                                |        |
-| dvfy-htmx-form  | Forms      | dvfy-modal                                | server |
-| dvfy-confirm    | Feedback   | dvfy-modal                                | server |
+## A/B testing (how strata map to the LP variant contract)
 
-### Tier 4 — Widgets (0)
+Widgets and Layouts are what the funnel A/B engine selects between. Three variant granularities map onto the `lp-variant-list/v1` contract:
 
-No components yet. Future target for self-contained functional units (e.g., decomposed auth flow, notification center).
+- **Content** (same widget, different copy/image) → `copy` / `media` axis. *(Live today.)*
+- **Widget selection** (hero-1 vs hero-2) → `component-layout` axis, self-contained variant. *(Deferred until a live instance pulls it — see the design spec.)*
+- **Layout selection** (page arrangement) → page-global `component-layout`. *(Deferred.)*
 
-### Tier 5 — Layouts (0)
+No A/B contract change is introduced by this taxonomy; widget/layout-selection axes are designed but not built yet (Instance Gate #11).
 
-No components yet. Future target for page-level scaffolds (e.g., app shell with nav + sidebar + content + footer).
+## Decomposition backlog
 
-## Decomposition Backlog
-
-The following Tier 1 components were reclassified from higher tiers because they have zero dvfy-* dependencies. Each is a candidate for future decomposition to earn a higher tier through genuine composition:
-
-- **dvfy-select** — could compose dvfy-button (trigger), dvfy-dropdown (menu)
-- **dvfy-date-picker** — decompose into day/week/month/calendar primitives
-- **dvfy-tabs** — could compose dvfy-button (tab triggers)
-- **dvfy-pagination** — could compose dvfy-button (page buttons)
-- **dvfy-dropdown** — could compose dvfy-button (trigger)
-- **dvfy-toast** — could compose dvfy-alert internally
-- **dvfy-file-upload** — could compose dvfy-button, dvfy-progress
-- **dvfy-carousel** — could compose dvfy-button (prev/next)
-- **dvfy-sidebar** — could compose dvfy-drawer or dvfy-section
-- **dvfy-card** — evaluate composition hierarchy with gradient-card and spotlight-card
-- **dvfy-gradient-card** — evaluate composition hierarchy with card
-- **dvfy-spotlight-card** — evaluate composition hierarchy with card
-- **dvfy-tree-view** — already has dvfy-tree-node; verify composition reflected in deps
-
-See GitHub issues labeled `taxonomy` + `decomposition` for tracked work.
+Tier-1 components that are candidates for future decomposition to earn a higher Tier through genuine composition (tracked in `catalog/data.js` `DECOMPOSITION_BACKLOG` and GitHub issues labeled `taxonomy` + `decomposition`): `dvfy-select`, `dvfy-date-picker`, `dvfy-tabs`, `dvfy-pagination`, `dvfy-dropdown`, `dvfy-toast`, `dvfy-file-upload`, `dvfy-carousel`, `dvfy-sidebar`, `dvfy-card` / `dvfy-gradient-card` / `dvfy-spotlight-card` (hierarchy), `dvfy-tree-view`.
