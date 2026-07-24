@@ -56,6 +56,8 @@ Classification is declared in `catalog/data.js` → `COMPONENT_REGISTRY` (NOT in
 
 Components imply `strata:'component'` (they carry `tier`) — read the effective stratum via `strataOf(meta)`.
 
+**Catalog surfaces (keep in sync).** A classification change touches three catalog files that mirror the taxonomy: `catalog/data.js` (the registry — source of truth), `catalog/sidebar.js` (the nav grouping), and `catalog/overview.js` (the explanatory *Composition Model* page). Update all three; this doc is the human mirror.
+
 ## Enforcement
 
 `scripts/check-taxonomy.mjs` (wired into `npm run lint` as `check:taxonomy`) is a **deterministic gate** validating, from the registry: dependency integrity (every dep is registered), per-stratum presence rules (component→tier, widget→role, layout→category+pageRole), the strict-downward composition law, and the Component Tier forcing-function (Tier N composes ≥1 Tier N-1). Violations fail CI. This replaces the previous manual-only review for Tiers 4/5.
