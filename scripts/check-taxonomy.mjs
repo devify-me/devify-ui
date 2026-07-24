@@ -80,6 +80,12 @@ for (const [tag, meta] of Object.entries(COMPONENT_REGISTRY)) {
     const hasLowerAdjacent = deps.some(d => COMPONENT_REGISTRY[d]?.tier === meta.tier - 1);
     if (!hasLowerAdjacent) fail(tag, `Tier ${meta.tier} component must compose ≥1 Tier ${meta.tier - 1} component`);
   }
+
+  // Widget/Layout forcing-function: a self-contained section/scaffold must
+  // actually compose ≥1 lower-stratum piece (no content-free widget/layout).
+  if ((strata === 'widget' || strata === 'layout') && deps.length === 0) {
+    fail(tag, `${strata} must compose ≥1 ${strata === 'widget' ? 'Component' : 'Widget/Component'}`);
+  }
 }
 
 if (violations.length) {

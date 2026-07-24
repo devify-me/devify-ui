@@ -2,7 +2,7 @@ import { sanitizeHref } from '../utils/url.js';
 import { injectStyles } from '../utils/styles.js';
 
 /**
- * <dvfy-campaign-layout> — No-nav landing/campaign page scaffold (Tier 5 Layout).
+ * <dvfy-campaign-layout> — No-nav landing/campaign page scaffold (Layout stratum).
  *
  * The reusable page shell for a landing page that honors Gardner's attention ratio of
  * 1:1 (one page, one goal) BY CONSTRUCTION. Unlike <dvfy-nav-bar>, it deliberately

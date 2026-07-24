@@ -56,7 +56,7 @@ Classification is declared in `catalog/data.js` → `COMPONENT_REGISTRY` (NOT in
 
 Components imply `strata:'component'` (they carry `tier`) — read the effective stratum via `strataOf(meta)`.
 
-**Catalog surfaces (keep in sync).** A classification change touches three catalog files that mirror the taxonomy: `catalog/data.js` (the registry — source of truth), `catalog/sidebar.js` (the nav grouping), and `catalog/overview.js` (the explanatory *Composition Model* page). Update all three; this doc is the human mirror.
+**Catalog surfaces (keep in sync).** A classification change touches four catalog files that mirror the taxonomy: `catalog/data.js` (the registry — source of truth), `catalog/sidebar.js` (the nav grouping), `catalog/overview.js` (the *Composition Model* page), and `catalog/router.js` (the tier/component detail views). Any code iterating tiers must derive from `Object.keys(TIERS)`, never a hardcoded `[1..5]`. Update all four; this doc is the human mirror.
 
 ## Enforcement
 
