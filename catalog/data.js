@@ -133,10 +133,12 @@ export const COMPONENT_REGISTRY = {
   'dvfy-payment-setup':     { tier: 2, domain: 'forms',   deps: ['dvfy-button', 'dvfy-loader'] },
 
   // ── Tier 3 — Organisms (≥1 T2 dep) ────────────────────────────────────────
-  'dvfy-nav-bar':    { tier: 3, domain: 'navigation', deps: ['dvfy-nav-menu', 'dvfy-hamburger', 'dvfy-drawer'] },
-  'dvfy-auth':       { tier: 3, domain: 'utility',    deps: ['dvfy-modal'] },
   'dvfy-htmx-form':  { tier: 3, domain: 'forms',      deps: ['dvfy-modal'], server: true },
   'dvfy-confirm':    { tier: 3, domain: 'feedback',    deps: ['dvfy-modal'], server: true },
+
+  // ── Widgets stratum (self-contained sections; Domain × Role) ──────────────
+  'dvfy-nav-bar':    { strata: 'widget', domain: 'navigation', role: 'header', deps: ['dvfy-nav-menu', 'dvfy-hamburger', 'dvfy-drawer'] },
+  'dvfy-auth':       { strata: 'widget', domain: 'utility',    role: 'auth',   deps: ['dvfy-modal'] },
 
   // ── Layouts stratum (page/flow scaffolds; Category × Page-role) ───────────
   // No-nav campaign/landing page shell — 1:1 attention ratio by construction

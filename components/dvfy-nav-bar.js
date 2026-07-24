@@ -167,7 +167,7 @@ const NAV_BAR_RESPONSIVE_FN = (id, bp) => `
 
 /**
  * Full responsive navigation bar composing lower-tier components.
- * Tier 3 organism — brand section + dvfy-nav-menu + action items.
+ * Widget (navigation / role: header) — brand section + dvfy-nav-menu + action items.
  * Mobile breakpoint triggers dvfy-hamburger toggle and dvfy-drawer slide-in.
  *
  * @element dvfy-nav-bar

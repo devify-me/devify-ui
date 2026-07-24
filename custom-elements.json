@@ -1984,7 +1984,7 @@
     {
       "name": "dvfy-nav-bar",
       "path": "./components/dvfy-nav-bar.js",
-      "description": "Full responsive navigation bar composing lower-tier components.\nTier 3 organism — brand section + dvfy-nav-menu + action items.\nMobile breakpoint triggers dvfy-hamburger toggle and dvfy-drawer slide-in.",
+      "description": "Full responsive navigation bar composing lower-tier components.\nWidget (navigation / role: header) — brand section + dvfy-nav-menu + action items.\nMobile breakpoint triggers dvfy-hamburger toggle and dvfy-drawer slide-in.",
       "attributes": [
         {
           "name": "href",

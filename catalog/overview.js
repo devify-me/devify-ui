@@ -480,7 +480,7 @@ export function renderOverviewTiers(mainEl) {
 
   // ── Forcing function ──
   mainEl.appendChild(heading('The Forcing Function', 2));
-  mainEl.appendChild(para('The tier system answers one question for every component: "How deep is this component\u2019s dependency chain?" A button has zero dvfy-* dependencies (Tier 1). A nav-bar composes nav-menu, hamburger, and drawer (Tier 3). An auth form composes modal, button, and input (Tier 3).'));
+  mainEl.appendChild(para('Within Components, the tier answers one question: "How deep is its dependency chain?" A button has zero dvfy-* dependencies (Tier 1). A confirm dialog composes modal (Tier 3). Self-contained sections like nav-bar and auth are Widgets, not depth-tiered.'));
   mainEl.appendChild(para('If a component is "too complex" for its current tier, that\u2019s a signal to decompose it. Extract the reusable piece into a lower tier, then compose it. This is how the library grows without accumulating accidental complexity.'));
 
   // ── Decomposition principle ──
@@ -493,7 +493,7 @@ export function renderOverviewTiers(mainEl) {
   decompAlert.style.marginBottom = 'var(--dvfy-space-4)';
   mainEl.appendChild(decompAlert);
 
-  mainEl.appendChild(para('Example: dvfy-nav was a 521-line monolith that handled brand display, nav links, mobile drawer, and hamburger toggle. It was decomposed into three components: dvfy-nav (T1 link primitive), dvfy-nav-menu (T2 link group), and dvfy-nav-bar (T3 full bar). Each piece is independently reusable.'));
+  mainEl.appendChild(para('Example: dvfy-nav was a 521-line monolith that handled brand display, nav links, mobile drawer, and hamburger toggle. It was decomposed into three pieces: dvfy-nav (Tier 1 primitive), dvfy-nav-menu (Tier 2 composite), and the dvfy-nav-bar Widget (the full bar). Each piece is independently reusable.'));
 
   // ── Domain assignment ──
   mainEl.appendChild(heading('Domain Assignment', 2));
