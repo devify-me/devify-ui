@@ -73,10 +73,8 @@ Components imply `strata:'component'` (they carry `tier`) — read the effective
 The live, authoritative listing is the catalog (Strata / Tier / Domain views) and `COMPONENT_REGISTRY`. Summary:
 
 - **Components** — the building blocks, Tiers 1–3 (Primitives / Composites / Organisms) across the six domains. This is the bulk of the library.
-- **Widgets** — *none registered yet.* First movers are pre-decided (pending the audit, #386): `dvfy-nav-bar` → Widget (navigation/header), `dvfy-auth` → Widget (self-contained flow). Renting Ideal's section widgets (hero, how-it-works, trust-strip, faq, footer-cta, quiz-step) land here as they are built.
+- **Widgets** — `dvfy-nav-bar` (navigation / role: header) and `dvfy-auth` (utility / role: auth), reclassified from Tier 3 in #386. Renting Ideal's section widgets (hero, how-it-works, trust-strip, faq, footer-cta, quiz-step) land here as they are built.
 - **Layouts** — `dvfy-campaign-layout` (category: landing, page-role: landing) — the no-nav 1:1-attention LP shell; the first Layout.
-
-> **Audit pending (#386):** re-classify `nav-bar`/`auth` into Widgets and reconcile per-stratum counts. Until then they remain Components in the registry.
 
 ### HTMX / server components
 
