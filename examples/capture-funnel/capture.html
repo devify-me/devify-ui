@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!--
+  Capture-funnel demo — page 1 of 2 (the OPT-IN page).
+
+  Acceptance proof for the `capture` Layout category: a short, single-goal page built from
+  <dvfy-capture-page> (the no-nav shell) + <dvfy-optin> (the section widget). It renders with
+  a 1:1 ATTENTION RATIO by construction — no nav menu, no link list, no hamburger/drawer
+  escape route. The only conversion path is the opt-in form's single submit button.
+
+  Demo offer is a neutral "thermometer" lead magnet (an instant home energy score). Copy is
+  honest: a clear promise, a plain "what to do" CTA, and truthful no-spam trust microcopy —
+  no fabricated urgency or scarcity.
+
+  Themed via data-theme on <html> per the integration KB (light theme ships in devify.css).
+  On submit it navigates to thank-you.html (the second page-role of the AND-set).
+-->
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home Energy Score — free instant report (dvfy-capture-page demo)</title>
+  <meta name="description" content="Demo of the capture Layout: a no-nav opt-in page with a single conversion path (1:1 attention ratio).">
+  <link rel="stylesheet" href="../../devify.css">
+  <script type="module" src="../../devify.js"></script>
+  <style>
+    /* Page reset only — no layout/typography utilities, those are primitives. */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { min-height: 100%; }
+    body { background: var(--dvfy-surface-page); color: var(--dvfy-text-primary); }
+  </style>
+</head>
+<body id="top">
+  <!--
+    The whole page lives inside ONE dvfy-capture-page. Note what is ABSENT: no dvfy-nav-bar,
+    no dvfy-nav-menu, no dvfy-nav. The brand mark is a single self-link to #top only.
+  -->
+  <dvfy-capture-page brand="HomeWatt" home-href="#top">
+
+    <dvfy-optin
+      eyebrow="Free instant report"
+      heading="Know your home's energy score in 60 seconds"
+      subhead="A plain-English report on where your home loses heat and money — no installer visit, no sales call."
+      action="./thank-you.html"
+      method="get"
+      email-label="Email"
+      email-placeholder="you@example.com"
+      cta="Email me my score"
+      qualifier-label="Home type"
+      qualifier-options="Flat, Terraced, Semi-detached, Detached, Bungalow"
+      trust="One email with your report. No spam, and you can unsubscribe anytime.">
+    </dvfy-optin>
+
+    <!-- Footer — non-nav fine print ONLY (no links → no escape routes) -->
+    <div slot="footer">
+      <dvfy-text size="sm" tone="muted" inline>
+        © 2026 HomeWatt · Your energy score is an estimate for guidance only.
+      </dvfy-text>
+    </div>
+
+  </dvfy-capture-page>
+</body>
+</html>

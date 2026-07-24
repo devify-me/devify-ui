@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<!--
+  Capture-funnel demo — page 2 of 2 (the THANK-YOU page).
+
+  The second page-role of the `capture` Layout AND-set: the SAME <dvfy-capture-page> shell
+  now carries a <dvfy-thank-you> body instead of the opt-in. It confirms the sign-up and
+  gives the ONE next-step instruction. It stays 1:1 by construction — still no nav menu.
+
+  The CTA button is the scheduler-READY link seam (cta-href) — the scheduler itself is
+  deferred; here it just links onward. The default slot is left empty but is reserved for a
+  future inline scheduler embed. Copy is honest — no fabricated urgency.
+-->
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You're in — check your inbox (dvfy-capture-page demo)</title>
+  <meta name="description" content="Demo of the capture Layout thank-you page-role: post-opt-in confirmation with the single next step.">
+  <link rel="stylesheet" href="../../devify.css">
+  <script type="module" src="../../devify.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { min-height: 100%; }
+    body { background: var(--dvfy-surface-page); color: var(--dvfy-text-primary); }
+  </style>
+</head>
+<body id="top">
+  <dvfy-capture-page brand="HomeWatt" home-href="#top">
+
+    <dvfy-thank-you
+      heading="You're in — check your inbox"
+      subhead="We just emailed your home energy score. It usually lands within a minute."
+      cta="Read how to act on your score"
+      cta-href="#top"
+      note="Not there? Check your spam folder, or reply to the email and we'll resend it.">
+      <!-- Default slot reserved for a future inline scheduler embed. -->
+    </dvfy-thank-you>
+
+    <div slot="footer">
+      <dvfy-text size="sm" tone="muted" inline>
+        © 2026 HomeWatt · Your energy score is an estimate for guidance only.
+      </dvfy-text>
+    </div>
+
+  </dvfy-capture-page>
+</body>
+</html>
