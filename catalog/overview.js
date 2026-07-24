@@ -5,9 +5,9 @@
  * #overview/goal   — Goal & Purpose: mission, pillars, litmus test
  * #overview/stack  — Stack & Philosophy: WC + Light DOM + HTMX, why not React
  * #overview/start  — Getting Started: install, import, first component, theming
- * #overview/tiers  — Composition Model: 5-tier hierarchy, forcing function, decomposition
+ * #overview/tiers  — Composition Model: three strata (Components/Widgets/Layouts), composition law, decomposition
  */
-import { COMPONENT_CATEGORIES, TOKEN_GROUPS, TIERS, getComponentsByTier, getServerComponents, COMPONENT_REGISTRY, DECOMPOSITION_BACKLOG } from './data.js';
+import { COMPONENT_CATEGORIES, TOKEN_GROUPS, TIERS, STRATA, getComponentsByTier, getComponentsByStrata, getServerComponents, COMPONENT_REGISTRY, DECOMPOSITION_BACKLOG } from './data.js';
 
 // ─── Shared helpers ──────────────────────────────────────────────────────────
 
@@ -95,7 +95,7 @@ export function renderOverview(mainEl) {
   subtitle.style.cssText = 'font-size: var(--dvfy-text-lg); color: var(--dvfy-text-secondary); margin-bottom: var(--dvfy-space-4);';
   mainEl.appendChild(subtitle);
 
-  mainEl.appendChild(para('A complete, tier-structured component library that enables any Devify product to ship a production-ready, accessible, themeable frontend using only HTML attributes \u2014 no framework, no build step, no client-side state management required.'));
+  mainEl.appendChild(para('A complete, strata-organized component library that enables any Devify product to ship a production-ready, accessible, themeable frontend using only HTML attributes \u2014 no framework, no build step, no client-side state management required.'));
 
   // Stats row
   const statsRow = document.createElement('div');
@@ -105,7 +105,7 @@ export function renderOverview(mainEl) {
     { label: 'Components', value: componentCount, hash: '#components/dvfy-button' },
     { label: 'Server Components', value: serverCount, hash: '#components/dvfy-htmx-form' },
     { label: 'Token Groups', value: tokenGroupCount, hash: '#tokens/colors' },
-    { label: 'Architecture Tiers', value: Object.keys(TIERS).length, hash: '#overview/tiers' },
+    { label: 'Strata', value: Object.keys(STRATA).length, hash: '#overview/tiers' },
   ];
 
   for (const stat of stats) {
@@ -135,7 +135,7 @@ export function renderOverview(mainEl) {
   learnGrid.appendChild(linkCard('Goal & Purpose', 'Mission, pillars, and litmus test for design decisions', '#overview/goal'));
   learnGrid.appendChild(linkCard('Stack & Philosophy', 'Web Components, Light DOM, HTMX \u2014 why this stack', '#overview/stack'));
   learnGrid.appendChild(linkCard('Getting Started', 'Install, import, first component, theming', '#overview/start'));
-  learnGrid.appendChild(linkCard('Composition Model', '5-tier hierarchy, dependency rules, decomposition', '#overview/tiers'));
+  learnGrid.appendChild(linkCard('Composition Model', 'Three strata, composition law, decomposition', '#overview/tiers'));
   mainEl.appendChild(learnGrid);
 
   // Explore cards — link to catalog sections
@@ -159,7 +159,7 @@ export function renderOverviewGoal(mainEl) {
 
   const s1 = section();
   s1.appendChild(heading('Goal', 2));
-  s1.appendChild(para('Provide a complete, tier-structured component library that enables any Devify product to ship a production-ready, accessible, themeable frontend using only HTML attributes \u2014 no framework, no build step, no client-side state management required.'));
+  s1.appendChild(para('Provide a complete, strata-organized component library that enables any Devify product to ship a production-ready, accessible, themeable frontend using only HTML attributes \u2014 no framework, no build step, no client-side state management required.'));
   mainEl.appendChild(s1);
 
   const s2 = section();
@@ -386,13 +386,32 @@ export function renderOverviewStart(mainEl) {
 export function renderOverviewTiers(mainEl) {
   mainEl.appendChild(heading('Composition Model'));
 
+  mainEl.appendChild(para('@devify/ui is organized into three strata — the primary classification axis. Each answers a different question; Tier depth applies only within Components. Composition flows strictly downward between strata.'));
+
+  // ── Strata table ──
+  mainEl.appendChild(heading('The Three Strata', 2));
+  mainEl.appendChild(infoTable([
+    ['Components', `Domain × Tier (depth 1–3) — generic building blocks you compose (${getComponentsByStrata('component').length} registered)`],
+    ['Widgets', `Domain × Role — self-contained sections; OR-set: choose / A-B test ONE (${getComponentsByStrata('widget').length} registered)`],
+    ['Layouts', `Category × Page-role — page/flow scaffolds; AND-set: build ALL pages a flow needs (${getComponentsByStrata('layout').length} registered)`],
+  ]));
+  mainEl.appendChild(para('Widget groups are OR-sets — hero-1 / hero-2 / hero-3 are alternatives you pick or A/B-test one of. Layout groups are AND-sets — a Quiz funnel (landing + step + result) is the set of pages you must all build.'));
+
+  // ── Composition law ──
+  const lawAlert = document.createElement('dvfy-alert');
+  lawAlert.setAttribute('status', 'info');
+  lawAlert.setAttribute('title', 'Composition law (strict downward)');
+  lawAlert.textContent = 'Layouts compose Widgets (+ Components). Widgets compose Components only. Components compose lower-Tier Components only. Never sideways, never up — enforced in CI by scripts/check-taxonomy.mjs (npm run lint).';
+  lawAlert.style.marginBottom = 'var(--dvfy-space-4)';
+  mainEl.appendChild(lawAlert);
+
   const tierKeys = Object.keys(TIERS).map(Number).sort((a, b) => a - b);
   const tierCount = tierKeys.length;
 
-  mainEl.appendChild(para(`Every component in @devify/ui is classified into one of ${tierCount} tiers based on its dependency depth. This isn\u2019t arbitrary categorization \u2014 it\u2019s a forcing function that prevents complexity from hiding inside components.`));
+  mainEl.appendChild(para(`Within the Components stratum, each component is classified into one of ${tierCount} depth tiers by its dependency chain. This is a forcing function that prevents complexity from hiding inside components.`));
 
   // ── Tier table ──
-  mainEl.appendChild(heading(`The ${tierCount} Tiers`, 2));
+  mainEl.appendChild(heading('Components — depth tiers', 2));
 
   const table = document.createElement('table');
   table.style.cssText = 'width: 100%; border-collapse: collapse; margin-bottom: var(--dvfy-space-6); font-size: var(--dvfy-text-sm);';

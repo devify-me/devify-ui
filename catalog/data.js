@@ -4,7 +4,9 @@
  * Taxonomy (tiers, domains, registry), HTMX patterns, token groups, and semantic tokens.
  */
 
-/** Tier definitions — composition depth classification (see docs/taxonomy.md) */
+/** Tier definitions — composition depth *within the Components stratum*
+ *  (see docs/taxonomy.md). Widgets and Layouts are NOT depth-tiered; they are
+ *  classified by Role and Category/Page-role respectively. */
 export const TIERS = {
   1: {
     name: 'Primitives',
@@ -24,18 +26,20 @@ export const TIERS = {
     description: 'Compose at least one Tier 2 component. Cross-component coordination.',
     rules: '≥1 Tier 2 dep. May also depend on Tier 1.',
   },
-  4: {
-    name: 'Widgets',
-    label: 'Tier 4 — Widgets',
-    description: 'Self-contained UX flows composing Tier 3+ components.',
-    rules: '≥1 Tier 3 dep. Self-contained functional unit.',
-  },
-  5: {
-    name: 'Layouts',
-    label: 'Tier 5 — Layouts',
-    description: 'Page-level scaffolds composing Tier 3+ components.',
-    rules: '≥1 Tier 3+ dep. Defines page-level spatial layout.',
-  },
+};
+
+/** Strata — the primary classification axis (orthogonal to Tier depth).
+ *  Components → Domain × Tier (depth 1–3). Widgets → Domain × Role (OR-set:
+ *  choose/test one). Layouts → Category × Page-role (AND-set: build all pages a
+ *  flow needs). See docs/taxonomy.md.
+ *
+ *  Registry convention: components imply `strata:'component'` (they carry `tier`);
+ *  widgets declare `strata:'widget'` + `role`; layouts declare `strata:'layout'`
+ *  + `category` + `pageRole`. Read the effective stratum via strataOf(meta). */
+export const STRATA = {
+  component: { name: 'Components', label: 'Components', description: 'Generic building blocks, classified by Domain × Tier (depth 1–3).' },
+  widget:    { name: 'Widgets',    label: 'Widgets',    description: 'Self-contained sections, classified by Domain × Role (OR-set: choose/test one).' },
+  layout:    { name: 'Layouts',    label: 'Layouts',    description: 'Page/flow scaffolds, classified by Category × Page-role (AND-set: build all required pages).' },
 };
 
 /** Domain keys → display labels */
@@ -98,6 +102,7 @@ export const COMPONENT_REGISTRY = {
   // Layout
   'dvfy-section':      { tier: 1, domain: 'layout', deps: [] },
   'dvfy-section-hero': { tier: 1, domain: 'layout', deps: [] },
+  'dvfy-page-section': { tier: 1, domain: 'layout', deps: [] },
   // Utility
   'dvfy-tooltip':         { tier: 1, domain: 'utility', deps: [] },
   'dvfy-scroll-reveal':   { tier: 1, domain: 'utility', deps: [] },
@@ -133,10 +138,10 @@ export const COMPONENT_REGISTRY = {
   'dvfy-htmx-form':  { tier: 3, domain: 'forms',      deps: ['dvfy-modal'], server: true },
   'dvfy-confirm':    { tier: 3, domain: 'feedback',    deps: ['dvfy-modal'], server: true },
 
-  // ── Tier 5 — Layouts (page-level scaffolds) ───────────────────────────────
+  // ── Layouts stratum (page/flow scaffolds; Category × Page-role) ───────────
   // No-nav campaign/landing page shell — 1:1 attention ratio by construction
   // (deliberately omits the nav menu). Scaffolds the §8 page sections it receives.
-  'dvfy-campaign-layout': { tier: 5, domain: 'layout', deps: ['dvfy-section-hero', 'dvfy-page-section'] },
+  'dvfy-campaign-layout': { strata: 'layout', category: 'landing', pageRole: 'landing', domain: 'layout', deps: ['dvfy-section-hero', 'dvfy-page-section'] },
 };
 
 /** Get tags for a given tier number */
@@ -157,6 +162,18 @@ export function getComponentsByDomain(key) {
 export function getTierForComponent(tag) {
   const meta = COMPONENT_REGISTRY[tag];
   return meta ? TIERS[meta.tier] : null;
+}
+
+/** Effective stratum for a registry meta — components imply 'component'. */
+export function strataOf(meta) {
+  return meta && meta.strata ? meta.strata : 'component';
+}
+
+/** Get tags for a given stratum key (component | widget | layout) */
+export function getComponentsByStrata(key) {
+  return Object.entries(COMPONENT_REGISTRY)
+    .filter(([, meta]) => strataOf(meta) === key)
+    .map(([tag]) => tag);
 }
 
 /** Components grouped by domain for sidebar navigation — derived from registry */

@@ -44,19 +44,25 @@ Before writing any code, study the codebase to understand conventions and plan t
   - Feedback/overlay? → Read `dvfy-modal.js`, `dvfy-toast.js`, or `dvfy-alert.js`
   - Data display? → Read `dvfy-card.js`, `dvfy-table.js`, or `dvfy-badge.js`
   - Navigation? → Read `dvfy-nav.js`, `dvfy-breadcrumb.js`, or `dvfy-tabs.js`
-- Read `catalog/data.js` to see the category list.
+- Read `catalog/data.js` (`STRATA`, `DOMAINS`, `COMPONENT_REGISTRY`) and `docs/taxonomy.md` to determine the stratum, the domain/role/category, and dependency legality.
 
 ### 2b: Plan the component
 
 Present a brief plan to the user via AskUserQuestion before building:
 
-1. **Category** — which of the 6 domains (Forms, Data Display, Feedback, Navigation, Layout, Utility)
-2. **Server flag** — does it require HTMX/server interaction? (`server: true`)
-3. **One-line description**
-3. **Planned attributes** — list with types and defaults (derived from issue + similar components)
-4. **Key behavior** — 2-3 bullet points on what the component does
-5. **Child elements** — what goes inside it (slots, expected children)
-6. **Reference component** — which existing component's pattern you're following
+1. **Stratum** — Component, Widget, or Layout? (decision tree in `docs/taxonomy.md`; most new pieces are Components). Determines the registry fields:
+   - Component → `tier` (1–3) + `domain`
+   - Widget → `strata:'widget'` + `domain` + `role`
+   - Layout → `strata:'layout'` + `category` + `pageRole`
+2. **Domain / Role / Category** — per the stratum above (6 domains: Forms, Data Display, Feedback, Navigation, Layout, Utility).
+3. **Server flag** — does it require HTMX/server interaction? (`server: true`)
+4. **One-line description**
+5. **Planned attributes** — list with types and defaults (derived from issue + similar components)
+6. **Key behavior** — 2-3 bullet points on what the component does
+7. **Child elements** — what goes inside it (slots, expected children)
+8. **Reference component** — which existing component's pattern you're following
+
+Respect the **strict-downward composition law** (`docs/taxonomy.md`): Layouts→Widgets→Components, never sideways/up. A Widget composes only Components; a Layout composes Widgets (+ Components).
 
 Ask the user to confirm or adjust. This is a single AskUserQuestion with options like:
 - "Looks good, build it"
@@ -108,15 +114,17 @@ The value MUST be **actual HTML** that demonstrates the component in the playgro
 
 Add as the last entry before the closing `};`.
 
-## Step 6: Verify Catalog Registration
+## Step 6: Register in COMPONENT_REGISTRY (per stratum)
 
-`COMPONENT_CATEGORIES` is derived from `COMPONENT_REGISTRY` — no separate step needed. Verify the component appears in the correct domain by checking the registry entry added in Step 2b. If the component requires server interaction, ensure `server: true` is set in the registry entry.
+Add the entry to `COMPONENT_REGISTRY` in `catalog/data.js` with the fields for its stratum (Step 2b): Component → `{ tier, domain, deps }`; Widget → `{ strata:'widget', domain, role, deps }`; Layout → `{ strata:'layout', category, pageRole, domain, deps }`. Set `server: true` if it needs a backend. `COMPONENT_CATEGORIES` and the catalog Strata/Tier/Domain views derive automatically.
 
-## Step 7: Run Analyzer
+Then run the gate: `npm run check:taxonomy` — it validates the composition law, per-stratum presence rules, and dependency integrity. Fix any violation before proceeding.
 
-Run `npm run analyze` in the project root (`/home/grob/devify/devify-ui`).
+## Step 7: Run Analyzer + Lint
 
-Verify it completes without errors. If it fails, diagnose and fix.
+Run `npm run analyze` in the project root (`/home/grob/devify/tools/devify-ui`) to regenerate `custom-elements.json`, then `npm run lint` (includes `check:taxonomy`).
+
+Verify both complete without errors. If they fail, diagnose and fix.
 
 ## Step 8: Report
 

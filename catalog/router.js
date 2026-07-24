@@ -169,7 +169,7 @@ function renderTierView(mainEl, tierNum) {
   // Tier nav
   const tierNav = document.createElement('div');
   tierNav.style.cssText = 'display: flex; gap: var(--dvfy-space-2); margin-bottom: var(--dvfy-space-6);';
-  for (const tn of [1, 2, 3, 4, 5]) {
+  for (const tn of Object.keys(TIERS).map(Number)) {
     const tags = getComponentsByTier(tn);
     const btn = document.createElement('dvfy-button');
     btn.textContent = `T${tn}: ${TIERS[tn].name} (${tags.length})`;
