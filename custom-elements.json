@@ -87,12 +87,12 @@
         },
         {
           "name": "action",
-          "description": "Form action URL",
+          "description": "Form action URL — where the form submits, e.g. /auth/login",
           "type": "string"
         },
         {
           "name": "method",
-          "description": "Form method (default: \"post\")",
+          "description": "Form method: post | get (default: \"post\")",
           "type": "string"
         },
         {
@@ -107,8 +107,13 @@
         },
         {
           "name": "modal",
-          "description": "Wrap form in a modal dialog",
+          "description": "Wrap form in a modal dialog (renders a trigger button)",
           "type": "boolean"
+        },
+        {
+          "name": "trigger-label",
+          "description": "Modal trigger button text (default: mode label)",
+          "type": "string"
         },
         {
           "name": "forgot-url",
@@ -117,12 +122,12 @@
         },
         {
           "name": "signup-url",
-          "description": "\"Create account\" link URL (sign-in mode)",
+          "description": "Separate sign-up page URL — footer link navigates here instead of toggling mode in place (sign-in mode)",
           "type": "string"
         },
         {
           "name": "signin-url",
-          "description": "\"Already have an account?\" link URL (sign-up mode)",
+          "description": "Separate sign-in page URL — footer link navigates here instead of toggling mode in place (sign-up mode)",
           "type": "string"
         },
         {
