@@ -6,17 +6,21 @@ import './dvfy-button.js';
  * <dvfy-auth> — Authentication forms (sign-in, sign-up)
  *
  * Attributes:
- *   mode:         signin | signup (default: "signin")
- *   action:       form action URL
- *   method:       form method (default: "post")
- *   brand:        brand name text (hidden when logo is present)
- *   logo:         logo image URL (shown instead of brand text)
- *   modal:        boolean — wraps form in a modal (use with trigger button)
- *   forgot-url:   "Forgot password?" link URL
- *   signup-url:   "Create account" link URL (sign-in mode)
- *   signin-url:   "Already have an account?" link URL (sign-up mode)
- *   oauth-google: Google OAuth URL
- *   oauth-github: GitHub OAuth URL
+ *   mode:          signin | signup (default: "signin")
+ *   action:        form action URL — where the form submits, e.g. /auth/login
+ *   method:        post | get (default: "post")
+ *   brand:         brand name text (hidden when logo is present)
+ *   logo:          logo image URL (shown instead of brand text)
+ *   modal:         boolean — wraps form in a modal + renders a trigger button
+ *   trigger-label: modal trigger button text (default: mode label)
+ *   forgot-url:    "Forgot password?" link URL
+ *   signup-url:    separate sign-up page — footer link navigates here instead of toggling in place
+ *   signin-url:    separate sign-in page — footer link navigates here instead of toggling in place
+ *   oauth-google:  Google OAuth URL
+ *   oauth-github:  GitHub OAuth URL
+ *
+ * By default the footer link toggles between sign-in and sign-up IN PLACE (one
+ * form, state change) — set signup-url / signin-url to navigate to separate pages.
  *
  * Events:
  *   auth-submit — { email, password, ... } form data as object
@@ -24,7 +28,7 @@ import './dvfy-button.js';
  * Modal usage:
  *   <dvfy-auth mode="signin" modal action="/auth/login" logo="/logo.svg">
  *   </dvfy-auth>
- *   <!-- Opens via: document.querySelector('dvfy-auth').open() -->
+ *   <!-- Renders a "Sign in" trigger button; also opens via el.open() -->
  *
  * Usage:
  *   <dvfy-auth mode="signin" action="/auth/login" brand="Devify"
@@ -69,6 +73,7 @@ const STYLES = `
 }
 
 .dvfy-auth__brand {
+  font-family: var(--dvfy-font-brand);
   font-size: var(--dvfy-text-xl);
   font-weight: var(--dvfy-weight-bold);
   color: var(--dvfy-text-primary);
@@ -229,14 +234,15 @@ const STYLES = `
  * @element dvfy-auth
  *
  * @attr {string} mode - Form mode: signin | signup (default: "signin")
- * @attr {string} action - Form action URL
- * @attr {string} method - Form method (default: "post")
+ * @attr {string} action - Form action URL — where the form submits, e.g. /auth/login
+ * @attr {string} method - Form method: post | get (default: "post")
  * @attr {string} brand - Brand name text (hidden when logo is present)
  * @attr {string} logo - Logo image URL (shown instead of brand text)
- * @attr {boolean} modal - Wrap form in a modal dialog
+ * @attr {boolean} modal - Wrap form in a modal dialog (renders a trigger button)
+ * @attr {string} trigger-label - Modal trigger button text (default: mode label)
  * @attr {string} forgot-url - "Forgot password?" link URL
- * @attr {string} signup-url - "Create account" link URL (sign-in mode)
- * @attr {string} signin-url - "Already have an account?" link URL (sign-up mode)
+ * @attr {string} signup-url - Separate sign-up page URL — footer link navigates here instead of toggling mode in place (sign-in mode)
+ * @attr {string} signin-url - Separate sign-in page URL — footer link navigates here instead of toggling mode in place (sign-up mode)
  * @attr {string} oauth-google - Google OAuth URL
  * @attr {string} oauth-github - GitHub OAuth URL
  *
@@ -253,8 +259,8 @@ class DvfyAuth extends HTMLElement {
   #initialized = false;
 
   static get observedAttributes() {
-    return ['mode', 'action', 'method', 'brand', 'logo', 'modal', 'forgot-url',
-            'signup-url', 'signin-url', 'oauth-google', 'oauth-github'];
+    return ['mode', 'action', 'method', 'brand', 'logo', 'modal', 'trigger-label',
+            'forgot-url', 'signup-url', 'signin-url', 'oauth-google', 'oauth-github'];
   }
 
   connectedCallback() {
@@ -310,7 +316,12 @@ class DvfyAuth extends HTMLElement {
       }
       case 'method': {
         const form = this.querySelector('form.dvfy-auth__form');
-        if (form) form.method = newValue || 'post';
+        if (form) form.method = this.#method();
+        break;
+      }
+      case 'trigger-label': {
+        const t = this.querySelector('.dvfy-auth__trigger');
+        if (t) t.textContent = newValue || (this.#attr('mode') === 'signup' ? 'Create account' : 'Sign in');
         break;
       }
       case 'brand': {
@@ -348,7 +359,14 @@ class DvfyAuth extends HTMLElement {
 
   #attr(name) { return this.getAttribute(name) || ''; }
 
+  /** Normalized form method — get|post (invalid/empty → post). */
+  #method() {
+    return this.#attr('method').toLowerCase() === 'get' ? 'get' : 'post';
+  }
+
   #render() {
+    // Preserve modal open state across re-renders (e.g. an in-place mode toggle).
+    const wasOpen = this._modal ? this._modal.hasAttribute('open') : false;
     this.textContent = '';
     const mode = this.#attr('mode') || 'signin';
 
@@ -380,6 +398,14 @@ class DvfyAuth extends HTMLElement {
 
     // Modal wrapping
     if (this.hasAttribute('modal')) {
+      // Visible trigger button — opens the modal. Consumers may also call .open().
+      const trigger = document.createElement('dvfy-button');
+      trigger.className = 'dvfy-auth__trigger';
+      trigger.setAttribute('variant', 'primary');
+      trigger.textContent = this.#attr('trigger-label') || (mode === 'signup' ? 'Create account' : 'Sign in');
+      trigger.addEventListener('click', () => this.open());
+      this.appendChild(trigger);
+
       const modal = document.createElement('dvfy-modal');
       modal.setAttribute('title', mode === 'signup' ? 'Create Account' : 'Sign In');
       modal.setAttribute('size', 'sm');
@@ -387,10 +413,12 @@ class DvfyAuth extends HTMLElement {
       root.classList.remove('dvfy-auth');
       root.classList.add('dvfy-auth--modal');
       modal.appendChild(root);
+      if (wasOpen) modal.setAttribute('open', '');
       this.appendChild(modal);
       // Expose open/close methods
       this._modal = modal;
     } else {
+      this._modal = null;
       this.appendChild(root);
     }
   }
@@ -406,7 +434,7 @@ class DvfyAuth extends HTMLElement {
     const form = document.createElement('form');
     form.className = 'dvfy-auth__form';
     form.action = sanitizeHref(this.#attr('action'));
-    form.method = this.#attr('method') || 'post';
+    form.method = this.#method();
     this.#copyHxAttrs(form);
     form.addEventListener('submit', e => this.#handleSubmit(e, form));
 
@@ -459,33 +487,31 @@ class DvfyAuth extends HTMLElement {
       card.appendChild(oauthGroup);
     }
 
-    // Footer link
+    // Footer toggle \u2014 flips mode in place by default (single form, state change);
+    // navigates to a separate page only when signup-url / signin-url is provided.
     const footer = document.createElement('div');
     footer.className = 'dvfy-auth__footer';
 
-    if (isSignUp) {
-      const url = this.#attr('signin-url');
-      if (url) {
-        footer.appendChild(document.createTextNode('Already have an account? '));
-        const a = document.createElement('a');
-        a.className = 'dvfy-auth__link';
-        a.href = sanitizeHref(url);
-        a.textContent = 'Sign in';
-        footer.appendChild(a);
-        card.appendChild(footer);
-      }
+    const targetMode = isSignUp ? 'signin' : 'signup';
+    const toggleUrl = this.#attr(isSignUp ? 'signin-url' : 'signup-url');
+    footer.appendChild(document.createTextNode(
+      isSignUp ? 'Already have an account? ' : "Don\u2019t have an account? "
+    ));
+
+    const a = document.createElement('a');
+    a.className = 'dvfy-auth__link';
+    a.textContent = isSignUp ? 'Sign in' : 'Create account';
+    if (toggleUrl) {
+      a.href = sanitizeHref(toggleUrl);
     } else {
-      const url = this.#attr('signup-url');
-      if (url) {
-        footer.appendChild(document.createTextNode("Don\u2019t have an account? "));
-        const a = document.createElement('a');
-        a.className = 'dvfy-auth__link';
-        a.href = sanitizeHref(url);
-        a.textContent = 'Create account';
-        footer.appendChild(a);
-        card.appendChild(footer);
-      }
+      a.setAttribute('role', 'button');
+      a.setAttribute('tabindex', '0');
+      const toggle = (e) => { e.preventDefault(); this.setAttribute('mode', targetMode); };
+      a.addEventListener('click', toggle);
+      a.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') toggle(e); });
     }
+    footer.appendChild(a);
+    card.appendChild(footer);
   }
 
   #field(label, type, name, placeholder) {

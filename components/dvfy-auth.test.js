@@ -1,4 +1,4 @@
-import { fixture, html, expect, oneEvent } from '@open-wc/testing';
+import { fixture, html, expect, oneEvent, nextFrame } from '@open-wc/testing';
 import './dvfy-modal.js';
 import './dvfy-auth.js';
 
@@ -400,6 +400,67 @@ describe('dvfy-auth', () => {
       el.setAttribute('brand', 'Acme');
       expect(el.querySelector('.dvfy-auth__brand')).to.equal(brand);
       expect(brand.textContent).to.equal('Acme');
+    });
+  });
+
+  describe('#390 polish', () => {
+    it('modal mode renders a trigger button that opens the modal', async () => {
+      const el = await fixture(html`<dvfy-auth modal action="/auth/login"></dvfy-auth>`);
+      const trigger = el.querySelector('.dvfy-auth__trigger');
+      expect(trigger, 'trigger button should render in modal mode').to.exist;
+      const modal = el.querySelector('dvfy-modal');
+      expect(modal.hasAttribute('open')).to.be.false;
+      trigger.click();
+      expect(modal.hasAttribute('open')).to.be.true;
+    });
+
+    it('trigger-label customizes the trigger text (defaults to mode label)', async () => {
+      const el = await fixture(html`<dvfy-auth modal action="/x"></dvfy-auth>`);
+      expect(el.querySelector('.dvfy-auth__trigger').textContent).to.equal('Sign in');
+      const el2 = await fixture(html`<dvfy-auth modal trigger-label="Log in" action="/x"></dvfy-auth>`);
+      expect(el2.querySelector('.dvfy-auth__trigger').textContent).to.equal('Log in');
+    });
+
+    it('shows the footer toggle by default (no url) and flips mode in place', async () => {
+      const el = await fixture(html`<dvfy-auth action="/auth/login"></dvfy-auth>`);
+      const link = el.querySelector('.dvfy-auth__footer .dvfy-auth__link');
+      expect(link, 'footer toggle should show by default').to.exist;
+      expect(link.hasAttribute('href'), 'toggle should not navigate when no url').to.be.false;
+      link.click();
+      await nextFrame();
+      expect(el.getAttribute('mode')).to.equal('signup');
+      expect(el.querySelector('#dvfy-auth-name'), 'signup shows name field').to.exist;
+    });
+
+    it('footer link navigates when signup-url is set (opt-in separate page)', async () => {
+      const el = await fixture(html`<dvfy-auth action="/auth/login" signup-url="/register"></dvfy-auth>`);
+      const link = el.querySelector('.dvfy-auth__footer .dvfy-auth__link');
+      expect(link.getAttribute('href')).to.include('/register');
+    });
+
+    it('preserves modal open state across a mode toggle', async () => {
+      const el = await fixture(html`<dvfy-auth modal action="/auth/login"></dvfy-auth>`);
+      el.open();
+      expect(el.querySelector('dvfy-modal').hasAttribute('open')).to.be.true;
+      el.querySelector('.dvfy-auth__footer .dvfy-auth__link').click();
+      await nextFrame();
+      expect(el.getAttribute('mode')).to.equal('signup');
+      expect(el.querySelector('dvfy-modal').hasAttribute('open'), 'modal stays open after toggle').to.be.true;
+    });
+
+    it('renders brand text in the brand font token', async () => {
+      document.documentElement.style.setProperty('--dvfy-font-brand', 'BrandTestFont, sans-serif');
+      const el = await fixture(html`<dvfy-auth action="/x" brand="Devify"></dvfy-auth>`);
+      const brand = el.querySelector('.dvfy-auth__brand');
+      expect(getComputedStyle(brand).fontFamily).to.include('BrandTestFont');
+      document.documentElement.style.removeProperty('--dvfy-font-brand');
+    });
+
+    it('normalizes method to get|post (default post)', async () => {
+      const a = await fixture(html`<dvfy-auth action="/x" method="GET"></dvfy-auth>`);
+      expect(a.querySelector('form').method).to.equal('get');
+      const b = await fixture(html`<dvfy-auth action="/x" method="bogus"></dvfy-auth>`);
+      expect(b.querySelector('form').method).to.equal('post');
     });
   });
 });
