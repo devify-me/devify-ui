@@ -14,8 +14,10 @@ import './dvfy-button.js';
  * embedded content (e.g. an inline scheduler) placed AFTER the next-step copy.
  *
  * Attributes:
- *   heading:    confirmation headline (default: "You're in.")
- *   subhead:    the next-step instruction (optional)
+ *   heading:       confirmation headline (default: "You're in.")
+ *   heading-level: heading tag — h1 | h2 | h3 (default: "h1"; it carries the thank-you
+ *                  page's primary heading, so it IS the page <h1> unless dropped to h2/h3)
+ *   subhead:       the next-step instruction (optional)
  *   avatar:     human-face image URL (optional)
  *   avatar-alt: alt text for the avatar image (optional)
  *   cta:        CTA button text (optional)
@@ -97,6 +99,7 @@ dvfy-thank-you {
  * @element dvfy-thank-you
  *
  * @attr {string} heading - Confirmation headline (default: "You're in.")
+ * @attr {"h1"|"h2"|"h3"} heading-level - Heading tag (default: "h1" — the widget owns the page's single primary heading on a chum thank-you page)
  * @attr {string} subhead - The next-step instruction
  * @attr {string} avatar - Human-face image URL
  * @attr {string} avatar-alt - Alt text for the avatar image
@@ -121,7 +124,7 @@ class DvfyThankYou extends HTMLElement {
   #slotNodes = [];
 
   static get observedAttributes() {
-    return ['heading', 'subhead', 'avatar', 'avatar-alt', 'cta', 'cta-href', 'note'];
+    return ['heading', 'heading-level', 'subhead', 'avatar', 'avatar-alt', 'cta', 'cta-href', 'note'];
   }
 
   connectedCallback() {
@@ -153,6 +156,16 @@ class DvfyThankYou extends HTMLElement {
 
   #attr(name) { return this.getAttribute(name) || ''; }
 
+  /**
+   * Resolved heading tag — h1|h2|h3, defaulting to h1 (invalid/empty → h1).
+   * On a chum thank-you page this widget carries the page's primary heading, so it IS the
+   * page <h1> by default; an author drops the level only when it isn't the top heading.
+   */
+  #headingTag() {
+    const lvl = this.#attr('heading-level').toLowerCase();
+    return ['h1', 'h2', 'h3'].includes(lvl) ? lvl : 'h1';
+  }
+
   #render() {
     // Detach the preserved slot nodes so clearing generated DOM never destroys them.
     for (const node of this.#slotNodes) {
@@ -174,7 +187,7 @@ class DvfyThankYou extends HTMLElement {
       inner.appendChild(av);
     }
 
-    const h = document.createElement('h2');
+    const h = document.createElement(this.#headingTag());
     h.className = 'dvfy-thank-you__heading';
     h.textContent = this.#attr('heading') || "You're in.";
     inner.appendChild(h);

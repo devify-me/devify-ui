@@ -20,6 +20,8 @@ import './dvfy-button.js';
  * Attributes:
  *   eyebrow:            small call-out text above the heading (optional)
  *   heading:           main headline — the narrow-problem promise
+ *   heading-level:     hero heading tag — h1 | h2 | h3 (default: "h1"; it carries the page's
+ *                      primary promise, so it IS the page <h1> unless dropped to h2/h3)
  *   subhead:           supporting line under the heading (optional)
  *   action:            form action URL (where the form submits)
  *   method:            post | get (default: "post")
@@ -129,6 +131,7 @@ dvfy-optin {
  *
  * @attr {string} eyebrow - Small call-out text above the heading
  * @attr {string} heading - Main headline — the narrow-problem promise
+ * @attr {"h1"|"h2"|"h3"} heading-level - Hero heading tag (default: "h1" — the widget owns the page's single primary heading on a chum page)
  * @attr {string} subhead - Supporting line under the heading
  * @attr {string} action - Form action URL (where the form submits)
  * @attr {string} method - Form method: post | get (default: "post")
@@ -156,7 +159,7 @@ class DvfyOptin extends HTMLElement {
   #hasCustomAriaLabel = false;
 
   static get observedAttributes() {
-    return ['eyebrow', 'heading', 'subhead', 'action', 'method',
+    return ['eyebrow', 'heading', 'heading-level', 'subhead', 'action', 'method',
             'email-label', 'email-placeholder', 'cta',
             'qualifier-label', 'qualifier-name', 'qualifier-options', 'qualifier-required',
             'trust'];
@@ -194,6 +197,16 @@ class DvfyOptin extends HTMLElement {
     return this.#attr('method').toLowerCase() === 'get' ? 'get' : 'post';
   }
 
+  /**
+   * Resolved hero-heading tag — h1|h2|h3, defaulting to h1 (invalid/empty → h1).
+   * On a chum page this widget carries the page's primary promise, so its heading IS the
+   * page <h1> by default; an author drops the level only when the widget isn't the top heading.
+   */
+  #headingTag() {
+    const lvl = this.#attr('heading-level').toLowerCase();
+    return ['h1', 'h2', 'h3'].includes(lvl) ? lvl : 'h1';
+  }
+
   #render() {
     this.textContent = '';
 
@@ -210,7 +223,7 @@ class DvfyOptin extends HTMLElement {
 
     const heading = this.#attr('heading');
     if (heading) {
-      const h = document.createElement('h2');
+      const h = document.createElement(this.#headingTag());
       h.className = 'dvfy-optin__heading';
       h.textContent = heading;
       inner.appendChild(h);

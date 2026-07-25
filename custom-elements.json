@@ -738,6 +738,11 @@
           "name": "home-href",
           "description": "When set, the brand becomes a single self-link to this anchor (page-top only; sanitized)",
           "type": "string"
+        },
+        {
+          "name": "logo-only",
+          "description": "With a logo present, render the logo mark alone (drop the brand-text span); the logo alt still carries the brand name. No-op without a logo. Default off.",
+          "type": "boolean"
         }
       ],
       "slots": [
@@ -2244,6 +2249,11 @@
           "name": "heading",
           "description": "Main headline — the narrow-problem promise",
           "type": "string"
+        },
+        {
+          "name": "heading-level",
+          "description": "Hero heading tag (default: \"h1\" — the widget owns the page's single primary heading on a chum page)",
+          "type": "\"h1\"|\"h2\"|\"h3\""
         },
         {
           "name": "subhead",
@@ -4079,6 +4089,11 @@
           "name": "heading",
           "description": "Confirmation headline (default: \"You're in.\")",
           "type": "string"
+        },
+        {
+          "name": "heading-level",
+          "description": "Heading tag (default: \"h1\" — the widget owns the page's single primary heading on a chum thank-you page)",
+          "type": "\"h1\"|\"h2\"|\"h3\""
         },
         {
           "name": "subhead",

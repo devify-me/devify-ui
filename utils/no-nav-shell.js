@@ -24,6 +24,8 @@ import { sanitizeHref } from './url.js';
  * @property {?string} brand   - brand name text (header omitted if absent + no logo)
  * @property {?string} logo    - logo image URL
  * @property {?string} homeHref - when set, the brand becomes a single self-link (page-top only; sanitized)
+ * @property {?boolean} logoOnly - when set WITH a logo, render the logo mark only and drop
+ *                                 the brand-text span (the logo `alt` still carries the brand name)
  */
 
 /**
@@ -213,10 +215,14 @@ export function rebuildNoNavShell(host, opts) {
  * Build the optional brand-mark header. Returns null when neither brand nor logo is set.
  * The brand is a self-link ONLY when `homeHref` is set (sanitized, page-top intent);
  * otherwise it is a non-interactive mark. Never a nav menu.
+ *
+ * When `logoOnly` is set AND a logo is present, the brand-text span is dropped so the header
+ * shows the logo mark alone — the logo `alt` still carries the brand name, so the accessible
+ * name is unchanged. (With no logo, `logoOnly` is a no-op: the brand text is the only mark.)
  * @param {NoNavShellOptions} opts
  * @returns {?HTMLElement}
  */
-function buildHeader({ block, brand, logo, homeHref }) {
+function buildHeader({ block, brand, logo, homeHref, logoOnly }) {
   if (!brand && !logo) return null;
 
   const header = document.createElement('header');
@@ -233,7 +239,10 @@ function buildHeader({ block, brand, logo, homeHref }) {
     img.alt = brand || 'Logo';
     mark.appendChild(img);
   }
-  if (brand) {
+  // Brand text shows by default; hidden only in logo-only mode when a logo is present
+  // (the logo alt preserves the accessible brand name).
+  const showBrandText = brand && !(logoOnly && logo);
+  if (showBrandText) {
     const txt = document.createElement('span');
     txt.className = `${block}__brand-text`;
     txt.textContent = brand;
