@@ -27,6 +27,9 @@ import { noNavShellStyles, buildNoNavShell, rebuildNoNavShell } from '../utils/n
  *   logo:      string — logo image URL shown in the header
  *   home-href: string — when set, the brand becomes a single self-link to this anchor
  *                       (intended for "#"/page-top only; sanitized). Omit → brand is plain text.
+ *   logo-only: boolean — with a logo present, render the logo mark ALONE (drop the brand-text
+ *                        span). The logo `alt` still carries `brand`, so the accessible name is
+ *                        unchanged. No-op without a logo. Default off (brand text shown).
  *
  * Usage:
  *   <dvfy-chum-page brand="Renting Ideal" home-href="#top">
@@ -47,6 +50,7 @@ import { noNavShellStyles, buildNoNavShell, rebuildNoNavShell } from '../utils/n
  * @attr {string} brand - Brand name text shown in the header (header omitted if absent + no logo)
  * @attr {string} logo - Logo image URL shown in the header
  * @attr {string} home-href - When set, the brand becomes a single self-link to this anchor (page-top only; sanitized)
+ * @attr {boolean} logo-only - With a logo present, render the logo mark alone (drop the brand-text span); the logo alt still carries the brand name. No-op without a logo. Default off.
  *
  * @slot - The capture body: a <dvfy-optin> (capture page) or a <dvfy-thank-you> (thank-you page).
  * @slot footer - Non-nav fine print (©, legal). Renders a <footer> landmark.
@@ -65,7 +69,7 @@ import { noNavShellStyles, buildNoNavShell, rebuildNoNavShell } from '../utils/n
 class DvfyChumPage extends HTMLElement {
   static #BLOCK = 'dvfy-chum-page';
 
-  static get observedAttributes() { return ['brand', 'logo', 'home-href']; }
+  static get observedAttributes() { return ['brand', 'logo', 'home-href', 'logo-only']; }
 
   #built = false;
 
@@ -87,6 +91,7 @@ class DvfyChumPage extends HTMLElement {
       brand: this.getAttribute('brand'),
       logo: this.getAttribute('logo'),
       homeHref: this.getAttribute('home-href'),
+      logoOnly: this.hasAttribute('logo-only'),
     };
   }
 

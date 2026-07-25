@@ -31,6 +31,32 @@ describe('dvfy-thank-you', () => {
     });
   });
 
+  describe('heading semantics (#396 — single h1)', () => {
+    it('renders the heading as <h1> by default (the page primary heading)', async () => {
+      const el = await fixture(html`<dvfy-thank-you heading="You're in"></dvfy-thank-you>`);
+      const h = el.querySelector('.dvfy-thank-you__heading');
+      expect(h.tagName.toLowerCase()).to.equal('h1');
+      expect(h.textContent).to.equal("You're in");
+    });
+
+    it('renders the DEFAULT heading text as an <h1> too', async () => {
+      const el = await fixture(html`<dvfy-thank-you></dvfy-thank-you>`);
+      const h = el.querySelector('.dvfy-thank-you__heading');
+      expect(h.tagName.toLowerCase()).to.equal('h1');
+      expect(h.textContent).to.equal("You're in.");
+    });
+
+    it('honors heading-level (h2) when the widget is not the top heading', async () => {
+      const el = await fixture(html`<dvfy-thank-you heading-level="h2"></dvfy-thank-you>`);
+      expect(el.querySelector('.dvfy-thank-you__heading').tagName.toLowerCase()).to.equal('h2');
+    });
+
+    it('falls back to h1 for an invalid heading-level', async () => {
+      const el = await fixture(html`<dvfy-thank-you heading-level="span"></dvfy-thank-you>`);
+      expect(el.querySelector('.dvfy-thank-you__heading').tagName.toLowerCase()).to.equal('h1');
+    });
+  });
+
   describe('avatar', () => {
     it('renders a dvfy-avatar with src + alt when avatar is set', async () => {
       const el = await fixture(html`

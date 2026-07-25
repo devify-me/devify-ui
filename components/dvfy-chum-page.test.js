@@ -1,5 +1,7 @@
 import { fixture, html, expect } from '@open-wc/testing';
 import './dvfy-chum-page.js';
+import './dvfy-optin.js';
+import './dvfy-thank-you.js';
 
 describe('dvfy-chum-page', () => {
   it('is defined as a custom element', () => {
@@ -58,6 +60,69 @@ describe('dvfy-chum-page', () => {
       const brandText = el.querySelector('.dvfy-chum-page__brand-text');
       expect(brandText).to.exist;
       expect(brandText.closest('a')).to.equal(null);
+    });
+  });
+
+  describe('single h1 baseline (#396) — pure-widget chum page', () => {
+    it('a shell + optin page has exactly one non-empty <h1> (no hidden-h1 hack)', async () => {
+      const el = await fixture(html`
+        <dvfy-chum-page brand="Renting Ideal">
+          <dvfy-optin heading="Los 7 errores que encarecen tu renting" action="/x"></dvfy-optin>
+        </dvfy-chum-page>
+      `);
+      const h1s = el.querySelectorAll('h1');
+      expect(h1s.length, 'exactly one h1').to.equal(1);
+      expect(h1s[0].textContent.trim(), 'the h1 is the promise, non-empty').to.equal(
+        'Los 7 errores que encarecen tu renting'
+      );
+    });
+
+    it('a shell + thank-you page has exactly one non-empty <h1>', async () => {
+      const el = await fixture(html`
+        <dvfy-chum-page brand="Renting Ideal">
+          <dvfy-thank-you heading="Revisa tu correo"></dvfy-thank-you>
+        </dvfy-chum-page>
+      `);
+      const h1s = el.querySelectorAll('h1');
+      expect(h1s.length).to.equal(1);
+      expect(h1s[0].textContent.trim()).to.equal('Revisa tu correo');
+    });
+  });
+
+  describe('logo-only header mode (#397)', () => {
+    it('renders the logo but hides the brand-text span when logo-only is set', async () => {
+      const el = await fixture(html`
+        <dvfy-chum-page brand="Renting Ideal" logo="/logo.svg" logo-only><p>x</p></dvfy-chum-page>
+      `);
+      const img = el.querySelector('header img.dvfy-chum-page__logo');
+      expect(img, 'logo still renders').to.exist;
+      expect(img.getAttribute('alt'), 'alt still carries the brand name').to.equal('Renting Ideal');
+      expect(el.querySelector('.dvfy-chum-page__brand-text'), 'brand text hidden').to.equal(null);
+    });
+
+    it('shows the brand text by default (logo-only off)', async () => {
+      const el = await fixture(html`
+        <dvfy-chum-page brand="Renting Ideal" logo="/logo.svg"><p>x</p></dvfy-chum-page>
+      `);
+      expect(el.querySelector('.dvfy-chum-page__brand-text').textContent).to.equal('Renting Ideal');
+    });
+
+    it('logo-only is a no-op without a logo (brand text still shows)', async () => {
+      const el = await fixture(html`
+        <dvfy-chum-page brand="Renting Ideal" logo-only><p>x</p></dvfy-chum-page>
+      `);
+      expect(el.querySelector('.dvfy-chum-page__brand-text').textContent).to.equal('Renting Ideal');
+    });
+
+    it('reacts to logo-only being toggled on', async () => {
+      const el = await fixture(html`
+        <dvfy-chum-page brand="Renting Ideal" logo="/logo.svg"><p>x</p></dvfy-chum-page>
+      `);
+      expect(el.querySelector('.dvfy-chum-page__brand-text')).to.exist;
+      el.setAttribute('logo-only', '');
+      await Promise.resolve();
+      expect(el.querySelector('.dvfy-chum-page__brand-text')).to.equal(null);
+      expect(el.querySelector('header img.dvfy-chum-page__logo')).to.exist;
     });
   });
 

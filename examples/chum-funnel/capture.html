@@ -13,6 +13,10 @@
 
   Themed via data-theme on <html> per the integration KB (light theme ships in devify.css).
   On submit it navigates to thank-you.html (the second page-role of the AND-set).
+
+  SEO/a11y: <dvfy-optin> renders its promise `heading` as the page's <h1> by default
+  (heading-level defaults to "h1"), so this page has exactly one <h1> with no page-authored
+  hidden-h1 hack. Drop it to h2/h3 via heading-level only if the widget isn't the top heading.
 -->
 <html lang="en" data-theme="light">
 <head>

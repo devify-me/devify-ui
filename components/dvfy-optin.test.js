@@ -57,6 +57,38 @@ describe('dvfy-optin', () => {
     });
   });
 
+  describe('heading semantics (#396 — single h1)', () => {
+    it('renders the hero heading as <h1> by default (it is the page primary promise)', async () => {
+      const el = await fixture(html`<dvfy-optin heading="Know your score" action="/x"></dvfy-optin>`);
+      const h = el.querySelector('.dvfy-optin__heading');
+      expect(h.tagName.toLowerCase()).to.equal('h1');
+      expect(h.textContent).to.equal('Know your score');
+    });
+
+    it('honors heading-level to drop the tag (h2) when the widget is not the top heading', async () => {
+      const el = await fixture(html`<dvfy-optin heading="H" heading-level="h2" action="/x"></dvfy-optin>`);
+      expect(el.querySelector('.dvfy-optin__heading').tagName.toLowerCase()).to.equal('h2');
+    });
+
+    it('supports h3', async () => {
+      const el = await fixture(html`<dvfy-optin heading="H" heading-level="h3" action="/x"></dvfy-optin>`);
+      expect(el.querySelector('.dvfy-optin__heading').tagName.toLowerCase()).to.equal('h3');
+    });
+
+    it('falls back to h1 for an invalid heading-level', async () => {
+      const el = await fixture(html`<dvfy-optin heading="H" heading-level="h7" action="/x"></dvfy-optin>`);
+      expect(el.querySelector('.dvfy-optin__heading').tagName.toLowerCase()).to.equal('h1');
+    });
+
+    it('re-renders the tag when heading-level changes', async () => {
+      const el = await fixture(html`<dvfy-optin heading="H" action="/x"></dvfy-optin>`);
+      expect(el.querySelector('.dvfy-optin__heading').tagName.toLowerCase()).to.equal('h1');
+      el.setAttribute('heading-level', 'h2');
+      await Promise.resolve();
+      expect(el.querySelector('.dvfy-optin__heading').tagName.toLowerCase()).to.equal('h2');
+    });
+  });
+
   describe('qualifier field', () => {
     it('renders NO qualifier by default', async () => {
       const el = await fixture(html`<dvfy-optin action="/x"></dvfy-optin>`);
