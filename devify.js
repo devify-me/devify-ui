@@ -80,6 +80,11 @@ import './components/dvfy-heading.js';
 import './components/dvfy-text.js';
 import './components/dvfy-campaign-layout.js';
 
+// Capture funnel — no-nav chum Layout + its two section Widgets
+import './components/dvfy-optin.js';
+import './components/dvfy-thank-you.js';
+import './components/dvfy-chum-page.js';
+
 // Wave 4: Billing & Payments
 import './components/dvfy-usage-meter.js';
 import './components/dvfy-invoice-list.js';

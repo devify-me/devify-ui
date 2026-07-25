@@ -720,6 +720,65 @@
       ]
     },
     {
+      "name": "dvfy-chum-page",
+      "path": "./components/dvfy-chum-page.js",
+      "description": "No-nav lead-magnet page scaffold that is 1:1 attention-ratio by construction.",
+      "attributes": [
+        {
+          "name": "brand",
+          "description": "Brand name text shown in the header (header omitted if absent + no logo)",
+          "type": "string"
+        },
+        {
+          "name": "logo",
+          "description": "Logo image URL shown in the header",
+          "type": "string"
+        },
+        {
+          "name": "home-href",
+          "description": "When set, the brand becomes a single self-link to this anchor (page-top only; sanitized)",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "The capture body: a <dvfy-optin> (capture page) or a <dvfy-thank-you> (thank-you page)."
+        },
+        {
+          "name": "footer",
+          "description": "Non-nav fine print (©, legal). Renders a <footer> landmark."
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-surface-page",
+          "description": "Page background",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-nav-bg",
+          "description": "Brand-bar background (default: var(--dvfy-surface-raised))",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-nav-border",
+          "description": "Brand-bar bottom border (default: var(--dvfy-border-default))",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-nav-brand-text",
+          "description": "Brand text color (default: var(--dvfy-text-primary))",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-nav-height",
+          "description": "Brand-bar min height (default: 3.5rem)",
+          "type": "length"
+        }
+      ]
+    },
+    {
       "name": "dvfy-command-palette",
       "path": "./components/dvfy-command-palette.js",
       "description": "Command palette / spotlight search with keyboard navigation.",
@@ -2167,6 +2226,100 @@
         {
           "name": "--dvfy-nav-link-active",
           "description": "Active link color (default: var(--dvfy-primary-bg))",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-optin",
+      "path": "./components/dvfy-optin.js",
+      "description": "Self-contained lead-magnet opt-in section carrying the whole chum-page body.",
+      "attributes": [
+        {
+          "name": "eyebrow",
+          "description": "Small call-out text above the heading",
+          "type": "string"
+        },
+        {
+          "name": "heading",
+          "description": "Main headline — the narrow-problem promise",
+          "type": "string"
+        },
+        {
+          "name": "subhead",
+          "description": "Supporting line under the heading",
+          "type": "string"
+        },
+        {
+          "name": "action",
+          "description": "Form action URL (where the form submits)",
+          "type": "string"
+        },
+        {
+          "name": "method",
+          "description": "Form method: post | get (default: \"post\")",
+          "type": "string"
+        },
+        {
+          "name": "email-label",
+          "description": "Email field label (default: \"Email\")",
+          "type": "string"
+        },
+        {
+          "name": "email-placeholder",
+          "description": "Email field placeholder (default: \"you@example.com\")",
+          "type": "string"
+        },
+        {
+          "name": "cta",
+          "description": "Submit button text (default: \"Get instant access\")",
+          "type": "string"
+        },
+        {
+          "name": "qualifier-label",
+          "description": "If set, render one optional qualifier field for lead-scoring",
+          "type": "string"
+        },
+        {
+          "name": "qualifier-name",
+          "description": "Qualifier field name (default: \"qualifier\")",
+          "type": "string"
+        },
+        {
+          "name": "qualifier-options",
+          "description": "Comma-separated → render a dvfy-select; absent + label set → text input",
+          "type": "string"
+        },
+        {
+          "name": "qualifier-required",
+          "description": "Mark the qualifier field required",
+          "type": "boolean"
+        },
+        {
+          "name": "trust",
+          "description": "Small honest no-spam/trust microcopy under the button",
+          "type": "string"
+        }
+      ],
+      "events": [
+        {
+          "name": "optin-submit"
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-text-link",
+          "description": "Eyebrow color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-text-primary",
+          "description": "Heading color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-text-secondary",
+          "description": "Subhead color",
           "type": "color"
         }
       ]
@@ -3913,6 +4066,71 @@
         {
           "name": "--dvfy-input-error",
           "description": "Error border and message color",
+          "type": "color"
+        }
+      ]
+    },
+    {
+      "name": "dvfy-thank-you",
+      "path": "./components/dvfy-thank-you.js",
+      "description": "Post-opt-in confirmation section with a next-step instruction and a scheduler-ready CTA slot.",
+      "attributes": [
+        {
+          "name": "heading",
+          "description": "Confirmation headline (default: \"You're in.\")",
+          "type": "string"
+        },
+        {
+          "name": "subhead",
+          "description": "The next-step instruction",
+          "type": "string"
+        },
+        {
+          "name": "avatar",
+          "description": "Human-face image URL",
+          "type": "string"
+        },
+        {
+          "name": "avatar-alt",
+          "description": "Alt text for the avatar image",
+          "type": "string"
+        },
+        {
+          "name": "cta",
+          "description": "CTA button text",
+          "type": "string"
+        },
+        {
+          "name": "cta-href",
+          "description": "CTA link — the scheduler-ready slot (sanitized)",
+          "type": "string"
+        },
+        {
+          "name": "note",
+          "description": "Small secondary line",
+          "type": "string"
+        }
+      ],
+      "slots": [
+        {
+          "name": "",
+          "description": "Future embedded content (e.g. an inline scheduler), placed after the next-step copy."
+        }
+      ],
+      "cssProperties": [
+        {
+          "name": "--dvfy-text-primary",
+          "description": "Heading color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-text-secondary",
+          "description": "Subhead color",
+          "type": "color"
+        },
+        {
+          "name": "--dvfy-text-muted",
+          "description": "Note color",
           "type": "color"
         }
       ]
