@@ -18,6 +18,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `dvfy-component-playground` — WIP mode. New `src` attribute dynamically imports a component module before rendering; new `tag` attribute (preferred name; `component` retained as alias). Companion `catalog/wip.html` route reads `?src&tag&manifest` from the URL for shareable preview links. Enables previewing project-local and authoring-in-progress components through the same UI as the library catalog. See `docs/conventions.md` for the three modes.
 - `scripts/check-no-hardcoded.mjs` — static check for raw color literals (hex, rgb, hsl) in component CSS. Wired into `npm run lint` and CI. Pre-existing violations tracked in `scripts/.hardcoded-allowlist.json` for cleanup in #331.
 - `scripts/check-dvfy-preference.mjs` — static check that components prefer `<dvfy-button>` over `document.createElement('button')` (and similarly for `select`). Wired into `npm run lint` and CI. Pre-existing violations tracked in `scripts/.dvfy-preference-allowlist.json` for cleanup in #332.
+- New Layout category `chum` — `dvfy-chum-page` is the lead-magnet capture page shell (category `chum`, page-role `capture`, domain `layout`, deps `[dvfy-optin, dvfy-thank-you]`), a no-nav shell (`utils/no-nav-shell`) giving 1:1 attention-ratio by construction. Companion Widgets `dvfy-optin` (domain `forms`, role `capture`) and `dvfy-thank-you` (domain `feedback`, role `confirmation`) compose an opt-in + thank-you two-page capture funnel. See `examples/chum-funnel/`.
 
 ### Changed (breaking, pre-1.0)
 
