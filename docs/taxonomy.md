@@ -73,8 +73,8 @@ Components imply `strata:'component'` (they carry `tier`) — read the effective
 The live, authoritative listing is the catalog (Strata / Tier / Domain views) and `COMPONENT_REGISTRY`. Summary:
 
 - **Components** — the building blocks, Tiers 1–3 (Primitives / Composites / Organisms) across the six domains. This is the bulk of the library.
-- **Widgets** — `dvfy-nav-bar` (navigation / role: header) and `dvfy-auth` (utility / role: auth), reclassified from Tier 3 in #386; plus the capture-funnel bodies `dvfy-optin` (forms / role: capture) and `dvfy-thank-you` (feedback / role: confirmation) — the OR-set section widgets of the `capture` Layout. Renting Ideal's remaining section widgets (hero, how-it-works, trust-strip, faq, footer-cta, quiz-step) land here as they are built.
-- **Layouts** — `dvfy-campaign-layout` (category: landing, page-role: landing) — the no-nav 1:1-attention LP shell; and `dvfy-capture-page` (category: **capture**, page-role: capture) — the no-nav capture-funnel shell shared by both capture-flow page-roles (opt-in + thank-you), sharing the `utils/no-nav-shell` helper with the landing shell.
+- **Widgets** — `dvfy-nav-bar` (navigation / role: header) and `dvfy-auth` (utility / role: auth), reclassified from Tier 3 in #386; plus the capture-funnel bodies `dvfy-optin` (forms / role: capture) and `dvfy-thank-you` (feedback / role: confirmation) — the OR-set section widgets of the `chum` Layout. Renting Ideal's remaining section widgets (hero, how-it-works, trust-strip, faq, footer-cta, quiz-step) land here as they are built.
+- **Layouts** — `dvfy-campaign-layout` (category: landing, page-role: landing) — the no-nav 1:1-attention LP shell; and `dvfy-chum-page` (category: **chum**, page-role: capture) — the no-nav lead-magnet ("chum") shell shared by both capture-flow page-roles (opt-in + thank-you), sharing the `utils/no-nav-shell` helper with the landing shell.
 
 ### HTMX / server components
 

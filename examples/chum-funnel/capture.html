@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <!--
-  Capture-funnel demo — page 1 of 2 (the OPT-IN page).
+  Chum-funnel demo — page 1 of 2 (the OPT-IN page).
 
-  Acceptance proof for the `capture` Layout category: a short, single-goal page built from
-  <dvfy-capture-page> (the no-nav shell) + <dvfy-optin> (the section widget). It renders with
+  Acceptance proof for the `chum` Layout category: a short, single-goal page built from
+  <dvfy-chum-page> (the no-nav shell) + <dvfy-optin> (the section widget). It renders with
   a 1:1 ATTENTION RATIO by construction — no nav menu, no link list, no hamburger/drawer
   escape route. The only conversion path is the opt-in form's single submit button.
 
@@ -18,8 +18,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home Energy Score — free instant report (dvfy-capture-page demo)</title>
-  <meta name="description" content="Demo of the capture Layout: a no-nav opt-in page with a single conversion path (1:1 attention ratio).">
+  <title>Home Energy Score — free instant report (dvfy-chum-page demo)</title>
+  <meta name="description" content="Demo of the chum Layout: a no-nav opt-in page with a single conversion path (1:1 attention ratio).">
   <link rel="stylesheet" href="../../devify.css">
   <script type="module" src="../../devify.js"></script>
   <style>
@@ -31,10 +31,10 @@
 </head>
 <body id="top">
   <!--
-    The whole page lives inside ONE dvfy-capture-page. Note what is ABSENT: no dvfy-nav-bar,
+    The whole page lives inside ONE dvfy-chum-page. Note what is ABSENT: no dvfy-nav-bar,
     no dvfy-nav-menu, no dvfy-nav. The brand mark is a single self-link to #top only.
   -->
-  <dvfy-capture-page brand="HomeWatt" home-href="#top">
+  <dvfy-chum-page brand="HomeWatt" home-href="#top">
 
     <dvfy-optin
       eyebrow="Free instant report"
@@ -57,6 +57,6 @@
       </dvfy-text>
     </div>
 
-  </dvfy-capture-page>
+  </dvfy-chum-page>
 </body>
 </html>

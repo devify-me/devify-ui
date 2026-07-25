@@ -9,7 +9,7 @@ import './dvfy-button.js';
  *
  * The self-contained body of a capture-funnel page: an eyebrow call-out, the narrow-problem
  * promise (heading), an optional supporting line, and a short email-first form with an
- * optional single qualifier field for lead-scoring. Drop it inside <dvfy-capture-page>.
+ * optional single qualifier field for lead-scoring. Drop it inside <dvfy-chum-page>.
  *
  * Form handling mirrors <dvfy-auth>: the fields are @devify/ui form Components styled via
  * tokens, submit dispatches a CustomEvent AND lets the native/HTMX submit proceed, and any
@@ -123,7 +123,7 @@ dvfy-optin {
 `;
 
 /**
- * Self-contained lead-magnet opt-in section carrying the whole capture-page body.
+ * Self-contained lead-magnet opt-in section carrying the whole chum-page body.
  *
  * @element dvfy-optin
  *

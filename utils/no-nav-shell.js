@@ -20,7 +20,7 @@ import { sanitizeHref } from './url.js';
  * Layout keeps its own scoped class names / CSS while sharing this structure verbatim.
  *
  * @typedef {Object} NoNavShellOptions
- * @property {string} block    - BEM block name / host tag (e.g. "dvfy-capture-page")
+ * @property {string} block    - BEM block name / host tag (e.g. "dvfy-chum-page")
  * @property {?string} brand   - brand name text (header omitted if absent + no logo)
  * @property {?string} logo    - logo image URL
  * @property {?string} homeHref - when set, the brand becomes a single self-link (page-top only; sanitized)

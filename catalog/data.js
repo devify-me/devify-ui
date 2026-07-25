@@ -139,7 +139,7 @@ export const COMPONENT_REGISTRY = {
   // ── Widgets stratum (self-contained sections; Domain × Role) ──────────────
   'dvfy-nav-bar':    { strata: 'widget', domain: 'navigation', role: 'header', deps: ['dvfy-nav-menu', 'dvfy-hamburger', 'dvfy-drawer'] },
   'dvfy-auth':       { strata: 'widget', domain: 'utility',    role: 'auth',   deps: ['dvfy-modal'] },
-  // Capture-funnel section widgets (OR-set bodies of the `capture` Layout).
+  // Capture-funnel section widgets (OR-set bodies of the `chum` Layout).
   'dvfy-optin':      { strata: 'widget', domain: 'forms',      role: 'capture',      deps: ['dvfy-input', 'dvfy-select', 'dvfy-button'] },
   'dvfy-thank-you':  { strata: 'widget', domain: 'feedback',   role: 'confirmation', deps: ['dvfy-avatar', 'dvfy-button'] },
 
@@ -147,9 +147,9 @@ export const COMPONENT_REGISTRY = {
   // No-nav campaign/landing page shell — 1:1 attention ratio by construction
   // (deliberately omits the nav menu). Scaffolds the §8 page sections it receives.
   'dvfy-campaign-layout': { strata: 'layout', category: 'landing', pageRole: 'landing', domain: 'layout', deps: ['dvfy-section-hero', 'dvfy-page-section'] },
-  // No-nav capture-funnel page shell — shared by both capture-flow page-roles (opt-in +
+  // No-nav lead-magnet ("chum") page shell — shared by both capture-flow page-roles (opt-in +
   // thank-you). Same 1:1-attention guarantees; arranges the capture-funnel widgets.
-  'dvfy-capture-page': { strata: 'layout', category: 'capture', pageRole: 'capture', domain: 'layout', deps: ['dvfy-optin', 'dvfy-thank-you'] },
+  'dvfy-chum-page': { strata: 'layout', category: 'chum', pageRole: 'capture', domain: 'layout', deps: ['dvfy-optin', 'dvfy-thank-you'] },
 };
 
 /** Get tags for a given tier number */

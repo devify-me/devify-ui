@@ -2,17 +2,18 @@ import { injectStyles } from '../utils/styles.js';
 import { noNavShellStyles, buildNoNavShell, rebuildNoNavShell } from '../utils/no-nav-shell.js';
 
 /**
- * <dvfy-capture-page> — No-nav capture-funnel page scaffold (Layout stratum).
+ * <dvfy-chum-page> — No-nav lead-magnet page scaffold (Layout stratum).
  *
- * The short, single-goal page shell for a lead-capture / validation funnel. It honors
- * Gardner's attention ratio of 1:1 (one page, one goal) BY CONSTRUCTION — exactly like
- * <dvfy-campaign-layout>, it deliberately OMITS the site navigation menu (no nav-menu,
+ * The short, single-goal page shell for a lead-capture / validation funnel. "Chum" is the
+ * lead magnet — the free value offered to draw the visitor in; this is its page template.
+ * It honors Gardner's attention ratio of 1:1 (one page, one goal) BY CONSTRUCTION — exactly
+ * like <dvfy-campaign-layout>, it deliberately OMITS the site navigation menu (no nav-menu,
  * no link list, no hamburger/drawer escape routes) so nothing leaks attention off the
  * single conversion path.
  *
- * It is the shared shell for BOTH page-roles of the `capture` Layout category (an AND-set):
- *   - the capture page  = <dvfy-capture-page> + <dvfy-optin>     (email opt-in body)
- *   - the thank-you page = <dvfy-capture-page> + <dvfy-thank-you> (post-opt-in confirmation)
+ * It is the shared shell for BOTH page-roles of the `chum` Layout category (an AND-set):
+ *   - the capture page  = <dvfy-chum-page> + <dvfy-optin>     (email opt-in body)
+ *   - the thank-you page = <dvfy-chum-page> + <dvfy-thank-you> (post-opt-in confirmation)
  *
  * What it provides (via the shared utils/no-nav-shell helper):
  *   - a skip-to-content link (the one same-page a11y anchor);
@@ -28,20 +29,20 @@ import { noNavShellStyles, buildNoNavShell, rebuildNoNavShell } from '../utils/n
  *                       (intended for "#"/page-top only; sanitized). Omit → brand is plain text.
  *
  * Usage:
- *   <dvfy-capture-page brand="Renting Ideal" home-href="#top">
+ *   <dvfy-chum-page brand="Renting Ideal" home-href="#top">
  *     <dvfy-optin
  *       eyebrow="Guía gratuita"
  *       heading="Los 7 errores que encarecen tu renting"
  *       cta="Enviarme la guía">
  *     </dvfy-optin>
  *     <div slot="footer"><dvfy-text size="sm" tone="muted">© 2026 Renting Ideal</dvfy-text></div>
- *   </dvfy-capture-page>
+ *   </dvfy-chum-page>
  */
 
 /**
- * No-nav capture-funnel page scaffold that is 1:1 attention-ratio by construction.
+ * No-nav lead-magnet page scaffold that is 1:1 attention-ratio by construction.
  *
- * @element dvfy-capture-page
+ * @element dvfy-chum-page
  *
  * @attr {string} brand - Brand name text shown in the header (header omitted if absent + no logo)
  * @attr {string} logo - Logo image URL shown in the header
@@ -57,19 +58,19 @@ import { noNavShellStyles, buildNoNavShell, rebuildNoNavShell } from '../utils/n
  * @cssprop {length} --dvfy-nav-height - Brand-bar min height (default: 3.5rem)
  *
  * @example
- * <dvfy-capture-page brand="Renting Ideal" home-href="#top">
+ * <dvfy-chum-page brand="Renting Ideal" home-href="#top">
  *   <dvfy-thank-you subhead="Revisa tu correo: te hemos enviado la guía."></dvfy-thank-you>
- * </dvfy-capture-page>
+ * </dvfy-chum-page>
  */
-class DvfyCapturePage extends HTMLElement {
-  static #BLOCK = 'dvfy-capture-page';
+class DvfyChumPage extends HTMLElement {
+  static #BLOCK = 'dvfy-chum-page';
 
   static get observedAttributes() { return ['brand', 'logo', 'home-href']; }
 
   #built = false;
 
   connectedCallback() {
-    injectStyles(DvfyCapturePage.#BLOCK, noNavShellStyles(DvfyCapturePage.#BLOCK));
+    injectStyles(DvfyChumPage.#BLOCK, noNavShellStyles(DvfyChumPage.#BLOCK));
     this.#build();
   }
 
@@ -82,7 +83,7 @@ class DvfyCapturePage extends HTMLElement {
 
   #opts() {
     return {
-      block: DvfyCapturePage.#BLOCK,
+      block: DvfyChumPage.#BLOCK,
       brand: this.getAttribute('brand'),
       logo: this.getAttribute('logo'),
       homeHref: this.getAttribute('home-href'),
@@ -94,4 +95,4 @@ class DvfyCapturePage extends HTMLElement {
   }
 }
 
-customElements.define('dvfy-capture-page', DvfyCapturePage);
+customElements.define('dvfy-chum-page', DvfyChumPage);
