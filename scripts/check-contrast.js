@@ -159,6 +159,7 @@ function loadThemes() {
   const cyanCss       = readFileSync(join(ROOT, 'tokens/themes/devify-cyan.css'), 'utf8');
   const pinkCss       = readFileSync(join(ROOT, 'tokens/themes/devify-pink.css'), 'utf8');
   const rentingCss    = readFileSync(join(ROOT, 'tokens/themes/renting-ideal.css'), 'utf8');
+  const devifyDarkCss = readFileSync(join(ROOT, 'tokens/themes/devify-dark.css'), 'utf8');
 
   const primitives    = parseCssVars(primitivesCss);
   const lightVars     = extractSelectorVars(lightCss, ':root');
@@ -169,6 +170,7 @@ function loadThemes() {
   const pinkDarkVars  = extractSelectorVars(pinkCss, '[data-theme="devify-pink-dark"]');
   const rentingVars     = extractSelectorVars(rentingCss, '[data-theme="renting-ideal"]');
   const rentingDarkVars = extractSelectorVars(rentingCss, '[data-theme="renting-ideal-dark"]');
+  const devifyDarkVars  = extractSelectorVars(devifyDarkCss, '[data-theme="devify-dark"]');
 
   // Merge strategy: primitives (:root) → light semantic base → theme overrides.
   // Partial brand themes (cyan/pink) only override their accent colours;
@@ -185,6 +187,10 @@ function loadThemes() {
     'devify-pink-dark': { ...primitives, ...lightVars, ...pinkDarkVars },
     'renting-ideal':      { ...primitives, ...rentingVars },
     'renting-ideal-dark': { ...primitives, ...rentingDarkVars },
+    // devify-dark is a FULL semantic theme (indigo surfaces + cyan/pink brand) over the
+    // primitive base. Its surface-raised/muted use color-mix (unresolvable to a single hex),
+    // but those are not in the audited PAIRS — every checked pair resolves via single var().
+    'devify-dark':        { ...primitives, ...devifyDarkVars },
   };
 }
 

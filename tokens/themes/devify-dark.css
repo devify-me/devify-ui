@@ -1,0 +1,151 @@
+/*
+ * @devify/ui — Devify Dark Theme (devify-dark)
+ *
+ * The Devify studio DARK brand theme: Devify cyan (#00E5E5) + hot-pink (#FF3CAC)
+ * accents on a deep-indigo (#1A1040 family) base. Activate with
+ * data-theme="devify-dark" on <html>.
+ *
+ * Promoted upstream (devify-ui#—) from a page-local Tier-2 theme in `projects/devify-me`.
+ * The library already ships a neutral-slate `dark` and a cyan-forward `devify-cyan-dark`,
+ * but NEITHER pairs the indigo surface family with the cyan+pink accents the studio brand
+ * uses. This is that missing "dark brand" combo, authored as a full SEMANTIC (Tier-2) theme:
+ * every role token maps onto existing Tier-1 primitives (indigo/cyan/brand/neutral) — no raw
+ * color literals, no component patches. Consumed by name (a standalone by-name brand theme,
+ * like `renting-ideal.css`); NOT auto-imported into devify.css.
+ *
+ * ── SURFACE RAMP (calmer-surfaces tweak, devify-ui#—) ──────────────────────────
+ * The raised/muted surfaces (chum-page header via --dvfy-nav-bg→--dvfy-surface-raised,
+ * footer via --dvfy-surface-muted) previously mapped to indigo-900 (#1f1558), which reads
+ * noticeably brighter than the indigo-950 (#1a1040) page and pops too much. They now sit a
+ * SMALL step above the page via a primitive-derived color-mix (page 60% + indigo-900 40%),
+ * for a calmer, more premium dark UI. The step stays distinguishable (not flush, not black);
+ * the existing indigo-800 hairline border further delineates header/footer.
+ *   --dvfy-surface-raised:  indigo-900 #1f1558  →  mix(indigo-950 60%, indigo-900)  [darker]
+ *   --dvfy-surface-muted:   indigo-900 #1f1558  →  mix(indigo-950 60%, indigo-900)  [darker]
+ * Brand cyan/pink, text, borders and all other roles are unchanged. Darkening a dark-theme
+ * surface only INCREASES contrast for the light foregrounds on it, so WCAG-AA is preserved.
+ *
+ * Contrast (WCAG AA — foreground vs surface):
+ *   text-primary  neutral-50  #f8fafc  on page/raised/muted (indigo)   → ~16:1  (AAA)
+ *   text-muted    neutral-300 #cbd5e1  on muted (footer fine print)     → ~12:1  (AAA)
+ *   primary CTA   neutral-950 #020617  on cyan-500 #00e5e5              → ~13:1  (AAA)
+ */
+
+[data-theme="devify-dark"] {
+  /* ─── Surface — indigo brand base (the deep-indigo studio dark) ─── */
+  --dvfy-surface-page:      var(--dvfy-indigo-950);   /* #1a1040 — page */
+  /* Raised (cards, chum header) — a SMALL calm step above the page, not full indigo-900. */
+  --dvfy-surface-raised:    color-mix(in oklch, var(--dvfy-indigo-950) 60%, var(--dvfy-indigo-900));
+  --dvfy-surface-overlay:   var(--dvfy-indigo-800);
+  --dvfy-surface-sunken:    var(--dvfy-neutral-1000); /* #000000 — deepest well */
+  /* Muted (alternating sections, chum footer) — same calm step as raised. */
+  --dvfy-surface-muted:     color-mix(in oklch, var(--dvfy-indigo-950) 60%, var(--dvfy-indigo-900));
+
+  /* ─── Overlay scrims ─── */
+  --dvfy-overlay-bg-subtle: rgb(0 0 0 / 0.3);
+  --dvfy-overlay-bg:        rgb(0 0 0 / 0.5);
+  --dvfy-overlay-bg-strong: rgb(0 0 0 / 0.75);
+
+  /* ─── Elevation surfaces (progressive lightening, indigo-tinted) ─── */
+  --dvfy-elevation-2xs-bg:  var(--dvfy-indigo-950);
+  --dvfy-elevation-xs-bg:   color-mix(in oklch, var(--dvfy-indigo-900) 70%, var(--dvfy-indigo-800));
+  --dvfy-elevation-sm-bg:   var(--dvfy-indigo-900);
+  --dvfy-elevation-md-bg:   color-mix(in oklch, var(--dvfy-indigo-900) 40%, var(--dvfy-indigo-800));
+  --dvfy-elevation-lg-bg:   var(--dvfy-indigo-800);
+  --dvfy-elevation-xl-bg:   color-mix(in oklch, var(--dvfy-indigo-800) 50%, var(--dvfy-indigo-700));
+  --dvfy-elevation-2xl-bg:  var(--dvfy-indigo-700);
+
+  /* ─── Elevation shadows (boosted for dark) ─── */
+  --dvfy-shadow-2xs: 0 1px 2px 0 color-mix(in srgb, var(--dvfy-shadow-color) 10%, transparent);
+  --dvfy-shadow-xs:  0 1px 3px 0 color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent),
+                     0 1px 2px -1px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+  --dvfy-shadow-sm:  0 2px 4px -1px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent),
+                     0 1px 3px -1px color-mix(in srgb, var(--dvfy-shadow-color) 12%, transparent);
+  --dvfy-shadow-md:  0 4px 6px -1px color-mix(in srgb, var(--dvfy-shadow-color) 20%, transparent),
+                     0 2px 4px -2px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+  --dvfy-shadow-lg:  0 10px 15px -3px color-mix(in srgb, var(--dvfy-shadow-color) 20%, transparent),
+                     0 4px 6px -4px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+  --dvfy-shadow-xl:  0 20px 25px -5px color-mix(in srgb, var(--dvfy-shadow-color) 20%, transparent),
+                     0 8px 10px -6px color-mix(in srgb, var(--dvfy-shadow-color) 15%, transparent);
+  --dvfy-shadow-2xl: 0 25px 35px -10px color-mix(in srgb, var(--dvfy-shadow-color) 30%, transparent);
+
+  /* ─── Text — bright on indigo; "muted" bumped to neutral-300 for AA on this base
+         (LP body paragraphs use tone="muted", so they must read at secondary contrast,
+         not caption-dim). ─── */
+  --dvfy-text-primary:      var(--dvfy-neutral-50);   /* #f8fafc */
+  --dvfy-text-secondary:    var(--dvfy-neutral-200);  /* #e2e8f0 */
+  --dvfy-text-muted:        var(--dvfy-neutral-300);  /* #cbd5e1 — AA-safe body on indigo */
+  --dvfy-text-disabled:     var(--dvfy-neutral-500);
+  --dvfy-text-inverse:      var(--dvfy-neutral-900);
+  --dvfy-text-link:         var(--dvfy-cyan-300);     /* bright cyan link on dark */
+  --dvfy-text-link-hover:   var(--dvfy-cyan-200);
+
+  /* ─── Border — indigo-tinted hairlines so cards read as one family ─── */
+  --dvfy-border-default:    var(--dvfy-indigo-800);
+  --dvfy-border-strong:     var(--dvfy-indigo-700);
+  --dvfy-border-muted:      var(--dvfy-indigo-900);
+  --dvfy-border-focus:      var(--dvfy-cyan-400);
+
+  /* ─── Primary (Devify cyan) — the CTA. Dark text on bright cyan = max contrast. ─── */
+  --dvfy-primary-bg:        var(--dvfy-cyan-500);     /* #00e5e5 */
+  --dvfy-primary-bg-hover:  var(--dvfy-cyan-400);
+  --dvfy-primary-bg-active: var(--dvfy-cyan-300);
+  --dvfy-primary-bg-subtle: var(--dvfy-indigo-900);   /* brand-tone section wash, on-base */
+  --dvfy-primary-text:      var(--dvfy-neutral-950);  /* #020617 on cyan */
+  --dvfy-primary-border:    var(--dvfy-cyan-500);
+
+  /* ─── Accent (Devify hot pink) — the second brand pop (icons, accents) ─── */
+  --dvfy-accent-bg:         var(--dvfy-brand-500);    /* #ff3cac */
+  --dvfy-accent-bg-hover:   var(--dvfy-brand-400);
+  --dvfy-accent-bg-subtle:  var(--dvfy-brand-950);
+  --dvfy-accent-text:       var(--dvfy-brand-300);    /* readable pink on dark */
+  --dvfy-accent-border:     var(--dvfy-brand-700);
+
+  /* ─── Status — keep semantic hues, dark-tuned ─── */
+  --dvfy-success-bg:        var(--dvfy-green-600);
+  --dvfy-success-bg-subtle: var(--dvfy-green-950);
+  --dvfy-success-text:      var(--dvfy-green-300);
+  --dvfy-success-border:    var(--dvfy-green-700);
+  --dvfy-warning-bg:        var(--dvfy-amber-600);
+  --dvfy-warning-bg-subtle: var(--dvfy-amber-950);
+  --dvfy-warning-text:      var(--dvfy-amber-300);
+  --dvfy-warning-border:    var(--dvfy-amber-700);
+  --dvfy-danger-bg:         var(--dvfy-red-600);
+  --dvfy-danger-bg-subtle:  var(--dvfy-red-950);
+  --dvfy-danger-text:       var(--dvfy-red-300);
+  --dvfy-danger-border:     var(--dvfy-red-700);
+  /* Info alert (the "free teardown" banner) — cyan family on indigo wash */
+  --dvfy-info-bg:           var(--dvfy-cyan-600);
+  --dvfy-info-bg-subtle:    var(--dvfy-indigo-900);
+  --dvfy-info-text:         var(--dvfy-cyan-200);
+  --dvfy-info-border:       var(--dvfy-cyan-700);
+
+  /* ─── Interactive states ─── */
+  --dvfy-hover-bg:          var(--dvfy-indigo-800);
+  --dvfy-active-bg:         var(--dvfy-indigo-700);
+  --dvfy-selected-bg:       var(--dvfy-indigo-900);
+  --dvfy-disabled-bg:       var(--dvfy-indigo-900);
+  --dvfy-disabled-text:     var(--dvfy-neutral-500);
+
+  /* ─── Focus ring ─── */
+  --dvfy-ring-color:        var(--dvfy-cyan-400);
+
+  /* ─── Input (the free-teardown form) — indigo well, cyan focus ─── */
+  --dvfy-input-bg:          var(--dvfy-indigo-900);
+  --dvfy-input-border:      var(--dvfy-indigo-700);
+  --dvfy-input-border-hover: var(--dvfy-indigo-600);
+  --dvfy-input-border-focus: var(--dvfy-cyan-400);
+  --dvfy-input-placeholder: var(--dvfy-neutral-400);
+  --dvfy-input-error:       var(--dvfy-red-400);
+
+  /* ─── Status text on solid backgrounds ─── */
+  --dvfy-on-success:        var(--dvfy-neutral-950);
+  --dvfy-on-warning:        var(--dvfy-neutral-950);
+  --dvfy-on-danger:         var(--dvfy-neutral-0);
+  --dvfy-on-info:           var(--dvfy-neutral-950);
+
+  /* ─── Tooltip ─── */
+  --dvfy-tooltip-bg:        var(--dvfy-neutral-100);
+  --dvfy-tooltip-text:      var(--dvfy-neutral-900);
+  --dvfy-tooltip-border:    var(--dvfy-neutral-300);
+}
