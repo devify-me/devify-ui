@@ -145,6 +145,7 @@ Three-tier token system following [UI Collective](https://uicollective.co/) meth
 | Devify Cyan | `devify-cyan` | `devify-cyan-dark` | Cyan primary |
 | Devify Pink | `devify-pink` | `devify-pink-dark` | Pink primary |
 | Renting Ideal | `renting-ideal` | `renting-ideal-dark` | Sage-green primary (named brand artifact) |
+| Devify Dark | `devify-dark` | *(dark-only)* | Deep-indigo base + cyan/pink brand accents (named brand artifact) |
 
 ### Theme Switcher
 
@@ -257,7 +258,8 @@ devify-ui/
 │       ├── devify-cyan.css # Cyan brand (light + dark)
 │       ├── devify-pink.css # Pink brand (light + dark)
 │       ├── renting-ideal.css        # Renting Ideal brand — generated, read-only
-│       └── renting-ideal.brand.json # ↑ its seed/brief (regenerate, never hand-edit)
+│       ├── renting-ideal.brand.json # ↑ its seed/brief (regenerate, never hand-edit)
+│       └── devify-dark.css # Devify studio dark brand (indigo + cyan/pink), hand-authored, dark-only
 ├── components/             # 48 Web Components
 │   ├── dvfy-button.js
 │   ├── dvfy-input.js
