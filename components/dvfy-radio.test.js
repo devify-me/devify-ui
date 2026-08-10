@@ -98,4 +98,70 @@ describe('dvfy-radio', () => {
       await checkA11y(el, RADIO_A11Y_RULES);
     });
   });
+
+  describe('whole-host activation', () => {
+    // The host sets cursor:pointer and consumers pad it into a full-width card row, so a
+    // click anywhere on it must select — not only on the input and label text.
+    it('selects when the host padding (not the input or label) is clicked', async () => {
+      const el = await fixture(html`<dvfy-radio name="g" value="a" label="Option A"></dvfy-radio>`);
+      const input = el.querySelector('.dvfy-radio__input');
+      expect(input.checked).to.be.false;
+
+      el.click();
+
+      expect(input.checked).to.be.true;
+      expect(el.hasAttribute('checked')).to.be.true;
+      expect(el.getAttribute('aria-checked')).to.equal('true');
+    });
+
+    // Forwarding must not multiply events: a host click and a direct input click have to
+    // produce the SAME number of change events. (The component emits two today — its own
+    // re-dispatch plus the native one bubbling — which is a separate pre-existing defect;
+    // asserting parity guards this fix without freezing that bug in place.)
+    it('a host click emits the same number of change events as a direct input click', async () => {
+      const direct = await fixture(html`<dvfy-radio name="g" value="a" label="Option A"></dvfy-radio>`);
+      let directCount = 0;
+      direct.addEventListener('change', () => { directCount += 1; });
+      direct.querySelector('.dvfy-radio__input').click();
+
+      const host = await fixture(html`<dvfy-radio name="g2" value="a" label="Option A"></dvfy-radio>`);
+      let hostCount = 0;
+      host.addEventListener('change', () => { hostCount += 1; });
+      host.click();
+
+      expect(hostCount).to.equal(directCount);
+      expect(hostCount).to.be.greaterThan(0);
+    });
+
+    it('unchecks its sibling when the host of another option is clicked', async () => {
+      const wrap = await fixture(html`<div>
+        <dvfy-radio name="grp" value="a" label="A" checked></dvfy-radio>
+        <dvfy-radio name="grp" value="b" label="B"></dvfy-radio>
+      </div>`);
+      const [a, b] = wrap.querySelectorAll('dvfy-radio');
+
+      b.click();
+
+      expect(b.querySelector('.dvfy-radio__input').checked).to.be.true;
+      expect(a.hasAttribute('checked')).to.be.false;
+    });
+
+    it('ignores host clicks while disabled', async () => {
+      const el = await fixture(html`<dvfy-radio name="g" value="a" label="A" disabled></dvfy-radio>`);
+
+      el.click();
+
+      expect(el.querySelector('.dvfy-radio__input').checked).to.be.false;
+    });
+
+    it('still activates after a rebuild from an attribute change', async () => {
+      const el = await fixture(html`<dvfy-radio name="g" value="a" label="A"></dvfy-radio>`);
+      el.setAttribute('label', 'A renamed');
+      await el.updateComplete ?? Promise.resolve();
+
+      el.click();
+
+      expect(el.querySelector('.dvfy-radio__input').checked).to.be.true;
+    });
+  });
 });

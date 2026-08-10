@@ -170,6 +170,8 @@ class DvfyCheckbox extends HTMLElement {
   #initialized = false;
   #muted = false;
   #id = '';
+  /** Guards against re-binding the host click handler if the element is re-connected. */
+  #hostActivationBound = false;
 
   connectedCallback() {
     injectStyles('dvfy-checkbox', STYLES);
@@ -182,8 +184,39 @@ class DvfyCheckbox extends HTMLElement {
       this.#state = 'unchecked';
     }
     this.setAttribute('role', 'checkbox');
+    this.#bindHostActivation();
     this.#build();
     this.#initialized = true;
+  }
+
+  /**
+   * Make the WHOLE host activate the input, not just the input and its label text.
+   *
+   * The host sets `cursor: pointer`, promising the entire element is clickable, but the input
+   * and label are siblings inside it — so any host area outside those two (the padding a
+   * consumer adds to render a full-width card row) swallowed the click. Hover styling covered
+   * the whole row while the hit target did not.
+   *
+   * Bound once on the host (never in #build, which reruns on attribute changes) and guarded so
+   * a forwarded click cannot re-enter: input.click() dispatches a click targeting the input,
+   * which bubbles back here and returns early. Tristate cycling is unaffected — it is driven by
+   * the input's own click handler, which this simply triggers.
+   */
+  #bindHostActivation() {
+    if (this.#hostActivationBound) return;
+    this.#hostActivationBound = true;
+
+    this.addEventListener('click', (event) => {
+      if (this.hasAttribute('disabled')) return;
+
+      const input = this.querySelector('.dvfy-checkbox__input');
+      if (!input) return;
+
+      if (event.target === input) return;
+      if (event.target.closest?.('.dvfy-checkbox__label')) return;
+
+      input.click();
+    });
   }
 
   disconnectedCallback() {

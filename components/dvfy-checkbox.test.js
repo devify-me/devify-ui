@@ -1,4 +1,4 @@
-import { fixture, html, expect, oneEvent } from '@open-wc/testing';
+import { fixture, html, expect, nextFrame, oneEvent } from '@open-wc/testing';
 import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-checkbox.js';
 
@@ -202,6 +202,66 @@ describe('dvfy-checkbox', () => {
       await Promise.resolve();
       expect(el.querySelector('.dvfy-checkbox__input')).to.equal(input);
       expect(input.indeterminate).to.be.true;
+    });
+  });
+
+  describe('whole-host activation', () => {
+    // Same contract as dvfy-radio: the host promises clickability via cursor:pointer, and
+    // consumers pad it into a full-width row, so the entire host must toggle.
+    it('toggles when the host padding (not the input or label) is clicked', async () => {
+      const el = await fixture(html`<dvfy-checkbox name="t" label="Accept"></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+      expect(input.checked).to.be.false;
+
+      el.click();
+
+      expect(input.checked).to.be.true;
+    });
+
+    // Forwarding must not multiply events: a host click and a direct input click have to
+    // produce the SAME number of change events. (The component emits two today — its own
+    // re-dispatch plus the native one bubbling — which is a separate pre-existing defect;
+    // asserting parity guards this fix without freezing that bug in place.)
+    it('a host click emits the same number of change events as a direct input click', async () => {
+      const direct = await fixture(html`<dvfy-checkbox name="t" label="Accept"></dvfy-checkbox>`);
+      let directCount = 0;
+      direct.addEventListener('change', () => { directCount += 1; });
+      direct.querySelector('.dvfy-checkbox__input').click();
+
+      const host = await fixture(html`<dvfy-checkbox name="t2" label="Accept"></dvfy-checkbox>`);
+      let hostCount = 0;
+      host.addEventListener('change', () => { hostCount += 1; });
+      host.click();
+
+      expect(hostCount).to.equal(directCount);
+      expect(hostCount).to.be.greaterThan(0);
+    });
+
+    it('ignores host clicks while disabled', async () => {
+      const el = await fixture(html`<dvfy-checkbox name="t" label="Accept" disabled></dvfy-checkbox>`);
+
+      el.click();
+
+      expect(el.querySelector('.dvfy-checkbox__input').checked).to.be.false;
+    });
+
+    // Tristate: assert PARITY, not the cycle itself. A programmatic click does not advance
+    // the tristate cycle even when dispatched directly on the input — pre-existing behaviour,
+    // unrelated to this fix. What this fix owes is that routing through the host changes
+    // nothing, which is what is asserted here.
+    it('a host click leaves tristate in the same state as a direct input click', async () => {
+      const direct = await fixture(html`<dvfy-checkbox name="t" label="All" indeterminate></dvfy-checkbox>`);
+      const di = direct.querySelector('.dvfy-checkbox__input');
+      di.click();
+      await nextFrame();
+
+      const host = await fixture(html`<dvfy-checkbox name="t2" label="All" indeterminate></dvfy-checkbox>`);
+      host.click();
+      await nextFrame();
+      const hi = host.querySelector('.dvfy-checkbox__input');
+
+      expect(hi.checked).to.equal(di.checked);
+      expect(hi.indeterminate).to.equal(di.indeterminate);
     });
   });
 });

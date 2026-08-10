@@ -121,10 +121,45 @@ ${labelPositionCSS('dvfy-radio', { layout: 'inline', label: '.dvfy-radio__label'
  * @cssprop {color} --dvfy-input-border - Unselected border color
  */
 class DvfyRadio extends HTMLElement {
+  /** Guards against re-binding the host click handler if the element is re-connected. */
+  #hostActivationBound = false;
+
   connectedCallback() {
     injectStyles('dvfy-radio', STYLES);
     this.setAttribute('role', 'radio');
+    this.#bindHostActivation();
     this.#build();
+  }
+
+  /**
+   * Make the WHOLE host activate the input, not just the input and its label text.
+   *
+   * The host sets `cursor: pointer`, so it already promises the entire element is clickable.
+   * But the input and label are siblings inside it, so any host area outside those two — the
+   * padding a consumer adds to render options as full-width card rows — swallowed the click.
+   * Hover styling covered the whole row while the hit target did not, which reads as a broken
+   * control.
+   *
+   * Bound once on the host (never in #build, which reruns on every attribute change) and
+   * guarded so a forwarded click cannot re-enter: input.click() dispatches a click whose
+   * target IS the input, which bubbles back here and returns early.
+   */
+  #bindHostActivation() {
+    if (this.#hostActivationBound) return;
+    this.#hostActivationBound = true;
+
+    this.addEventListener('click', (event) => {
+      if (this.hasAttribute('disabled')) return;
+
+      const input = this.querySelector('.dvfy-radio__input');
+      if (!input) return;
+
+      // The native control and its <label for=…> already handle themselves.
+      if (event.target === input) return;
+      if (event.target.closest?.('.dvfy-radio__label')) return;
+
+      input.click();
+    });
   }
 
   disconnectedCallback() {}
