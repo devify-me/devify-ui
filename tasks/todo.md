@@ -1,23 +1,25 @@
-# Task — chum header/heading factory-friction (#396 + #397)
+# Task: Calmer devify-dark surfaces (header/footer)
 
-**G&P:** Smooth two reuse-proof frictions found by chum instance #2, in the library, so
-instance #3 doesn't re-pay them. Additive, backward-compatible, tokens-only, light-DOM, a11y intact.
+## G&P
+- **Goal:** Darken the devify-dark theme's non-brand blue SURFACES (`--dvfy-surface-raised`,
+  `--dvfy-surface-muted`) so the chum-page header/footer sit closer to the deep-indigo page
+  background (`--dvfy-surface-page` = indigo-950 #1a1040), keeping WCAG-AA. Brand cyan/pink
+  untouched.
+- **Purpose:** Header + footer currently use indigo-900 (#1f1558), noticeably brighter than the
+  page — they pop too much. A tighter elevation step reads calmer / more premium.
+- **Doctrine:** `devify-dark` currently exists ONLY as a page-local Tier-2 theme in devify-me.
+  Per token discipline (no local overrides that belong in devify-ui; fix upstream) and the
+  `renting-ideal.css` precedent, PROMOTE it into `@devify/ui/tokens/themes/devify-dark.css`
+  (faithful port) and apply the surface darkening there. devify-me re-vendors downstream (not me).
 
-## #396 — chum widgets render no `<h1>`
-- [ ] `dvfy-optin`: add `heading-level` attr (h1|h2|h3, default **h1**); render hero heading with that tag
-- [ ] `dvfy-thank-you`: same `heading-level` attr (default **h1**)
-- [ ] Design note: widget owns the h1 (it carries the page's primary promise text) — not the shell
-- [ ] Tests: correct tag renders; default is h1; invalid → h1; single-h1 on shell+widget page
+## Atomic items
+- [x] Locate devify-dark (page-local in devify-me; indigo primitives exist upstream)
+- [ ] Create tokens/themes/devify-dark.css (verbatim port + darkened raised/muted)
+- [ ] Register devify-dark in scripts/check-contrast.js (real AA CI coverage)
+- [ ] Browser e2e (Playwright/chromium, this session): chum page under devify-dark
+- [ ] npm run lint + npm run test + npm run contrast green
+- [ ] Commit (Jorge, no AI attribution), push, open PR w/ before/after + AA evidence
 
-## #397 — logo-only header mode
-- [ ] `dvfy-chum-page`: add `logo-only` boolean attr
-- [ ] `utils/no-nav-shell.js` buildHeader: when `logoOnly && logo`, drop brand-text span, keep logo + alt=brand
-- [ ] Tests: logo-only hides brand text, keeps logo + alt; default still shows brand text
-
-## Quality bar
-- [ ] JSDoc `@attr` updated (both widgets + shell + NoNavShellOptions typedef)
-- [ ] examples/chum-funnel/ — confirm h1 now auto-rendered; drop any now-unneeded markup
-- [ ] `npm run analyze` → custom-elements.json
-- [ ] `npm run lint` (incl check:taxonomy) PASS
-- [ ] `npm run test` PASS (existing chum/campaign tests stay green)
-- [ ] One PR, Fixes #396 + #397
+## Scope guard
+- ONLY surface-raised + surface-muted change value. NO brand/primary/accent changes.
+- NO devify.css @import (brand themes are by-name, per renting-ideal). NO devify-me edits.
