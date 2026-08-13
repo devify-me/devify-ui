@@ -91,6 +91,19 @@ document.querySelector('dvfy-nav-bar .dvfy-nav-bar__bar');
 document.querySelector('dvfy-nav-bar').setAttribute('brand', 'MyApp');
 ```
 
+## `href`/`action`-style attributes must be root- or dot-relative
+
+Any component that accepts a URL-ish attribute (`href`, `action`, `logo`, `cta-href`, etc. — e.g. `dvfy-optin`, `dvfy-thank-you`, `dvfy-chum-page`, `dvfy-nav-bar`) runs it through `sanitizeHref()` (`utils/url.js`) to block `javascript:`/`data:` injection. It only passes through values that are absolute (`http(s)://`), start with `/`, start with `#`, or start with `.` — anything else (including a **bare relative path** like `action="thank-you.html"`, with no leading `./`) silently collapses to `#`, producing a dead link/no-op form submit with no console warning.
+
+```html
+<!-- Wrong: bare relative path sanitizes to "#" -->
+<dvfy-optin action="thank-you.html"></dvfy-optin>
+
+<!-- Right: dot-relative or root-relative -->
+<dvfy-optin action="./thank-you.html"></dvfy-optin>
+<dvfy-optin action="/thank-you.html"></dvfy-optin>
+```
+
 ## When the Component Doesn't Support What You Need
 
 1. **Check all available attributes** — the manifest may have what you need under a different name
