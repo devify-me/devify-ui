@@ -91,18 +91,26 @@ document.querySelector('dvfy-nav-bar .dvfy-nav-bar__bar');
 document.querySelector('dvfy-nav-bar').setAttribute('brand', 'MyApp');
 ```
 
-## `href`/`action`-style attributes must be root- or dot-relative
+## `href`/`action`-style attributes are scheme-filtered
 
-Any component that accepts a URL-ish attribute (`href`, `action`, `logo`, `cta-href`, etc. — e.g. `dvfy-optin`, `dvfy-thank-you`, `dvfy-chum-page`, `dvfy-nav-bar`) runs it through `sanitizeHref()` (`utils/url.js`) to block `javascript:`/`data:` injection. It only passes through values that are absolute (`http(s)://`), start with `/`, start with `#`, or start with `.` — anything else (including a **bare relative path** like `action="thank-you.html"`, with no leading `./`) silently collapses to `#`, producing a dead link/no-op form submit with no console warning.
+Any component that accepts a URL-ish attribute (`href`, `action`, `logo`, `cta-href`, etc. — e.g. `dvfy-optin`, `dvfy-thank-you`, `dvfy-chum-page`, `dvfy-nav-bar`) runs it through `sanitizeHref()` (`utils/url.js`) to block `javascript:`/`data:` injection.
+
+The rule is about the **scheme**, not the shape:
+
+- **Passed through:** any relative reference — bare (`assets/x.svg`, `thank-you.html`), dot-relative (`./x`, `../x`), root-relative (`/x`), fragment (`#x`), query (`?x=1`) — plus absolute `http://` and `https://`.
+- **Collapsed to `#`:** every other scheme — `javascript:`, `data:`, `vbscript:`, `file:`, `blob:`, `about:` — including forms obfuscated with whitespace or embedded tabs/newlines (`java&Tab;script:`).
 
 ```html
-<!-- Wrong: bare relative path sanitizes to "#" -->
+<!-- All fine -->
 <dvfy-optin action="thank-you.html"></dvfy-optin>
-
-<!-- Right: dot-relative or root-relative -->
 <dvfy-optin action="./thank-you.html"></dvfy-optin>
 <dvfy-optin action="/thank-you.html"></dvfy-optin>
+
+<!-- Collapses to "#" -->
+<dvfy-optin action="javascript:alert(1)"></dvfy-optin>
 ```
+
+> Before devify-ui#381 (fixed 2026-08-27) the sanitizer was a *prefix* allowlist and a bare relative path such as `action="thank-you.html"` or `logo="assets/x.svg"` silently collapsed to `#`. If your project carries a `./`-prefix workaround for that, it is no longer needed (it still works).
 
 ## When the Component Doesn't Support What You Need
 

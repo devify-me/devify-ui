@@ -164,6 +164,26 @@ describe('dvfy-optin', () => {
       expect(b.querySelector('form').method).to.equal('post');
     });
 
+    // devify-ui#395 — parity with the same assertion in dvfy-thank-you /
+    // dvfy-chum-page: every chum-funnel element sanitizes a hostile action.
+    it('sanitizes a hostile action down to "#"', async () => {
+      const el = await fixture(html`<dvfy-optin action="javascript:alert(1)"></dvfy-optin>`);
+      expect(el.querySelector('form').getAttribute('action')).to.equal('#');
+    });
+
+    it('sanitizes a data: action down to "#"', async () => {
+      const el = await fixture(html`
+        <dvfy-optin action="data:text/html;base64,PHNjcmlwdD4="></dvfy-optin>
+      `);
+      expect(el.querySelector('form').getAttribute('action')).to.equal('#');
+    });
+
+    // devify-ui#381 — a bare relative action is legitimate and must survive.
+    it('preserves a bare relative action', async () => {
+      const el = await fixture(html`<dvfy-optin action="capture.php"></dvfy-optin>`);
+      expect(el.querySelector('form').getAttribute('action')).to.equal('capture.php');
+    });
+
     it('copies hx-* attributes onto the form', async () => {
       const el = await fixture(html`
         <dvfy-optin action="/capture" hx-post="/capture" hx-target="#main"></dvfy-optin>
