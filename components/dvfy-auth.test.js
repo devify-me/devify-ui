@@ -462,5 +462,70 @@ describe('dvfy-auth', () => {
       const b = await fixture(html`<dvfy-auth action="/x" method="bogus"></dvfy-auth>`);
       expect(b.querySelector('form').method).to.equal('post');
     });
+
+    // #392 — a stray space is a typo, not a request for POST.
+    it('normalizes a padded method value', async () => {
+      const el = await fixture(html`<dvfy-auth action="/x" method=" get "></dvfy-auth>`);
+      expect(el.querySelector('form').method).to.equal('get');
+    });
+
+    it('normalizes a padded method value set after upgrade', async () => {
+      const el = await fixture(html`<dvfy-auth action="/x" method="post"></dvfy-auth>`);
+      el.setAttribute('method', '  GET  ');
+      await nextFrame();
+      expect(el.querySelector('form').method).to.equal('get');
+    });
+  });
+
+  // #392 — the in-place mode toggle rebuilds the whole subtree, so the element the user just
+  // activated stops existing and focus falls to <body>. A keyboard user loses their place
+  // mid-flow, on the one control the component asks them to press.
+  describe('focus restoration across a structural re-render', () => {
+    it('restores focus to the rebuilt toggle after an in-place mode switch', async () => {
+      const el = await fixture(html`<dvfy-auth action="/auth/login"></dvfy-auth>`);
+      const link = el.querySelector('.dvfy-auth__footer .dvfy-auth__link');
+      link.focus();
+      expect(document.activeElement === link, 'toggle did not take focus').to.be.true;
+
+      link.click();
+      await nextFrame();
+
+      expect(el.getAttribute('mode')).to.equal('signup');
+      const active = document.activeElement;
+      expect(active !== document.body, 'focus fell to <body> after the re-render').to.be.true;
+      expect(el.contains(active), 'focus left the component after the re-render').to.be.true;
+      expect(active.classList.contains('dvfy-auth__link'), 'focus should land on the rebuilt toggle').to.be.true;
+    });
+
+    it('restores focus inside the modal when toggling with the modal open', async () => {
+      const el = await fixture(html`<dvfy-auth modal action="/auth/login"></dvfy-auth>`);
+      el.open();
+      const link = el.querySelector('.dvfy-auth__footer .dvfy-auth__link');
+      link.focus();
+
+      link.click();
+      await nextFrame();
+
+      const active = document.activeElement;
+      expect(el.querySelector('dvfy-modal').hasAttribute('open')).to.be.true;
+      expect(active !== document.body, 'focus fell to <body> after the re-render').to.be.true;
+      expect(el.contains(active), 'focus left the component after the re-render').to.be.true;
+    });
+
+    it('does not steal focus when the re-render happens away from the component', async () => {
+      const outside = document.createElement('button');
+      document.body.appendChild(outside);
+      try {
+        const el = await fixture(html`<dvfy-auth action="/auth/login"></dvfy-auth>`);
+        outside.focus();
+
+        el.setAttribute('mode', 'signup');
+        await nextFrame();
+
+        expect(document.activeElement === outside, 'component grabbed focus it never had').to.be.true;
+      } finally {
+        outside.remove();
+      }
+    });
   });
 });

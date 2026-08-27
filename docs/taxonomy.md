@@ -58,9 +58,13 @@ Components imply `strata:'component'` (they carry `tier`) — read the effective
 
 **Catalog surfaces (keep in sync).** A classification change touches four catalog files that mirror the taxonomy: `catalog/data.js` (the registry — source of truth), `catalog/sidebar.js` (the nav grouping), `catalog/overview.js` (the *Composition Model* page), and `catalog/router.js` (the tier/component detail views). Any code iterating tiers must derive from `Object.keys(TIERS)`, never a hardcoded `[1..5]`. Update all four; this doc is the human mirror.
 
+A **fifth surface** restates the classification in prose: the component's own JSDoc/header comment, which `npm run analyze` echoes into `custom-elements.json` and the catalog API viewer renders live. That prose drifted silently twice — #387 (`dvfy-campaign-layout` "Tier 5 Layout") and #388 (`dvfy-nav-bar` "Tier 3 organism" after it moved to the Widgets stratum) — and both times only human review caught it. Both the source header and the manifest description are now **guarded** (see Enforcement). Prefer not to name a tier/stratum in a header at all; the registry owns it.
+
 ## Enforcement
 
 `scripts/check-taxonomy.mjs` (wired into `npm run lint` as `check:taxonomy`) is a **deterministic gate** validating, from the registry: dependency integrity (every dep is registered), per-stratum presence rules (component→tier, widget→role, layout→category+pageRole), the strict-downward composition law, and the Component Tier forcing-function (Tier N composes ≥1 Tier N-1). Violations fail CI. This replaces the previous manual-only review for Tiers 4/5.
+
+It also enforces **header/manifest classification drift** (#389): a component's source comments and its `custom-elements.json` description may not state a classification that contradicts the registry. Recognised claim forms are `Tier N`, `Tier N <noun>`, `<Stratum> stratum`, and a comment line opening `<Stratum> (`. A widget or layout naming *any* tier fails (they are not depth-tiered), a component naming the wrong tier fails, a self-contradicting phrase like `Tier 1 organism` fails, and a stratum word that disagrees with the registry fails. Prose that merely uses the words ("no layout shifts", "knobs are the primitive") is not a claim. Unit tests for the claim parser live in `scripts/check-taxonomy.test.mjs` (`npm run test:scripts`).
 
 `/new-component` records the declared stratum/role/category; the composition-law checks are auto-derived by the gate above.
 

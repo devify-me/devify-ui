@@ -67,6 +67,7 @@
     "lint:js": "eslint components/ patterns/ catalog/ tokens/ scripts/",
     "lint:css": "stylelint 'tokens/**/*.css'",
     "test": "web-test-runner",
+    "test:scripts": "node --test scripts/*.test.mjs",
     "test:watch": "web-test-runner --watch",
     "verify:composition": "node scripts/verify-composition-demo.mjs",
     "verify:hero-media": "node scripts/verify-hero-media-size.mjs",

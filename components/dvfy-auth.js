@@ -359,14 +359,20 @@ class DvfyAuth extends HTMLElement {
 
   #attr(name) { return this.getAttribute(name) || ''; }
 
-  /** Normalized form method — get|post (invalid/empty → post). */
+  /** Normalized form method — get|post (invalid/empty → post).
+   *  Trimmed: a stray space (`method=" get "`) is a typo, not a request for POST. */
   #method() {
-    return this.#attr('method').toLowerCase() === 'get' ? 'get' : 'post';
+    return this.#attr('method').trim().toLowerCase() === 'get' ? 'get' : 'post';
   }
 
   #render() {
     // Preserve modal open state across re-renders (e.g. an in-place mode toggle).
     const wasOpen = this._modal ? this._modal.hasAttribute('open') : false;
+    // …and preserve the user's PLACE. A structural render destroys the subtree, so the
+    // element the user just activated (the footer toggle) stops existing and focus falls to
+    // <body> — a keyboard user is ejected mid-flow. Remember what kind of thing had focus
+    // so the equivalent can be re-focused once the new subtree exists. (#392)
+    const focusHint = this.#captureFocusHint();
     this.textContent = '';
     const mode = this.#attr('mode') || 'signin';
 
@@ -421,6 +427,26 @@ class DvfyAuth extends HTMLElement {
       this._modal = null;
       this.appendChild(root);
     }
+
+    this.#restoreFocus(focusHint);
+  }
+
+  /** What had focus inside this component before a structural render — 'toggle' for the
+   *  footer mode link, 'field' for anything else, null when focus was elsewhere entirely
+   *  (in which case the component must NOT grab it). */
+  #captureFocusHint() {
+    const active = document.activeElement;
+    if (!active || active === this || !this.contains(active)) return null;
+    return active.classList?.contains('dvfy-auth__link') ? 'toggle' : 'field';
+  }
+
+  /** @param {'toggle'|'field'|null} hint */
+  #restoreFocus(hint) {
+    if (!hint) return;
+    const toggle = this.querySelector('.dvfy-auth__footer .dvfy-auth__link');
+    const field = this.querySelector('.dvfy-auth__form input, .dvfy-auth__form select, .dvfy-auth__form textarea');
+    const target = hint === 'toggle' ? (toggle || field) : (field || toggle);
+    target?.focus({ preventScroll: true });
   }
 
   /** Open the auth modal (only works when modal attribute is set) */
