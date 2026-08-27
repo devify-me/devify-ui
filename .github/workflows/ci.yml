@@ -32,6 +32,9 @@ jobs:
       - name: Check dvfy-* preference
         run: npm run check:dvfy-pref
 
+      - name: Check taxonomy (composition law + header classification drift)
+        run: npm run check:taxonomy
+
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -50,6 +53,9 @@ jobs:
 
       - name: Run tests
         run: npm test
+
+      - name: Run script-level tests
+        run: npm run test:scripts
 
   build:
     name: Build
