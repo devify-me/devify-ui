@@ -184,7 +184,7 @@ class DvfyRadio extends HTMLElement {
     if (this.hasAttribute('disabled')) input.disabled = true;
     if (this.hasAttribute('required')) input.required = true;
 
-    input.addEventListener('change', () => this.#handleChange(input));
+    input.addEventListener('change', e => this.#handleChange(input, e));
 
     this.appendChild(input);
 
@@ -199,8 +199,17 @@ class DvfyRadio extends HTMLElement {
     this.setAttribute('aria-checked', this.hasAttribute('checked') ? 'true' : 'false');
   }
 
-  /** @param {HTMLInputElement} input */
-  #handleChange(input) {
+  /**
+   * @param {HTMLInputElement} input
+   * @param {Event} [nativeEvent] the inner input's own `change`, when there was one
+   */
+  #handleChange(input, nativeEvent) {
+    // `change` from a native input already bubbles, so a host listener saw BOTH it and the
+    // component's re-dispatch below -- two events for one interaction, which double-counts in
+    // any consumer that appends, posts or tracks (devify-ui#403). Stop the native one at the
+    // input so the component's event is the single canonical one on the host and above; a
+    // listener attached to the input itself still receives it (target-phase listeners run).
+    nativeEvent?.stopPropagation();
     if (!input.checked) return;
     this.#uncheckSiblings(input.name);
     this.setAttribute('checked', '');
