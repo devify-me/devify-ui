@@ -97,6 +97,51 @@ describe('dvfy-radio', () => {
       expect(event.bubbles).to.be.true;
       await checkA11y(el, RADIO_A11Y_RULES);
     });
+
+    // devify-ui#403 — the component re-dispatches its own `change` on the host while the
+    // native one from the inner input also bubbles there, so a host listener ran twice.
+    it('emits exactly one change event to a host listener on a direct input click', async () => {
+      const el = await fixture(html`<dvfy-radio name="p403a" value="pro" label="Pro"></dvfy-radio>`);
+      let count = 0;
+      el.addEventListener('change', () => { count += 1; });
+
+      el.querySelector('.dvfy-radio__input').click();
+
+      expect(count).to.equal(1);
+    });
+
+    it('emits exactly one change event to a host listener on a host click', async () => {
+      const el = await fixture(html`<dvfy-radio name="p403b" value="pro" label="Pro"></dvfy-radio>`);
+      let count = 0;
+      el.addEventListener('change', () => { count += 1; });
+
+      el.click();
+
+      expect(count).to.equal(1);
+    });
+
+    it('emits exactly one change event to an ancestor listener', async () => {
+      const wrap = await fixture(html`
+        <div><dvfy-radio name="p403c" value="pro" label="Pro"></dvfy-radio></div>
+      `);
+      let count = 0;
+      wrap.addEventListener('change', () => { count += 1; });
+
+      wrap.querySelector('.dvfy-radio__input').click();
+
+      expect(count).to.equal(1);
+    });
+
+    it('still delivers the native change to a listener on the input itself', async () => {
+      const el = await fixture(html`<dvfy-radio name="p403d" value="pro" label="Pro"></dvfy-radio>`);
+      const input = el.querySelector('.dvfy-radio__input');
+      let count = 0;
+      input.addEventListener('change', () => { count += 1; });
+
+      input.click();
+
+      expect(count).to.equal(1);
+    });
   });
 
   describe('whole-host activation', () => {

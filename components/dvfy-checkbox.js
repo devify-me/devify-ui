@@ -329,30 +329,41 @@ class DvfyCheckbox extends HTMLElement {
 
     this.#syncInput(input);
 
-    if (this.#tristate) {
-      input.addEventListener('click', (e) => {
-        e.preventDefault();
-        if (input.disabled) return;
+    // Both the binary and the tri-state control are driven from the input's own `change`.
+    //
+    // Tri-state used to be driven from a `click` handler that called preventDefault(). That
+    // cannot work: cancelling a checkbox click triggers the browser's legacy-canceled-
+    // activation behaviour, which restores checkedness and indeterminate to their pre-click
+    // values AFTER every listener has run -- so the handler's #syncInput() was undone on the
+    // way out and the cycle never advanced in the DOM. It looked like a test-only quirk but it
+    // meant the control could not be driven programmatically at all: no "select all" wiring,
+    // no restoring saved form state (devify-ui#404). Running after the activation behaviour,
+    // from `change`, means nothing is reverted behind us.
+    input.addEventListener('change', (e) => {
+      // The native `change` already bubbles to the host, where the component also dispatches
+      // its own -- two events per interaction for any host listener, which double-counts in
+      // consumers that append, post or track (devify-ui#403). Stop the native one here so the
+      // component's CustomEvent (which carries `detail`) is the single canonical event on the
+      // host and above. A listener on the input itself still gets it: this is a target-phase
+      // listener, and stopPropagation does not cancel siblings.
+      e.stopPropagation();
+
+      if (this.#tristate) {
+        // The browser has already flipped checkedness; advance our own cycle over it.
         if (this.#state === 'indeterminate') this.#state = 'checked';
         else if (this.#state === 'checked') this.#state = 'unchecked';
         else this.#state = 'indeterminate';
-        this.#syncInput(input);
-        this.#syncAttributes();
-        this.dispatchEvent(new CustomEvent('change', {
-          bubbles: true,
-          detail: { checked: input.checked, indeterminate: input.indeterminate }
-        }));
-      });
-    } else {
-      input.addEventListener('change', () => {
+      } else {
         this.#state = input.checked ? 'checked' : 'unchecked';
-        this.#syncAttributes();
-        this.dispatchEvent(new CustomEvent('change', {
-          bubbles: true,
-          detail: { checked: input.checked, indeterminate: false }
-        }));
-      });
-    }
+      }
+
+      this.#syncInput(input);
+      this.#syncAttributes();
+      this.dispatchEvent(new CustomEvent('change', {
+        bubbles: true,
+        detail: { checked: input.checked, indeterminate: input.indeterminate }
+      }));
+    });
 
     this.appendChild(input);
 

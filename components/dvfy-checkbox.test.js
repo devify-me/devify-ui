@@ -90,6 +90,142 @@ describe('dvfy-checkbox', () => {
       expect(ev1.detail.checked).to.be.true;
       expect(ev1.detail.indeterminate).to.be.false;
     });
+
+    // devify-ui#403 — the component re-dispatches its own `change` on the host while the
+    // native one from the inner input also bubbles there, so a host listener ran twice.
+    it('emits exactly one change event to a host listener (binary)', async () => {
+      const el = await fixture(html`<dvfy-checkbox name="c403a" label="Accept"></dvfy-checkbox>`);
+      let count = 0;
+      el.addEventListener('change', () => { count += 1; });
+
+      el.querySelector('.dvfy-checkbox__input').click();
+
+      expect(count).to.equal(1);
+    });
+
+    it('emits exactly one change event to a host listener (tristate)', async () => {
+      const el = await fixture(html`<dvfy-checkbox name="c403b" label="All" indeterminate></dvfy-checkbox>`);
+      let count = 0;
+      el.addEventListener('change', () => { count += 1; });
+
+      el.querySelector('.dvfy-checkbox__input').click();
+
+      expect(count).to.equal(1);
+    });
+
+    it('emits exactly one change event to an ancestor listener', async () => {
+      const wrap = await fixture(html`
+        <div><dvfy-checkbox name="c403c" label="Accept"></dvfy-checkbox></div>
+      `);
+      let count = 0;
+      wrap.addEventListener('change', () => { count += 1; });
+
+      wrap.querySelector('.dvfy-checkbox__input').click();
+
+      expect(count).to.equal(1);
+    });
+
+    it('still delivers the native change to a listener on the input itself', async () => {
+      const el = await fixture(html`<dvfy-checkbox name="c403d" label="Accept"></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+      let count = 0;
+      input.addEventListener('change', () => { count += 1; });
+
+      input.click();
+
+      expect(count).to.equal(1);
+    });
+  });
+
+  // devify-ui#404 — the tristate cycle was driven from a preventDefault()ed click, so the
+  // browser's legacy-canceled-activation behaviour reverted the input to its pre-click state
+  // and the control could not be advanced programmatically at all.
+  describe('tri-state cycle under a programmatic click (#404)', () => {
+    it('advances indeterminate -> checked -> unchecked -> indeterminate', async () => {
+      const el = await fixture(html`<dvfy-checkbox name="t404" label="All" indeterminate></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+      expect(input.indeterminate, 'starts indeterminate').to.be.true;
+
+      input.click();
+      await nextFrame();
+      expect(input.checked, 'indeterminate -> checked').to.be.true;
+      expect(input.indeterminate).to.be.false;
+
+      input.click();
+      await nextFrame();
+      expect(input.checked, 'checked -> unchecked').to.be.false;
+      expect(input.indeterminate).to.be.false;
+
+      input.click();
+      await nextFrame();
+      expect(input.checked, 'unchecked -> indeterminate').to.be.false;
+      expect(input.indeterminate).to.be.true;
+    });
+
+    it('advances on a host click too', async () => {
+      const el = await fixture(html`<dvfy-checkbox name="t404h" label="All" indeterminate></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+
+      el.click();
+      await nextFrame();
+
+      expect(input.checked).to.be.true;
+      expect(input.indeterminate).to.be.false;
+    });
+
+    it('keeps host attributes and aria-checked in step with the cycle', async () => {
+      const el = await fixture(html`<dvfy-checkbox name="t404a" label="All" indeterminate></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+      expect(el.getAttribute('aria-checked')).to.equal('mixed');
+
+      input.click();
+      await nextFrame();
+      expect(el.hasAttribute('checked')).to.be.true;
+      expect(el.hasAttribute('indeterminate')).to.be.false;
+      expect(el.getAttribute('aria-checked')).to.equal('true');
+
+      input.click();
+      await nextFrame();
+      expect(el.hasAttribute('checked')).to.be.false;
+      expect(el.getAttribute('aria-checked')).to.equal('false');
+
+      input.click();
+      await nextFrame();
+      expect(el.hasAttribute('indeterminate')).to.be.true;
+      expect(el.getAttribute('aria-checked')).to.equal('mixed');
+    });
+
+    it('reports the cycle through the checked/indeterminate properties', async () => {
+      const el = await fixture(html`<dvfy-checkbox name="t404p" label="All" indeterminate></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+
+      input.click();
+      await nextFrame();
+      expect(el.checked).to.be.true;
+      expect(el.indeterminate).to.be.false;
+
+      input.click();
+      await nextFrame();
+      expect(el.checked).to.be.false;
+      expect(el.indeterminate).to.be.false;
+    });
+
+    it('carries the advanced state in each change event detail', async () => {
+      const el = await fixture(html`<dvfy-checkbox name="t404e" label="All" indeterminate></dvfy-checkbox>`);
+      const input = el.querySelector('.dvfy-checkbox__input');
+      const details = [];
+      el.addEventListener('change', (e) => { details.push(e.detail); });
+
+      input.click();
+      input.click();
+      input.click();
+
+      expect(details).to.deep.equal([
+        { checked: true, indeterminate: false },
+        { checked: false, indeterminate: false },
+        { checked: false, indeterminate: true },
+      ]);
+    });
   });
 
   describe('label', () => {
