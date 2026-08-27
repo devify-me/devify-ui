@@ -112,6 +112,24 @@ The rule is about the **scheme**, not the shape:
 
 > Before devify-ui#381 (fixed 2026-08-27) the sanitizer was a *prefix* allowlist and a bare relative path such as `action="thank-you.html"` or `logo="assets/x.svg"` silently collapsed to `#`. If your project carries a `./`-prefix workaround for that, it is no longer needed (it still works).
 
+## `dvfy-button[href]` renders a real `<a>` — target it accordingly
+
+A `dvfy-button` with an `href` renders a genuine inner `<a class="dvfy-button__link" href>` that
+fills the button box. That is what makes the CTA crawlable (the page ships a real link graph),
+cmd/middle-clickable, and visible to `hx-boost`. Consequences for consumers:
+
+- The host element is **not** the link. It carries no `role="link"` and no `tabindex`; the anchor
+  is the single tab stop. Don't assert on `dvfy-button[role="link"]`.
+- `el.textContent` still reads the label, but `el.firstElementChild` is the anchor. Setting
+  `el.textContent = '…'` after upgrade is re-homed into the anchor automatically.
+- A button **without** `href` is unchanged: `role="button"`, `tabindex="0"`, no anchor.
+- `disabled`/`loading` strip `href` off the anchor, so it is neither navigable nor focusable.
+
+```html
+<!-- Emits: <dvfy-button href="/cuestionario"><a class="dvfy-button__link" href="/cuestionario">Empezar</a></dvfy-button> -->
+<dvfy-button href="/cuestionario" variant="primary">Empezar</dvfy-button>
+```
+
 ## When the Component Doesn't Support What You Need
 
 1. **Check all available attributes** — the manifest may have what you need under a different name
