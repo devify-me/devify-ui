@@ -12,6 +12,7 @@ import { injectStyles } from '../utils/styles.js';
  *   DvfyToast.show({ message, status, duration, position })
  *
  * Usage:
+ *   import { DvfyToast } from '@devify/ui/components/dvfy-toast.js';
  *   DvfyToast.show({ message: 'Saved!', status: 'success' })
  */
 
@@ -278,5 +279,14 @@ class DvfyToast extends HTMLElement {
 
 customElements.define('dvfy-toast', DvfyToast);
 
-// Export for static usage
+// dvfy-toast is the one component whose PRIMARY api is imperative, so unlike the rest of the
+// library it has to be importable, not merely registered. Without these the documented
+// `DvfyToast.show()` entry point was unreachable and every consumer had to rediscover
+// `customElements.get('dvfy-toast')` (devify-ui#401). The `customElements.define` side effect
+// above is unchanged, so declarative `<dvfy-toast>` usage is unaffected.
+export { DvfyToast };
+export default DvfyToast;
+
+// Retained for `patterns/dvfy-htmx-form.js`, which feature-detects the global rather than
+// importing the module, and for non-module <script> consumers of dist/devify.min.js.
 if (typeof window !== 'undefined') window.DvfyToast = DvfyToast;

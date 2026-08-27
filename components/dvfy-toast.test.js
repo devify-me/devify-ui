@@ -119,6 +119,55 @@ describe('dvfy-toast', () => {
     });
   });
 
+  // devify-ui#401 — the module documents `DvfyToast.show()` as its entry point but never
+  // exported the class, so the documented import was `undefined` and every consumer had to
+  // rediscover the `customElements.get('dvfy-toast')` workaround. The tests below did not
+  // catch it because the rest of this file reaches DvfyToast through the `window` global.
+  //
+  // Identity assertions use `=== ... to.be.true` rather than `to.equal(SomeClass)`: on
+  // failure chai inspects both operands to build a diff, and inspecting a custom-element
+  // constructor wedges the runner (the test file times out instead of failing).
+  describe('module exports (#401)', () => {
+    it('exports the class as a named export', async () => {
+      const mod = await import('./dvfy-toast.js');
+      expect(mod.DvfyToast).to.be.a('function');
+    });
+
+    it('exports the class as the default export', async () => {
+      const mod = await import('./dvfy-toast.js');
+      expect(mod.default).to.be.a('function');
+      expect(mod.default === mod.DvfyToast).to.be.true;
+    });
+
+    it('exports the same class the registry holds', async () => {
+      const mod = await import('./dvfy-toast.js');
+      expect(mod.DvfyToast === customElements.get('dvfy-toast')).to.be.true;
+    });
+
+    // Asserts the element and its container, not the rendered message: this suite's
+    // afterEach removes the containers from the DOM but getContainer() keeps handing back
+    // the cached, now-detached one, so a toast created after the first test never connects
+    // and never renders. That is a real component bug, filed separately -- not this one.
+    it('the documented DvfyToast.show() call works through the import', async () => {
+      const mod = await import('./dvfy-toast.js');
+      const toast = mod.DvfyToast.show({ message: 'From the import', status: 'success' });
+      expect(toast.tagName).to.equal('DVFY-TOAST');
+      expect(toast.getAttribute('status')).to.equal('success');
+      expect(toast.parentElement.classList.contains('dvfy-toast-container')).to.be.true;
+      toast.remove();
+    });
+
+    it('still registers the element as a side effect of importing', async () => {
+      await import('./dvfy-toast.js');
+      expect(customElements.get('dvfy-toast')).to.exist;
+    });
+
+    it('still exposes the window global that dvfy-htmx-form relies on', async () => {
+      const mod = await import('./dvfy-toast.js');
+      expect(window.DvfyToast === mod.DvfyToast).to.be.true;
+    });
+  });
+
   describe('ARIA', () => {
     it('sets role="alert"', async () => {
       const el = await fixture(html`<dvfy-toast>ARIA test</dvfy-toast>`);
