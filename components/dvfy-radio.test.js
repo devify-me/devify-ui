@@ -2,9 +2,12 @@ import { fixture, html, expect, oneEvent } from '@open-wc/testing';
 import { checkA11y } from '../utils/axe-test.js';
 import './dvfy-radio.js';
 
-// dvfy-radio uses role="radio" on a custom element containing a native radio input for better
-// component control. Axe flags this as nested-interactive, but the inner input is hidden
-// and the component itself handles all interactive behavior via keyboard/mouse events.
+// dvfy-radio puts role="radio" on the host while a REAL, focusable <input type="radio"> lives
+// inside it, so axe's nested-interactive finding is genuine — the previous justification here
+// ("the inner input is hidden") was false: the input is a visible appearance:none control.
+// Clearing it means dropping the host role and letting the native input carry the semantics,
+// which changes the accessible name/role of every consumer. Tracked separately (#407 AC 4);
+// suppressed here so the focus-survival fix isn't blocked on that semantic change.
 const RADIO_A11Y_RULES = { ignoredRules: ['nested-interactive'] };
 
 describe('dvfy-radio', () => {
@@ -96,6 +99,82 @@ describe('dvfy-radio', () => {
       expect(event).to.exist;
       expect(event.bubbles).to.be.true;
       await checkA11y(el, RADIO_A11Y_RULES);
+    });
+  });
+
+  // #407 — selecting an option must not eject the user from the form. The component used
+  // to rebuild its whole subtree on every attribute change (`this.textContent = ''`), which
+  // annihilated the very input that had focus: activeElement became BODY. That is a WCAG
+  // 2.4.3 (Focus Order) + 3.2.2 (On Input) failure on a live lead-capture funnel.
+  describe('focus survival', () => {
+    it('keeps focus on the input after selecting it', async () => {
+      const el = await fixture(html`<dvfy-radio name="f1" value="a" label="A"></dvfy-radio>`);
+      const input = el.querySelector('.dvfy-radio__input');
+      input.focus();
+      expect(document.activeElement === input, 'input did not take focus').to.be.true;
+
+      input.click();
+
+      expect(el.hasAttribute('checked'), 'selection did not register').to.be.true;
+      expect(document.activeElement === input, 'focus was destroyed by the rebuild').to.be.true;
+      expect(el.querySelector('.dvfy-radio__input') === input, 'the input node was replaced').to.be.true;
+    });
+
+    it('keeps focus when a sibling in the group is selected', async () => {
+      const wrap = await fixture(html`<div>
+        <dvfy-radio name="f2" value="a" label="A" checked></dvfy-radio>
+        <dvfy-radio name="f2" value="b" label="B"></dvfy-radio>
+      </div>`);
+      const [a, b] = wrap.querySelectorAll('dvfy-radio');
+      const aInput = a.querySelector('.dvfy-radio__input');
+      const bInput = b.querySelector('.dvfy-radio__input');
+
+      bInput.focus();
+      bInput.click();
+
+      // The de-selected sibling must not be torn down either — it holds tab order.
+      expect(document.activeElement === bInput, 'focus was destroyed by the rebuild').to.be.true;
+      expect(a.querySelector('.dvfy-radio__input') === aInput, 'the de-selected sibling was rebuilt').to.be.true;
+      expect(aInput.checked).to.be.false;
+    });
+
+    it('keeps focus and the input node across a label change', async () => {
+      const el = await fixture(html`<dvfy-radio name="f3" value="a" label="A"></dvfy-radio>`);
+      const input = el.querySelector('.dvfy-radio__input');
+      input.focus();
+
+      el.setAttribute('label', 'A renamed');
+
+      expect(document.activeElement === input, 'a label change stole focus').to.be.true;
+      expect(el.querySelector('.dvfy-radio__input') === input, 'the input node was replaced').to.be.true;
+      expect(el.querySelector('.dvfy-radio__label').textContent).to.equal('A renamed');
+      expect(el.querySelector('.dvfy-radio__label').getAttribute('for')).to.equal(input.id);
+    });
+
+    it('keeps the input node across a disabled toggle', async () => {
+      const el = await fixture(html`<dvfy-radio name="f4" value="a" label="A"></dvfy-radio>`);
+      const input = el.querySelector('.dvfy-radio__input');
+
+      el.setAttribute('disabled', '');
+      expect(el.querySelector('.dvfy-radio__input') === input, 'the input node was replaced').to.be.true;
+      expect(input.disabled).to.be.true;
+
+      el.removeAttribute('disabled');
+      expect(el.querySelector('.dvfy-radio__input') === input, 'the input node was replaced').to.be.true;
+      expect(input.disabled).to.be.false;
+    });
+
+    it('adds and removes the label element when the attribute appears/disappears', async () => {
+      const el = await fixture(html`<dvfy-radio name="f5" value="a"></dvfy-radio>`);
+      const input = el.querySelector('.dvfy-radio__input');
+      expect(el.querySelector('.dvfy-radio__label')).to.not.exist;
+
+      el.setAttribute('label', 'Now labelled');
+      expect(el.querySelector('.dvfy-radio__label').textContent).to.equal('Now labelled');
+
+      el.removeAttribute('label');
+      expect(el.querySelector('.dvfy-radio__label')).to.not.exist;
+      expect(el.querySelector('.dvfy-radio__input') === input, 'the input node was replaced').to.be.true;
     });
   });
 

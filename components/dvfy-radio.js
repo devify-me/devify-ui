@@ -166,8 +166,43 @@ class DvfyRadio extends HTMLElement {
 
   static get observedAttributes() { return ['checked', 'disabled', 'label', 'label-position']; }
 
-  attributeChangedCallback() {
-    if (this.isConnected) this.#build();
+  attributeChangedCallback(name) {
+    if (!this.isConnected) return;
+    // NEVER rebuild on a state change. #build() starts with `this.textContent = ''`, which
+    // annihilates the input the user is standing on: selecting an option ejected keyboard and
+    // screen-reader users to <body> mid-form (WCAG 2.4.3 / 3.2.2). Patch the existing DOM
+    // instead, and only fall back to a full build if the subtree isn't there yet. (#407)
+    if (this.querySelector('.dvfy-radio__input')) this.#update(name);
+    else this.#build();
+  }
+
+  /** Targeted, non-destructive attribute sync — keeps focus, node identity and listeners.
+   *  @param {string} name */
+  #update(name) {
+    const input = this.querySelector('.dvfy-radio__input');
+
+    if (name === 'checked') input.checked = this.hasAttribute('checked');
+    if (name === 'disabled') input.disabled = this.hasAttribute('disabled');
+    if (name === 'label') this.#syncLabel(input);
+    // label-position is pure CSS keyed off the host attribute — nothing to do in JS.
+
+    this.setAttribute('aria-checked', this.hasAttribute('checked') ? 'true' : 'false');
+  }
+
+  /** Create, update or drop the label element without touching the input.
+   *  @param {HTMLInputElement} input */
+  #syncLabel(input) {
+    const text = this.getAttribute('label');
+    let lbl = this.querySelector('.dvfy-radio__label');
+
+    if (!text) { lbl?.remove(); return; }
+    if (!lbl) {
+      lbl = document.createElement('label');
+      lbl.className = 'dvfy-radio__label';
+      this.appendChild(lbl);
+    }
+    lbl.setAttribute('for', input.id);
+    lbl.textContent = text;
   }
 
   #build() {
