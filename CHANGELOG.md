@@ -28,6 +28,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- `dvfy-button[href]` — now renders a **real inner `<a href>`** that fills the button box, instead of faking a link with `role="link"` + `window.location.assign()`. The fake link emitted no crawlable link graph (a factory page's only next step was an orphan URL to a search engine), swallowed cmd/middle-click and "open in new tab", and bypassed `hx-boost` on boosted pages. `target`/`rel` pass through to the anchor, `sanitizeHref()` still guards the value, and `disabled`/`loading` strip `href` off the anchor. **Behaviour change for consumers:** the host no longer carries `role="link"` or `tabindex` — the anchor is the single tab stop (removing a nested-interactive a11y violation). A button without `href` is unchanged. (#408)
 - `dvfy-alert`, `dvfy-avatar`, `dvfy-auth`, `dvfy-checkbox` — no longer rebuild their internal DOM on every observed attribute change. Non-structural changes (`status`, `title`, `name`, `label`, `action`, `checked`, `disabled`, OAuth URLs, etc.) now update in place, preserving focus, typed input values, and element references. Fixes flicker during rapid attribute updates such as theme switches or live-edit sandboxes.
 
 ---

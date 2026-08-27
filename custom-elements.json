@@ -350,16 +350,6 @@
           "type": "string"
         },
         {
-          "name": "target",
-          "description": "Link target for href navigation (e.g. \"_blank\"); only applies when href is set",
-          "type": "string"
-        },
-        {
-          "name": "rel",
-          "description": "Link relationship for href navigation; defaults to \"noopener noreferrer\" when target=\"_blank\"",
-          "type": "string"
-        },
-        {
           "name": "disabled",
           "description": "Disable button and prevent interaction",
           "type": "boolean"
@@ -381,7 +371,17 @@
         },
         {
           "name": "href",
-          "description": "When set, the button behaves as a link (role=\"link\") and navigates on click/Enter",
+          "description": "When set, the button renders a REAL inner `<a href>` (crawlable, cmd-clickable, hx-boostable) that fills the button box",
+          "type": "string"
+        },
+        {
+          "name": "target",
+          "description": "Link target, passed through to the anchor (e.g. \"_blank\"); only applies when href is set",
+          "type": "string"
+        },
+        {
+          "name": "rel",
+          "description": "Link relationship, passed through to the anchor; defaults to \"noopener noreferrer\" when target=\"_blank\"",
           "type": "string"
         }
       ],

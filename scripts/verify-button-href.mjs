@@ -61,13 +61,37 @@ page.on('pageerror', e => consoleErrors.push(String(e)));
 try {
   console.log(`button href e2e — ${base}\n`);
 
-  // 1. role=link semantics applied by the real component.
+  // 1. A REAL crawlable anchor — the link graph a search engine can follow (#408).
   await page.goto(base + '/', { waitUntil: 'networkidle' });
   await page.waitForFunction(() => customElements.get('dvfy-button') !== undefined);
+  const anchorHref = await page.getAttribute('#cta a', 'href');
+  anchorHref === '/cuestionario'
+    ? ok('href button renders a real <a href="/cuestionario">')
+    : fail(`no crawlable anchor — #cta a[href] is ${anchorHref}`);
+  const anchorText = (await page.textContent('#cta a').catch(() => ''))?.trim();
+  anchorText === 'Empezar' ? ok('anchor carries the label text') : fail(`anchor text is ${JSON.stringify(anchorText)}`);
+
+  // The host must not duplicate the anchor: one tab stop, no nested interactive.
   const ctaRole = await page.getAttribute('#cta', 'role');
+  const ctaTabindex = await page.getAttribute('#cta', 'tabindex');
+  ctaRole === null && ctaTabindex === null
+    ? ok('host is not a second link/tab stop')
+    : fail(`host still interactive — role=${ctaRole} tabindex=${ctaTabindex}`);
   const plainRole = await page.getAttribute('#plain', 'role');
-  ctaRole === 'link' ? ok('href button has role=link') : fail(`cta role=${ctaRole}, expected link`);
   plainRole === 'button' ? ok('no-href button keeps role=button') : fail(`plain role=${plainRole}, expected button`);
+
+  // Tab reaches the anchor (keyboard users get the link, not a dead custom element).
+  await page.keyboard.press('Tab');
+  const focusTag = await page.evaluate(() => document.activeElement?.tagName);
+  focusTag === 'A' ? ok('Tab focuses the anchor') : fail(`Tab focused ${focusTag}, expected A`);
+
+  // A plain click must reach the anchor un-prevented, or hx-boost never sees it.
+  const notPrevented = await page.evaluate(() => new Promise((resolve) => {
+    const a = document.querySelector('#cta a');
+    document.addEventListener('click', (e) => { const clean = !e.defaultPrevented; e.preventDefault(); resolve(clean); }, { once: true });
+    a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+  }));
+  notPrevented ? ok('plain click is not preventDefault-ed (hx-boost can intercept)') : fail('component preventDefault-ed the anchor click — hx-boost is bypassed');
 
   // 2. Click on the href CTA REALLY navigates (no stub).
   await Promise.all([
@@ -80,14 +104,21 @@ try {
   // 3. Enter key on the href CTA REALLY navigates.
   await page.goto(base + '/', { waitUntil: 'networkidle' });
   await page.waitForFunction(() => customElements.get('dvfy-button') !== undefined);
-  await page.focus('#cta');
+  await page.focus('#cta a');
   await Promise.all([
     page.waitForURL('**/cuestionario'),
     page.keyboard.press('Enter'),
   ]).catch(() => {});
   page.url().endsWith('/cuestionario') ? ok('Enter on href CTA navigated') : fail(`Enter did not navigate — url ${page.url()}`);
 
-  // 4. A plain button must NOT navigate (regression guard).
+  // 4. A modifier click must NOT navigate the current tab (cmd/ctrl-click stays usable).
+  await page.goto(base + '/', { waitUntil: 'networkidle' });
+  await page.waitForFunction(() => customElements.get('dvfy-button') !== undefined);
+  await page.click('#cta', { modifiers: ['ControlOrMeta'] });
+  await page.waitForTimeout(250);
+  page.url().endsWith('/') ? ok('ctrl/cmd-click did NOT navigate the current tab') : fail(`modifier click hijacked the current tab → ${page.url()}`);
+
+  // 5. A plain button must NOT navigate (regression guard).
   await page.goto(base + '/', { waitUntil: 'networkidle' });
   await page.waitForFunction(() => customElements.get('dvfy-button') !== undefined);
   await page.click('#plain');

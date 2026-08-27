@@ -21,9 +21,15 @@ const STYLES = `
 }
 
 dvfy-button {
+  /* Padding lives in custom properties so that, when an href renders a real inner
+     <a>, the anchor can own the padding box and the whole button surface is a link. */
+  --dvfy-btn-pad-y: var(--dvfy-space-2);
+  --dvfy-btn-pad-x: var(--dvfy-space-4);
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: var(--dvfy-btn-pad-y) var(--dvfy-btn-pad-x);
   gap: var(--dvfy-space-2);
   font-family: var(--dvfy-font-sans);
   font-weight: var(--dvfy-weight-medium);
@@ -37,22 +43,45 @@ dvfy-button {
 }
 
 /* Size: xs */
-dvfy-button[size="xs"] { padding: var(--dvfy-space-1) var(--dvfy-space-2); font-size: var(--dvfy-text-xs); border-radius: var(--dvfy-radius-sm); }
+dvfy-button[size="xs"] { --dvfy-btn-pad-y: var(--dvfy-space-1); --dvfy-btn-pad-x: var(--dvfy-space-2); font-size: var(--dvfy-text-xs); border-radius: var(--dvfy-radius-sm); }
 /* Size: sm */
-dvfy-button[size="sm"] { padding: var(--dvfy-space-1-5) var(--dvfy-space-3); font-size: var(--dvfy-text-sm); border-radius: var(--dvfy-radius-md); }
+dvfy-button[size="sm"] { --dvfy-btn-pad-y: var(--dvfy-space-1-5); --dvfy-btn-pad-x: var(--dvfy-space-3); font-size: var(--dvfy-text-sm); border-radius: var(--dvfy-radius-md); }
 /* Size: md (default) */
-dvfy-button:not([size]), dvfy-button[size="md"] { padding: var(--dvfy-space-2) var(--dvfy-space-4); font-size: var(--dvfy-text-sm); border-radius: var(--dvfy-radius-lg); }
+dvfy-button:not([size]), dvfy-button[size="md"] { --dvfy-btn-pad-y: var(--dvfy-space-2); --dvfy-btn-pad-x: var(--dvfy-space-4); font-size: var(--dvfy-text-sm); border-radius: var(--dvfy-radius-lg); }
 /* Size: lg */
-dvfy-button[size="lg"] { padding: var(--dvfy-space-2-5) var(--dvfy-space-5); font-size: var(--dvfy-text-base); border-radius: var(--dvfy-radius-lg); }
+dvfy-button[size="lg"] { --dvfy-btn-pad-y: var(--dvfy-space-2-5); --dvfy-btn-pad-x: var(--dvfy-space-5); font-size: var(--dvfy-text-base); border-radius: var(--dvfy-radius-lg); }
 /* Size: xl */
-dvfy-button[size="xl"] { padding: var(--dvfy-space-3) var(--dvfy-space-6); font-size: var(--dvfy-text-lg); border-radius: var(--dvfy-radius-xl); }
+dvfy-button[size="xl"] { --dvfy-btn-pad-y: var(--dvfy-space-3); --dvfy-btn-pad-x: var(--dvfy-space-6); font-size: var(--dvfy-text-lg); border-radius: var(--dvfy-radius-xl); }
 
 /* Icon-only — square aspect ratio */
-dvfy-button[icon] { aspect-ratio: 1; padding: var(--dvfy-space-2); }
-dvfy-button[icon][size="xs"] { padding: var(--dvfy-space-1); }
-dvfy-button[icon][size="sm"] { padding: var(--dvfy-space-1-5); }
-dvfy-button[icon][size="lg"] { padding: var(--dvfy-space-2-5); }
-dvfy-button[icon][size="xl"] { padding: var(--dvfy-space-3); }
+dvfy-button[icon] { aspect-ratio: 1; --dvfy-btn-pad-y: var(--dvfy-space-2); --dvfy-btn-pad-x: var(--dvfy-space-2); }
+dvfy-button[icon][size="xs"] { --dvfy-btn-pad-y: var(--dvfy-space-1); --dvfy-btn-pad-x: var(--dvfy-space-1); }
+dvfy-button[icon][size="sm"] { --dvfy-btn-pad-y: var(--dvfy-space-1-5); --dvfy-btn-pad-x: var(--dvfy-space-1-5); }
+dvfy-button[icon][size="lg"] { --dvfy-btn-pad-y: var(--dvfy-space-2-5); --dvfy-btn-pad-x: var(--dvfy-space-2-5); }
+dvfy-button[icon][size="xl"] { --dvfy-btn-pad-y: var(--dvfy-space-3); --dvfy-btn-pad-x: var(--dvfy-space-3); }
+
+/* Link mode — a real <a> owns the whole padding box, so every pixel of the button is a
+   genuine anchor: crawlable, cmd/middle-clickable, and boostable by htmx. The host keeps
+   the visual chrome (background, border, radius) and gives its padding to the anchor. */
+dvfy-button[href] { padding: 0; }
+dvfy-button > a.dvfy-button__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: inherit;
+  padding: var(--dvfy-btn-pad-y) var(--dvfy-btn-pad-x);
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+  border-radius: inherit;
+}
+dvfy-button > a.dvfy-button__link:focus-visible {
+  outline: var(--dvfy-ring-width) solid var(--dvfy-ring-color);
+  outline-offset: var(--dvfy-ring-offset);
+}
 
 /* Primary variant (default when no variant specified) — high specificity to resist overrides */
 dvfy-button:not([variant]), dvfy-button[variant="primary"] {
@@ -162,9 +191,9 @@ dvfy-button[loading]::after {
  * @attr {boolean} disabled - Disable button and prevent interaction
  * @attr {boolean} loading - Show loading state with spinner indicator
  * @attr {string} type - HTML button type: button | submit | reset (default: "button")
- * @attr {string} href - When set, the button behaves as a link (role="link") and navigates on click/Enter
- * @attr {string} target - Link target for href navigation (e.g. "_blank"); only applies when href is set
- * @attr {string} rel - Link relationship for href navigation; defaults to "noopener noreferrer" when target="_blank"
+ * @attr {string} href - When set, the button renders a REAL inner `<a href>` (crawlable, cmd-clickable, hx-boostable) that fills the button box
+ * @attr {string} target - Link target, passed through to the anchor (e.g. "_blank"); only applies when href is set
+ * @attr {string} rel - Link relationship, passed through to the anchor; defaults to "noopener noreferrer" when target="_blank"
  * @attr {string} from - Gradient start color for variant="gradient" (default: "#7c3aed")
  * @attr {string} to - Gradient end color for variant="gradient" (default: "#2563eb")
  *
@@ -175,16 +204,19 @@ dvfy-button[loading]::after {
  * @cssprop {color} --dvfy-danger-bg - Danger variant background
  */
 class DvfyButton extends HTMLElement {
+  /** The real <a> rendered for `href` mode (null when the button is not a link). */
+  #anchor = null;
+
+  /** Watches for label content appended after upgrade so it lands inside the anchor. */
+  #childWatcher = null;
+
   connectedCallback() {
     injectStyles('dvfy-button', STYLES);
 
     if (this.hasAttribute('from')) this.style.setProperty('--dvfy-btn-grad-from', this.getAttribute('from'));
     if (this.hasAttribute('to')) this.style.setProperty('--dvfy-btn-grad-to', this.getAttribute('to'));
 
-    this.#syncRole();
-    if (!this.getAttribute('tabindex') && !this.hasAttribute('disabled')) {
-      this.setAttribute('tabindex', '0');
-    }
+    this.#syncLink();
     this.#syncAria();
 
     this.addEventListener('keydown', this.#onKey);
@@ -194,9 +226,22 @@ class DvfyButton extends HTMLElement {
   disconnectedCallback() {
     this.removeEventListener('keydown', this.#onKey);
     this.removeEventListener('click', this.#onClick);
+    this.#childWatcher?.disconnect();
+    this.#childWatcher = null;
+  }
+
+  /** True when the event originated on (or inside) the rendered anchor, i.e. the browser
+   *  is already doing the navigation natively and the JS path must stay out of the way. */
+  #fromAnchor(e) {
+    const a = this.#anchor;
+    return !!a && !!e?.target && (e.target === a || (e.target.nodeType === 1 && a.contains(e.target)));
   }
 
   #onKey = (e) => {
+    // A real anchor handles its own Enter; intervening would double-navigate and would
+    // also swallow the modifier keys the browser uses for "open in new tab/window".
+    if (this.#fromAnchor(e)) return;
+
     // Links activate on Enter only (native anchor semantics); buttons also on Space.
     const isLink = this.hasAttribute('href');
     if (e.key === 'Enter' || (!isLink && e.key === ' ')) {
@@ -208,7 +253,12 @@ class DvfyButton extends HTMLElement {
   #onClick = (e) => {
     if (this.hasAttribute('disabled') || this.hasAttribute('loading')) return;
 
-    // Link behavior takes precedence: navigate when href is present.
+    // The anchor is a real link: let the browser own the click. This is what preserves
+    // cmd/middle-click, "open in new tab", and hx-boost interception.
+    if (this.#fromAnchor(e)) return;
+
+    // Fallback for a click on the host itself (a programmatic .click(), or the 1px border
+    // ring the anchor does not cover, or a consumer that tore the anchor out of the DOM).
     if (this.hasAttribute('href')) {
       this.#navigateFromHref(e);
       return;
@@ -240,19 +290,17 @@ class DvfyButton extends HTMLElement {
   _navigate(url) { window.location.assign(url); }
   _openTab(url, features) { window.open(url, '_blank', features); }
 
-  static get observedAttributes() { return ['disabled', 'loading', 'from', 'to', 'href']; }
+  static get observedAttributes() { return ['disabled', 'loading', 'from', 'to', 'href', 'target', 'rel']; }
 
   attributeChangedCallback(name, _old, value) {
     if (name === 'disabled') {
       const disabled = this.hasAttribute('disabled');
-      this.setAttribute('tabindex', disabled ? '-1' : '0');
       this.setAttribute('aria-disabled', String(disabled));
+      // In link mode the anchor is the tab stop, so the host stays out of the tab order.
+      if (!this.hasAttribute('href')) this.setAttribute('tabindex', disabled ? '-1' : '0');
     }
     if (name === 'loading') {
       this.setAttribute('aria-busy', String(this.hasAttribute('loading')));
-    }
-    if (name === 'href') {
-      this.#syncRole();
     }
     if (name === 'from') {
       this.style.setProperty('--dvfy-btn-grad-from', value ?? '');
@@ -260,14 +308,104 @@ class DvfyButton extends HTMLElement {
     if (name === 'to') {
       this.style.setProperty('--dvfy-btn-grad-to', value ?? '');
     }
+    // Anchor presence and the host's own focusability both depend on href + inert state.
+    if (this.isConnected && ['href', 'target', 'rel', 'disabled', 'loading'].includes(name)) {
+      this.#syncLink();
+    }
   }
 
-  #syncRole() {
-    const role = this.hasAttribute('href') ? 'link' : 'button';
-    // Respect an author-supplied role only if it isn't the one we manage.
-    const current = this.getAttribute('role');
-    if (current === 'link' || current === 'button' || current === null) {
-      this.setAttribute('role', role);
+  // ── Link mode ───────────────────────────────────────────────────────────────
+  // `href` renders a REAL <a> instead of faking one with role="link" +
+  // location.assign(). A fake link is invisible to crawlers (the page ships no link
+  // graph at all), swallows every modifier click, and bypasses hx-boost. See #408.
+
+  #syncLink() {
+    if (this.hasAttribute('href')) this.#renderAnchor(); else this.#removeAnchor();
+    this.#syncHostFocus();
+  }
+
+  #renderAnchor() {
+    let a = this.#anchor;
+    if (!a || a.parentNode !== this) {
+      a = document.createElement('a');
+      a.className = 'dvfy-button__link';
+      // MOVE the label (never clone) so nodes, listeners and IDs survive intact.
+      while (this.firstChild) a.appendChild(this.firstChild);
+      this.appendChild(a);
+      this.#anchor = a;
+      this.#watchChildren();
+    }
+    this.#syncAnchorAttrs();
+  }
+
+  #syncAnchorAttrs() {
+    const a = this.#anchor;
+    if (!a) return;
+
+    // disabled/loading must not leave a navigable, focusable link behind.
+    if (this.hasAttribute('disabled') || this.hasAttribute('loading')) {
+      a.removeAttribute('href');
+      a.removeAttribute('target');
+      a.removeAttribute('rel');
+      a.setAttribute('aria-disabled', 'true');
+      return;
+    }
+    a.removeAttribute('aria-disabled');
+    a.setAttribute('href', sanitizeHref(this.getAttribute('href')));
+
+    const target = this.getAttribute('target');
+    if (target) a.setAttribute('target', target); else a.removeAttribute('target');
+
+    // Safe default for _blank: opener-isolated + no referrer unless the author overrides.
+    const rel = this.getAttribute('rel') || (target === '_blank' ? 'noopener noreferrer' : null);
+    if (rel) a.setAttribute('rel', rel); else a.removeAttribute('rel');
+  }
+
+  #removeAnchor() {
+    const a = this.#anchor;
+    if (a && a.parentNode === this) {
+      while (a.firstChild) this.insertBefore(a.firstChild, a);
+      a.remove();
+    }
+    this.#anchor = null;
+    this.#childWatcher?.disconnect();
+    this.#childWatcher = null;
+  }
+
+  /** Consumers commonly set `.textContent` after appending the element. Re-home any stray
+   *  direct child into the anchor (and rebuild the anchor if it was wiped) so the link
+   *  never silently loses its text — which would leave an anchor with no accessible name. */
+  #watchChildren() {
+    if (this.#childWatcher) return;
+    this.#childWatcher = new MutationObserver(() => {
+      if (!this.hasAttribute('href')) return;
+      this.#childWatcher.disconnect();
+      try {
+        this.#renderAnchor();
+        for (const node of [...this.childNodes]) {
+          if (node !== this.#anchor) this.#anchor.appendChild(node);
+        }
+      } finally {
+        if (this.#childWatcher) this.#childWatcher.observe(this, { childList: true });
+      }
+    });
+    this.#childWatcher.observe(this, { childList: true });
+  }
+
+  /** The anchor is the interactive element in link mode, so the host must NOT be a second
+   *  tab stop or a second `link` in the a11y tree (axe: nested-interactive). */
+  #syncHostFocus() {
+    const managedRole = r => r === 'link' || r === 'button' || r === null;
+    if (this.#anchor) {
+      if (managedRole(this.getAttribute('role'))) this.removeAttribute('role');
+      const t = this.getAttribute('tabindex');
+      if (t === '0' || t === '-1') this.removeAttribute('tabindex');
+      return;
+    }
+    if (managedRole(this.getAttribute('role'))) this.setAttribute('role', 'button');
+    // Respect an author-supplied tabindex (e.g. -1 on decorative in-field toggles).
+    if (!this.getAttribute('tabindex')) {
+      this.setAttribute('tabindex', this.hasAttribute('disabled') ? '-1' : '0');
     }
   }
 
