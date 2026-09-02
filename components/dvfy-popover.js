@@ -181,7 +181,11 @@ class DvfyPopover extends HTMLElement {
   static get observedAttributes() { return ['position', 'open', 'trigger']; }
 
   attributeChangedCallback(name, oldVal, newVal) {
-    if (!this.isConnected) return;
+    // `isConnected` alone is not enough: when a parsed `<dvfy-popover trigger="hover">`
+    // is upgraded, the element is ALREADY in the document, so this callback runs
+    // before connectedCallback has built #panel. Bailing costs nothing —
+    // connectedCallback re-applies position, open and trigger on its own.
+    if (!this.isConnected || !this.#panel) return;
 
     if (name === 'position') {
       this.dataset.pos = newVal || 'bottom';

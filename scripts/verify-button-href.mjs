@@ -13,7 +13,6 @@
  * Usage: node scripts/verify-button-href.mjs
  * Exit 0 = navigation proven; exit 1 = dead CTA / wrong semantics.
  */
-// eslint-disable-next-line import-x/no-extraneous-dependencies -- dev/CI verify tool; not shipped (scripts/ excluded from `files`)
 import { chromium } from 'playwright';
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';

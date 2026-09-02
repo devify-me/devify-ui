@@ -73,6 +73,8 @@
     "verify:hero-media": "node scripts/verify-hero-media-size.mjs",
     "verify:campaign-layout": "node scripts/verify-campaign-layout.mjs",
     "verify:button-href": "node scripts/verify-button-href.mjs",
-    "build": "node scripts/build.js"
+    "build": "node scripts/build.js",
+    "design-sync:build": "node scripts/build-design-sync.mjs",
+    "design-sync:verify": "node scripts/verify-design-sync.mjs"
   }
 }
