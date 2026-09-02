@@ -338,14 +338,14 @@ files.push(artboard({
   path: 'brand/logo.html',
   group: 'Brand',
   name: 'Logo & mark',
-  subtitle: 'Horizontal lockup, mark',
+  subtitle: 'Horizontal + stacked lockups',
   eyebrow: 'Brand',
   title: 'Logo & mark',
-  desc: 'The canonical Devify lockup and mark. Note: the SVGs hardcode #fa3aab/#fa3cac and #00e1e2, which do NOT match --dvfy-brand-500 (#ff3cac) or --dvfy-cyan-500 (#00e5e5). Shipped as-is; see the tracking issue.',
-  chips: ['SVG', 'off-token colours', 'no stacked/mono variant'],
+  desc: 'The canonical Devify lockup and stacked mark. Every painted colour is a design token verbatim — --dvfy-brand-500 (#ff3cac) and --dvfy-cyan-500 (#00e5e5) — enforced by `npm run check:brand-assets`. Literal values, not var(): the mark must not re-colour to a consuming project theme.',
+  chips: ['SVG', 'token-exact', 'no mono/reversed variant'],
   body: [
     section('Horizontal lockup', '      <img src="../assets/devify-hz-logo-cyan-pink.svg" alt="Devify" style="width:min(420px,100%)">', true),
-    section('Mark', '      <img src="../assets/favicon.svg" alt="Devify mark" style="width:140px">', true),
+    section('Stacked lockup', '      <img src="../assets/favicon.svg" alt="Devify stacked lockup" style="width:140px">', true),
     section('On dark', '      <div style="background:var(--dvfy-neutral-950);padding:var(--dvfy-space-8);border-radius:var(--dvfy-radius-lg)"><img src="../assets/devify-hz-logo-cyan-pink.svg" alt="Devify" style="width:min(420px,100%)"></div>', true),
   ].join('\n'),
 }));
