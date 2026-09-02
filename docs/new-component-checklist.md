@@ -79,6 +79,15 @@ For auditing existing components, use `docs/component-review-checklist.md`.
 - [ ] Multiple instances on the same page do not share state or conflict
 - [ ] Component works when attributes are set before and after DOM insertion
 - [ ] Component works when inserted dynamically via `innerHTML`
+- [ ] **Upgrade path** — `npm run check:upgrade-order` passes. A parsed element is
+      *already connected* when it upgrades, so `attributeChangedCallback` runs
+      **before** `connectedCallback` builds anything; `if (!this.isConnected) return;`
+      does **not** guard that. Guard on the built artifact instead:
+      `if (!this.isConnected || !this.#panel) return;`
+      Reproduce in a test with `host.innerHTML = '<dvfy-x attr="v">'` on an
+      **already-connected** host — `fixture()` create-then-connects and cannot reach it.
+      *(The two items above have been in this checklist all along and were still missed,
+      which is why this one is a command and not a sentence.)*
 
 ## Step 10 — Final Review
 

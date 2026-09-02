@@ -419,6 +419,11 @@ class DvfyCommandPalette extends HTMLElement {
   // ── Filtering ──
 
   #filter() {
+    // #list is built by #build(), which connectedCallback defers to a microtask.
+    // Callers currently guard on #input — a sibling built at the same time — so
+    // this is safe today by coincidence, not by construction. Guard on the field
+    // this method actually uses.
+    if (!this.#list) return;
     const query = this.#input?.value.toLowerCase().trim() || '';
     const allItems = this.#list.querySelectorAll('dvfy-cmd-item');
     const groups = this.#list.querySelectorAll('dvfy-cmd-group');
