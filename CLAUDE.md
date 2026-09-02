@@ -14,6 +14,7 @@ Active and maintained (v0.2.0, recent component work through 2026-06). This is `
 - `CONTRIBUTING.md`, `FORM_VALIDATION_PATTERN.md` — contribution + form patterns.
 - `.claude/skills/` — project skills: `new-component`, `catalog-review`.
 - `tasks/todo.md` — current work item / scope.
+- **Claude Design export** — `npm run design-sync:build` generates 85 preview artboards into `.design-sync/` (gitignored) and `npm run design-sync:verify` puts a real browser over them. The library is published as a Claude Design design-system project; **the sync is one-way (local → Claude Design)**, so an edit made in that canvas is an edit to a generated preview, not to a component, and the next build overwrites it. Scripts carry their own G&P headers; `scripts/design-sync/` holds committed bundle inputs.
 
 ## Architecture & gotchas (know before you change things)
 
@@ -21,6 +22,7 @@ Active and maintained (v0.2.0, recent component work through 2026-06). This is `
 - **Light DOM only** (no Shadow DOM) — required for HTMX compatibility. Attributes are the component API.
 - **Zero build step** — ES modules served directly; `devify.css` + `devify.js` are the bundles consumers import.
 - **`dvfy-` prefix** on all element + class names. Container queries (parent width), not viewport, on responsive components.
+- **`isConnected` does not mean "ready".** A parsed element is *already connected* when it upgrades, so `attributeChangedCallback` runs **before** `connectedCallback` builds anything — guard on the built artifact, never on `isConnected` alone. 55 of 79 components still use the unsound idiom (#419), and neither the catalog playground nor `fixture()` can reach the bug (both create-then-connect; every consumer parses-then-upgrades). Reproduce with `host.innerHTML = '<dvfy-x attr="v">'` on a **connected** host. Full lesson: `studio/docs/departments/engineering/kb/is-connected-does-not-mean-ready.md`.
 - **Static gates enforce the above:** `npm run lint` runs eslint + stylelint + `check:tokens` (no hardcoded colors) + `check:dvfy-pref` (prefer `<dvfy-*>` over native). Tests: `npm run test` (web-test-runner + Playwright). Regenerate the manifest after API changes: `npm run analyze` → `custom-elements.json`. See `docs/conventions.md` for the allowlisting mechanisms.
 
 ## Conventions
