@@ -13,7 +13,6 @@
  * Usage: node scripts/verify-hero-media-size.mjs
  * Exit 0 = bounded + responsive; exit 1 = full-bleed / overflow regression.
  */
-// eslint-disable-next-line import-x/no-extraneous-dependencies -- dev/CI verify tool; scripts/ excluded from `files`
 import { chromium } from 'playwright';
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';

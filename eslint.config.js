@@ -14,7 +14,9 @@ export default [
     },
   },
   {
-    files: ['**/*.test.js', 'scripts/**/*.js'],
+    // .mjs included: every build/verify script under scripts/ is ESM, and they
+    // legitimately import devDependencies (esbuild, playwright).
+    files: ['**/*.test.{js,mjs}', 'scripts/**/*.{js,mjs}'],
     rules: {
       'import-x/no-extraneous-dependencies': ['error', { devDependencies: true }],
     },

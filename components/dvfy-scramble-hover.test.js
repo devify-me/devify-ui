@@ -95,3 +95,31 @@ describe('dvfy-scramble-hover', () => {
     });
   });
 });
+
+/*
+ * Regression: upgrade-order double-attach. A parsed
+ * `<dvfy-scramble-hover trigger="visible">` upgrades while already connected, so
+ * attributeChangedCallback attaches an IntersectionObserver and connectedCallback
+ * attaches a second one. The orphaned observer then nulls the live one's
+ * reference, throwing on the next callback.
+ */
+describe('dvfy-scramble-hover — upgrade order', () => {
+  it('attaches exactly one IntersectionObserver when upgraded with trigger="visible"', async () => {
+    const host = await fixture(html`<div></div>`);
+    const Real = window.IntersectionObserver;
+    let constructed = 0;
+    // Counting constructions tests the defect itself (double-attach), not the
+    // observer race it happens to produce, which is timing-dependent.
+    window.IntersectionObserver = class extends Real {
+      constructor(...args) { super(...args); constructed += 1; }
+    };
+    try {
+      host.innerHTML = '<dvfy-scramble-hover trigger="visible">Decode me</dvfy-scramble-hover>';
+      await new Promise(r => setTimeout(r, 60));
+    } finally {
+      window.IntersectionObserver = Real;
+    }
+    expect(constructed).to.equal(1);
+    expect(host.querySelector('dvfy-scramble-hover')).to.have.attribute('aria-label', 'Decode me');
+  });
+});

@@ -213,3 +213,38 @@ describe('dvfy-popover', () => {
     });
   });
 });
+
+/*
+ * Regression: upgrade-order. When a parsed `<dvfy-popover trigger="...">` is
+ * upgraded, the element is ALREADY connected, so attributeChangedCallback runs
+ * before connectedCallback has built #panel. The `isConnected` guard does not
+ * catch this. Reproduced by setting innerHTML on a connected host, which is how
+ * every static-HTML consumer uses the library.
+ */
+describe('dvfy-popover — upgrade order', () => {
+  async function upgradeInto(markup) {
+    const host = await fixture(html`<div></div>`);
+    const errors = [];
+    const onErr = e => errors.push(e.message || String(e.error));
+    window.addEventListener('error', onErr);
+    host.innerHTML = markup;
+    await new Promise(r => setTimeout(r, 60));
+    window.removeEventListener('error', onErr);
+    return { host, errors };
+  }
+
+  it('upgrades with a trigger attribute without throwing', async () => {
+    const { host, errors } = await upgradeInto(
+      '<dvfy-popover trigger="hover"><button>T</button><div slot="content">C</div></dvfy-popover>',
+    );
+    expect(errors, errors.join(' | ')).to.have.lengthOf(0);
+    expect(host.querySelector('.dvfy-popover__panel')).to.exist;
+  });
+
+  it('upgrades with an open attribute without throwing', async () => {
+    const { errors } = await upgradeInto(
+      '<dvfy-popover open position="top"><button>T</button><div slot="content">C</div></dvfy-popover>',
+    );
+    expect(errors, errors.join(' | ')).to.have.lengthOf(0);
+  });
+});

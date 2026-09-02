@@ -11,7 +11,6 @@
  * Usage: node scripts/verify-composition-demo.mjs
  * Exit 0 = proof holds; exit 1 = a dead class / unstyled primitive / unthemed page.
  */
-// eslint-disable-next-line import-x/no-extraneous-dependencies -- dev/CI verify tool; not part of the shipped package (scripts/ is excluded from `files`)
 import { chromium } from 'playwright';
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';

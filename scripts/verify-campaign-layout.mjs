@@ -18,7 +18,6 @@
  * Usage: node scripts/verify-campaign-layout.mjs
  * Exit 0 = 1:1 holds; exit 1 = a competing nav link / unthemed page / wrong link count.
  */
-// eslint-disable-next-line import-x/no-extraneous-dependencies -- dev/CI verify tool; not part of the shipped package (scripts/ is excluded from `files`)
 import { chromium } from 'playwright';
 import http from 'node:http';
 import { readFile } from 'node:fs/promises';

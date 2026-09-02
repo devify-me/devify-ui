@@ -124,7 +124,11 @@ class DvfyScrambleHover extends HTMLElement {
   }
 
   attributeChangedCallback(name) {
-    if (!this.isConnected) return;
+    // `isConnected` alone is not enough: a parsed element is ALREADY connected
+    // when it upgrades, so this runs before connectedCallback has rendered.
+    // #charSpans is the "internals are ready" signal; connectedCallback attaches
+    // the trigger itself, so bailing here loses nothing.
+    if (!this.isConnected || !this.#charSpans.length) return;
     if (name === 'trigger') {
       this.#detachTrigger();
       this.#attachTrigger();
@@ -173,6 +177,12 @@ class DvfyScrambleHover extends HTMLElement {
   #attachTrigger() {
     const trigger = this.getAttribute('trigger') || 'hover';
 
+    // Idempotent: a parsed `<dvfy-scramble-hover trigger="visible">` is upgraded
+    // while already connected, so attributeChangedCallback attaches once and
+    // connectedCallback attaches again. Without this, the second call orphans the
+    // first IntersectionObserver, which then nulls the live one's reference.
+    this.#detachTrigger();
+
     if (trigger === 'hover') {
       this.addEventListener('mouseenter', this.#onEnter);
       this.addEventListener('mouseleave', this.#onLeave);
@@ -183,14 +193,13 @@ class DvfyScrambleHover extends HTMLElement {
       requestAnimationFrame(() => this.#start());
     } else if (trigger === 'visible') {
       this.#observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting && !this.#done) {
-              this.#start();
-              this.#observer.disconnect();
-              this.#observer = null;
-            }
-          }
+        (entries, observer) => {
+          if (!entries.some(e => e.isIntersecting) || this.#done) return;
+          this.#start();
+          // Disconnect the observer that actually fired, not whatever #observer
+          // currently points at — the two can differ after a re-attach.
+          observer.disconnect();
+          if (this.#observer === observer) this.#observer = null;
         },
         { rootMargin: '-10% 0px -10% 0px' },
       );
