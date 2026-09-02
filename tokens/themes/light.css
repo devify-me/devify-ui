@@ -3,7 +3,14 @@
  *
  * Tier 2: Maps primitives to roles.
  * These tokens describe PURPOSE, not appearance.
- * Primary colors derived from Devify brand: #040053 (indigo), #00e1e2 (cyan), #fa3aab (pink).
+ * Brand colours are DEFINED in tokens/colors.css, not here — name the token, never
+ * a literal. --dvfy-brand-500 (#ff3cac) and --dvfy-cyan-500 (#00e5e5).
+ *
+ * This line previously read "#040053 (indigo), #00e1e2 (cyan), #fa3aab (pink)",
+ * which disagreed with colors.css by 2-5/255 per channel. The logo SVGs were
+ * painted with those values and shipped that way for months (#420). A literal in
+ * a comment is a second source of truth that nothing validates, and the art
+ * followed the comment rather than the palette.
  */
 
 :root,
