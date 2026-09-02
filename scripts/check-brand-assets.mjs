@@ -53,7 +53,31 @@ if (palette.size === 0) {
   process.exit(1);
 }
 
+/**
+ * XML well-formedness, narrowly. Browsers parse SVG leniently, so a malformed
+ * file renders fine locally and is rejected only downstream — the Claude Design
+ * upload refused both marks with `xml.SyntaxError line 2` after a provenance
+ * comment containing `--dvfy-brand-500` shipped in #424. A double hyphen is
+ * ILLEGAL inside an XML comment, and nothing in the repo noticed.
+ */
+function xmlCommentFaults(svg) {
+  const faults = [];
+  const re = /<!--([\s\S]*?)-->/g;
+  let m;
+  while ((m = re.exec(svg)) !== null) {
+    if (m[1].includes('--')) {
+      const line = svg.slice(0, m.index).split('\n').length;
+      faults.push(`comment at line ${line} contains "--", which is illegal inside an XML comment`);
+    }
+  }
+  const opens = (svg.match(/<!--/g) || []).length;
+  const closes = (svg.match(/-->/g) || []).length;
+  if (opens !== closes) faults.push(`unbalanced comment delimiters (${opens} "<!--" vs ${closes} "-->")`);
+  return faults;
+}
+
 const failures = [];
+const xmlFailures = [];
 let scanned = 0;
 
 for (const rel of ASSETS) {
@@ -62,6 +86,8 @@ for (const rel of ASSETS) {
   // not be matched — an earlier naive /#[0-9a-f]{6}/ swept up 30 clipPath ids.
   const painted = [...svg.matchAll(/(?:fill|stroke|stop-color|flood-color)="(#[0-9a-fA-F]{3,8})"/g)]
     .map(m => norm(m[1]));
+
+  for (const fault of xmlCommentFaults(svg)) xmlFailures.push({ rel, fault });
 
   const counts = painted.reduce((a, c) => a.set(c, (a.get(c) || 0) + 1), new Map());
   scanned += painted.length;
@@ -72,8 +98,15 @@ for (const rel of ASSETS) {
   }
 }
 
+if (xmlFailures.length) {
+  console.error('check-brand-assets: brand asset is not well-formed XML\n');
+  for (const x of xmlFailures) console.error(`  ${x.rel}\n    ${x.fault}`);
+  console.error('\nBrowsers parse SVG leniently; strict consumers do not. Rewrite the comment.');
+  process.exit(CI ? 1 : 0);
+}
+
 if (failures.length === 0) {
-  console.log(`check-brand-assets: OK — ${scanned} painted colours across ${ASSETS.length} brand assets, all from tokens/colors.css`);
+  console.log(`check-brand-assets: OK — ${scanned} painted colours across ${ASSETS.length} brand assets, all from tokens/colors.css, comments well-formed`);
   process.exit(0);
 }
 
